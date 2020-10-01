@@ -263,7 +263,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 PhSim.DynSim.prototype.removeSimpleEvent = function(refNumber) {
 	
-	o = this.simpleEventRefs[refNumber];
+	var o = this.simpleEventRefs[refNumber];
 
 	if(o.trigger === "key") {
 		this.removeEventListener("keydown",o.ref);

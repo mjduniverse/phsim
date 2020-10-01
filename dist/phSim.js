@@ -2176,27 +2176,45 @@ PhSim.Tools.getDynBoundingBox = function(dynObj) {
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/**
+ * 
+ * @typedef {PhSim.Objects.CompositeSimulation|PhSim.Objects.Simulation|StaticObject[]} DynSimOptions
+ * 
+ * The options that can be used to create a dynamic simulation could be a 
+ * CompositeSimulation object, a simulation object or an array 
+ * of static objects.
+ * 
+ * If an array is chosen, then it is used to create
+ * 
+ * /
+
 /** 
  * Dynamic Simulation Instance Object 
  * 
  * @constructor
- * @param {object} sim - The simulation object
+ * @param {DynSimOptions} sim - The simulation object
  * 
  */
 
-PhSim.DynSim = function(sim) {
-
-	/**
-	 * 
-	 */
-
-	PhSim.Objects.Simulation.apply(this);
+PhSim.DynSim = function(dynSimOptions) {
 
 	/**
 	 * The static simulation object
 	 */
+
 	
-	this.sim = sim;
+	if(Array.isArray(dynSimOptions.simulations)) {
+		this.sim = dynSimOptions;
+	}
+
+	else if(Array.isArray(dynSimOptions.layers)) {
+		this.sim = new PhSim.Objects.CompositeSimulation();
+		this.sim.simulations[0] = dynSimOptions;
+	}
+
+	else if(Array.isArray(dynSimOptions)) {
+
+	}
 
 	this.registerKeyEvents();
 
@@ -5844,7 +5862,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 PhSim.DynSim.prototype.removeSimpleEvent = function(refNumber) {
 	
-	o = this.simpleEventRefs[refNumber];
+	var o = this.simpleEventRefs[refNumber];
 
 	if(o.trigger === "key") {
 		this.removeEventListener("keydown",o.ref);
