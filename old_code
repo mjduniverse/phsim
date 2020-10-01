@@ -1,0 +1,473 @@
+/**
+ * Possible Object Structure
+ */
+
+PhSim.objectTypes = {
+	path: true,
+	circle: true,
+	regularPolygon: true,
+	rectangle: true
+}
+
+/*** Structure defining possible object types ***/
+
+/**
+ * 
+ * @param {String} objectTypeStr
+ * @returns {Boolean} 
+ * 
+ */
+
+PhSim.Tools.checkObjectType = function (objectTypeStr) {
+	if(objectTypes[objectTypeStr])
+		return false;
+	else {
+		return true;
+	}
+}
+
+/*** Vector Transformation */
+
+PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
+	return {
+		"x": a11 * x + a12 * y,
+		"y": a21 * x + a22 * y   
+	}
+}
+
+// Generate Static Object from Dynamic Object
+
+PhSim.Tools.genStaticObject = function(dynObject) {
+	
+	var o = {}
+	
+	if(dynObject.plugin.ph.static.path) {
+		var o = new PhSim.Objects.Path();
+		o.verts = dynObject.plugin.ph.skinmesh;
+	}
+
+	if(dynObject.plugin.ph.static.circle) {
+		var o = new PhSim.Objects.Circle();
+		o.x = dynObject.position.x;
+		o.y = dynObject.position.y;
+		o.radius = PhSim.Tools.calcVertDistance(dynObject.position,dynObject.vertices[0]);
+		o.cycle = dynObject.angle;
+	}
+
+	if(dynObject.plugin.ph.static.rectangle) {
+		var o = new PhSim.Objects.Rectangle();
+		this.x = null;
+		this.y = null;
+		this.w = null;
+		this.h = null;
+		this.cycle = 0;
+		o.cycle = dynObject.angle;
+	}
+
+	o.fillStyle = dynObject.plugin.ph.static.fillStyle;
+	o.lineWidth = dynObject.plugin.ph.static.lineWidth;
+	o.strokeStyle = dynObject.plugin.ph.static.strokeStyle;
+	o.lineWidth = dynObject.plugin.ph.static.lineWidth;
+	o.sprite = dynObject.plugin.ph.static.sprite;
+	o.globalAlpha = dynObject.plugin.ph.static.globalAlpha;
+}
+
+PhSim.Tools.squareEdgeRect = function(ctx,x,y,w,h,e) {
+	PhSim.Tools.fillSquareByCenter(ctx,x,y,e);
+	PhSim.Tools.fillSquareByCenter(ctx,x + w,y,e);
+	PhSim.Tools.fillSquareByCenter(ctx,x,y + h,e);
+	PhSim.Tools.fillSquareByCenter(ctx,x + w, y + h,e);
+}
+
+PhSim.Tools.pointInCenterSquare = function(x,y,e,px,py) {
+	var ctx = document.createElement("canvas").getContext("2d");
+	ctx.rect(x-e*0.5,y-e*0.5,e,e);
+	return ctx.isPointInPath(px,py);
+}
+
+PhSim.Tools.fillSquareByCenter = function(ctx,x,y,e) {
+	ctx.fillRect(x-e*0.5,y-e*0.5,e,e);
+}
+
+// Create Object Composite 
+
+
+PhSim.Tools.drawSquareByCenter = function(ctx,x,y,e) {
+	ctx.rect(x-e*0.5,y-e*0.5,e,e);
+}
+
+// PhSim MatterJS Mouse
+
+PhSim.DynSim.prototype.matterJSMouseConstraint = function(obj) {
+	
+	var mouseObj = Matter.Body.create({});
+
+	var constraint = Matter.Constraint.create({
+		"bodyA": mouseObj,
+		"bodyB": obj.matter
+	})
+	
+	var f = function() {
+		Matter.Body.setPosition(mouseObj, position)
+	}
+}
+
+ // Get Rectangle by Diagonal with points (x1,y1) and (x2,y2), along with an angle 
+
+ PhSim.Tools.AngleDiagRect = function(x1,y1,x2,y2,angle) {
+	return {
+		"w": Math.abs(x2-x1),
+		"h": Math.abs(y2-y1),
+		"x": x1,
+		"y": y1
+	}
+ }
+ 
+ /***
+
+Suppose we have the line defined by the equation y=p1 and that there is a point p2 on the line.
+Now, take a point (mx,my).
+Now, let d1 be the distance between (p1,p2)
+
+***/
+
+PhSim.Tools.DiagTrig = function(p1,p2,mx,my) {
+	
+	this.hypotenuse = calc_vert_distance(p1,p2,mx,my);
+	this.opposite = calc_vert_distance(mx,my,mx,p2);
+	this.adjacent = calc_vert_distance(p1,p2,mx,p2);
+	
+	this.angle = Math.acos(this.adjacent/this.hypotenuse);
+	this.degrees = this.angle * (180/Math.PI);
+}
+
+PhSim.Tools.FollowMeDiagTrig = function(x,y) {
+	this.diatrig = new diagTrig();
+}
+
+/*
+
+// DynSim c
+
+PhSim.Counters = {
+
+    NumbCounterRender: function() {
+        this.font = null;
+        this.x = null;
+        this.y = null;
+    },
+
+    Static: {
+        NumCounterBase: function() {
+            this.numCounter = true;
+            this.render = new PhSim.Counters.NumCounterRender();
+            this.value = null;
+            this.name = null;
+            this.min = null;
+            this.max = null;
+        }
+    }
+
+}
+
+PhSim.DynSim.prototype.createNumCounterBase = function(value,min,max,x,y,name,font) {
+	var a = new PhSim.Counters.Static.NumCounterBase();
+	a.value = value;
+	a.min = min;
+	a.max = max;
+	a.render.x = x;
+	a.render.y = y;
+	a.name = name;
+	a.render.font = font;
+	this.counterArray.push(a);
+	return a;
+}
+
+PhSim.DynSim.prototype.setNumCounterValue = function(counter,newvalue) {
+	if(newvalue > counter.value.min - 1 && newvalue < counter.value.max + 1) {
+		var preEvent = new PhSim.PhEvent()
+		this.callEventClass("beforecounterset",counterRegister,preEvent);
+		counter.value = newValue;
+		var postEvent = new PhSim.PhEvent();
+		this.callEventClass("aftercounterset",counterRegister,postEvent);
+		return newValue;
+	}
+}
+
+PhSim.renderNumCounter = function(ctx,counter) {
+	ctx.fillText(counter.value,counter.render.x,counter.render.y);
+}
+
+PhSim.DynSim.prototype.counterArray = []
+
+PhSim.DynSim.prototype.renderCounterByIndex = function(i) {
+	renderNumCounter(this.simCtx,this.counterArray[i]);
+}
+
+*/
+
+PhSim.Tools.projectPointOntoLine = function(v1,v2,p) {
+	
+	var relVec = PhSim.Tools.subtractVectors(v2,v1);
+	var a = Math.atan2(relVec.y,relVec.x);
+	
+	var relPoint = PhSim.Tools.subtractVectors(v1,p);
+	relPoint = PhSim.Tools.rotatedVector(relPoint.x,relPoint.y,-a);
+	
+	relPoint = {
+		"x": relPoint.x,
+		"y": 0,
+	}
+
+	relPoint = PhSim.Tools.rotatedVector(relPoint.x,relPoint.y,a);
+	relPoint = PhSim.Tools.addVectors(relPoint,v1);
+
+	return relPoint;
+
+}
+
+// Linear Equations
+
+/**
+ * 
+ * @param {Number} m - Slope
+ * @param {Number} b - y-intercept
+ * 
+ */
+
+PhSim.Tools.createLinearFunction = function(m,b) {
+	return function(x) {
+		return m*x + b;
+	}
+}
+
+// Sim Events Aliases
+
+/*** ***/
+
+// DynSim events
+
+
+PhSim.DynSim.prototype.addClickRectRegion = function(argx,argy,argw,argh,callArg) {
+
+	var getFunction = function() {
+
+		var callFunc = callArg;
+		var x = argx;
+		var y = argy;
+		var w = argw;
+		var h = argh;
+		
+		return function(e) {
+
+			if( (x < e.x && e.x < x + w) && (y < e.y && e.y < y + h)) {
+				callFunc();
+			}
+
+		}
+
+	}
+
+	var func = getFunction();
+	this.addEventListener("mousedown",func);
+	return func
+
+}
+
+PhSim.DynSim.removeClickRectRegion = function(reference) {
+	this.removeEventListener("mousedown",reference);
+}
+
+
+PhSim.DynSim.prototype.interpretRef = function(str) {
+	if(str[0] === '"' && str[str.length - 1] === '"') {
+		
+	}
+}
+
+PhSim.DynSim.prototype.interpreter = {
+
+	execArgs: function() {
+		if(arguments[0] === "delete") {
+
+		}
+	}
+}
+
+PhSim.actionsStruct = {
+	destroyMe: {
+		id: "destroyMe"
+	},
+
+	destoryOther: {
+		id: "destroyOther"
+	}
+}
+
+// DynSim events
+
+
+PhSim.DynSim.prototype.addClickRectRegion = function(argx,argy,argw,argh,callArg) {
+
+	var getFunction = function() {
+
+		var callFunc = callArg;
+		var x = argx;
+		var y = argy;
+		var w = argw;
+		var h = argh;
+		
+		return function(e) {
+
+			if( (x < e.x && e.x < x + w) && (y < e.y && e.y < y + h)) {
+				callFunc();
+			}
+
+		}
+
+	}
+
+	var func = getFunction();
+	this.addEventListener("mousedown",func);
+	return func
+
+}
+
+PhSim.actionsStruct = {
+	destroyMe: {
+		id: "destroyMe"
+	},
+
+	destoryOther: {
+		id: "destroyOther"
+	}
+}
+
+/*
+
+// DynSim c
+
+PhSim.Counters = {
+
+    NumbCounterRender: function() {
+        this.font = null;
+        this.x = null;
+        this.y = null;
+    },
+
+    Static: {
+        NumCounterBase: function() {
+            this.numCounter = true;
+            this.render = new PhSim.Counters.NumCounterRender();
+            this.value = null;
+            this.name = null;
+            this.min = null;
+            this.max = null;
+        }
+    }
+
+}
+
+PhSim.DynSim.prototype.createNumCounterBase = function(value,min,max,x,y,name,font) {
+	var a = new PhSim.Counters.Static.NumCounterBase();
+	a.value = value;
+	a.min = min;
+	a.max = max;
+	a.render.x = x;
+	a.render.y = y;
+	a.name = name;
+	a.render.font = font;
+	this.counterArray.push(a);
+	return a;
+}
+
+PhSim.DynSim.prototype.setNumCounterValue = function(counter,newvalue) {
+	if(newvalue > counter.value.min - 1 && newvalue < counter.value.max + 1) {
+		var preEvent = new PhSim.PhEvent()
+		this.callEventClass("beforecounterset",counterRegister,preEvent);
+		counter.value = newValue;
+		var postEvent = new PhSim.PhEvent();
+		this.callEventClass("aftercounterset",counterRegister,postEvent);
+		return newValue;
+	}
+}
+
+PhSim.renderNumCounter = function(ctx,counter) {
+	ctx.fillText(counter.value,counter.render.x,counter.render.y);
+}
+
+PhSim.DynSim.prototype.counterArray = []
+
+PhSim.DynSim.prototype.renderCounterByIndex = function(i) {
+	renderNumCounter(this.simCtx,this.counterArray[i]);
+}
+
+*/
+
+PhSim.Tools.projectPointOntoLine = function(v1,v2,p) {
+	
+	var relVec = PhSim.Tools.subtractVectors(v2,v1);
+	var a = Math.atan2(relVec.y,relVec.x);
+	
+	var relPoint = PhSim.Tools.subtractVectors(v1,p);
+	relPoint = PhSim.Tools.rotatedVector(relPoint.x,relPoint.y,-a);
+	
+	relPoint = {
+		"x": relPoint.x,
+		"y": 0,
+	}
+
+	relPoint = PhSim.Tools.rotatedVector(relPoint.x,relPoint.y,a);
+	relPoint = PhSim.Tools.addVectors(relPoint,v1);
+
+	return relPoint;
+
+}
+
+// Linear Equations
+
+/**
+ * 
+ * @param {Number} m - Slope
+ * @param {Number} b - y-intercept
+ * 
+ */
+
+PhSim.Tools.createLinearFunction = function(m,b) {
+	return function(x) {
+		return m*x + b;
+	}
+}
+
+
+// PhSim MatterJS Mouse
+
+PhSim.DynSim.prototype.matterJSMouseConstraint = function(obj) {
+	
+	var mouseObj = Matter.Body.create({});
+
+	var constraint = Matter.Constraint.create({
+		"bodyA": mouseObj,
+		"bodyB": obj.matter
+	})
+	
+	var f = function() {
+		Matter.Body.setPosition(mouseObj, position)
+	}
+}
+
+
+PhSim.DynSim.prototype.interpretRef = function(str) {
+	if(str[0] === '"' && str[str.length - 1] === '"') {
+		
+	}
+}
+
+PhSim.DynSim.prototype.interpreter = {
+
+	execArgs: function() {
+		if(arguments[0] === "delete") {
+
+		}
+	}
+}

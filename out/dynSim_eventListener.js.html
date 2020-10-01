@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: dynSim/eventListener.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: dynSim/eventListener.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * 
+ * Used to add events to a PhSim simulation
+ * 
+ * @function
+ * @param {string} eventStr - String representing the event.
+ * @param {PhSimEventCall} call - Function to run when event is executed.
+ * @param {object} [options = {}] - Event Listener Options.
+ * @param {boolean} [options.once] - If true, the function is executed only once.
+ * @param {boolean} [options.slEvent] - If true, the event will be removed when the simulation changes
+ * 
+ */
+
+PhSim.DynSim.prototype.addEventListener = function(eventStr,call,options = {}) {
+	
+	
+
+	if(options &amp;&amp; options.slEvent === true) {
+		if(this.slEventStack[eventStr]) {
+			this.slEventStack[eventStr].push(call);
+		}
+	}
+
+	else {
+		if(this.eventStack[eventStr]) {
+			this.eventStack[eventStr].push(call);
+		}
+	}
+
+
+	if(options) {
+		if(options === true) {
+			if(options.once) {
+	
+				var f = function(e) {
+					this.removeEventListener(eventStr,call)
+					this.removeEventListener(eventStr,f)
+				}
+	
+				this.addEventListener(eventStr,f);
+
+			}
+		}
+
+	}
+
+
+	else {
+		throw new Error("Event Target Not Available")
+	}
+
+}
+
+/**
+ * @function 
+ * @param {String} eventStr 
+ * @param {PhSimEventCall} call 
+ */
+
+
+PhSim.DynSim.prototype.removeEventListener = function(eventStr,call) {
+	
+	if(this.eventStack[eventStr] &amp;&amp; this.eventStack[eventStr].includes(call)) {
+		var callIndex = this.eventStack[eventStr].indexOf(call);
+		this.eventStack[eventStr].splice(callIndex,1);
+	}
+
+	if(this.slEventStack[eventStr] &amp;&amp; this.slEventStack[eventStr].includes(call)) {
+		var callIndex = this.slEventStack[eventStr].indexOf(call);
+		this.slEventStack[eventStr].splice(callIndex,1);
+	}
+
+}
+
+/**
+ * @function
+ * @param {String} eventStr 
+ * @param {Object} thisArg 
+ * @param {Object} eventArg 
+ */
+
+PhSim.DynSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
+	
+	if(this.eventStack[eventStr]) {
+		for(var i = 0; i &lt; this.eventStack[eventStr].length; i++) {
+			var func = this.eventStack[eventStr][i]
+			eventArg.func = func;
+			func.call(thisArg,eventArg);
+
+		}
+	}
+
+	if(this.slEventStack[eventStr]) {
+		for(var i = 0; i &lt; this.slEventStack[eventStr].length; i++) {
+
+			var func = this.slEventStack[eventStr][i]
+			eventArg.func = func;
+			func.call(thisArg,eventArg);
+
+		}
+	}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Gradients.html">Gradients</a></li><li><a href="PhSim.Objects.html">Objects</a></li><li><a href="PhSim.Tools.html">Tools</a></li></ul><h3>Classes</h3><ul><li><a href="PhSim.CollisionReport.html">CollisionReport</a></li><li><a href="PhSim.DynObject.html">DynObject</a></li><li><a href="PhSim.DynSim.html">DynSim</a></li><li><a href="PhSim.DynSimCamera.html">DynSimCamera</a></li><li><a href="PhSim.EventStack.html">EventStack</a></li><li><a href="PhSim.Objects.Camera.html">Camera</a></li><li><a href="PhSim.Objects.Circle.html">Circle</a></li><li><a href="PhSim.Objects.CompositeSimulation.html">CompositeSimulation</a></li><li><a href="PhSim.Objects.GradientLimits.html">GradientLimits</a></li><li><a href="PhSim.Objects.GradientStop.html">GradientStop</a></li><li><a href="PhSim.Objects.Layer.html">Layer</a></li><li><a href="PhSim.Objects.Path.html">Path</a></li><li><a href="PhSim.Objects.Rectangle.html">Rectangle</a></li><li><a href="PhSim.Objects.RegPolygon.html">RegPolygon</a></li><li><a href="PhSim.Objects.Simulation.html">Simulation</a></li><li><a href="PhSim.PhDynEvent.html">PhDynEvent</a></li><li><a href="PhSim.PhEvent.html">PhEvent</a></li><li><a href="PhSim.PhKeyEvent.html">PhKeyEvent</a></li><li><a href="PhSim.PhMouseEvent.html">PhMouseEvent</a></li><li><a href="PhSim.PhRender.html">PhRender</a></li><li><a href="PhSim.phSimCollision.html">phSimCollision</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getDynBoundingBox">getDynBoundingBox</a></li><li><a href="global.html#getRectangleCentroid">getRectangleCentroid</a></li><li><a href="global.html#getRegPolygonVerts">getRegPolygonVerts</a></li><li><a href="global.html#getVertBoundingBox">getVertBoundingBox</a></li><li><a href="global.html#setDynObjectLifespan">setDynObjectLifespan</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Sep 30 2020 20:58:26 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
