@@ -13,9 +13,6 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, './dist'),
         filename: "phSim.js",
-        library: "PhSim",
-        libraryTarget: 'umd',
-        umdNamedDefine: true,
         globalObject: 'this',
     }
 };

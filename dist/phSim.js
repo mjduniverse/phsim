@@ -1,14 +1,4 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define("PhSim", [], factory);
-	else if(typeof exports === 'object')
-		exports["PhSim"] = factory();
-	else
-		root["PhSim"] = factory();
-})(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -3104,7 +3094,11 @@ PhSim.DynSim.prototype.registerCanvasEvents = function() {
 
 PhSim.DynSim.prototype.registerKeyEvents = function() {
 
+	this.windowObj = this.windowObj || window;
+
 	var self = this;
+
+	this.keyElm = document.createElement("div");
 
 	this.keydownBridge = function(e) {
 		var eventObj = new PhSim.PhKeyEvent();
@@ -3121,11 +3115,11 @@ PhSim.DynSim.prototype.registerKeyEvents = function() {
 		}
 	}
 
-	window.addEventListener("keydown",this.keydownBridgeWrapper);
+	this.windowObj.addEventListener("keydown",this.keydownBridgeWrapper);
 }
 
 PhSim.DynSim.prototype.deregisterKeyEvents = function() {
-	window.removeEventListener("keydown",this.keydownBridgeWrapper);
+	this.windowObj.removeEventListener("keydown",this.keydownBridgeWrapper);
 }
 
 /***/ }),
@@ -5620,6 +5614,7 @@ PhSim.DynSim.prototype.simpleEventRefs = [];
  * @param {Number} options.maxN - The maximum number of times a repeated SimpleEvent can be executed.
  * @param {PhSim.DynObject} options.triggerObj - Trigger object
  * @returns {Number} - A reference to the simple event.
+ * @this {PhSim.DynSim}
  * */
 
 
@@ -5750,8 +5745,15 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 		return this.simpleEventRefs.push(new PhSim.DynSim.SimpeEventRef(trigger,f)) - 1;
 	}
 
-	this.callEventClass("firstslupdate",this,afterUpdateEvent);
+	if(trigger === "firstslupdate") {
+		
+		var f = function(e) {
+			call(e)
+		}
 
+		this.addEventListener("firstslupdate",f);
+
+	}
 	
 	if(trigger === "objmouseup" || trigger === "objmouseup_global") {
 
@@ -5922,4 +5924,3 @@ PhSim.DynSim.prototype.processVar = function(str) {
 
 /***/ })
 /******/ ]);
-});

@@ -21,6 +21,7 @@ PhSim.DynSim.prototype.simpleEventRefs = [];
  * @param {Number} options.maxN - The maximum number of times a repeated SimpleEvent can be executed.
  * @param {PhSim.DynObject} options.triggerObj - Trigger object
  * @returns {Number} - A reference to the simple event.
+ * @this {PhSim.DynSim}
  * */
 
 
@@ -151,8 +152,15 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 		return this.simpleEventRefs.push(new PhSim.DynSim.SimpeEventRef(trigger,f)) - 1;
 	}
 
-	this.callEventClass("firstslupdate",this,afterUpdateEvent);
+	if(trigger === "firstslupdate") {
+		
+		var f = function(e) {
+			call(e)
+		}
 
+		this.addEventListener("firstslupdate",f);
+
+	}
 	
 	if(trigger === "objmouseup" || trigger === "objmouseup_global") {
 

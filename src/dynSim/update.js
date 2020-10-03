@@ -102,9 +102,8 @@ PhSim.DynSim.prototype.loopFunction = function() {
 
 		if(!this.firstSlUpdate) {
 			this.callEventClass("firstslupdate",this,afterUpdateEvent);
+			this.firstSlUpdate = true;
 		}
-
-		this.firstSlUpdate = true;
 
 		this.callEventClass("afterupdate",this,afterUpdateEvent);
 

@@ -191,7 +191,11 @@ PhSim.DynSim.prototype.registerCanvasEvents = function() {
 
 PhSim.DynSim.prototype.registerKeyEvents = function() {
 
+	this.windowObj = this.windowObj || window;
+
 	var self = this;
+
+	this.keyElm = document.createElement("div");
 
 	this.keydownBridge = function(e) {
 		var eventObj = new PhSim.PhKeyEvent();
@@ -208,9 +212,9 @@ PhSim.DynSim.prototype.registerKeyEvents = function() {
 		}
 	}
 
-	window.addEventListener("keydown",this.keydownBridgeWrapper);
+	this.windowObj.addEventListener("keydown",this.keydownBridgeWrapper);
 }
 
 PhSim.DynSim.prototype.deregisterKeyEvents = function() {
-	window.removeEventListener("keydown",this.keydownBridgeWrapper);
+	this.windowObj.removeEventListener("keydown",this.keydownBridgeWrapper);
 }
