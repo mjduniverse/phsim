@@ -1,5 +1,5 @@
 # phsim
-PhSim is a library built on top of Matter.js. PhSim allows one to easily create a physics simulation without much hassle
+PhSim is a library built on top of Matter.js. PhSim allows one to easily create a physics simulation without much hassle.
 PhSim could be used to create games as well.
 
 # Some of the features:
