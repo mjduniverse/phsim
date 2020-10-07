@@ -20,7 +20,7 @@
 
 PhSim.DynObject = function(staticObject) {
 
-	var opts = {}
+	var opts = staticObject
 
 	if(staticObject.name) {
 		opts.label = staticObject.name;

@@ -280,6 +280,15 @@ PhSim.Widgets.CircularConstraint = function() {
 	this.circularConstraint = true;
 }
 
+PhSim.Widgets.AdditionalSprite = function() {
+	this.additionalSprite = true;
+	PhSim.Sprites.Sprite.call(this);
+}
+
+PhSim.Widgets.CompositeSprite = function() {
+	this.srcArray = [];
+}
+
 PhSim.Widgets.RectText.alignStruct = [
 	"left",
 	"right",

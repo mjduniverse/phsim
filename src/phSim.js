@@ -45,7 +45,7 @@ PhSim.name = "phsim"
  * @readonly
  */
 
-PhSim.version = "1"
+PhSim.version = "0.1.0-alpha"
 
 if(typeof window === "object") {
 	window.PhSim = PhSim;

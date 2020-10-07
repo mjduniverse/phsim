@@ -136,7 +136,7 @@ PhSim.name = "phsim"
  * @readonly
  */
 
-PhSim.version = "1"
+PhSim.version = "0.1.0-alpha"
 
 if(typeof window === "object") {
 	window.PhSim = PhSim;
@@ -4243,9 +4243,8 @@ PhSim.DynSim.prototype.loopFunction = function() {
 
 		if(!this.firstSlUpdate) {
 			this.callEventClass("firstslupdate",this,afterUpdateEvent);
+			this.firstSlUpdate = true;
 		}
-
-		this.firstSlUpdate = true;
 
 		this.callEventClass("afterupdate",this,afterUpdateEvent);
 
@@ -5385,6 +5384,15 @@ PhSim.Widgets.CircularConstraint = function() {
 	this.circularConstraint = true;
 }
 
+PhSim.Widgets.AdditionalSprite = function() {
+	this.additionalSprite = true;
+	PhSim.Sprites.Sprite.call(this);
+}
+
+PhSim.Widgets.CompositeSprite = function() {
+	this.srcArray = [];
+}
+
 PhSim.Widgets.RectText.alignStruct = [
 	"left",
 	"right",
@@ -5471,7 +5479,7 @@ PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
 
 PhSim.DynObject = function(staticObject) {
 
-	var opts = {}
+	var opts = staticObject
 
 	if(staticObject.name) {
 		opts.label = staticObject.name;

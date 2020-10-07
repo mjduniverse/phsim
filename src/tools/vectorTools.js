@@ -1,7 +1,10 @@
 /**
  * 
- * @param {PhSim.Objects.Vector} vector1 
- * @param {PhSim.Objects.Vector} vector2 
+ * Perform vector addition
+ * 
+ * @param {PhSim.Objects.Vector} vector1 - The first vector
+ * @param {PhSim.Objects.Vector} vector2 - The second vector
+ * @returns {PhSim.Objects.Vector} - The sum of the two vectors
  */
 
 PhSim.Tools.addVectors = function(vector1,vector2) {
@@ -10,8 +13,11 @@ PhSim.Tools.addVectors = function(vector1,vector2) {
 
 /**
  * 
+ * Perform vector subtraction
+ * 
  * @param {PhSim.Objects.Vector} vector1 
  * @param {PhSim.Objects.Vector} vector2 
+ * @returns {PhSim.Objects.Vector} - The difference between the two vectors
  */
 
 PhSim.Tools.subtractVectors = function(vector1,vector2) {
@@ -81,8 +87,17 @@ PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
 	}
 }
 
-/*** Rotate Vector ***/
+/**
+ * 
+ * @param {*} x 
+ * @param {*} y 
+ * @param {*} a 
+ */
 
 PhSim.Tools.rotatedVector = function(x,y,a) {
 	return PhSim.Tools.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
+}
+
+PhSim.Tools.svgVector = function(x,y) {
+	return x + "," + y;
 }
