@@ -500,17 +500,40 @@ PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
 			this.ctx.scale(regPolygon.sprite.scale,regPolygon.sprite.scale);
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
-			this.ctx.arc(0,0,regPolygon.radius,0,2*Math.PI);
+
+			this.ctx.beginPath();
+
+			this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
+		
+			for(var j = 0; j < vertSet.length; j++) {
+			  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
+			}
+		
+			this.ctx.closePath();
+
 			this.ctx.fill();
 			this.ctx.restore();	
 		}
 
 		if(regPolygon.sprite.fit) {
+
 			this.ctx.save();
+
+			this.ctx.beginPath();
+
+			this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
+		
+			for(var j = 0; j < vertSet.length; j++) {
+			  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
+			}
+		
+			this.ctx.closePath();
+
+			this.ctx.clip();
+
 			this.ctx.translate(regPolygon.x,regPolygon.y);
 			this.ctx.rotate(regPolygon.cycle);
-			this.ctx.arc(0,0,regPolygon.radius,0,2*Math.PI);
-			this.ctx.clip();
+
 			var box = PhSim.Tools.getStaticBoundingBox(regPolygon);
 
 			var h = img.height * (box.w/img.width);
