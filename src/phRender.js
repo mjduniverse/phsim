@@ -304,7 +304,7 @@ PhSim.PhRender.prototype.static_circle = function (circle) {
  * 
  * @function
  * @param {PhSim.Objects.Rectangle} rectangle - Rectangle object
- * 
+ * @param rectangle.sprite - Sprite Object
  */
 
 PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
@@ -395,6 +395,7 @@ PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 			this.ctx.rotate(rectangle.cycle);
 			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
 			this.ctx.clip();
+
 			var box = PhSim.Tools.getStaticBoundingBox(rectangle);
 
 			var h = img.height * (rectangle.w/img.width);
@@ -504,8 +505,22 @@ PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
 			this.ctx.restore();	
 		}
 
-		if(regPolygon.sprite.center) { 
-			this.renderSpriteByCenter(regPolygon.sprite.src,regPolygon.x,regPolygon.y,regPolygon.cycle);
+		if(regPolygon.sprite.fit) {
+			this.ctx.save();
+			this.ctx.translate(regPolygon.x,regPolygon.y);
+			this.ctx.rotate(regPolygon.cycle);
+			this.ctx.arc(0,0,regPolygon.radius,0,2*Math.PI);
+			this.ctx.clip();
+			var box = PhSim.Tools.getStaticBoundingBox(regPolygon);
+
+			var h = img.height * (box.w/img.width);
+
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,box.w,h,0);
+			this.ctx.restore();	
+		}
+
+		else { 
+			this.renderSpriteByCenter(regPolygon.sprite.src,regPolygon.x,regPolygon.y,img.width,img.height,regPolygon.cycle);
 		}
 
 	}
@@ -746,7 +761,9 @@ PhSim.PhRender.prototype.dynamicRenderDraw = function (arg) {
 				this.renderSpriteByCenter(arg.object.sprite.src,arg.matter.position.x,arg.matter.position.y,box.w,h,arg.matter.angle);
 	
 				this.ctx.restore();	
-	
+
+				//
+
 			}
 	
 			else {

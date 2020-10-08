@@ -1749,8 +1749,11 @@ PhSim.Tools = {}
 
 /**
  * 
- * @param {PhSim.Objects.Vector} vector1 
- * @param {PhSim.Objects.Vector} vector2 
+ * Perform vector addition
+ * 
+ * @param {PhSim.Objects.Vector} vector1 - The first vector
+ * @param {PhSim.Objects.Vector} vector2 - The second vector
+ * @returns {PhSim.Objects.Vector} - The sum of the two vectors
  */
 
 PhSim.Tools.addVectors = function(vector1,vector2) {
@@ -1759,8 +1762,11 @@ PhSim.Tools.addVectors = function(vector1,vector2) {
 
 /**
  * 
+ * Perform vector subtraction
+ * 
  * @param {PhSim.Objects.Vector} vector1 
  * @param {PhSim.Objects.Vector} vector2 
+ * @returns {PhSim.Objects.Vector} - The difference between the two vectors
  */
 
 PhSim.Tools.subtractVectors = function(vector1,vector2) {
@@ -1830,10 +1836,19 @@ PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
 	}
 }
 
-/*** Rotate Vector ***/
+/**
+ * 
+ * @param {*} x 
+ * @param {*} y 
+ * @param {*} a 
+ */
 
 PhSim.Tools.rotatedVector = function(x,y,a) {
 	return PhSim.Tools.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
+}
+
+PhSim.Tools.svgVector = function(x,y) {
+	return x + "," + y;
 }
 
 /***/ }),
@@ -1872,33 +1887,18 @@ PhSim.Tools.checkObjectType = function (objectTypeStr) {
 /* 9 */
 /***/ (function(module, exports) {
 
-/*** 
+/**
  * 
  * Get Rectangle by diagonal with points (x1,y1) and (x2,y2)
  * 
- * ***/
+ */
 
-PhSim.Tools.diagRect = function(x1,y1,x2,y2,a) {
+PhSim.Tools.diagRect = function(x1,y1,x2,y2) {
 
-	var v = {
-		"x": x2 - x1,
-		"y": y2 - y1
-	}
+	var w = x2 - x1;
+	var h = y2 - y1;
 
-	v = {
-		"x": v.x * Math.cos(-a) - v.y * Math.sin(-a),
-		"y": v.x * Math.sin(-a) + v.y * Math.cos(-a)
-	}
-
-	v = {
-		"x": v.x + x1,
-		"y": v.y + y1
-	}
-
-	x2 = v.x;
-	y2 = v.y;
-
-    return new PhSim.Objects.Rectangle(x2-x1,y2-y1,x1,y1);
+    return new PhSim.Objects.Rectangle(x1,y1,w,h);
     
  }
 
