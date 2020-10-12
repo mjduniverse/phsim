@@ -26,11 +26,14 @@ PhSim.Tools.getRegPolygonVerts = function(regularPolygon) {
 }
 
 
-/* 
-
-Rectangles
-
-*/
+/**
+ * 
+ * Get vertices for a rectangle
+ * 
+ * @function
+ * @param {PhSim.Objects.Rectangle} rectangle
+ * @returns {Object[]} 
+ */
 
 PhSim.Tools.getRectangleVertArray = function(rectangle) {
 
@@ -68,6 +71,15 @@ PhSim.Tools.getRectangleVertArray = function(rectangle) {
 	return a;
 
 }
+
+/**
+ * 
+ * Get rectangle corners
+ * 
+ * @function
+ * @param {PhSim.Objects.Rectangle} rectangle 
+ * @returns {Object}
+ */
 
 
 PhSim.Tools.getRectangleCorners = function(rectangle) {

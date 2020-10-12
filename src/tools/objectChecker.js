@@ -12,7 +12,9 @@ PhSim.objectTypes = {
 /*** Structure defining possible object types ***/
 
 /**
+ * Check object type
  * 
+ * @function
  * @param {String} objectTypeStr
  * @returns {Boolean} 
  * 

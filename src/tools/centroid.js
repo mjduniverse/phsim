@@ -2,7 +2,7 @@
  * 
  * Get centroid of a rectangle
  * 
- * @function getRectangleCentroid
+ * @function
  * @param {PhSim.Objects.Rectangle} rectangle
  * @returns {PhSim.Objects.Vector}
  *  
@@ -16,14 +16,16 @@ PhSim.Tools.getRectangleCentroid = function(rectangle) {
 }
 
 
-/*** Find Centroid of a path polygon ***/
+/** 
+ * Find Centroid of a path polygon
+ * @function
+ * @param {PhSim.Objects.Path} a - Path
+ * @returns {PhSim.Objects.Vector}
+ */
 
 PhSim.Tools.findCentroidOfPath = function(a) {
 		
-	var v = {
-		x: 0,
-		y: 0,
-	}
+	var v = new PhSim.Objects.Vector(0,0);
 	
 	for(var j = 0; j < a.verts.length; j++) { 
 		v.x += a.verts[j].x;

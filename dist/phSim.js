@@ -1157,7 +1157,7 @@ PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 	this.ctx.translate(-c.x,-c.y);
 
 
-	if(Number.isInteger(rectangle.sprite)) {
+	if(rectangle.sprite) {
 
 		var img = this.spriteImgArray[rectangle.sprite.src];
 
@@ -1181,11 +1181,11 @@ PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
 			this.ctx.clip();
 
-			var box = PhSim.Tools.getStaticBoundingBox(rectangle);
+			//var box = PhSim.Tools.getStaticBoundingBox(rectangle);
 
 			var h = img.height * (rectangle.w/img.width);
 
-			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.w,h);
+			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.w,h,0);
 			this.ctx.restore();	
 		}
 
@@ -1791,6 +1791,7 @@ PhSim.Tools = {}
  * 
  * Perform vector addition
  * 
+ * @function
  * @param {PhSim.Objects.Vector} vector1 - The first vector
  * @param {PhSim.Objects.Vector} vector2 - The second vector
  * @returns {PhSim.Objects.Vector} - The sum of the two vectors
@@ -1804,6 +1805,7 @@ PhSim.Tools.addVectors = function(vector1,vector2) {
  * 
  * Perform vector subtraction
  * 
+ * @function
  * @param {PhSim.Objects.Vector} vector1 
  * @param {PhSim.Objects.Vector} vector2 
  * @returns {PhSim.Objects.Vector} - The difference between the two vectors
@@ -1815,8 +1817,13 @@ PhSim.Tools.subtractVectors = function(vector1,vector2) {
 
 /**
  * 
+ * Multiply a vector by a scalar
+ * 
+ * @function
  * @param {PhSim.Objects.Vector} vector 
- * @param {Number} scalar 
+ * @param {Number} scalar
+ * @returns {PhSim.Objects.Vector} 
+ * 
  */
 
 PhSim.Tools.scaleVector = function(vector,scalar) {
@@ -1825,8 +1832,13 @@ PhSim.Tools.scaleVector = function(vector,scalar) {
 
 /**
  * 
+ * Divide a vector by a scalar
+ * 
+ * @function
  * @param {PhSim.Objects.Vector} vector 
- * @param {Number} scalar 
+ * @param {Number} scalar
+ * @returns {PhSim.Objects.Vector} 
+ *  
  */
 
 PhSim.Tools.divideVector = function(vector,scalar) {
@@ -1835,8 +1847,13 @@ PhSim.Tools.divideVector = function(vector,scalar) {
 
 /**
  * 
+ * Get distance between two vectors.
+ * 
+ * @function
  * @param {PhSim.Objects.Vector} vector1 
- * @param {PhSim.Objects.Vector} vector2 
+ * @param {PhSim.Objects.Vector} vector2
+ * @returns - The vector distance
+ *  
  */
 
 PhSim.Tools.calcVertDistance = function(vector1,vector2) {
@@ -1850,8 +1867,11 @@ PhSim.Tools.calcVertDistance = function(vector1,vector2) {
 
 /**
  * 
- * @param {PhSim.Objects.Vector} vector 
+ * Get length of the vector
  * 
+ * @function
+ * @param {PhSim.Objects.Vector} vector 
+ * @returns {Number} - The length of the vector
  */
 
 PhSim.Tools.getVectorLength = function(vector) {
@@ -1860,32 +1880,55 @@ PhSim.Tools.getVectorLength = function(vector) {
 
 /**
  * 
- * @param {PhSim.Objects.Vector} vector 
+ * Get normalized vector of some vector.
+ * 
+ * @function
+ * @param {PhSim.Objects.Vector} vector - Vector to normalize.
+ * @returns {PhSim.Objects.Vector} -  The Unit Vector
  */
 
 PhSim.Tools.getUnitVector = function(vector) {
 	return PhSim.Tools.scaleVector(vector,1/PhSim.Tools.getVectorLength(vector));
 }
 
-/*** Vector Transformation */
+/**
+ * Apply a linear transformation defined by a 2x2 matrix to a vector.
+ * 
+ * @function
+ * @param {Number} a11 - Element found in row 1, column 1
+ * @param {Number} a12 - Element found in row 1, column 2
+ * @param {Number} a21 - Element found in row 2, column 1
+ * @param {Number} a22 - Element found in row 2, column 2
+ * @param {Number} x - x-coordinate of vector to be transformed
+ * @param {Number} y - y-coordinate of vector to be transformed
+ * @returns - The transformed vector 
+ */
 
 PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
-	return {
-		"x": a11 * x + a12 * y,
-		"y": a21 * x + a22 * y   
-	}
+	return new PhSim.Objects.Vector(a11 * x + a12 * y,a21 * x + a22 * y);
 }
 
 /**
  * 
- * @param {*} x 
- * @param {*} y 
- * @param {*} a 
+ * Rotate a vector (x,y) by angle a
+ * 
+ * @function
+ * @param {Number} x - x-coordinate
+ * @param {Number} y - y-coordinate
+ * @param {Number} a - Angle in radians
+ * @returns {PhSim.Objects.Vector}
  */
 
 PhSim.Tools.rotatedVector = function(x,y,a) {
 	return PhSim.Tools.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
 }
+
+/**
+ * Get SVG point
+ * @param {Number} x 
+ * @param {Number} y
+ * @returns {String} - SVG Vector String 
+ */
 
 PhSim.Tools.svgVector = function(x,y) {
 	return x + "," + y;
@@ -1909,7 +1952,9 @@ PhSim.objectTypes = {
 /*** Structure defining possible object types ***/
 
 /**
+ * Check object type
  * 
+ * @function
  * @param {String} objectTypeStr
  * @returns {Boolean} 
  * 
@@ -1929,7 +1974,15 @@ PhSim.Tools.checkObjectType = function (objectTypeStr) {
 
 /**
  * 
- * Get Rectangle by diagonal with points (x1,y1) and (x2,y2)
+ * Get Rectangle by diagonal with points (x1,y1) and (x2,y2);
+ * 
+ * @function
+ * 
+ * @param {Number} x1
+ * @param {Number} y1
+ * @param {Number} x2
+ * @param {Number} y2 
+ * @returns {PhSim.Objects.Rectangle} - Rectangle Object
  * 
  */
 
@@ -1975,11 +2028,14 @@ PhSim.Tools.getRegPolygonVerts = function(regularPolygon) {
 }
 
 
-/* 
-
-Rectangles
-
-*/
+/**
+ * 
+ * Get vertices for a rectangle
+ * 
+ * @function
+ * @param {PhSim.Objects.Rectangle} rectangle
+ * @returns {Object[]} 
+ */
 
 PhSim.Tools.getRectangleVertArray = function(rectangle) {
 
@@ -2018,6 +2074,15 @@ PhSim.Tools.getRectangleVertArray = function(rectangle) {
 
 }
 
+/**
+ * 
+ * Get rectangle corners
+ * 
+ * @function
+ * @param {PhSim.Objects.Rectangle} rectangle 
+ * @returns {Object}
+ */
+
 
 PhSim.Tools.getRectangleCorners = function(rectangle) {
 
@@ -2049,7 +2114,7 @@ PhSim.Tools.getRectangleCorners = function(rectangle) {
  * 
  * Get centroid of a rectangle
  * 
- * @function getRectangleCentroid
+ * @function
  * @param {PhSim.Objects.Rectangle} rectangle
  * @returns {PhSim.Objects.Vector}
  *  
@@ -2063,14 +2128,16 @@ PhSim.Tools.getRectangleCentroid = function(rectangle) {
 }
 
 
-/*** Find Centroid of a path polygon ***/
+/** 
+ * Find Centroid of a path polygon
+ * @function
+ * @param {PhSim.Objects.Path} a - Path
+ * @returns {PhSim.Objects.Vector}
+ */
 
 PhSim.Tools.findCentroidOfPath = function(a) {
 		
-	var v = {
-		x: 0,
-		y: 0,
-	}
+	var v = new PhSim.Objects.Vector(0,0);
 	
 	for(var j = 0; j < a.verts.length; j++) { 
 		v.x += a.verts[j].x;
