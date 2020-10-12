@@ -372,7 +372,7 @@ PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 	this.ctx.translate(-c.x,-c.y);
 
 
-	if(Number.isInteger(rectangle.sprite)) {
+	if(rectangle.sprite) {
 
 		var img = this.spriteImgArray[rectangle.sprite.src];
 
@@ -396,11 +396,11 @@ PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
 			this.ctx.clip();
 
-			var box = PhSim.Tools.getStaticBoundingBox(rectangle);
+			//var box = PhSim.Tools.getStaticBoundingBox(rectangle);
 
 			var h = img.height * (rectangle.w/img.width);
 
-			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.w,h);
+			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.w,h,0);
 			this.ctx.restore();	
 		}
 
