@@ -344,8 +344,8 @@ PhSim.DynSim.prototype.getCollidingObjects = function(dynObject) {
 
 PhSim.DynSim.prototype.getSensorClasses = function(dynObject) {
 
-	if(dynObject.object.sensorClass) {
-		var a = dynObject.object.sensorClass;
+	if(dynObject.sensorClass) {
+		var a = dynObject.sensorClass;
 		var b = a.split(" ");
 		return b;
 	}
