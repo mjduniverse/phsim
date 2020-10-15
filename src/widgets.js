@@ -11,7 +11,7 @@ PhSim.Widgets = {}
 PhSim.Widgets.Velocity = function() {
 	this.velocity = true;
 	this.key = null;
-	this.vector = new PhSim.Objects.Vector(null,null);
+	this.vector = new PhSim.Vector(null,null);
 }
 
 //PhSim.Widgets.VelocityKey.desc = "VelocityKey is a widget that allows the user to change the velocity of a physical object by some key."
@@ -20,21 +20,21 @@ PhSim.Widgets.Force = function() {
 	this.trigger = null;
 	this.force = true;
 	this.key = null;
-	this.vector = new PhSim.Objects.Vector(null,null);
+	this.vector = new PhSim.Vector(null,null);
 }
 
 PhSim.Widgets.Position = function() {
 	this.trigger = null;
 	this.position = true;
 	this.key = null;
-	this.vector = new PhSim.Objects.Vector(null,null);
+	this.vector = new PhSim.Vector(null,null);
 }
 
 PhSim.Widgets.Translate = function() {
 	this.trigger = null;
 	this.translate = true;
 	this.key = null;
-	this.vector = new PhSim.Objects.Vector(null,null);
+	this.vector = new PhSim.Vector(null,null);
 }
 
 PhSim.Widgets.Clone = function() {
@@ -43,7 +43,7 @@ PhSim.Widgets.Clone = function() {
 	this.time = null;
 	this.clone = true;
 	this.key = null;
-	this.vector = new PhSim.Objects.Vector(null,null);
+	this.vector = new PhSim.Vector(null,null);
 	this.copyWidgets = true;
 	this.maxN = null;
 }

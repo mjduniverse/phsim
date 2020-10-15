@@ -5,7 +5,7 @@
  * 
  * @function
  * @param {PhSim.Objects.RegPolygon} regularPolygon - The Static Regular Polygon Object
- * @returns {PhSim.Objects.Vector[]}
+ * @returns {PhSim.Vector[]}
  * 
  */
 
@@ -18,7 +18,7 @@ PhSim.Tools.getRegPolygonVerts = function(regularPolygon) {
 	for(var i = 0; i < regularPolygon.sides; i++) {
 		var x = regularPolygon.x + Math.cos(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
 		var y = regularPolygon.y + Math.sin(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
-		a.push(new PhSim.Objects.Vector(x,y));
+		a.push(new PhSim.Vector(x,y));
 	}
 
 	return a;

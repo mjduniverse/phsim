@@ -188,7 +188,7 @@ PhSim.Objects = {}
  * 
  */
 
-PhSim.Objects.Vector = function(x, y) {
+PhSim.Vector = function(x, y) {
 	this.x = x;
 	this.y = y;
 }
@@ -206,17 +206,17 @@ PhSim.Objects.GradientLimits = function(x0,y0,x1,y1) {
 
 	/**
 	 * Start vector
-	 * @type {PhSim.Objects.Vector}
+	 * @type {PhSim.Vector}
 	 */
 
-	this.start = new PhSim.Objects.Vector(x0,y0);	
+	this.start = new PhSim.Vector(x0,y0);	
 	
 	/**
 	 * End vector
-	 * @type {PhSim.Objects.Vector}
+	 * @type {PhSim.Vector}
 	 */
 
-	this.end = new PhSim.Objects.Vector(x1,y1);
+	this.end = new PhSim.Vector(x1,y1);
 }
 
 /**
@@ -296,7 +296,7 @@ PhSim.Objects.Path = function() {
 
 	/**
 	 * Array of vectors defining a path or a polygon
-	 * @type {PhSim.Objects.Vector}
+	 * @type {PhSim.Vector}
 	 */
 
 	this.verts = [];
@@ -1865,13 +1865,13 @@ PhSim.Tools = {}
  * Perform vector addition
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector1 - The first vector
- * @param {PhSim.Objects.Vector} vector2 - The second vector
- * @returns {PhSim.Objects.Vector} - The sum of the two vectors
+ * @param {PhSim.Vector} vector1 - The first vector
+ * @param {PhSim.Vector} vector2 - The second vector
+ * @returns {PhSim.Vector} - The sum of the two vectors
  */
 
 PhSim.Tools.addVectors = function(vector1,vector2) {
-	return new PhSim.Objects.Vector(vector1.x + vector2.x, vector1.y + vector2.y);
+	return new PhSim.Vector(vector1.x + vector2.x, vector1.y + vector2.y);
 }
 
 /**
@@ -1879,13 +1879,13 @@ PhSim.Tools.addVectors = function(vector1,vector2) {
  * Perform vector subtraction
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector1 
- * @param {PhSim.Objects.Vector} vector2 
- * @returns {PhSim.Objects.Vector} - The difference between the two vectors
+ * @param {PhSim.Vector} vector1 
+ * @param {PhSim.Vector} vector2 
+ * @returns {PhSim.Vector} - The difference between the two vectors
  */
 
 PhSim.Tools.subtractVectors = function(vector1,vector2) {
-	return new PhSim.Objects.Vector(vector1.x - vector2.x, vector1.y - vector2.y);
+	return new PhSim.Vector(vector1.x - vector2.x, vector1.y - vector2.y);
 }
 
 /**
@@ -1893,14 +1893,14 @@ PhSim.Tools.subtractVectors = function(vector1,vector2) {
  * Multiply a vector by a scalar
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector 
+ * @param {PhSim.Vector} vector 
  * @param {Number} scalar
- * @returns {PhSim.Objects.Vector} 
+ * @returns {PhSim.Vector} 
  * 
  */
 
 PhSim.Tools.scaleVector = function(vector,scalar) {
-	return new PhSim.Objects.Vector(vector.x * scalar,vector.y * scalar)
+	return new PhSim.Vector(vector.x * scalar,vector.y * scalar)
 }
 
 /**
@@ -1908,14 +1908,14 @@ PhSim.Tools.scaleVector = function(vector,scalar) {
  * Divide a vector by a scalar
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector 
+ * @param {PhSim.Vector} vector 
  * @param {Number} scalar
- * @returns {PhSim.Objects.Vector} 
+ * @returns {PhSim.Vector} 
  *  
  */
 
 PhSim.Tools.divideVector = function(vector,scalar) {
-	return new PhSim.Objects.Vector(vector.x * (1/scalar),vector.y * (1/scalar));
+	return new PhSim.Vector(vector.x * (1/scalar),vector.y * (1/scalar));
 }
 
 /**
@@ -1923,8 +1923,8 @@ PhSim.Tools.divideVector = function(vector,scalar) {
  * Get distance between two vectors.
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector1 
- * @param {PhSim.Objects.Vector} vector2
+ * @param {PhSim.Vector} vector1 
+ * @param {PhSim.Vector} vector2
  * @returns - The vector distance
  *  
  */
@@ -1943,7 +1943,7 @@ PhSim.Tools.calcVertDistance = function(vector1,vector2) {
  * Get length of the vector
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector 
+ * @param {PhSim.Vector} vector 
  * @returns {Number} - The length of the vector
  */
 
@@ -1956,8 +1956,8 @@ PhSim.Tools.getVectorLength = function(vector) {
  * Get normalized vector of some vector.
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector - Vector to normalize.
- * @returns {PhSim.Objects.Vector} -  The Unit Vector
+ * @param {PhSim.Vector} vector - Vector to normalize.
+ * @returns {PhSim.Vector} -  The Unit Vector
  */
 
 PhSim.Tools.getUnitVector = function(vector) {
@@ -1978,7 +1978,7 @@ PhSim.Tools.getUnitVector = function(vector) {
  */
 
 PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
-	return new PhSim.Objects.Vector(a11 * x + a12 * y,a21 * x + a22 * y);
+	return new PhSim.Vector(a11 * x + a12 * y,a21 * x + a22 * y);
 }
 
 /**
@@ -1989,7 +1989,7 @@ PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
  * @param {Number} a - Angle in radians
- * @returns {PhSim.Objects.Vector}
+ * @returns {PhSim.Vector}
  */
 
 PhSim.Tools.rotatedVector = function(x,y,a) {
@@ -2080,7 +2080,7 @@ PhSim.Tools.diagRect = function(x1,y1,x2,y2) {
  * 
  * @function
  * @param {PhSim.Objects.RegPolygon} regularPolygon - The Static Regular Polygon Object
- * @returns {PhSim.Objects.Vector[]}
+ * @returns {PhSim.Vector[]}
  * 
  */
 
@@ -2093,7 +2093,7 @@ PhSim.Tools.getRegPolygonVerts = function(regularPolygon) {
 	for(var i = 0; i < regularPolygon.sides; i++) {
 		var x = regularPolygon.x + Math.cos(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
 		var y = regularPolygon.y + Math.sin(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
-		a.push(new PhSim.Objects.Vector(x,y));
+		a.push(new PhSim.Vector(x,y));
 	}
 
 	return a;
@@ -2189,7 +2189,7 @@ PhSim.Tools.getRectangleCorners = function(rectangle) {
  * 
  * @function
  * @param {PhSim.Objects.Rectangle} rectangle
- * @returns {PhSim.Objects.Vector}
+ * @returns {PhSim.Vector}
  *  
  */
 
@@ -2205,12 +2205,12 @@ PhSim.Tools.getRectangleCentroid = function(rectangle) {
  * Find Centroid of a path polygon
  * @function
  * @param {PhSim.Objects.Path} a - Path
- * @returns {PhSim.Objects.Vector}
+ * @returns {PhSim.Vector}
  */
 
 PhSim.Tools.findCentroidOfPath = function(a) {
 		
-	var v = new PhSim.Objects.Vector(0,0);
+	var v = new PhSim.Vector(0,0);
 	
 	for(var j = 0; j < a.verts.length; j++) { 
 		v.x += a.verts[j].x;
@@ -4259,8 +4259,8 @@ PhSim.DynSim.prototype.initSim = function(simulationI) {
 /**
  * @function
  * @param {PhSim.Objects.DynObject} dynObject 
- * @param {PhSim.Objects.Vector} position 
- * @param {PhSim.Objects.Vector} forceVector 
+ * @param {PhSim.Vector} position 
+ * @param {PhSim.Vector} forceVector 
  */
 
 PhSim.DynSim.prototype.applyForce = function(dynObject,position,forceVector) {
@@ -4271,7 +4271,7 @@ PhSim.DynSim.prototype.applyForce = function(dynObject,position,forceVector) {
 /**
  * @function
  * @param {PhSim.Objects.DynObject} dynObject 
- * @param {PhSim.Objects.Vector} velocityVector 
+ * @param {PhSim.Vector} velocityVector 
  */
 
 PhSim.DynSim.prototype.setVelocity = function(dynObject,velocityVector) {
@@ -4281,7 +4281,7 @@ PhSim.DynSim.prototype.setVelocity = function(dynObject,velocityVector) {
 /**
  * @function
  * @param {PhSim.Objects.DynObject} dynObject 
- * @param {PhSim.Objects.Vector} translationVector 
+ * @param {PhSim.Vector} translationVector 
  */
 
 PhSim.DynSim.prototype.translate = function(dynObject,translationVector) {
@@ -4291,7 +4291,7 @@ PhSim.DynSim.prototype.translate = function(dynObject,translationVector) {
 /**
  * @function
  * @param {PhSim.Objects.DynObject} dynObject 
- * @param {PhSim.Objects.Vector} positionVector 
+ * @param {PhSim.Vector} positionVector 
  */
 
 PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
@@ -4302,7 +4302,7 @@ PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
  * @function
  * @param {PhSim.Objects.DynObject} dynObject 
  * @param {Number} angle 
- * @param {PhSim.Objects.Vector} point 
+ * @param {PhSim.Vector} point 
  */
 
 PhSim.DynSim.prototype.rotate = function(dynObject,angle,point) {
@@ -5374,7 +5374,7 @@ PhSim.Widgets = {}
 PhSim.Widgets.Velocity = function() {
 	this.velocity = true;
 	this.key = null;
-	this.vector = new PhSim.Objects.Vector(null,null);
+	this.vector = new PhSim.Vector(null,null);
 }
 
 //PhSim.Widgets.VelocityKey.desc = "VelocityKey is a widget that allows the user to change the velocity of a physical object by some key."
@@ -5383,21 +5383,21 @@ PhSim.Widgets.Force = function() {
 	this.trigger = null;
 	this.force = true;
 	this.key = null;
-	this.vector = new PhSim.Objects.Vector(null,null);
+	this.vector = new PhSim.Vector(null,null);
 }
 
 PhSim.Widgets.Position = function() {
 	this.trigger = null;
 	this.position = true;
 	this.key = null;
-	this.vector = new PhSim.Objects.Vector(null,null);
+	this.vector = new PhSim.Vector(null,null);
 }
 
 PhSim.Widgets.Translate = function() {
 	this.trigger = null;
 	this.translate = true;
 	this.key = null;
-	this.vector = new PhSim.Objects.Vector(null,null);
+	this.vector = new PhSim.Vector(null,null);
 }
 
 PhSim.Widgets.Clone = function() {
@@ -5406,7 +5406,7 @@ PhSim.Widgets.Clone = function() {
 	this.time = null;
 	this.clone = true;
 	this.key = null;
-	this.vector = new PhSim.Objects.Vector(null,null);
+	this.vector = new PhSim.Vector(null,null);
 	this.copyWidgets = true;
 	this.maxN = null;
 }

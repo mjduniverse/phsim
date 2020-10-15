@@ -14,7 +14,7 @@ PhSim.Objects = {}
  * 
  */
 
-PhSim.Objects.Vector = function(x, y) {
+PhSim.Vector = function(x, y) {
 	this.x = x;
 	this.y = y;
 }
@@ -32,17 +32,17 @@ PhSim.Objects.GradientLimits = function(x0,y0,x1,y1) {
 
 	/**
 	 * Start vector
-	 * @type {PhSim.Objects.Vector}
+	 * @type {PhSim.Vector}
 	 */
 
-	this.start = new PhSim.Objects.Vector(x0,y0);	
+	this.start = new PhSim.Vector(x0,y0);	
 	
 	/**
 	 * End vector
-	 * @type {PhSim.Objects.Vector}
+	 * @type {PhSim.Vector}
 	 */
 
-	this.end = new PhSim.Objects.Vector(x1,y1);
+	this.end = new PhSim.Vector(x1,y1);
 }
 
 /**
@@ -122,7 +122,7 @@ PhSim.Objects.Path = function() {
 
 	/**
 	 * Array of vectors defining a path or a polygon
-	 * @type {PhSim.Objects.Vector}
+	 * @type {PhSim.Vector}
 	 */
 
 	this.verts = [];

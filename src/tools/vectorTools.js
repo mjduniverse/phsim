@@ -3,13 +3,13 @@
  * Perform vector addition
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector1 - The first vector
- * @param {PhSim.Objects.Vector} vector2 - The second vector
- * @returns {PhSim.Objects.Vector} - The sum of the two vectors
+ * @param {PhSim.Vector} vector1 - The first vector
+ * @param {PhSim.Vector} vector2 - The second vector
+ * @returns {PhSim.Vector} - The sum of the two vectors
  */
 
 PhSim.Tools.addVectors = function(vector1,vector2) {
-	return new PhSim.Objects.Vector(vector1.x + vector2.x, vector1.y + vector2.y);
+	return new PhSim.Vector(vector1.x + vector2.x, vector1.y + vector2.y);
 }
 
 /**
@@ -17,13 +17,13 @@ PhSim.Tools.addVectors = function(vector1,vector2) {
  * Perform vector subtraction
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector1 
- * @param {PhSim.Objects.Vector} vector2 
- * @returns {PhSim.Objects.Vector} - The difference between the two vectors
+ * @param {PhSim.Vector} vector1 
+ * @param {PhSim.Vector} vector2 
+ * @returns {PhSim.Vector} - The difference between the two vectors
  */
 
 PhSim.Tools.subtractVectors = function(vector1,vector2) {
-	return new PhSim.Objects.Vector(vector1.x - vector2.x, vector1.y - vector2.y);
+	return new PhSim.Vector(vector1.x - vector2.x, vector1.y - vector2.y);
 }
 
 /**
@@ -31,14 +31,14 @@ PhSim.Tools.subtractVectors = function(vector1,vector2) {
  * Multiply a vector by a scalar
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector 
+ * @param {PhSim.Vector} vector 
  * @param {Number} scalar
- * @returns {PhSim.Objects.Vector} 
+ * @returns {PhSim.Vector} 
  * 
  */
 
 PhSim.Tools.scaleVector = function(vector,scalar) {
-	return new PhSim.Objects.Vector(vector.x * scalar,vector.y * scalar)
+	return new PhSim.Vector(vector.x * scalar,vector.y * scalar)
 }
 
 /**
@@ -46,14 +46,14 @@ PhSim.Tools.scaleVector = function(vector,scalar) {
  * Divide a vector by a scalar
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector 
+ * @param {PhSim.Vector} vector 
  * @param {Number} scalar
- * @returns {PhSim.Objects.Vector} 
+ * @returns {PhSim.Vector} 
  *  
  */
 
 PhSim.Tools.divideVector = function(vector,scalar) {
-	return new PhSim.Objects.Vector(vector.x * (1/scalar),vector.y * (1/scalar));
+	return new PhSim.Vector(vector.x * (1/scalar),vector.y * (1/scalar));
 }
 
 /**
@@ -61,8 +61,8 @@ PhSim.Tools.divideVector = function(vector,scalar) {
  * Get distance between two vectors.
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector1 
- * @param {PhSim.Objects.Vector} vector2
+ * @param {PhSim.Vector} vector1 
+ * @param {PhSim.Vector} vector2
  * @returns - The vector distance
  *  
  */
@@ -81,7 +81,7 @@ PhSim.Tools.calcVertDistance = function(vector1,vector2) {
  * Get length of the vector
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector 
+ * @param {PhSim.Vector} vector 
  * @returns {Number} - The length of the vector
  */
 
@@ -94,8 +94,8 @@ PhSim.Tools.getVectorLength = function(vector) {
  * Get normalized vector of some vector.
  * 
  * @function
- * @param {PhSim.Objects.Vector} vector - Vector to normalize.
- * @returns {PhSim.Objects.Vector} -  The Unit Vector
+ * @param {PhSim.Vector} vector - Vector to normalize.
+ * @returns {PhSim.Vector} -  The Unit Vector
  */
 
 PhSim.Tools.getUnitVector = function(vector) {
@@ -116,7 +116,7 @@ PhSim.Tools.getUnitVector = function(vector) {
  */
 
 PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
-	return new PhSim.Objects.Vector(a11 * x + a12 * y,a21 * x + a22 * y);
+	return new PhSim.Vector(a11 * x + a12 * y,a21 * x + a22 * y);
 }
 
 /**
@@ -127,7 +127,7 @@ PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
  * @param {Number} a - Angle in radians
- * @returns {PhSim.Objects.Vector}
+ * @returns {PhSim.Vector}
  */
 
 PhSim.Tools.rotatedVector = function(x,y,a) {
