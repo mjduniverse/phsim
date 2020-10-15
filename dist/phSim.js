@@ -628,6 +628,119 @@ PhSim.Objects.CompositeSimulation = function() {
 
 }
 
+/**
+ * Matter.js body
+ * @external {MatterBody}
+ * @see {@link https://brm.io/matter-js/docs/classes/Body.html|MatterBody} 
+ */
+
+/**
+ * 
+ * Create Dynamic Object from static object
+ * @constructor
+ * @param {StaticObject} staticObject - Static Object
+ * @param {string} staticObject.name - Object Name;
+ * @param {boolean} staticObject.locked - Lock
+ * @param {Number} staticObject.density - Density
+ * @param {Number} staticObject.mass  - Object mass, overrides density if set
+ * @param {boolean} staticObject.path - Tells if object is irregular polygon
+ * @param {Array} staticObject.verts - Array for vertices, used if object.path === true.
+ * @param {boolean} staticObject.circle - Tells if object is a circle.
+ * @param {Number} staticObject.x - Center of regular polygon, center of circle or upper left corner of rectangle.
+ * @param {Number} staticObject.radius - Radius of circle or circle that circumscribes regular polygon.
+ * @param {boolean} staticObject.rectangle - Tells if object is a rectangle
+ * @param {Number} staticObject.w - Rectangle Width
+ * @param {Number} staticObject.h - Rectangle Height
+ * 
+ */
+
+PhSim.Objects.DynObject = function(staticObject) {
+
+	var opts = staticObject
+
+	if(staticObject.name) {
+		opts.label = staticObject.name;
+	}
+
+	if(staticObject.locked) {
+		opts.isStatic = staticObject.locked;
+	}
+
+	if(typeof staticObject.density === "number") {
+		opts.density = staticObject.density;
+
+	}
+
+	if(typeof staticObject.mass === "number") {
+		opts.mass = staticObject.mass;
+		opts.inverseMass = 1/staticObject.mass;
+	}
+
+	if(Number.isInteger(staticObject.collisionNum)) {
+		opts.collisionFilter = staticObject.collisionNum;
+	}
+
+	if(staticObject.path === true) {
+
+		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
+
+		/** Irregular polygon skinmesh */
+
+		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
+
+		//PhSim.Objects.Path.call(this);
+
+	}
+
+	if(staticObject.circle === true) {
+		this.matter = Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
+		this.firstCycle = staticObject.cycle;
+		//PhSim.Objects.Circle.call(this);
+	}
+
+	if(staticObject.rectangle === true) {
+		var set = PhSim.Tools.getRectangleVertArray(staticObject);
+		this.firstCycle = staticObject.cycle;
+		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+		//PhSim.Objects.Rectangle.call(this);
+	}
+
+	if(staticObject.regPolygon === true) {
+		var set = PhSim.Tools.getRegPolygonVerts(staticObject);
+		this.firstCycle = staticObject.cycle;
+		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+		//PhSim.Objects.RegPolygon.call(this);
+	}
+
+	/** Deep cloned copy of the static object used to create the DynObject*/
+
+	this.object = JSON.parse(JSON.stringify(staticObject));
+
+	/** 
+	 * Reference to static object used to create the DynObject
+	 * @type {StaticObject}
+	 */
+
+	this.static = staticObject;
+
+	/** 
+	 * Object ID 
+	 * @type {String}
+	 * */
+
+	this.id = PhSim.DynSim.nextId;
+
+	PhSim.DynSim.nextId = (Number.parseInt(PhSim.DynSim.nextId,36) + 1).toString(36);
+	
+	/** 
+	 * Refernce of DynObj in matter object 
+	 * @type {Object}
+	 * */
+
+	this.matter.plugin.ph = this;
+
+}
+
 /***/ }),
 /* 2 */
 /***/ (function(module, exports) {
@@ -1180,8 +1293,6 @@ PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 			this.ctx.rotate(rectangle.cycle);
 			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
 			this.ctx.clip();
-
-			//var box = PhSim.Tools.getStaticBoundingBox(rectangle);
 
 			var h = img.height * (rectangle.w/img.width);
 
@@ -2257,7 +2368,7 @@ PhSim.Tools.getStaticBoundingBox = function(object) {
  * Get bounding box of a static object
  * 
  * @function getDynBoundingBox
- * @param {PhSim.DynObject} dynObj 
+ * @param {PhSim.Objects.DynObject} dynObj 
  */
 
 PhSim.Tools.getDynBoundingBox = function(dynObj) {
@@ -2879,7 +2990,7 @@ PhSim.DynSim.prototype.callObjLinkFunctions = function(dynObject) {
 // Spawn Function
 
 PhSim.DynSim.prototype.spawnObject = function(dynObject) {
-	var obj = new PhSim.DynObject(dynObject.static);
+	var obj = new PhSim.Objects.DynObject(dynObject.static);
 	obj.cloned = true;
 	obj.loneParent = dynObject;
 
@@ -2927,7 +3038,7 @@ PhSim.DynSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 /**
  * Remove dynamic object
- * @param {PhSim.DynObject}  dynObject - Dynamic Object
+ * @param {PhSim.Objects.DynObject}  dynObject - Dynamic Object
  */
 
 PhSim.DynSim.prototype.removeDynObj = function(dynObject) {
@@ -3398,7 +3509,7 @@ PhSim.DynSim.prototype.getStatusStr = function() {
  * Get collision classes
  * 
  * @function
- * @param {PhSim.DynObject} dynObject - Dynamic Object
+ * @param {PhSim.Objects.DynObject} dynObject - Dynamic Object
  * @returns {String[]}
  * 
  */
@@ -3468,7 +3579,7 @@ PhSim.Tools.chkWidgetType = function(widget) {
 
 /**
  * Get static object of a dynamic object
- * @param {PhSim.DynObject} dynObject - The dynamic object
+ * @param {PhSim.Objects.DynObject} dynObject - The dynamic object
  */
 
 PhSim.DynSim.prototype.getStatic = function(dynObject) {
@@ -3487,7 +3598,7 @@ PhSim.DynSim.prototype.getStatic = function(dynObject) {
  * 
  * @function
  * @param {String} str - String for the name
- * @returns {PhSim.DynObject}
+ * @returns {PhSim.Objects.DynObject}
  */
 
 PhSim.DynSim.prototype.getObjectByName = function(str) {
@@ -3509,8 +3620,8 @@ PhSim.DynSim.prototype.getObjectByName = function(str) {
 /**
  * Check if two objects are colliding
  * @function
- * @param {PhSim.DynObject} dynObjectA 
- * @param {PhSim.DynObject} dynObjectB
+ * @param {PhSim.Objects.DynObject} dynObjectA 
+ * @param {PhSim.Objects.DynObject} dynObjectB
  * @returns {Boolean} 
  */
 
@@ -3521,7 +3632,7 @@ PhSim.DynSim.prototype.collided = function(dynObjectA,dynObjectB) {
 /**
  * Check if an object is in a collision
  * @function
- * @param {PhSim.DynObject} dynObject 
+ * @param {PhSim.Objects.DynObject} dynObject 
  * @returns {Boolean}
  */
 
@@ -3547,7 +3658,7 @@ PhSim.DynSim.prototype.isInCollision = function(dynObject) {
  * Check if a point (x,y) is in a dynamic object
  * 
  * @function
- * @param {PhSim.DynObject} dynObject - Dynamic Object
+ * @param {PhSim.Objects.DynObject} dynObject - Dynamic Object
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
  * @returns {Boolean}
@@ -3568,7 +3679,7 @@ PhSim.DynSim.prototype.pointInObject = function(dynObject,x,y) {
  * 
  * @function
  * @param {String} idNum
- * @returns {PhSim.DynObject} 
+ * @returns {PhSim.Objects.DynObject} 
  * 
  */
 
@@ -3591,7 +3702,7 @@ PhSim.DynSim.prototype.getDynObjectByID = function(idNum) {
  * @function
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
- * @returns {PhSim.DynObject[]}
+ * @returns {PhSim.Objects.DynObject[]}
  * 
  */
 
@@ -3615,7 +3726,7 @@ PhSim.DynSim.prototype.pointObjArray = function(x,y) {
  * Get the collison pairs that contain a certain object 
  * 
  * @function
- * @param {PhSim.DynObject} dynObject
+ * @param {PhSim.Objects.DynObject} dynObject
  * @returns {PhSim.phSimCollision[]}
  * 
  */
@@ -3650,8 +3761,8 @@ PhSim.DynSim.prototype.getCollisionList = function(dynObject) {
  * Get array of Dynamic Object colliding some specified colliding object
  * 
  * @function
- * @param {PhSim.DynObject} dynObject - Dynamic Object
- * @returns {PhSim.DynObject[]}
+ * @param {PhSim.Objects.DynObject} dynObject - Dynamic Object
+ * @returns {PhSim.Objects.DynObject[]}
  * 
  */
 
@@ -3680,7 +3791,7 @@ PhSim.DynSim.prototype.getCollidingObjects = function(dynObject) {
  * Get senor classes
  * 
  * @function
- * @param {PhSim.DynObject} dynObject 
+ * @param {PhSim.Objects.DynObject} dynObject 
  * @returns {String[]}
  */
 
@@ -3702,8 +3813,8 @@ PhSim.DynSim.prototype.getSensorClasses = function(dynObject) {
  * Check if two objects share at least one sensor class
  * 
  * @function
- * @param {PhSim.DynObject} dynObjectA 
- * @param {PhSim.DynObject} dynObjectB 
+ * @param {PhSim.Objects.DynObject} dynObjectA 
+ * @param {PhSim.Objects.DynObject} dynObjectB 
  * @returns {Boolean}
  */
 
@@ -3728,8 +3839,8 @@ function intersectionExists(array1,array2) {
  * Get objects colliding some object that share the same 
  * 
  * @function
- * @param {PhSim.DynObject} dynObject - Object to check for colliding sensor objects
- * @returns {PhSim.DynObject[]} 
+ * @param {PhSim.Objects.DynObject} dynObject - Object to check for colliding sensor objects
+ * @returns {PhSim.Objects.DynObject[]} 
  */
 
 PhSim.DynSim.prototype.getCollidingSensorObjects = function(dynObject) {
@@ -3758,7 +3869,7 @@ PhSim.DynSim.prototype.getCollidingSensorObjects = function(dynObject) {
 
 /**
  * @function
- * @param {PhSim.DynObject} dynObject 
+ * @param {PhSim.Objects.DynObject} dynObject 
  * @returns {Boolean}
  */
 
@@ -3804,8 +3915,8 @@ PhSim.Tools.isPointInRawRectangle = function(cx,cy,cw,ch,px,py) {
  * Get object that checks the collision relations between two objects
  * 
  * @function
- * @param {PhSim.DynObject} dynObjectA - The first object
- * @param {PhSim.DynObject} dynObjectB - The second object
+ * @param {PhSim.Objects.DynObject} dynObjectA - The first object
+ * @param {PhSim.Objects.DynObject} dynObjectB - The second object
  * @returns {PhSim.CollisionReport} - A collision report that updates itself after each update
  */
 
@@ -3996,7 +4107,7 @@ PhSim.DynSim.prototype.gotoSimulationIndex = function (i) {
 					}
 
 					else {
-						var dynObject = new PhSim.DynObject(this.simulation.layers[L].objUniverse[O])
+						var dynObject = new PhSim.Objects.DynObject(this.simulation.layers[L].objUniverse[O])
 						
 						// If the collision class object exists
 
@@ -4154,27 +4265,77 @@ PhSim.DynSim.prototype.initSim = function(simulationI) {
 /* 26 */
 /***/ (function(module, exports) {
 
+/**
+ * @function
+ * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {PhSim.Objects.Vector} position 
+ * @param {PhSim.Objects.Vector} forceVector 
+ */
+
 PhSim.DynSim.prototype.applyForce = function(dynObject,position,forceVector) {
 	return Matter.Body.applyForce(dynObject.matter,position,forceVector);
 }
+
+
+/**
+ * @function
+ * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {PhSim.Objects.Vector} velocityVector 
+ */
 
 PhSim.DynSim.prototype.setVelocity = function(dynObject,velocityVector) {
 	return Matter.Body.setVelocity(dynObject.matter,velocityVector);
 }
 
+/**
+ * @function
+ * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {PhSim.Objects.Vector} translationVector 
+ */
+
 PhSim.DynSim.prototype.translate = function(dynObject,translationVector) {
 	return Matter.Body.translate(dynObject.matter,translationVector);
 }
+
+/**
+ * @function
+ * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {PhSim.Objects.Vector} positionVector 
+ */
 
 PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
 	Matter.Body.setPosition(dynObject.matter,positionVector);
 }
 
+/**
+ * @function
+ * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {Number} angle 
+ * @param {PhSim.Objects.Vector} point 
+ */
+
 PhSim.DynSim.prototype.rotate = function(dynObject,angle,point) {
+
+	if(dynObject.skinmesh) {
+		Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
+	}
+
 	return Matter.Body.rotate(dynObject.matter, angle, point)
 }
 
+/**
+ * @function
+ * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {Number} angle 
+ */
+
 PhSim.DynSim.prototype.setAngle = function(dynObject,angle) {
+
+	if(dynObject.skinmesh) {
+		Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
+		Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
+	}
+
 	return Matter.Body.setAngle(dynObject.matter,angle);
 }
 
@@ -4373,7 +4534,7 @@ PhSim.DynSim.prototype.loopFunction = function() {
  * well-formed PhSim object and then translate it into JavaScript.
  * 
  * @param {Object} widget - The Widget
- * @param {PhSim.DynObject} dyn_object The individual Dynamic Object
+ * @param {PhSim.Objects.DynObject} dyn_object The individual Dynamic Object
  * @returns undefined
  * 
 */
@@ -5564,109 +5725,7 @@ PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
 /* 34 */
 /***/ (function(module, exports) {
 
-/**
- * 
- * Create Dynamic Object from static object
- * @constructor
- * @param {StaticObject} staticObject - Static Object
- * @param {string} staticObject.name - Object Name;
- * @param {boolean} staticObject.locked - Lock
- * @param {Number} staticObject.density - Density
- * @param {Number} staticObject.mass  - Object mass, overrides density if set
- * @param {boolean} staticObject.path - Tells if object is irregular polygon
- * @param {Array} staticObject.verts - Array for vertices, used if object.path === true.
- * @param {boolean} staticObject.circle - Tells if object is a circle.
- * @param {Number} staticObject.x - Center of regular polygon, center of circle or upper left corner of rectangle.
- * @param {Number} staticObject.radius - Radius of circle or circle that circumscribes regular polygon.
- * @param {boolean} staticObject.rectangle - Tells if object is a rectangle
- * @param {Number} staticObject.w - Rectangle Width
- * @param {Number} staticObject.h - Rectangle Height
- * 
- */
 
-PhSim.DynObject = function(staticObject) {
-
-	var opts = staticObject
-
-	if(staticObject.name) {
-		opts.label = staticObject.name;
-	}
-
-	if(staticObject.locked) {
-		opts.isStatic = staticObject.locked;
-	}
-
-	if(typeof staticObject.density === "number") {
-		opts.density = staticObject.density;
-
-	}
-
-	if(typeof staticObject.mass === "number") {
-		opts.mass = staticObject.mass;
-		opts.inverseMass = 1/staticObject.mass;
-	}
-
-	if(Number.isInteger(staticObject.collisionNum)) {
-		opts.collisionFilter = staticObject.collisionNum;
-	}
-
-	if(staticObject.path === true) {
-
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
-
-		/** Irregular polygon skinmesh */
-
-		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
-
-		//PhSim.Objects.Path.call(this);
-
-	}
-
-	if(staticObject.circle === true) {
-		this.matter = Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
-		this.firstCycle = staticObject.cycle;
-		//PhSim.Objects.Circle.call(this);
-	}
-
-	if(staticObject.rectangle === true) {
-		var set = PhSim.Tools.getRectangleVertArray(staticObject);
-		this.firstCycle = staticObject.cycle;
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-		//PhSim.Objects.Rectangle.call(this);
-	}
-
-	if(staticObject.regPolygon === true) {
-		var set = PhSim.Tools.getRegPolygonVerts(staticObject);
-		this.firstCycle = staticObject.cycle;
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-		//PhSim.Objects.RegPolygon.call(this);
-	}
-
-	/** Deep cloned copy of the static object used to create the DynObject*/
-
-	this.object = JSON.parse(JSON.stringify(staticObject));
-
-	/** Reference to static object used to create the DynObject*/
-
-	this.static = staticObject;
-
-	/** 
-	 * Object ID 
-	 * @type {String}
-	 * */
-
-	this.id = PhSim.DynSim.nextId;
-
-	PhSim.DynSim.nextId = (Number.parseInt(PhSim.DynSim.nextId,36) + 1).toString(36);
-	
-	/** 
-	 * Refernce of DynObj in matter object 
-	 * @type {Object}
-	 * */
-
-	this.matter.plugin.ph = this;
-
-}
 
 /***/ }),
 /* 35 */
@@ -5677,7 +5736,7 @@ PhSim.DynObject = function(staticObject) {
  * Calculate DynObject skinmesh
  * 
  * @function
- * @param {PhSim.DynObject} dynObject 
+ * @param {PhSim.Objects.DynObject} dynObject 
  */
 
 PhSim.calc_skinmesh = function(dynObject) {
@@ -5727,7 +5786,7 @@ PhSim.DynSim.prototype.simpleEventRefs = [];
  * @param {Number} options.time - The time interval between a repeated event or a delay time for timeouts.
  * Relevant when the trigger is set to "time".
  * @param {Number} options.maxN - The maximum number of times a repeated SimpleEvent can be executed.
- * @param {PhSim.DynObject} options.triggerObj - Trigger object
+ * @param {PhSim.Objects.DynObject} options.triggerObj - Trigger object
  * @returns {Number} - A reference to the simple event.
  * @this {PhSim.DynSim}
  * */

@@ -99,7 +99,7 @@ PhSim.Tools.getStaticBoundingBox = function(object) {
  * Get bounding box of a static object
  * 
  * @function getDynBoundingBox
- * @param {PhSim.DynObject} dynObj 
+ * @param {PhSim.Objects.DynObject} dynObj 
  */
 
 PhSim.Tools.getDynBoundingBox = function(dynObj) {

@@ -56,7 +56,7 @@ PhSim.DynSim.prototype.getStatusStr = function() {
  * Get collision classes
  * 
  * @function
- * @param {PhSim.DynObject} dynObject - Dynamic Object
+ * @param {PhSim.Objects.DynObject} dynObject - Dynamic Object
  * @returns {String[]}
  * 
  */
@@ -126,7 +126,7 @@ PhSim.Tools.chkWidgetType = function(widget) {
 
 /**
  * Get static object of a dynamic object
- * @param {PhSim.DynObject} dynObject - The dynamic object
+ * @param {PhSim.Objects.DynObject} dynObject - The dynamic object
  */
 
 PhSim.DynSim.prototype.getStatic = function(dynObject) {
@@ -145,7 +145,7 @@ PhSim.DynSim.prototype.getStatic = function(dynObject) {
  * 
  * @function
  * @param {String} str - String for the name
- * @returns {PhSim.DynObject}
+ * @returns {PhSim.Objects.DynObject}
  */
 
 PhSim.DynSim.prototype.getObjectByName = function(str) {
@@ -167,8 +167,8 @@ PhSim.DynSim.prototype.getObjectByName = function(str) {
 /**
  * Check if two objects are colliding
  * @function
- * @param {PhSim.DynObject} dynObjectA 
- * @param {PhSim.DynObject} dynObjectB
+ * @param {PhSim.Objects.DynObject} dynObjectA 
+ * @param {PhSim.Objects.DynObject} dynObjectB
  * @returns {Boolean} 
  */
 
@@ -179,7 +179,7 @@ PhSim.DynSim.prototype.collided = function(dynObjectA,dynObjectB) {
 /**
  * Check if an object is in a collision
  * @function
- * @param {PhSim.DynObject} dynObject 
+ * @param {PhSim.Objects.DynObject} dynObject 
  * @returns {Boolean}
  */
 
@@ -205,7 +205,7 @@ PhSim.DynSim.prototype.isInCollision = function(dynObject) {
  * Check if a point (x,y) is in a dynamic object
  * 
  * @function
- * @param {PhSim.DynObject} dynObject - Dynamic Object
+ * @param {PhSim.Objects.DynObject} dynObject - Dynamic Object
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
  * @returns {Boolean}
@@ -226,7 +226,7 @@ PhSim.DynSim.prototype.pointInObject = function(dynObject,x,y) {
  * 
  * @function
  * @param {String} idNum
- * @returns {PhSim.DynObject} 
+ * @returns {PhSim.Objects.DynObject} 
  * 
  */
 
@@ -249,7 +249,7 @@ PhSim.DynSim.prototype.getDynObjectByID = function(idNum) {
  * @function
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
- * @returns {PhSim.DynObject[]}
+ * @returns {PhSim.Objects.DynObject[]}
  * 
  */
 
@@ -273,7 +273,7 @@ PhSim.DynSim.prototype.pointObjArray = function(x,y) {
  * Get the collison pairs that contain a certain object 
  * 
  * @function
- * @param {PhSim.DynObject} dynObject
+ * @param {PhSim.Objects.DynObject} dynObject
  * @returns {PhSim.phSimCollision[]}
  * 
  */
@@ -308,8 +308,8 @@ PhSim.DynSim.prototype.getCollisionList = function(dynObject) {
  * Get array of Dynamic Object colliding some specified colliding object
  * 
  * @function
- * @param {PhSim.DynObject} dynObject - Dynamic Object
- * @returns {PhSim.DynObject[]}
+ * @param {PhSim.Objects.DynObject} dynObject - Dynamic Object
+ * @returns {PhSim.Objects.DynObject[]}
  * 
  */
 
@@ -338,7 +338,7 @@ PhSim.DynSim.prototype.getCollidingObjects = function(dynObject) {
  * Get senor classes
  * 
  * @function
- * @param {PhSim.DynObject} dynObject 
+ * @param {PhSim.Objects.DynObject} dynObject 
  * @returns {String[]}
  */
 
@@ -360,8 +360,8 @@ PhSim.DynSim.prototype.getSensorClasses = function(dynObject) {
  * Check if two objects share at least one sensor class
  * 
  * @function
- * @param {PhSim.DynObject} dynObjectA 
- * @param {PhSim.DynObject} dynObjectB 
+ * @param {PhSim.Objects.DynObject} dynObjectA 
+ * @param {PhSim.Objects.DynObject} dynObjectB 
  * @returns {Boolean}
  */
 
@@ -386,8 +386,8 @@ function intersectionExists(array1,array2) {
  * Get objects colliding some object that share the same 
  * 
  * @function
- * @param {PhSim.DynObject} dynObject - Object to check for colliding sensor objects
- * @returns {PhSim.DynObject[]} 
+ * @param {PhSim.Objects.DynObject} dynObject - Object to check for colliding sensor objects
+ * @returns {PhSim.Objects.DynObject[]} 
  */
 
 PhSim.DynSim.prototype.getCollidingSensorObjects = function(dynObject) {
@@ -416,7 +416,7 @@ PhSim.DynSim.prototype.getCollidingSensorObjects = function(dynObject) {
 
 /**
  * @function
- * @param {PhSim.DynObject} dynObject 
+ * @param {PhSim.Objects.DynObject} dynObject 
  * @returns {Boolean}
  */
 
@@ -462,8 +462,8 @@ PhSim.Tools.isPointInRawRectangle = function(cx,cy,cw,ch,px,py) {
  * Get object that checks the collision relations between two objects
  * 
  * @function
- * @param {PhSim.DynObject} dynObjectA - The first object
- * @param {PhSim.DynObject} dynObjectB - The second object
+ * @param {PhSim.Objects.DynObject} dynObjectA - The first object
+ * @param {PhSim.Objects.DynObject} dynObjectB - The second object
  * @returns {PhSim.CollisionReport} - A collision report that updates itself after each update
  */
 

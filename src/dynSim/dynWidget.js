@@ -142,7 +142,7 @@ PhSim.DynSim.prototype.callObjLinkFunctions = function(dynObject) {
 // Spawn Function
 
 PhSim.DynSim.prototype.spawnObject = function(dynObject) {
-	var obj = new PhSim.DynObject(dynObject.static);
+	var obj = new PhSim.Objects.DynObject(dynObject.static);
 	obj.cloned = true;
 	obj.loneParent = dynObject;
 
@@ -190,7 +190,7 @@ PhSim.DynSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 /**
  * Remove dynamic object
- * @param {PhSim.DynObject}  dynObject - Dynamic Object
+ * @param {PhSim.Objects.DynObject}  dynObject - Dynamic Object
  */
 
 PhSim.DynSim.prototype.removeDynObj = function(dynObject) {

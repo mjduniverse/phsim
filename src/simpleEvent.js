@@ -19,7 +19,7 @@ PhSim.DynSim.prototype.simpleEventRefs = [];
  * @param {Number} options.time - The time interval between a repeated event or a delay time for timeouts.
  * Relevant when the trigger is set to "time".
  * @param {Number} options.maxN - The maximum number of times a repeated SimpleEvent can be executed.
- * @param {PhSim.DynObject} options.triggerObj - Trigger object
+ * @param {PhSim.Objects.DynObject} options.triggerObj - Trigger object
  * @returns {Number} - A reference to the simple event.
  * @this {PhSim.DynSim}
  * */
