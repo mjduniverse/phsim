@@ -298,7 +298,7 @@ PhSim.Objects.Rectangle = function(x,y,w,h) {
  * 
  */
 
- /*** 
+ /**
  * Composite Object 
  */
 
@@ -481,6 +481,8 @@ PhSim.Objects.CompositeSimulation = function() {
 
 PhSim.Objects.DynObject = function(staticObject) {
 
+	Object.assign(this,staticObject);
+
 	var opts = staticObject
 
 	if(staticObject.name) {
@@ -537,10 +539,7 @@ PhSim.Objects.DynObject = function(staticObject) {
 		//PhSim.Objects.RegPolygon.call(this);
 	}
 
-	/** Deep cloned copy of the static object used to create the DynObject*/
-
-	this.object = JSON.parse(JSON.stringify(staticObject));
-
+	
 	/** 
 	 * Reference to static object used to create the DynObject
 	 * @type {StaticObject}

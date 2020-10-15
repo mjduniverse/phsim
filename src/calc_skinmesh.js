@@ -24,6 +24,6 @@ PhSim.calc_skinmesh = function(dynObject) {
 	Matter.Vertices.translate(dynObject.skinmesh,dynObject.matter.position,1);
 
 	dynObject.verts = dynObject.skinmesh;
-	dynObject.object.verts = dynObject.skinmesh;
+	dynObject.verts = dynObject.skinmesh;
 
 }

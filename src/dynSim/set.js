@@ -16,9 +16,9 @@ PhSim.DynSim.prototype.assignPhRender = function(phRender) {
 
 PhSim.DynSim.prototype.setRadius = function(dynObject,radius) {
 
-	var ratio = radius / dynObject.object.radius;
+	var ratio = radius / dynObject.radius;
 
-	if(dynObject.object.regPolygon || dynObject.object.circle) {
+	if(dynObject.regPolygon || dynObject.circle) {
 		Matter.Body.scale(dynObject.object, ratio, ratio);
 	}
 
@@ -35,7 +35,7 @@ PhSim.DynSim.prototype.setRectWidthAndHeight = function(dynObject,w,h) {
  */
 
 PhSim.DynSim.prototype.setColor = function(dyn_object,colorStr) {
-	dyn_object.object.fillStyle = colorStr;
+	dyn_object.fillStyle = colorStr;
 }
 
 /**
@@ -45,7 +45,7 @@ PhSim.DynSim.prototype.setColor = function(dyn_object,colorStr) {
  */
 
 PhSim.DynSim.prototype.setBorderColor = function(dyn_object,colorStr) {
-	dyn_object.object.strokeStyle = colorStr;
+	dyn_object.strokeStyle = colorStr;
 }
 
 /**
@@ -55,5 +55,5 @@ PhSim.DynSim.prototype.setBorderColor = function(dyn_object,colorStr) {
  */
 
 PhSim.DynSim.prototype.setLineWidth = function(dyn_object,lineWidth) {
-	dyn_object.object.lineWidth = lineWidth;
+	dyn_object.lineWidth = lineWidth;
 }

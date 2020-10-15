@@ -167,7 +167,6 @@ __webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
 __webpack_require__(36);
-__webpack_require__(37);
 
 /***/ }),
 /* 1 */
@@ -473,7 +472,7 @@ PhSim.Objects.Rectangle = function(x,y,w,h) {
  * 
  */
 
- /*** 
+ /**
  * Composite Object 
  */
 
@@ -656,6 +655,8 @@ PhSim.Objects.CompositeSimulation = function() {
 
 PhSim.Objects.DynObject = function(staticObject) {
 
+	Object.assign(this,staticObject);
+
 	var opts = staticObject
 
 	if(staticObject.name) {
@@ -712,10 +713,7 @@ PhSim.Objects.DynObject = function(staticObject) {
 		//PhSim.Objects.RegPolygon.call(this);
 	}
 
-	/** Deep cloned copy of the static object used to create the DynObject*/
-
-	this.object = JSON.parse(JSON.stringify(staticObject));
-
+	
 	/** 
 	 * Reference to static object used to create the DynObject
 	 * @type {StaticObject}
@@ -943,6 +941,7 @@ PhSim.PhRender.prototype.defaultFillStyle = "transparent";
  */
 
 PhSim.PhRender.prototype.setCtx = function(object) {
+	
 	this.ctx.lineCap = "round";
 
 	if(typeof this.ctx.globalAlpha === "number") {
@@ -1207,23 +1206,6 @@ PhSim.PhRender.prototype.static_circle = function (circle) {
 
 PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 
-	/*
-	var rectangle = {
-		"cycle": arg.cycle,
-		"x": arg.x,
-		"y": arg.y,
-		"w": arg.w,
-		"h": arg.h,
-		"globalAlpha": arg.globalAlpha,
-		"strokeStyle": arg.strokeStyle,
-		"fillStyle": arg.fillStyle,
-		"lineWidth": arg.lineWidth
-	}
-
-	*/
-
-	//var c = getCentroid.object(rectangle);
-
 	var c = PhSim.Tools.getRectangleCentroid(rectangle);
 
 	var x = -rectangle.w * 0.5;
@@ -1245,26 +1227,6 @@ PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 			}
 		}
 	}
-
-	/*
-	if(rectangle.text) {
-	
-		this.ctx.save();
-		this.ctx.beginPath();
-		this.ctx.rect(0,0,rectangle.w,rectangle.h);
-		this.ctx.clip();
-		this.ctx.fillStyle = rectangle.text.fill;
-		this.ctx.strokeStyle = rectangle.text.borderColor
-		this.ctx.font = rectangle.text.size + "px " + rectangle.text.font;
-		this.ctx.textBaseline = "top";
-		this.ctx.strokeText(rectangle.text.content, 0, (0));
-		this.ctx.restore();
-		
-
-		this.rectText(rectangle.text,0,0,rectangle.w,rectangle.h);
-	}
-
-	*/
 
 	this.ctx.rotate(-rectangle.cycle);
 	this.ctx.translate(-c.x,-c.y);
@@ -1618,36 +1580,36 @@ PhSim.PhRender.prototype.drawDynamicSkeleton = function (object) {
 
 /**
  * @function
- * @param {*} arg 
+ * @param {*} dynObject 
  */
 
-PhSim.PhRender.prototype.dynamicRenderDraw = function (arg) {
+PhSim.PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 
-	this.ctx.lineWidth = arg.object.lineWidth;
-	this.ctx.fillStyle = arg.object.fillStyle;
-	this.ctx.strokeStyle = arg.object.strokeStyle;
+	this.ctx.lineWidth = dynObject.lineWidth;
+	this.ctx.fillStyle = dynObject.fillStyle;
+	this.ctx.strokeStyle = dynObject.strokeStyle;
 
 	
-	if(arg.object.path) {
+	if(dynObject.path) {
 		
-		this.drawDynamicSkeleton(arg);
+		this.drawDynamicSkeleton(dynObject);
 		
 		this.ctx.fill();
 
-		if(arg.object.sprite) {
+		if(dynObject.sprite) {
 
-			var img = this.spriteImgArray[arg.object.sprite.src];
+			var img = this.spriteImgArray[dynObject.sprite.src];
 
-			this.ctx.imageSmoothingEnabled = arg.object.sprite.smooth;
+			this.ctx.imageSmoothingEnabled = dynObject.sprite.smooth;
 
-			if(arg.object.sprite.repeat) {
+			if(dynObject.sprite.repeat) {
 
 				this.ctx.save();
 
-				this.dynamicSkeleton(arg);
-				this.ctx.translate(arg.matter.position.x,arg.matter.position.y);
-				this.ctx.rotate(arg.matter.angle);
-				this.ctx.scale(arg.object.sprite.scale,arg.object.sprite.scale);
+				this.dynamicSkeleton(dynObject);
+				this.ctx.translate(dynObject.matter.position.x,dynObject.matter.position.y);
+				this.ctx.rotate(dynObject.matter.angle);
+				this.ctx.scale(dynObject.sprite.scale,dynObject.sprite.scale);
 		
 
 				var pattern = this.ctx.createPattern(img,"repeat");
@@ -1657,27 +1619,27 @@ PhSim.PhRender.prototype.dynamicRenderDraw = function (arg) {
 				this.ctx.restore();
 			}
 
-			if(arg.object.sprite.fit) {
+			if(dynObject.sprite.fit) {
 
 				this.ctx.save();
 	
 				this.ctx.beginPath();
 	
-				this.ctx.moveTo(arg.object.verts[0].x, arg.object.verts[0].y);
+				this.ctx.moveTo(dynObject.verts[0].x, dynObject.verts[0].y);
 	
-				for(var j = 0; j < arg.object.verts.length; j++) {
-					this.ctx.lineTo(arg.object.verts[j].x, arg.object.verts[j].y);
+				for(var j = 0; j < dynObject.verts.length; j++) {
+					this.ctx.lineTo(dynObject.verts[j].x, dynObject.verts[j].y);
 				}
 	
 				this.ctx.closePath();
 	
 				this.ctx.clip();
 	
-				var box = PhSim.Tools.getStaticBoundingBox(arg.object);
+				var box = PhSim.Tools.getStaticBoundingBox(dynObject);
 	
 				var h = img.height * (box.w/img.width);
 	
-				this.renderSpriteByCenter(arg.object.sprite.src,arg.matter.position.x,arg.matter.position.y,box.w,h,arg.matter.angle);
+				this.renderSpriteByCenter(dynObject.sprite.src,dynObject.matter.position.x,dynObject.matter.position.y,box.w,h,dynObject.matter.angle);
 	
 				this.ctx.restore();	
 
@@ -1686,7 +1648,7 @@ PhSim.PhRender.prototype.dynamicRenderDraw = function (arg) {
 			}
 	
 			else {
-				this.renderSpriteByCenter(arg.object.sprite.src,arg.matter.position.x,arg.matter.position.y,img.width,img.height,arg.matter.angle);
+				this.renderSpriteByCenter(dynObject.sprite.src,dynObject.matter.position.x,dynObject.matter.position.y,img.width,img.height,dynObject.matter.angle);
 			}
 
 			//this.ctx.restore();	
@@ -1695,21 +1657,21 @@ PhSim.PhRender.prototype.dynamicRenderDraw = function (arg) {
 		
 	}
 
-	if(arg.object.circle) {
-		this.static_circle(arg.object);	
+	if(dynObject.circle) {
+		this.static_circle(dynObject);	
 	}
 	
-	if(arg.object.regPolygon) {
-		this.static_regPolygon(arg.object);		
+	if(dynObject.regPolygon) {
+		this.static_regPolygon(dynObject);		
 	}
 
-	if(arg.object.rectangle) {
-		this.static_rectangle(arg.object);		
+	if(dynObject.rectangle) {
+		this.static_rectangle(dynObject);		
 	}
 
-	if(arg.object.composite) {
-		for(var i = 1; i < arg.parts.length; i++) {
-			this.dynamicRenderDraw(arg.parts[i]);
+	if(dynObject.composite) {
+		for(var i = 1; i < dynObject.parts.length; i++) {
+			this.dynamicRenderDraw(dynObject.parts[i]);
 		}
 	}
 
@@ -3077,29 +3039,58 @@ PhSim.DynSim.prototype.renderAllCounters = function() {
 /***/ (function(module, exports) {
 
 
-// Play Audio Index
+/**
+ * 
+ * @param {Number} i - Index in audio array. 
+ */
 
 PhSim.DynSim.prototype.playAudioByIndex = function(i) {
-	this.audioArray.array[i].play();
+	return this.audioArray.array[i].play();
 }
 
-PhSim.DynSim.prototype.pauseAudioByIndex = function(i) {
-	this.audioArray.array[i].pause();
-}
+/**
+ * 
+ * @param {*} i 
+ */
 
 PhSim.DynSim.prototype.pauseAudioByIndex = function(i) {
-	this.audioArray.array[i].pause();
+	return this.audioArray.array[i].pause();
 }
+
+/**
+ * 
+ * @param {*} i 
+ */
+
+PhSim.DynSim.prototype.pauseAudioByIndex = function(i) {
+	return this.audioArray.array[i].pause();
+}
+
+/**
+ * 
+ * @param {*} i 
+ * @param {*} v 
+ */
 
 PhSim.DynSim.prototype.setAudioVolByIndex = function(i,v) {
 	this.audioArray.array[i].volume = v;
 	return this.audioArray.array[i].volume; 
 }
 
+/**
+ * 
+ * @param {*} i 
+ */
+
 PhSim.DynSim.prototype.setAudioMuteByIndex = function(i) {
 	this.audioArray.array[i].muted = v;
 	return this.audioArray.array[i].muted;
 }
+
+/**
+ * 
+ * @param {*} i 
+ */
 
 PhSim.DynSim.prototype.toggleAudioByIndex = function(i) {
 	
@@ -3516,8 +3507,8 @@ PhSim.DynSim.prototype.getStatusStr = function() {
 
 PhSim.DynSim.prototype.getCollisionClasses = function(dynObject) {
 
-	if(dynObject.object.collisionClass) {
-		var a = dynObject.object.collisionClass;
+	if(dynObject.collisionClass) {
+		var a = dynObject.collisionClass;
 		var b = a.split(" ");
 		return b;
 	}
@@ -4361,9 +4352,9 @@ PhSim.DynSim.prototype.assignPhRender = function(phRender) {
 
 PhSim.DynSim.prototype.setRadius = function(dynObject,radius) {
 
-	var ratio = radius / dynObject.object.radius;
+	var ratio = radius / dynObject.radius;
 
-	if(dynObject.object.regPolygon || dynObject.object.circle) {
+	if(dynObject.regPolygon || dynObject.circle) {
 		Matter.Body.scale(dynObject.object, ratio, ratio);
 	}
 
@@ -4380,7 +4371,7 @@ PhSim.DynSim.prototype.setRectWidthAndHeight = function(dynObject,w,h) {
  */
 
 PhSim.DynSim.prototype.setColor = function(dyn_object,colorStr) {
-	dyn_object.object.fillStyle = colorStr;
+	dyn_object.fillStyle = colorStr;
 }
 
 /**
@@ -4390,7 +4381,7 @@ PhSim.DynSim.prototype.setColor = function(dyn_object,colorStr) {
  */
 
 PhSim.DynSim.prototype.setBorderColor = function(dyn_object,colorStr) {
-	dyn_object.object.strokeStyle = colorStr;
+	dyn_object.strokeStyle = colorStr;
 }
 
 /**
@@ -4400,7 +4391,7 @@ PhSim.DynSim.prototype.setBorderColor = function(dyn_object,colorStr) {
  */
 
 PhSim.DynSim.prototype.setLineWidth = function(dyn_object,lineWidth) {
-	dyn_object.object.lineWidth = lineWidth;
+	dyn_object.lineWidth = lineWidth;
 }
 
 /***/ }),
@@ -4418,28 +4409,28 @@ PhSim.DynSim.prototype.updateDynObj = function(currentObj) {
 	
 	else {
 
-		if(currentObj.object.circle || currentObj.object.regPolygon || currentObj.object.rectangle) {
-			currentObj.object.cycle = currentObj.firstCycle + currentObj.matter.angle;
+		if(currentObj.circle || currentObj.regPolygon || currentObj.rectangle) {
+			currentObj.cycle = currentObj.firstCycle + currentObj.matter.angle;
 		}
 	
-		if(currentObj.object.rectangle) {
+		if(currentObj.rectangle) {
 			
 			var v = {
 				"x": currentObj.matter.position.x - currentObj.matter.positionPrev.x,
 				"y": currentObj.matter.position.y - currentObj.matter.positionPrev.y 
 			}
 	
-			currentObj.object.x = currentObj.matter.position.x - currentObj.object.w * 0.5
-			currentObj.object.y = currentObj.matter.position.y - currentObj.object.h * 0.5
+			currentObj.x = currentObj.matter.position.x - currentObj.w * 0.5
+			currentObj.y = currentObj.matter.position.y - currentObj.h * 0.5
 	
 		}
 	
-		if(currentObj.object.circle || currentObj.object.regPolygon) {
-			currentObj.object.x = currentObj.matter.position.x;
-			currentObj.object.y = currentObj.matter.position.y;
+		if(currentObj.circle || currentObj.regPolygon) {
+			currentObj.x = currentObj.matter.position.x;
+			currentObj.y = currentObj.matter.position.y;
 		}
 	
-		if(currentObj.object.path) {
+		if(currentObj.path) {
 			PhSim.calc_skinmesh(currentObj);
 		}
 
@@ -5141,8 +5132,8 @@ PhSim.DynSim.prototype.extractWidget = function(widget,dyn_object) {
     
     
     PhSim.DynSim.prototype.extractWidgets = function(dyn_object) {
-        for(var i = 0; i < dyn_object.object.widgets.length; i++) {
-            this.extractWidget(dyn_object.object.widgets[i],dyn_object);
+        for(var i = 0; i < dyn_object.widgets.length; i++) {
+            this.extractWidget(dyn_object.widgets[i],dyn_object);
         }
     }
     
@@ -5370,13 +5361,13 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 /* 32 */
 /***/ (function(module, exports) {
 
-/*** 
+/** 
  * 
  * 
  * Object Widgets
  * 
  * 
-****/
+*/
 
 PhSim.Widgets = {}
 
@@ -5725,12 +5716,6 @@ PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
 /* 34 */
 /***/ (function(module, exports) {
 
-
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports) {
-
 /**
  * 
  * Calculate DynObject skinmesh
@@ -5757,12 +5742,12 @@ PhSim.calc_skinmesh = function(dynObject) {
 	Matter.Vertices.translate(dynObject.skinmesh,dynObject.matter.position,1);
 
 	dynObject.verts = dynObject.skinmesh;
-	dynObject.object.verts = dynObject.skinmesh;
+	dynObject.verts = dynObject.skinmesh;
 
 }
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports) {
 
 // Simple Event Reference
@@ -6055,7 +6040,7 @@ PhSim.DynSim.prototype.removeSimpleEvent = function(refNumber) {
 }
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports) {
 
 /**

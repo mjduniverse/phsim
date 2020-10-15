@@ -3,7 +3,7 @@
  * Get bounding box from an array of vertices.
  * 
  * 
- * @function getVertBoundingBox
+ * @function
  * @param {Array} verts 
  */
 
@@ -98,7 +98,7 @@ PhSim.Tools.getStaticBoundingBox = function(object) {
  * 
  * Get bounding box of a static object
  * 
- * @function getDynBoundingBox
+ * @function
  * @param {PhSim.Objects.DynObject} dynObj 
  */
 

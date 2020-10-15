@@ -45,6 +45,7 @@ PhSim.PhRender.prototype.defaultFillStyle = "transparent";
  */
 
 PhSim.PhRender.prototype.setCtx = function(object) {
+	
 	this.ctx.lineCap = "round";
 
 	if(typeof this.ctx.globalAlpha === "number") {
@@ -309,23 +310,6 @@ PhSim.PhRender.prototype.static_circle = function (circle) {
 
 PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 
-	/*
-	var rectangle = {
-		"cycle": arg.cycle,
-		"x": arg.x,
-		"y": arg.y,
-		"w": arg.w,
-		"h": arg.h,
-		"globalAlpha": arg.globalAlpha,
-		"strokeStyle": arg.strokeStyle,
-		"fillStyle": arg.fillStyle,
-		"lineWidth": arg.lineWidth
-	}
-
-	*/
-
-	//var c = getCentroid.object(rectangle);
-
 	var c = PhSim.Tools.getRectangleCentroid(rectangle);
 
 	var x = -rectangle.w * 0.5;
@@ -347,26 +331,6 @@ PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 			}
 		}
 	}
-
-	/*
-	if(rectangle.text) {
-	
-		this.ctx.save();
-		this.ctx.beginPath();
-		this.ctx.rect(0,0,rectangle.w,rectangle.h);
-		this.ctx.clip();
-		this.ctx.fillStyle = rectangle.text.fill;
-		this.ctx.strokeStyle = rectangle.text.borderColor
-		this.ctx.font = rectangle.text.size + "px " + rectangle.text.font;
-		this.ctx.textBaseline = "top";
-		this.ctx.strokeText(rectangle.text.content, 0, (0));
-		this.ctx.restore();
-		
-
-		this.rectText(rectangle.text,0,0,rectangle.w,rectangle.h);
-	}
-
-	*/
 
 	this.ctx.rotate(-rectangle.cycle);
 	this.ctx.translate(-c.x,-c.y);
@@ -720,36 +684,36 @@ PhSim.PhRender.prototype.drawDynamicSkeleton = function (object) {
 
 /**
  * @function
- * @param {*} arg 
+ * @param {*} dynObject 
  */
 
-PhSim.PhRender.prototype.dynamicRenderDraw = function (arg) {
+PhSim.PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 
-	this.ctx.lineWidth = arg.object.lineWidth;
-	this.ctx.fillStyle = arg.object.fillStyle;
-	this.ctx.strokeStyle = arg.object.strokeStyle;
+	this.ctx.lineWidth = dynObject.lineWidth;
+	this.ctx.fillStyle = dynObject.fillStyle;
+	this.ctx.strokeStyle = dynObject.strokeStyle;
 
 	
-	if(arg.object.path) {
+	if(dynObject.path) {
 		
-		this.drawDynamicSkeleton(arg);
+		this.drawDynamicSkeleton(dynObject);
 		
 		this.ctx.fill();
 
-		if(arg.object.sprite) {
+		if(dynObject.sprite) {
 
-			var img = this.spriteImgArray[arg.object.sprite.src];
+			var img = this.spriteImgArray[dynObject.sprite.src];
 
-			this.ctx.imageSmoothingEnabled = arg.object.sprite.smooth;
+			this.ctx.imageSmoothingEnabled = dynObject.sprite.smooth;
 
-			if(arg.object.sprite.repeat) {
+			if(dynObject.sprite.repeat) {
 
 				this.ctx.save();
 
-				this.dynamicSkeleton(arg);
-				this.ctx.translate(arg.matter.position.x,arg.matter.position.y);
-				this.ctx.rotate(arg.matter.angle);
-				this.ctx.scale(arg.object.sprite.scale,arg.object.sprite.scale);
+				this.dynamicSkeleton(dynObject);
+				this.ctx.translate(dynObject.matter.position.x,dynObject.matter.position.y);
+				this.ctx.rotate(dynObject.matter.angle);
+				this.ctx.scale(dynObject.sprite.scale,dynObject.sprite.scale);
 		
 
 				var pattern = this.ctx.createPattern(img,"repeat");
@@ -759,27 +723,27 @@ PhSim.PhRender.prototype.dynamicRenderDraw = function (arg) {
 				this.ctx.restore();
 			}
 
-			if(arg.object.sprite.fit) {
+			if(dynObject.sprite.fit) {
 
 				this.ctx.save();
 	
 				this.ctx.beginPath();
 	
-				this.ctx.moveTo(arg.object.verts[0].x, arg.object.verts[0].y);
+				this.ctx.moveTo(dynObject.verts[0].x, dynObject.verts[0].y);
 	
-				for(var j = 0; j < arg.object.verts.length; j++) {
-					this.ctx.lineTo(arg.object.verts[j].x, arg.object.verts[j].y);
+				for(var j = 0; j < dynObject.verts.length; j++) {
+					this.ctx.lineTo(dynObject.verts[j].x, dynObject.verts[j].y);
 				}
 	
 				this.ctx.closePath();
 	
 				this.ctx.clip();
 	
-				var box = PhSim.Tools.getStaticBoundingBox(arg.object);
+				var box = PhSim.Tools.getStaticBoundingBox(dynObject);
 	
 				var h = img.height * (box.w/img.width);
 	
-				this.renderSpriteByCenter(arg.object.sprite.src,arg.matter.position.x,arg.matter.position.y,box.w,h,arg.matter.angle);
+				this.renderSpriteByCenter(dynObject.sprite.src,dynObject.matter.position.x,dynObject.matter.position.y,box.w,h,dynObject.matter.angle);
 	
 				this.ctx.restore();	
 
@@ -788,7 +752,7 @@ PhSim.PhRender.prototype.dynamicRenderDraw = function (arg) {
 			}
 	
 			else {
-				this.renderSpriteByCenter(arg.object.sprite.src,arg.matter.position.x,arg.matter.position.y,img.width,img.height,arg.matter.angle);
+				this.renderSpriteByCenter(dynObject.sprite.src,dynObject.matter.position.x,dynObject.matter.position.y,img.width,img.height,dynObject.matter.angle);
 			}
 
 			//this.ctx.restore();	
@@ -797,21 +761,21 @@ PhSim.PhRender.prototype.dynamicRenderDraw = function (arg) {
 		
 	}
 
-	if(arg.object.circle) {
-		this.static_circle(arg.object);	
+	if(dynObject.circle) {
+		this.static_circle(dynObject);	
 	}
 	
-	if(arg.object.regPolygon) {
-		this.static_regPolygon(arg.object);		
+	if(dynObject.regPolygon) {
+		this.static_regPolygon(dynObject);		
 	}
 
-	if(arg.object.rectangle) {
-		this.static_rectangle(arg.object);		
+	if(dynObject.rectangle) {
+		this.static_rectangle(dynObject);		
 	}
 
-	if(arg.object.composite) {
-		for(var i = 1; i < arg.parts.length; i++) {
-			this.dynamicRenderDraw(arg.parts[i]);
+	if(dynObject.composite) {
+		for(var i = 1; i < dynObject.parts.length; i++) {
+			this.dynamicRenderDraw(dynObject.parts[i]);
 		}
 	}
 

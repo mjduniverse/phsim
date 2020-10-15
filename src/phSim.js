@@ -73,7 +73,6 @@ require("./dynSimCamera");
 require("./gradient");
 require("./widgets");
 require("./collisionClass");
-require("./dynObject");
 require("./calc_skinmesh");
 require("./simpleEvent");
 require("./processVar");

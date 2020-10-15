@@ -612,8 +612,8 @@ PhSim.DynSim.prototype.extractWidget = function(widget,dyn_object) {
     
     
     PhSim.DynSim.prototype.extractWidgets = function(dyn_object) {
-        for(var i = 0; i < dyn_object.object.widgets.length; i++) {
-            this.extractWidget(dyn_object.object.widgets[i],dyn_object);
+        for(var i = 0; i < dyn_object.widgets.length; i++) {
+            this.extractWidget(dyn_object.widgets[i],dyn_object);
         }
     }
     

@@ -63,8 +63,8 @@ PhSim.DynSim.prototype.getStatusStr = function() {
 
 PhSim.DynSim.prototype.getCollisionClasses = function(dynObject) {
 
-	if(dynObject.object.collisionClass) {
-		var a = dynObject.object.collisionClass;
+	if(dynObject.collisionClass) {
+		var a = dynObject.collisionClass;
 		var b = a.split(" ");
 		return b;
 	}
