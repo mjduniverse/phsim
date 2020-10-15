@@ -1,10 +1,10 @@
-/*** 
+/** 
  * 
  * 
  * Object Widgets
  * 
  * 
-****/
+*/
 
 PhSim.Widgets = {}
 

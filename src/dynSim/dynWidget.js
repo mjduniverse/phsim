@@ -201,7 +201,7 @@ PhSim.DynSim.prototype.removeDynObj = function(dynObject) {
 /**
  * Set Object Lifespan
  * 
- * @function setDynObjectLifespan
+ * @function
  * @param {*} dynObject - Dynamic Object
  * @param {Number} lifespan - Milliseconds 
  * 

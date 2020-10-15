@@ -3,7 +3,7 @@
  * 
  * Get vertices for a static object representing a regular polygon.
  * 
- * @function getRegPolygonVerts
+ * @function
  * @param {PhSim.Objects.RegPolygon} regularPolygon - The Static Regular Polygon Object
  * @returns {PhSim.Objects.Vector[]}
  * 

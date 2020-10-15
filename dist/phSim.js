@@ -2116,7 +2116,7 @@ PhSim.Tools.diagRect = function(x1,y1,x2,y2) {
  * 
  * Get vertices for a static object representing a regular polygon.
  * 
- * @function getRegPolygonVerts
+ * @function
  * @param {PhSim.Objects.RegPolygon} regularPolygon - The Static Regular Polygon Object
  * @returns {PhSim.Objects.Vector[]}
  * 
@@ -2272,7 +2272,7 @@ PhSim.Tools.findCentroidOfPath = function(a) {
  * Get bounding box from an array of vertices.
  * 
  * 
- * @function getVertBoundingBox
+ * @function
  * @param {Array} verts 
  */
 
@@ -2367,7 +2367,7 @@ PhSim.Tools.getStaticBoundingBox = function(object) {
  * 
  * Get bounding box of a static object
  * 
- * @function getDynBoundingBox
+ * @function
  * @param {PhSim.Objects.DynObject} dynObj 
  */
 
@@ -3049,7 +3049,7 @@ PhSim.DynSim.prototype.removeDynObj = function(dynObject) {
 /**
  * Set Object Lifespan
  * 
- * @function setDynObjectLifespan
+ * @function
  * @param {*} dynObject - Dynamic Object
  * @param {Number} lifespan - Milliseconds 
  * 
