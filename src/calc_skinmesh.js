@@ -3,7 +3,7 @@
  * Calculate DynObject skinmesh
  * 
  * @function
- * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {PhSim.DynObject} dynObject 
  */
 
 PhSim.calc_skinmesh = function(dynObject) {

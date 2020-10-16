@@ -1,6 +1,6 @@
 /**
  * @function
- * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} position 
  * @param {PhSim.Vector} forceVector 
  */
@@ -12,7 +12,7 @@ PhSim.DynSim.prototype.applyForce = function(dynObject,position,forceVector) {
 
 /**
  * @function
- * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} velocityVector 
  */
 
@@ -22,7 +22,7 @@ PhSim.DynSim.prototype.setVelocity = function(dynObject,velocityVector) {
 
 /**
  * @function
- * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} translationVector 
  */
 
@@ -32,7 +32,7 @@ PhSim.DynSim.prototype.translate = function(dynObject,translationVector) {
 
 /**
  * @function
- * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} positionVector 
  */
 
@@ -42,7 +42,7 @@ PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
 
 /**
  * @function
- * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {PhSim.DynObject} dynObject 
  * @param {Number} angle 
  * @param {PhSim.Vector} point 
  */
@@ -58,7 +58,7 @@ PhSim.DynSim.prototype.rotate = function(dynObject,angle,point) {
 
 /**
  * @function
- * @param {PhSim.Objects.DynObject} dynObject 
+ * @param {PhSim.DynObject} dynObject 
  * @param {Number} angle 
  */
 

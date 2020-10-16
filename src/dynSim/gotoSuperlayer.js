@@ -81,7 +81,7 @@ PhSim.DynSim.prototype.gotoSimulationIndex = function (i) {
 					}
 
 					else {
-						var dynObject = new PhSim.Objects.DynObject(this.simulation.layers[L].objUniverse[O])
+						var dynObject = new PhSim.DynObject(this.simulation.layers[L].objUniverse[O])
 						
 						// If the collision class object exists
 

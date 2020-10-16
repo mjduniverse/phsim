@@ -5,7 +5,7 @@
  * well-formed PhSim object and then translate it into JavaScript.
  * 
  * @param {Object} widget - The Widget
- * @param {PhSim.Objects.DynObject} dyn_object The individual Dynamic Object
+ * @param {PhSim.DynObject} dyn_object The individual Dynamic Object
  * @returns undefined
  * 
 */
