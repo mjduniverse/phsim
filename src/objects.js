@@ -4,7 +4,7 @@
  * @namespace
  */
 
-PhSim.Objects = {}
+PhSim.Static = {}
 
 /*** 
  * Vector 
@@ -28,7 +28,7 @@ PhSim.Vector = function(x, y) {
  * @param {Number} y1 - y coordinate of the second point
  */
 
-PhSim.Objects.GradientLimits = function(x0,y0,x1,y1) {
+PhSim.Static.GradientLimits = function(x0,y0,x1,y1) {
 
 	/**
 	 * Start vector
@@ -51,7 +51,7 @@ PhSim.Objects.GradientLimits = function(x0,y0,x1,y1) {
  * @param {String} color - String denoting the color of the stop
  */
 
-PhSim.Objects.GradientStop = function(pos,color) {
+PhSim.Static.GradientStop = function(pos,color) {
 	
 	/**
 	 * Gradient Color
@@ -69,11 +69,11 @@ PhSim.Objects.GradientStop = function(pos,color) {
 }
 
 
-PhSim.Objects.Gradient = function() {
+PhSim.Static.Gradient = function() {
 
 	/**
 	 * Gradient Stops
-	 * @type {PhSim.Objects.GradientStop[]}
+	 * @type {PhSim.Static.GradientStop[]}
 	 */
 
 	this.stops = [];
@@ -107,9 +107,9 @@ PhSim.Objects.Gradient = function() {
 	};
 }
 
-PhSim.Objects.lclGradient = function() {
+PhSim.Static.lclGradient = function() {
 	this.src = null;
-	this.limits = new PhSim.Objects.GradientLimits(x0,y0,x1,y1);
+	this.limits = new PhSim.Static.GradientLimits(x0,y0,x1,y1);
 	this.type = "linear";
 }
 
@@ -118,7 +118,7 @@ PhSim.Objects.lclGradient = function() {
  * @constructor
  */
 
-PhSim.Objects.Path = function() {
+PhSim.Static.Path = function() {
 
 	/**
 	 * Array of vectors defining a path or a polygon
@@ -141,7 +141,7 @@ PhSim.Objects.Path = function() {
  * @constructor
  */
 
-PhSim.Objects.Circle = function() {
+PhSim.Static.Circle = function() {
 
 	/**
 	 * Boolean indicating a circle
@@ -188,7 +188,7 @@ PhSim.Objects.Circle = function() {
  * @param {Number} n - sides of the regular polygon
  */
 
-PhSim.Objects.RegPolygon = function(x,y,r,n) {
+PhSim.Static.RegPolygon = function(x,y,r,n) {
 
 	/**
 	 * Boolean for indicating a regular polygon
@@ -245,7 +245,7 @@ PhSim.Objects.RegPolygon = function(x,y,r,n) {
  * 
  */
 
-PhSim.Objects.Rectangle = function(x,y,w,h) {
+PhSim.Static.Rectangle = function(x,y,w,h) {
 
 	/**
 	 * Boolean for indicating a rectangle
@@ -294,7 +294,7 @@ PhSim.Objects.Rectangle = function(x,y,w,h) {
  * 
  * Static Object Type
  * 
- * @typedef {PhSim.Objects.Rectangle | PhSim.Objects.Circle | PhSim.Objects.RegPolygon | PhSim.Objects.Path} StaticObject
+ * @typedef {PhSim.Static.Rectangle | PhSim.Static.Circle | PhSim.Static.RegPolygon | PhSim.Static.Path} StaticObject
  * 
  */
 
@@ -302,7 +302,7 @@ PhSim.Objects.Rectangle = function(x,y,w,h) {
  * Composite Object 
  */
 
-PhSim.Objects.Composite = function() {
+PhSim.Static.Composite = function() {
 	this.composite = true;
 	this.name = "Untitled";
 }
@@ -316,7 +316,7 @@ PhSim.Objects.Composite = function() {
  * 
  */
 
-PhSim.Objects.SimBox = function(w,h) {
+PhSim.Static.SimBox = function(w,h) {
 	
 	/**
 	 * Simulation Width
@@ -340,7 +340,7 @@ PhSim.Objects.SimBox = function(w,h) {
  *
  */
 
-PhSim.Objects.Camera = function(x,y,scale) {
+PhSim.Static.Camera = function(x,y,scale) {
 
 	/**
 	 * x-coordinate vector of camera
@@ -368,7 +368,7 @@ PhSim.Objects.Camera = function(x,y,scale) {
  * @constructor
  */
 
-PhSim.Objects.Layer = function() {
+PhSim.Static.Layer = function() {
 
 	/**
 	 * The array of objects
@@ -390,16 +390,16 @@ PhSim.Objects.Layer = function() {
  * @constructor
  */
 
-PhSim.Objects.Simulation = function() {
+PhSim.Static.Simulation = function() {
 
 	/**
 	 * Array of layers
-	 * @type {PhSim.Objects.Layer[]}
+	 * @type {PhSim.Static.Layer[]}
 	 */
 
 	this.layers = [];
 
-	this.layers.push(new PhSim.Objects.Layer())
+	this.layers.push(new PhSim.Static.Layer())
 	this.world = {
 		grav: 1,
 		bg: "white",
@@ -423,7 +423,7 @@ PhSim.Objects.Simulation = function() {
  * 
  */
 
-PhSim.Objects.CompositeSimulation = function() {
+PhSim.Static.CompositeSimulation = function() {
 
 	/**
 	 * PhSim version
@@ -434,22 +434,22 @@ PhSim.Objects.CompositeSimulation = function() {
 
 	/** 
 	 * PhSim Static simulation Array 
-	 * @type {PhSim.Objects.Simulation[]}
+	 * @type {PhSim.Static.Simulation[]}
 	 */
 
 	this.simulations = [];
 	
-	this.simulations.push(new PhSim.Objects.Simulation());
+	this.simulations.push(new PhSim.Static.Simulation());
 	this.simulations[0].layers[0].name = "Untitled Layer"
 	this.simulations[0].name = "Untitled simulation";
 
 	/** PhSim Box Settings */
 
-	this.box = new PhSim.Objects.SimBox(800,600);
+	this.box = new PhSim.Static.SimBox(800,600);
 
 	/** PhSim Camera */
 
-	this.camera = new PhSim.Objects.Camera(0,0,1);
+	this.camera = new PhSim.Static.Camera(0,0,1);
 
 }
 

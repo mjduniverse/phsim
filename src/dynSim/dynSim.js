@@ -1,6 +1,6 @@
 /**
  * 
- * @typedef {PhSim.Objects.CompositeSimulation|PhSim.Objects.Simulation|StaticObject[]} DynSimOptions
+ * @typedef {PhSim.Static.CompositeSimulation|PhSim.Static.Simulation|StaticObject[]} DynSimOptions
  * 
  * The options that can be used to create a dynamic simulation could be a 
  * CompositeSimulation object, a simulation object or an array 
@@ -30,7 +30,7 @@ PhSim.DynSim = function(dynSimOptions) {
 	}
 
 	else if(Array.isArray(dynSimOptions.layers)) {
-		this.sim = new PhSim.Objects.CompositeSimulation();
+		this.sim = new PhSim.Static.CompositeSimulation();
 		this.sim.simulations[0] = dynSimOptions;
 	}
 

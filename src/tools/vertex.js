@@ -4,7 +4,7 @@
  * Get vertices for a static object representing a regular polygon.
  * 
  * @function
- * @param {PhSim.Objects.RegPolygon} regularPolygon - The Static Regular Polygon Object
+ * @param {PhSim.Static.RegPolygon} regularPolygon - The Static Regular Polygon Object
  * @returns {PhSim.Vector[]}
  * 
  */
@@ -31,7 +31,7 @@ PhSim.Tools.getRegPolygonVerts = function(regularPolygon) {
  * Get vertices for a rectangle
  * 
  * @function
- * @param {PhSim.Objects.Rectangle} rectangle
+ * @param {PhSim.Static.Rectangle} rectangle
  * @returns {Object[]} 
  */
 
@@ -77,7 +77,7 @@ PhSim.Tools.getRectangleVertArray = function(rectangle) {
  * Get rectangle corners
  * 
  * @function
- * @param {PhSim.Objects.Rectangle} rectangle 
+ * @param {PhSim.Static.Rectangle} rectangle 
  * @returns {Object}
  */
 

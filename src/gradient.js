@@ -9,7 +9,7 @@ PhSim.Gradients = {}
 /**
  * @function
  * @param {CanvasRenderingContext2D} ctx 
- * @param {PhSim.Objects.Gradient} jsObject 
+ * @param {PhSim.Static.Gradient} jsObject 
  */
 
 PhSim.Gradients.extractGradient = function(ctx,jsObject) {

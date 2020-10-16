@@ -178,7 +178,7 @@ __webpack_require__(36);
  * @namespace
  */
 
-PhSim.Objects = {}
+PhSim.Static = {}
 
 /*** 
  * Vector 
@@ -202,7 +202,7 @@ PhSim.Vector = function(x, y) {
  * @param {Number} y1 - y coordinate of the second point
  */
 
-PhSim.Objects.GradientLimits = function(x0,y0,x1,y1) {
+PhSim.Static.GradientLimits = function(x0,y0,x1,y1) {
 
 	/**
 	 * Start vector
@@ -225,7 +225,7 @@ PhSim.Objects.GradientLimits = function(x0,y0,x1,y1) {
  * @param {String} color - String denoting the color of the stop
  */
 
-PhSim.Objects.GradientStop = function(pos,color) {
+PhSim.Static.GradientStop = function(pos,color) {
 	
 	/**
 	 * Gradient Color
@@ -243,11 +243,11 @@ PhSim.Objects.GradientStop = function(pos,color) {
 }
 
 
-PhSim.Objects.Gradient = function() {
+PhSim.Static.Gradient = function() {
 
 	/**
 	 * Gradient Stops
-	 * @type {PhSim.Objects.GradientStop[]}
+	 * @type {PhSim.Static.GradientStop[]}
 	 */
 
 	this.stops = [];
@@ -281,9 +281,9 @@ PhSim.Objects.Gradient = function() {
 	};
 }
 
-PhSim.Objects.lclGradient = function() {
+PhSim.Static.lclGradient = function() {
 	this.src = null;
-	this.limits = new PhSim.Objects.GradientLimits(x0,y0,x1,y1);
+	this.limits = new PhSim.Static.GradientLimits(x0,y0,x1,y1);
 	this.type = "linear";
 }
 
@@ -292,7 +292,7 @@ PhSim.Objects.lclGradient = function() {
  * @constructor
  */
 
-PhSim.Objects.Path = function() {
+PhSim.Static.Path = function() {
 
 	/**
 	 * Array of vectors defining a path or a polygon
@@ -315,7 +315,7 @@ PhSim.Objects.Path = function() {
  * @constructor
  */
 
-PhSim.Objects.Circle = function() {
+PhSim.Static.Circle = function() {
 
 	/**
 	 * Boolean indicating a circle
@@ -362,7 +362,7 @@ PhSim.Objects.Circle = function() {
  * @param {Number} n - sides of the regular polygon
  */
 
-PhSim.Objects.RegPolygon = function(x,y,r,n) {
+PhSim.Static.RegPolygon = function(x,y,r,n) {
 
 	/**
 	 * Boolean for indicating a regular polygon
@@ -419,7 +419,7 @@ PhSim.Objects.RegPolygon = function(x,y,r,n) {
  * 
  */
 
-PhSim.Objects.Rectangle = function(x,y,w,h) {
+PhSim.Static.Rectangle = function(x,y,w,h) {
 
 	/**
 	 * Boolean for indicating a rectangle
@@ -468,7 +468,7 @@ PhSim.Objects.Rectangle = function(x,y,w,h) {
  * 
  * Static Object Type
  * 
- * @typedef {PhSim.Objects.Rectangle | PhSim.Objects.Circle | PhSim.Objects.RegPolygon | PhSim.Objects.Path} StaticObject
+ * @typedef {PhSim.Static.Rectangle | PhSim.Static.Circle | PhSim.Static.RegPolygon | PhSim.Static.Path} StaticObject
  * 
  */
 
@@ -476,7 +476,7 @@ PhSim.Objects.Rectangle = function(x,y,w,h) {
  * Composite Object 
  */
 
-PhSim.Objects.Composite = function() {
+PhSim.Static.Composite = function() {
 	this.composite = true;
 	this.name = "Untitled";
 }
@@ -490,7 +490,7 @@ PhSim.Objects.Composite = function() {
  * 
  */
 
-PhSim.Objects.SimBox = function(w,h) {
+PhSim.Static.SimBox = function(w,h) {
 	
 	/**
 	 * Simulation Width
@@ -514,7 +514,7 @@ PhSim.Objects.SimBox = function(w,h) {
  *
  */
 
-PhSim.Objects.Camera = function(x,y,scale) {
+PhSim.Static.Camera = function(x,y,scale) {
 
 	/**
 	 * x-coordinate vector of camera
@@ -542,7 +542,7 @@ PhSim.Objects.Camera = function(x,y,scale) {
  * @constructor
  */
 
-PhSim.Objects.Layer = function() {
+PhSim.Static.Layer = function() {
 
 	/**
 	 * The array of objects
@@ -564,16 +564,16 @@ PhSim.Objects.Layer = function() {
  * @constructor
  */
 
-PhSim.Objects.Simulation = function() {
+PhSim.Static.Simulation = function() {
 
 	/**
 	 * Array of layers
-	 * @type {PhSim.Objects.Layer[]}
+	 * @type {PhSim.Static.Layer[]}
 	 */
 
 	this.layers = [];
 
-	this.layers.push(new PhSim.Objects.Layer())
+	this.layers.push(new PhSim.Static.Layer())
 	this.world = {
 		grav: 1,
 		bg: "white",
@@ -597,7 +597,7 @@ PhSim.Objects.Simulation = function() {
  * 
  */
 
-PhSim.Objects.CompositeSimulation = function() {
+PhSim.Static.CompositeSimulation = function() {
 
 	/**
 	 * PhSim version
@@ -608,22 +608,22 @@ PhSim.Objects.CompositeSimulation = function() {
 
 	/** 
 	 * PhSim Static simulation Array 
-	 * @type {PhSim.Objects.Simulation[]}
+	 * @type {PhSim.Static.Simulation[]}
 	 */
 
 	this.simulations = [];
 	
-	this.simulations.push(new PhSim.Objects.Simulation());
+	this.simulations.push(new PhSim.Static.Simulation());
 	this.simulations[0].layers[0].name = "Untitled Layer"
 	this.simulations[0].name = "Untitled simulation";
 
 	/** PhSim Box Settings */
 
-	this.box = new PhSim.Objects.SimBox(800,600);
+	this.box = new PhSim.Static.SimBox(800,600);
 
 	/** PhSim Camera */
 
-	this.camera = new PhSim.Objects.Camera(0,0,1);
+	this.camera = new PhSim.Static.Camera(0,0,1);
 
 }
 
@@ -633,111 +633,6 @@ PhSim.Objects.CompositeSimulation = function() {
  * @see {@link https://brm.io/matter-js/docs/classes/Body.html|MatterBody} 
  */
 
-/**
- * 
- * Create Dynamic Object from static object
- * @constructor
- * @param {StaticObject} staticObject - Static Object
- * @param {string} staticObject.name - Object Name;
- * @param {boolean} staticObject.locked - Lock
- * @param {Number} staticObject.density - Density
- * @param {Number} staticObject.mass  - Object mass, overrides density if set
- * @param {boolean} staticObject.path - Tells if object is irregular polygon
- * @param {Array} staticObject.verts - Array for vertices, used if object.path === true.
- * @param {boolean} staticObject.circle - Tells if object is a circle.
- * @param {Number} staticObject.x - Center of regular polygon, center of circle or upper left corner of rectangle.
- * @param {Number} staticObject.radius - Radius of circle or circle that circumscribes regular polygon.
- * @param {boolean} staticObject.rectangle - Tells if object is a rectangle
- * @param {Number} staticObject.w - Rectangle Width
- * @param {Number} staticObject.h - Rectangle Height
- * 
- */
-
-PhSim.DynObject = function(staticObject) {
-
-	Object.assign(this,staticObject);
-
-	var opts = staticObject
-
-	if(staticObject.name) {
-		opts.label = staticObject.name;
-	}
-
-	if(staticObject.locked) {
-		opts.isStatic = staticObject.locked;
-	}
-
-	if(typeof staticObject.density === "number") {
-		opts.density = staticObject.density;
-
-	}
-
-	if(typeof staticObject.mass === "number") {
-		opts.mass = staticObject.mass;
-		opts.inverseMass = 1/staticObject.mass;
-	}
-
-	if(Number.isInteger(staticObject.collisionNum)) {
-		opts.collisionFilter = staticObject.collisionNum;
-	}
-
-	if(staticObject.path === true) {
-
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
-
-		/** Irregular polygon skinmesh */
-
-		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
-
-		//PhSim.Objects.Path.call(this);
-
-	}
-
-	if(staticObject.circle === true) {
-		this.matter = Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
-		this.firstCycle = staticObject.cycle;
-		//PhSim.Objects.Circle.call(this);
-	}
-
-	if(staticObject.rectangle === true) {
-		var set = PhSim.Tools.getRectangleVertArray(staticObject);
-		this.firstCycle = staticObject.cycle;
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-		//PhSim.Objects.Rectangle.call(this);
-	}
-
-	if(staticObject.regPolygon === true) {
-		var set = PhSim.Tools.getRegPolygonVerts(staticObject);
-		this.firstCycle = staticObject.cycle;
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-		//PhSim.Objects.RegPolygon.call(this);
-	}
-
-	
-	/** 
-	 * Reference to static object used to create the DynObject
-	 * @type {StaticObject}
-	 */
-
-	this.static = staticObject;
-
-	/** 
-	 * Object ID 
-	 * @type {String}
-	 * */
-
-	this.id = PhSim.DynSim.nextId;
-
-	PhSim.DynSim.nextId = (Number.parseInt(PhSim.DynSim.nextId,36) + 1).toString(36);
-	
-	/** 
-	 * Refernce of DynObj in matter object 
-	 * @type {Object}
-	 * */
-
-	this.matter.plugin.ph = this;
-
-}
 
 /***/ }),
 /* 2 */
@@ -1129,7 +1024,7 @@ PhSim.PhRender.prototype.renderConstraint = function (constraint) {
  * Render circle
  * 
  * @function
- * @param {PhSim.Objects.Circle} circle 
+ * @param {PhSim.Static.Circle} circle 
  */
 
 PhSim.PhRender.prototype.static_circle = function (circle) {
@@ -1200,7 +1095,7 @@ PhSim.PhRender.prototype.static_circle = function (circle) {
  * Render rectangle
  * 
  * @function
- * @param {PhSim.Objects.Rectangle} rectangle - Rectangle object
+ * @param {PhSim.Static.Rectangle} rectangle - Rectangle object
  * @param rectangle.sprite - Sprite Object
  */
 
@@ -1322,7 +1217,7 @@ PhSim.PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 
 /**
  * @function
- * @param {PhSim.Objects.RegPolygon} regPolygon 
+ * @param {PhSim.Static.RegPolygon} regPolygon 
  */
 
 PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
@@ -2055,7 +1950,7 @@ PhSim.Tools.checkObjectType = function (objectTypeStr) {
  * @param {Number} y1
  * @param {Number} x2
  * @param {Number} y2 
- * @returns {PhSim.Objects.Rectangle} - Rectangle Object
+ * @returns {PhSim.Static.Rectangle} - Rectangle Object
  * 
  */
 
@@ -2064,7 +1959,7 @@ PhSim.Tools.diagRect = function(x1,y1,x2,y2) {
 	var w = x2 - x1;
 	var h = y2 - y1;
 
-    return new PhSim.Objects.Rectangle(x1,y1,w,h);
+    return new PhSim.Static.Rectangle(x1,y1,w,h);
     
  }
 
@@ -2079,7 +1974,7 @@ PhSim.Tools.diagRect = function(x1,y1,x2,y2) {
  * Get vertices for a static object representing a regular polygon.
  * 
  * @function
- * @param {PhSim.Objects.RegPolygon} regularPolygon - The Static Regular Polygon Object
+ * @param {PhSim.Static.RegPolygon} regularPolygon - The Static Regular Polygon Object
  * @returns {PhSim.Vector[]}
  * 
  */
@@ -2106,7 +2001,7 @@ PhSim.Tools.getRegPolygonVerts = function(regularPolygon) {
  * Get vertices for a rectangle
  * 
  * @function
- * @param {PhSim.Objects.Rectangle} rectangle
+ * @param {PhSim.Static.Rectangle} rectangle
  * @returns {Object[]} 
  */
 
@@ -2152,7 +2047,7 @@ PhSim.Tools.getRectangleVertArray = function(rectangle) {
  * Get rectangle corners
  * 
  * @function
- * @param {PhSim.Objects.Rectangle} rectangle 
+ * @param {PhSim.Static.Rectangle} rectangle 
  * @returns {Object}
  */
 
@@ -2188,7 +2083,7 @@ PhSim.Tools.getRectangleCorners = function(rectangle) {
  * Get centroid of a rectangle
  * 
  * @function
- * @param {PhSim.Objects.Rectangle} rectangle
+ * @param {PhSim.Static.Rectangle} rectangle
  * @returns {PhSim.Vector}
  *  
  */
@@ -2204,7 +2099,7 @@ PhSim.Tools.getRectangleCentroid = function(rectangle) {
 /** 
  * Find Centroid of a path polygon
  * @function
- * @param {PhSim.Objects.Path} a - Path
+ * @param {PhSim.Static.Path} a - Path
  * @returns {PhSim.Vector}
  */
 
@@ -2348,7 +2243,7 @@ PhSim.Tools.getDynBoundingBox = function(dynObj) {
 
 /**
  * 
- * @typedef {PhSim.Objects.CompositeSimulation|PhSim.Objects.Simulation|StaticObject[]} DynSimOptions
+ * @typedef {PhSim.Static.CompositeSimulation|PhSim.Static.Simulation|StaticObject[]} DynSimOptions
  * 
  * The options that can be used to create a dynamic simulation could be a 
  * CompositeSimulation object, a simulation object or an array 
@@ -2378,7 +2273,7 @@ PhSim.DynSim = function(dynSimOptions) {
 	}
 
 	else if(Array.isArray(dynSimOptions.layers)) {
-		this.sim = new PhSim.Objects.CompositeSimulation();
+		this.sim = new PhSim.Static.CompositeSimulation();
 		this.sim.simulations[0] = dynSimOptions;
 	}
 
@@ -5342,7 +5237,7 @@ PhSim.Gradients = {}
 /**
  * @function
  * @param {CanvasRenderingContext2D} ctx 
- * @param {PhSim.Objects.Gradient} jsObject 
+ * @param {PhSim.Static.Gradient} jsObject 
  */
 
 PhSim.Gradients.extractGradient = function(ctx,jsObject) {

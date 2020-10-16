@@ -54,28 +54,28 @@ PhSim.DynObject = function(staticObject) {
 
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
 
-		//PhSim.Objects.Path.call(this);
+		//PhSim.Static.Path.call(this);
 
 	}
 
 	if(staticObject.circle === true) {
 		this.matter = Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
 		this.firstCycle = staticObject.cycle;
-		//PhSim.Objects.Circle.call(this);
+		//PhSim.Static.Circle.call(this);
 	}
 
 	if(staticObject.rectangle === true) {
 		var set = PhSim.Tools.getRectangleVertArray(staticObject);
 		this.firstCycle = staticObject.cycle;
 		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-		//PhSim.Objects.Rectangle.call(this);
+		//PhSim.Static.Rectangle.call(this);
 	}
 
 	if(staticObject.regPolygon === true) {
 		var set = PhSim.Tools.getRegPolygonVerts(staticObject);
 		this.firstCycle = staticObject.cycle;
 		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-		//PhSim.Objects.RegPolygon.call(this);
+		//PhSim.Static.RegPolygon.call(this);
 	}
 
 	
