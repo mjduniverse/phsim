@@ -160,13 +160,15 @@ __webpack_require__(12);
 
 __webpack_require__(13);
 
-__webpack_require__(30);
+__webpack_require__(14);
+
 __webpack_require__(31);
 __webpack_require__(32);
 __webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
 __webpack_require__(36);
+__webpack_require__(37);
 
 /***/ }),
 /* 1 */
@@ -2239,6 +2241,116 @@ PhSim.Tools.getDynBoundingBox = function(dynObj) {
 
 /***/ }),
 /* 13 */
+/***/ (function(module, exports) {
+
+/**
+ * 
+ * Create Dynamic Object from static object
+ * @constructor
+ * @param {StaticObject} staticObject - Static Object
+ * @param {string} staticObject.name - Object Name;
+ * @param {boolean} staticObject.locked - Lock
+ * @param {Number} staticObject.density - Density
+ * @param {Number} staticObject.mass  - Object mass, overrides density if set
+ * @param {boolean} staticObject.path - Tells if object is irregular polygon
+ * @param {Array} staticObject.verts - Array for vertices, used if object.path === true.
+ * @param {boolean} staticObject.circle - Tells if object is a circle.
+ * @param {Number} staticObject.x - Center of regular polygon, center of circle or upper left corner of rectangle.
+ * @param {Number} staticObject.radius - Radius of circle or circle that circumscribes regular polygon.
+ * @param {boolean} staticObject.rectangle - Tells if object is a rectangle
+ * @param {Number} staticObject.w - Rectangle Width
+ * @param {Number} staticObject.h - Rectangle Height
+ * 
+ */
+
+PhSim.DynObject = function(staticObject) {
+
+	Object.assign(this,staticObject);
+
+	var opts = staticObject
+
+	if(staticObject.name) {
+		opts.label = staticObject.name;
+	}
+
+	if(staticObject.locked) {
+		opts.isStatic = staticObject.locked;
+	}
+
+	if(typeof staticObject.density === "number") {
+		opts.density = staticObject.density;
+
+	}
+
+	if(typeof staticObject.mass === "number") {
+		opts.mass = staticObject.mass;
+		opts.inverseMass = 1/staticObject.mass;
+	}
+
+	if(Number.isInteger(staticObject.collisionNum)) {
+		opts.collisionFilter = staticObject.collisionNum;
+	}
+
+	if(staticObject.path === true) {
+
+		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
+
+		/** Irregular polygon skinmesh */
+
+		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
+
+		//PhSim.Static.Path.call(this);
+
+	}
+
+	if(staticObject.circle === true) {
+		this.matter = Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
+		this.firstCycle = staticObject.cycle;
+		//PhSim.Static.Circle.call(this);
+	}
+
+	if(staticObject.rectangle === true) {
+		var set = PhSim.Tools.getRectangleVertArray(staticObject);
+		this.firstCycle = staticObject.cycle;
+		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+		//PhSim.Static.Rectangle.call(this);
+	}
+
+	if(staticObject.regPolygon === true) {
+		var set = PhSim.Tools.getRegPolygonVerts(staticObject);
+		this.firstCycle = staticObject.cycle;
+		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+		//PhSim.Static.RegPolygon.call(this);
+	}
+
+	
+	/** 
+	 * Reference to static object used to create the DynObject
+	 * @type {StaticObject}
+	 */
+
+	this.static = staticObject;
+
+	/** 
+	 * Object ID 
+	 * @type {String}
+	 * */
+
+	this.id = PhSim.DynSim.nextId;
+
+	PhSim.DynSim.nextId = (Number.parseInt(PhSim.DynSim.nextId,36) + 1).toString(36);
+	
+	/** 
+	 * Refernce of DynObj in matter object 
+	 * @type {Object}
+	 * */
+
+	this.matter.plugin.ph = this;
+
+}
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -2397,7 +2509,6 @@ PhSim.DynSim.prototype.addToOverlayer = function(dynObject) {
 	this.objUniverse.push(dynObject);
 }
 
-__webpack_require__(14);
 __webpack_require__(15);
 __webpack_require__(16);
 __webpack_require__(17);
@@ -2413,9 +2524,10 @@ __webpack_require__(26);
 __webpack_require__(27);
 __webpack_require__(28);
 __webpack_require__(29);
+__webpack_require__(30);
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.removeClickRectRegion = function(reference) {
@@ -2497,7 +2609,7 @@ PhSim.CollisionReport = function() {
 }
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.prototype.L = function(L) {
@@ -2514,7 +2626,7 @@ PhSim.DynSim.prototype.getObjectFromLOStr = function(str) {
 }
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 
@@ -2612,7 +2724,7 @@ PhSim.DynSim.prototype.configRender = function() {
 }
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.prototype.configFilter = function(container) {
@@ -2700,7 +2812,7 @@ PhSim.DynSim.prototype.alert = function(options) {
 }
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /** 
@@ -2930,7 +3042,7 @@ PhSim.DynSim.prototype.renderAllCounters = function() {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 
@@ -3002,7 +3114,7 @@ PhSim.DynSim.prototype.toggleAudioByIndex = function(i) {
 }
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.prototype.registerCanvasEvents = function() {
@@ -3227,7 +3339,7 @@ PhSim.DynSim.prototype.deregisterKeyEvents = function() {
 }
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /**
@@ -3334,7 +3446,7 @@ PhSim.DynSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
 }
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /**
@@ -3837,7 +3949,7 @@ PhSim.DynSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 // Newtonian Gravity
@@ -3861,7 +3973,7 @@ PhSim.DynSim.prototype.applyGravitationalField = function() {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.prototype.play = function() {
@@ -3907,7 +4019,7 @@ PhSim.DynSim.prototype.exit = function() {
 }
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports) {
 
 /**
@@ -4148,7 +4260,7 @@ PhSim.DynSim.prototype.initSim = function(simulationI) {
 }
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /**
@@ -4226,7 +4338,7 @@ PhSim.DynSim.prototype.setAngle = function(dynObject,angle) {
 }
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.prototype.assignPhRender = function(phRender) {
@@ -4290,7 +4402,7 @@ PhSim.DynSim.prototype.setLineWidth = function(dyn_object,lineWidth) {
 }
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.prototype.updateDynObj = function(currentObj) {
@@ -4410,7 +4522,7 @@ PhSim.DynSim.prototype.loopFunction = function() {
 }
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 /** 
@@ -5035,7 +5147,7 @@ PhSim.DynSim.prototype.extractWidget = function(widget,dyn_object) {
     
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /**
@@ -5223,7 +5335,7 @@ PhSim.DynSim.prototype.extractLclGame = function(localSettings) {
 }
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 
@@ -5253,7 +5365,7 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 }
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 /** 
@@ -5586,7 +5698,7 @@ PhSim.Constraints.Static.Constraint = function() {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 PhSim.CollisionClass = function(name) {
@@ -5608,7 +5720,7 @@ PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
 };
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /**
@@ -5642,7 +5754,7 @@ PhSim.calc_skinmesh = function(dynObject) {
 }
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 // Simple Event Reference
@@ -5935,7 +6047,7 @@ PhSim.DynSim.prototype.removeSimpleEvent = function(refNumber) {
 }
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 /**

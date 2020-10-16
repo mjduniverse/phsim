@@ -67,6 +67,8 @@ require("./tools/centroid");
 
 require("./tools/boundingBox");
 
+require("./dynObject");
+
 require("./dynSim/dynSim");
 
 require("./dynSimCamera");
