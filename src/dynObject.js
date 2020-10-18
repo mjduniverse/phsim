@@ -22,19 +22,21 @@ PhSim.DynObject = function(staticObject) {
 
 	Object.assign(this,staticObject);
 
-	var opts = staticObject
+	var opts = staticObject;
 
-	if(staticObject.name) {
-		opts.label = staticObject.name;
-	}
+	opts.label = staticObject.name || "Untitled Object";
 
-	if(staticObject.locked) {
-		opts.isStatic = staticObject.locked;
-	}
+	opts.isStatic = staticObject.semiLocked;
+
+	opts.isStatic = staticObject.locked;
 
 	if(typeof staticObject.density === "number") {
 		opts.density = staticObject.density;
 
+	}
+
+	else {
+		opts.density = 0.001;
 	}
 
 	if(typeof staticObject.mass === "number") {

@@ -2,7 +2,7 @@
  * 
  * 
  * Object Widgets
- * 
+ * @namespace
  * 
 */
 

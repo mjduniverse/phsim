@@ -14,9 +14,38 @@ PhSim.Static = {}
  * 
  */
 
-PhSim.Vector = function(x, y) {
-	this.x = x;
-	this.y = y;
+PhSim.Vector = function(x,y) {
+	
+	/**
+	 * x-coordinate of the vector
+	 * @type {Number}
+	 */
+	
+	this.x;
+
+	/**
+	 * y-coordinate of the vector
+	 * @type {Number}
+	 */
+	
+	this.y;
+
+	if(typeof x === "number") {
+		this.x = x;
+	}
+
+	else {
+		throw "Expecting a number in argument 1";
+	}
+
+	if(typeof y === "number") {
+		this.y = y;
+	}
+
+	else {
+		throw "Expecting a number in argument 2"
+	}
+
 }
 
 /**
@@ -35,7 +64,7 @@ PhSim.Static.GradientLimits = function(x0,y0,x1,y1) {
 	 * @type {PhSim.Vector}
 	 */
 
-	this.start = new PhSim.Vector(x0,y0);	
+	this.start = new PhSim.Vector(x0,y0);
 	
 	/**
 	 * End vector
@@ -115,17 +144,38 @@ PhSim.Static.lclGradient = function() {
 
 /**
  * A path is defined by vertices. They can be used as a regular polygon.
+ * Any object that contains an array of vectors and has the boolean property "path" set to true is reconized as a path.
+ * Paths can be used to define any polygon in general.
+ * 
+ * In PhSim, a path is any object obj such that the following is true:
+ * 
+ * Array.isArray(obj) === true
+ * obj.path === true
+ * 
  * @constructor
+ * @param {PhSim.Vector[]} verts -  Vertcies
  */
 
-PhSim.Static.Path = function() {
+PhSim.Static.Path = function(verts) {
 
 	/**
 	 * Array of vectors defining a path or a polygon
-	 * @type {PhSim.Vector}
+	 * @type {PhSim.Vector[]}
 	 */
 
-	this.verts = [];
+	this.verts;
+
+	if(Array.isArray(verts)) {
+		for(var i = 0; i < verts.length; i++) {
+			var old = verts[i];
+			verts[i] = new PhSim.Vector(verts[i].x,verts[i].y);
+			Object.assign(verts[i],old);
+		}
+	}
+
+	else {
+		throw "Expecting array in argument 1"
+	}
 
 	/**
 	 * Boolean indicating it is a path
@@ -137,7 +187,15 @@ PhSim.Static.Path = function() {
 
 
 /**
- * Circle constructor
+ * A circle is a set all points equidistant from some point known as the center.
+ * 
+ * In PhSim, a circle is any object obj such that the following are all true:
+ * obj.circle === true
+ * typeof obj.x === number
+ * typeof obj.y === number
+ * typeof obj.radius === number
+ * typeof obj.cycle === number || obj.cycle
+ * 
  * @constructor
  */
 
@@ -180,7 +238,13 @@ PhSim.Static.Circle = function() {
 }
 
 /**
- * Regular Polygon Constructor
+ * A regular polygon is a polygon that has all of its sides equal in length.
+ * 
+ * In PhSim, a regular polgon is any object obj such that the following are true:
+ * 
+ * this.regPolygon === true
+ * 
+ * 
  * @constructor
  * @param {Number} x - x-coordinate of the center
  * @param {Number} y - y-coordinate of the center
