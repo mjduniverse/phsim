@@ -277,6 +277,11 @@ PhSim.Widgets.ToggleLock = function() {
 	this.trigger = null;
 }
 
+PhSim.Widgets.ToggleSemiLock = function() {
+	this.toggleSemiLock = true;
+	this.trigger = null;
+}
+
 PhSim.Widgets.CircularConstraint = function() {
 	this.x = 30;
 	this.y = 30;

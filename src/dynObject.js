@@ -2,19 +2,8 @@
  * 
  * Create Dynamic Object from static object
  * @constructor
- * @param {StaticObject} staticObject - Static Object
- * @param {string} staticObject.name - Object Name;
- * @param {boolean} staticObject.locked - Lock
- * @param {Number} staticObject.density - Density
- * @param {Number} staticObject.mass  - Object mass, overrides density if set
- * @param {boolean} staticObject.path - Tells if object is irregular polygon
- * @param {Array} staticObject.verts - Array for vertices, used if object.path === true.
- * @param {boolean} staticObject.circle - Tells if object is a circle.
- * @param {Number} staticObject.x - Center of regular polygon, center of circle or upper left corner of rectangle.
- * @param {Number} staticObject.radius - Radius of circle or circle that circumscribes regular polygon.
- * @param {boolean} staticObject.rectangle - Tells if object is a rectangle
- * @param {Number} staticObject.w - Rectangle Width
- * @param {Number} staticObject.h - Rectangle Height
+ * @param {PhSimObject} staticObject - Static Object
+ * @augments StaticObject
  * 
  */
 
@@ -110,4 +99,6 @@ PhSim.DynObject = function(staticObject) {
  * A PhSimObject is either a static object or a dynamic object.
  * 
  * @typedef {PhSim.DynObject|StaticObject} PhSimObject
+ * 
+ *
  */

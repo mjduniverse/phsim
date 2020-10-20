@@ -143,7 +143,7 @@ PhSim.DynSim.prototype.callObjLinkFunctions = function(dynObject) {
  * 
  * @param {PhSim.DynObject} dynObject 
  * @param {Object} options - The options used for creating a spawned object
- * @param {PhSim.Vector} options.vector -  The velocity to add to an object when it got spawned.
+ * @param {Vector} options.vector -  The velocity to add to an object when it got spawned.
  * @param 
  */
 
@@ -227,4 +227,22 @@ PhSim.DynSim.prototype.renderAllCounters = function() {
 	for(var i = 0; i < this.counterArray.length; i++) {
 		this.renderCounterByIndex(i);
 	}
+}
+
+/**
+ * Toggle Lock Status of Dynamic Object.
+ * @param {PhSim.DynObject} dynObject 
+ */
+
+PhSim.DynSim.prototype.toggleLock = function(dynObject) {
+	dynObject
+}
+
+/**
+ * Toggle Semi-Lock Status of Dynamic Object.
+ * @param {PhSim.DynObject} dynObject 
+ */
+
+PhSim.DynSim.prototype.toggleSemiLock = function(dynObject) {
+
 }

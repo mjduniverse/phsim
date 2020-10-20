@@ -183,7 +183,7 @@ __webpack_require__(37);
 PhSim.Static = {}
 
 /*** 
- * Vector 
+ * Constructor for the minimal requirements for being a {@link Vector}. 
  * @constructor
  * @param {Number} x 
  * @param {Number} y
@@ -227,6 +227,19 @@ PhSim.Vector = function(x,y) {
 }
 
 /**
+ * 
+ * @typedef {PhSim.Vector|Circle|Rectangle|RegPolygon} Vector
+ * 
+ * In PhSim, a vector is any object with the properties "x" and "y" 
+ * such that both are of the Number type.
+ * 
+ * In a {@link Circle}, the x and y coordinates refer to the center of the circle and the
+ * same goes for the {@link RegPolygon|Regular Polygon}. In a {@link Rectangle}, it refers to the upper left
+ * corner of the rectangle.
+ * 
+ */
+
+/**
  * Gradient limits
  * @constructor
  * @param {Number} x0 - x coordinate of the first point
@@ -239,14 +252,14 @@ PhSim.Static.GradientLimits = function(x0,y0,x1,y1) {
 
 	/**
 	 * Start vector
-	 * @type {PhSim.Vector}
+	 * @type {Vector}
 	 */
 
 	this.start = new PhSim.Vector(x0,y0);
 	
 	/**
 	 * End vector
-	 * @type {PhSim.Vector}
+	 * @type {Vector}
 	 */
 
 	this.end = new PhSim.Vector(x1,y1);
@@ -377,15 +390,7 @@ PhSim.Static.Path = function(verts) {
  
 
 /**
- * A circle is a set all points equidistant from some point known as the center.
- * 
- * In PhSim, a circle is any object obj such that the following are all true:
- * obj.circle === true
- * typeof obj.x === number
- * typeof obj.y === number
- * typeof obj.radius === number
- * typeof obj.cycle === number || obj.cycle
- * 
+ * Constructor for the minimal requirements for a {@link Circle}.
  * @constructor
  */
 
@@ -426,6 +431,19 @@ PhSim.Static.Circle = function() {
 
 	this.cycle = null;
 }
+
+/** 
+ * A circle is a set all points equidistant from some point known as the center.
+ * 
+ * In PhSim, a circle is any object obj such that the following are all true:
+ * obj.circle === true;
+ * typeof obj.x === number;
+ * typeof obj.y === number;
+ * typeof obj.radius === number;
+ * typeof obj.cycle === number || obj.cycle;
+ * 
+ * @typedef {PhSim.Static.Circle} Circle
+ */
 
 /**
  * A regular polygon is a polygon that has all of its sides equal in length.
@@ -549,6 +567,16 @@ PhSim.Static.Rectangle = function(x,y,w,h) {
  * Static Object Type
  * 
  * @typedef {PhSim.Static.Rectangle | PhSim.Static.Circle | PhSim.Static.RegPolygon | PhSim.Static.Path} StaticObject
+ * @property {Number} [mass] - The mass of the object.
+ * @property {Number} [density] - The density of the object
+ * @property {Boolean} [locked] - A boolean deterimining the lock status of the object
+ * @property {Boolean} [semiLocked] - A boolean deteriming the semi-lock status of the object
+ * @property {String} [name] - The name of the object
+ * @property {String} [fillStyle] -  Fill Color 
+ * @property {String} [strokeStyle] - Stroke Color
+ * @property {String} [lineWidth] - Stroke Width
+ * @property {PhSim.Sprites.Sprite} [sprite] - Sprite Object
+ * @property {Array} [widgets] - {@link PhSim.Widgets|Static Widget Objects}.
  * 
  */
 
@@ -631,6 +659,8 @@ PhSim.Static.Layer = function() {
 
 	this.objUniverse = [];
 
+	this.objUniverse[0]
+
 	/**
 	 * The name of the layer
 	 * @type {String}
@@ -712,6 +742,12 @@ PhSim.Static.CompositeSimulation = function() {
  * @external {MatterBody}
  * @see {@link https://brm.io/matter-js/docs/classes/Body.html|MatterBody} 
  */
+
+
+ /**
+  * @typedef {Object} PhSimObjectBase
+  * @augments RenderableObject
+  */
 
 
 /***/ }),
@@ -1384,6 +1420,19 @@ PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
 
 }
 
+/**
+ * 
+ * A renderable object is any {@link PhSimObject} with any of the properties that 
+ * can be dealt with by {@link PhSim.PhRender}.
+ * 
+ * @typedef {Object} RenderableObject
+ * @property {String} [fillStyle] -  Fill Color 
+ * @property {String} [strokeStyle] - Stroke Color
+ * @property {String} [lineWidth] - Stroke Width
+ * @property {PhSim.Sprites.Sprite} [sprite] - Sprite Object
+ * 
+ */
+
 // Draw Static object
 
 /**
@@ -1840,9 +1889,9 @@ PhSim.Tools = {}
  * Perform vector addition
  * 
  * @function
- * @param {PhSim.Vector} vector1 - The first vector
- * @param {PhSim.Vector} vector2 - The second vector
- * @returns {PhSim.Vector} - The sum of the two vectors
+ * @param {Vector} vector1 - The first vector
+ * @param {Vector} vector2 - The second vector
+ * @returns {Vector} - The sum of the two vectors
  */
 
 PhSim.Tools.addVectors = function(vector1,vector2) {
@@ -1854,9 +1903,9 @@ PhSim.Tools.addVectors = function(vector1,vector2) {
  * Perform vector subtraction
  * 
  * @function
- * @param {PhSim.Vector} vector1 
- * @param {PhSim.Vector} vector2 
- * @returns {PhSim.Vector} - The difference between the two vectors
+ * @param {Vector} vector1 
+ * @param {Vector} vector2 
+ * @returns {Vector} - The difference between the two vectors
  */
 
 PhSim.Tools.subtractVectors = function(vector1,vector2) {
@@ -1868,9 +1917,9 @@ PhSim.Tools.subtractVectors = function(vector1,vector2) {
  * Multiply a vector by a scalar
  * 
  * @function
- * @param {PhSim.Vector} vector 
+ * @param {Vector} vector 
  * @param {Number} scalar
- * @returns {PhSim.Vector} 
+ * @returns {Vector} 
  * 
  */
 
@@ -1883,9 +1932,9 @@ PhSim.Tools.scaleVector = function(vector,scalar) {
  * Divide a vector by a scalar
  * 
  * @function
- * @param {PhSim.Vector} vector 
+ * @param {Vector} vector 
  * @param {Number} scalar
- * @returns {PhSim.Vector} 
+ * @returns {Vector} 
  *  
  */
 
@@ -1898,8 +1947,8 @@ PhSim.Tools.divideVector = function(vector,scalar) {
  * Get distance between two vectors.
  * 
  * @function
- * @param {PhSim.Vector} vector1 
- * @param {PhSim.Vector} vector2
+ * @param {Vector} vector1 
+ * @param {Vector} vector2
  * @returns - The vector distance
  *  
  */
@@ -1918,7 +1967,7 @@ PhSim.Tools.calcVertDistance = function(vector1,vector2) {
  * Get length of the vector
  * 
  * @function
- * @param {PhSim.Vector} vector 
+ * @param {Vector} vector 
  * @returns {Number} - The length of the vector
  */
 
@@ -1931,8 +1980,8 @@ PhSim.Tools.getVectorLength = function(vector) {
  * Get normalized vector of some vector.
  * 
  * @function
- * @param {PhSim.Vector} vector - Vector to normalize.
- * @returns {PhSim.Vector} -  The Unit Vector
+ * @param {Vector} vector - Vector to normalize.
+ * @returns {Vector} -  The Unit Vector
  */
 
 PhSim.Tools.getUnitVector = function(vector) {
@@ -1964,7 +2013,7 @@ PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
  * @param {Number} a - Angle in radians
- * @returns {PhSim.Vector}
+ * @returns {Vector}
  */
 
 PhSim.Tools.rotatedVector = function(x,y,a) {
@@ -2164,7 +2213,7 @@ PhSim.Tools.getRectangleCorners = function(rectangle) {
  * 
  * @function
  * @param {PhSim.Static.Rectangle} rectangle
- * @returns {PhSim.Vector}
+ * @returns {Vector}
  *  
  */
 
@@ -2180,7 +2229,7 @@ PhSim.Tools.getRectangleCentroid = function(rectangle) {
  * Find Centroid of a path polygon
  * @function
  * @param {Path} a - Path
- * @returns {PhSim.Vector}
+ * @returns {Vector}
  */
 
 PhSim.Tools.findCentroidOfPath = function(a) {
@@ -2325,19 +2374,8 @@ PhSim.Tools.getDynBoundingBox = function(dynObj) {
  * 
  * Create Dynamic Object from static object
  * @constructor
- * @param {StaticObject} staticObject - Static Object
- * @param {string} staticObject.name - Object Name;
- * @param {boolean} staticObject.locked - Lock
- * @param {Number} staticObject.density - Density
- * @param {Number} staticObject.mass  - Object mass, overrides density if set
- * @param {boolean} staticObject.path - Tells if object is irregular polygon
- * @param {Array} staticObject.verts - Array for vertices, used if object.path === true.
- * @param {boolean} staticObject.circle - Tells if object is a circle.
- * @param {Number} staticObject.x - Center of regular polygon, center of circle or upper left corner of rectangle.
- * @param {Number} staticObject.radius - Radius of circle or circle that circumscribes regular polygon.
- * @param {boolean} staticObject.rectangle - Tells if object is a rectangle
- * @param {Number} staticObject.w - Rectangle Width
- * @param {Number} staticObject.h - Rectangle Height
+ * @param {PhSimObject} staticObject - Static Object
+ * @augments StaticObject
  * 
  */
 
@@ -2433,6 +2471,8 @@ PhSim.DynObject = function(staticObject) {
  * A PhSimObject is either a static object or a dynamic object.
  * 
  * @typedef {PhSim.DynObject|StaticObject} PhSimObject
+ * 
+ *
  */
 
 /***/ }),
@@ -3051,7 +3091,7 @@ PhSim.DynSim.prototype.callObjLinkFunctions = function(dynObject) {
  * 
  * @param {PhSim.DynObject} dynObject 
  * @param {Object} options - The options used for creating a spawned object
- * @param {PhSim.Vector} options.vector -  The velocity to add to an object when it got spawned.
+ * @param {Vector} options.vector -  The velocity to add to an object when it got spawned.
  * @param 
  */
 
@@ -3137,6 +3177,23 @@ PhSim.DynSim.prototype.renderAllCounters = function() {
 	}
 }
 
+/**
+ * Toggle Lock Status of Dynamic Object.
+ * @param {PhSim.DynObject} dynObject 
+ */
+
+PhSim.DynSim.prototype.toggleLock = function(dynObject) {
+	dynObject
+}
+
+/**
+ * Toggle Semi-Lock Status of Dynamic Object.
+ * @param {PhSim.DynObject} dynObject 
+ */
+
+PhSim.DynSim.prototype.toggleSemiLock = function(dynObject) {
+
+}
 
 /***/ }),
 /* 20 */
@@ -3213,6 +3270,16 @@ PhSim.DynSim.prototype.toggleAudioByIndex = function(i) {
 /***/ }),
 /* 21 */
 /***/ (function(module, exports) {
+
+/**
+ * 
+ * Used to set event listeners for a canvas.
+ * This function works if {@link PhSim.DynSim.prototype#simCtx} 
+ * and {@link PhSim.DynSim.prototype#simCanvas} are set.
+ * 
+ * @function
+ *  
+ */
 
 PhSim.DynSim.prototype.registerCanvasEvents = function() {
 
@@ -4175,7 +4242,7 @@ PhSim.DynSim.prototype.gotoSimulationIndex = function (i) {
 		var this_a = this;
 
 		this.matterJSWorld = Matter.World.create({
-			"gravity": new PhSim.Vector(0,this.simulation.grav),
+			"gravity": new PhSim.Vector(0,this.simulation.world.grav),
 		});
 
 		this.dynTree = [];
@@ -4376,8 +4443,8 @@ PhSim.DynSim.prototype.initSim = function(simulationI) {
  * 
  * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {PhSim.Vector} position 
- * @param {PhSim.Vector} forceVector
+ * @param {Vector} position 
+ * @param {Vector} forceVector
  *   
  */
 
@@ -4391,33 +4458,55 @@ PhSim.DynSim.prototype.applyForce = function(dynObject,position,forceVector) {
 /**
  * 
  * Apply velocity to a dynamic object.
- * Velocity is ineffective against locked, semi-locked and permanetly static objects.
+ * Velocity is ineffective against locked, semi-locked objects.
  * 
  * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {PhSim.Vector} velocityVector 
+ * @param {Vector} velocityVector 
  */
 
 PhSim.DynSim.prototype.setVelocity = function(dynObject,velocityVector) {
 	if(!dynObject.locked) {
 		return Matter.Body.setVelocity(dynObject.matter,velocityVector);
 	}
+
+	if(dynObject.noDyn) {
+
+	}
 }
 
 /**
  * 
  * Apply a transformation to a dynamic object.
- * Transformation is ineffective against locked and permanetly static objects.
+ * Transformation is ineffective against locked objects.
+ * However, it moves semi-locked objects and permanetly static objects.
  * 
  * @function
- * @param {PhSim.DynObject} dynObject 
- * @param {PhSim.Vector} translationVector 
+ * @param {PhSimObject} o 
+ * @param {Vector} translationVector 
  */
 
-PhSim.DynSim.prototype.translate = function(dynObject,translationVector) {
-	if(!dynObject.locked) {
-		return Matter.Body.translate(dynObject.matter,translationVector);
+PhSim.DynSim.prototype.translate = function(o,translationVector) {
+	if(!o.locked) {
+
+		if(o.path) {
+			for(var i = 0; i < o.verts.length; i++) {
+				o.verts[i].x = o.verts[i].x + translationVector.x;
+				o.verts[i].y = o.verts[i].y + translationVector.y;
+			}
+		}
+
+		if(o.circle || o.rectangle || o.regPolygon) {
+				o.x = o.x + translationVector.x;
+				o.y = o.y + translationVector.y;
+		}
+
+		if(!o.noDyn) {
+			return Matter.Body.translate(o.matter,translationVector);
+		}
+
 	}
+	
 }
 
 /**
@@ -4426,11 +4515,21 @@ PhSim.DynSim.prototype.translate = function(dynObject,translationVector) {
  * 
  * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {PhSim.Vector} positionVector 
+ * @param {Vector} positionVector 
  */
 
 PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
 	if(!dynObject.locked) {
+
+		if(o.circle || o.regPolygon) {
+				o.x = positionVector.x;
+				o.y = positionVector.y;
+		}
+
+		if(o.rectangle) {
+
+		}
+
 		Matter.Body.setPosition(dynObject.matter,positionVector);
 	}
 }
@@ -4439,7 +4538,7 @@ PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {Number} angle 
- * @param {PhSim.Vector} point 
+ * @param {Vector} point 
  */
 
 PhSim.DynSim.prototype.rotate = function(dynObject,angle,point) {
@@ -5786,6 +5885,11 @@ PhSim.Widgets.ObjLink_a = function() {
 
 PhSim.Widgets.ToggleLock = function() {
 	this.toggleLock = true;
+	this.trigger = null;
+}
+
+PhSim.Widgets.ToggleSemiLock = function() {
+	this.toggleSemiLock = true;
 	this.trigger = null;
 }
 

@@ -7,7 +7,7 @@
 PhSim.Static = {}
 
 /*** 
- * Vector 
+ * Constructor for the minimal requirements for being a {@link Vector}. 
  * @constructor
  * @param {Number} x 
  * @param {Number} y
@@ -51,6 +51,19 @@ PhSim.Vector = function(x,y) {
 }
 
 /**
+ * 
+ * @typedef {PhSim.Vector|Circle|Rectangle|RegPolygon} Vector
+ * 
+ * In PhSim, a vector is any object with the properties "x" and "y" 
+ * such that both are of the Number type.
+ * 
+ * In a {@link Circle}, the x and y coordinates refer to the center of the circle and the
+ * same goes for the {@link RegPolygon|Regular Polygon}. In a {@link Rectangle}, it refers to the upper left
+ * corner of the rectangle.
+ * 
+ */
+
+/**
  * Gradient limits
  * @constructor
  * @param {Number} x0 - x coordinate of the first point
@@ -63,14 +76,14 @@ PhSim.Static.GradientLimits = function(x0,y0,x1,y1) {
 
 	/**
 	 * Start vector
-	 * @type {PhSim.Vector}
+	 * @type {Vector}
 	 */
 
 	this.start = new PhSim.Vector(x0,y0);
 	
 	/**
 	 * End vector
-	 * @type {PhSim.Vector}
+	 * @type {Vector}
 	 */
 
 	this.end = new PhSim.Vector(x1,y1);
@@ -201,15 +214,7 @@ PhSim.Static.Path = function(verts) {
  
 
 /**
- * A circle is a set all points equidistant from some point known as the center.
- * 
- * In PhSim, a circle is any object obj such that the following are all true:
- * obj.circle === true
- * typeof obj.x === number
- * typeof obj.y === number
- * typeof obj.radius === number
- * typeof obj.cycle === number || obj.cycle
- * 
+ * Constructor for the minimal requirements for a {@link Circle}.
  * @constructor
  */
 
@@ -250,6 +255,19 @@ PhSim.Static.Circle = function() {
 
 	this.cycle = null;
 }
+
+/** 
+ * A circle is a set all points equidistant from some point known as the center.
+ * 
+ * In PhSim, a circle is any object obj such that the following are all true:
+ * obj.circle === true;
+ * typeof obj.x === number;
+ * typeof obj.y === number;
+ * typeof obj.radius === number;
+ * typeof obj.cycle === number || obj.cycle;
+ * 
+ * @typedef {PhSim.Static.Circle} Circle
+ */
 
 /**
  * A regular polygon is a polygon that has all of its sides equal in length.
@@ -373,6 +391,16 @@ PhSim.Static.Rectangle = function(x,y,w,h) {
  * Static Object Type
  * 
  * @typedef {PhSim.Static.Rectangle | PhSim.Static.Circle | PhSim.Static.RegPolygon | PhSim.Static.Path} StaticObject
+ * @property {Number} [mass] - The mass of the object.
+ * @property {Number} [density] - The density of the object
+ * @property {Boolean} [locked] - A boolean deterimining the lock status of the object
+ * @property {Boolean} [semiLocked] - A boolean deteriming the semi-lock status of the object
+ * @property {String} [name] - The name of the object
+ * @property {String} [fillStyle] -  Fill Color 
+ * @property {String} [strokeStyle] - Stroke Color
+ * @property {String} [lineWidth] - Stroke Width
+ * @property {PhSim.Sprites.Sprite} [sprite] - Sprite Object
+ * @property {Array} [widgets] - {@link PhSim.Widgets|Static Widget Objects}.
  * 
  */
 
@@ -455,6 +483,8 @@ PhSim.Static.Layer = function() {
 
 	this.objUniverse = [];
 
+	this.objUniverse[0]
+
 	/**
 	 * The name of the layer
 	 * @type {String}
@@ -536,3 +566,9 @@ PhSim.Static.CompositeSimulation = function() {
  * @external {MatterBody}
  * @see {@link https://brm.io/matter-js/docs/classes/Body.html|MatterBody} 
  */
+
+
+ /**
+  * @typedef {Object} PhSimObjectBase
+  * @augments RenderableObject
+  */

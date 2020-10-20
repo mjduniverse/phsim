@@ -3,9 +3,9 @@
  * Perform vector addition
  * 
  * @function
- * @param {PhSim.Vector} vector1 - The first vector
- * @param {PhSim.Vector} vector2 - The second vector
- * @returns {PhSim.Vector} - The sum of the two vectors
+ * @param {Vector} vector1 - The first vector
+ * @param {Vector} vector2 - The second vector
+ * @returns {Vector} - The sum of the two vectors
  */
 
 PhSim.Tools.addVectors = function(vector1,vector2) {
@@ -17,9 +17,9 @@ PhSim.Tools.addVectors = function(vector1,vector2) {
  * Perform vector subtraction
  * 
  * @function
- * @param {PhSim.Vector} vector1 
- * @param {PhSim.Vector} vector2 
- * @returns {PhSim.Vector} - The difference between the two vectors
+ * @param {Vector} vector1 
+ * @param {Vector} vector2 
+ * @returns {Vector} - The difference between the two vectors
  */
 
 PhSim.Tools.subtractVectors = function(vector1,vector2) {
@@ -31,9 +31,9 @@ PhSim.Tools.subtractVectors = function(vector1,vector2) {
  * Multiply a vector by a scalar
  * 
  * @function
- * @param {PhSim.Vector} vector 
+ * @param {Vector} vector 
  * @param {Number} scalar
- * @returns {PhSim.Vector} 
+ * @returns {Vector} 
  * 
  */
 
@@ -46,9 +46,9 @@ PhSim.Tools.scaleVector = function(vector,scalar) {
  * Divide a vector by a scalar
  * 
  * @function
- * @param {PhSim.Vector} vector 
+ * @param {Vector} vector 
  * @param {Number} scalar
- * @returns {PhSim.Vector} 
+ * @returns {Vector} 
  *  
  */
 
@@ -61,8 +61,8 @@ PhSim.Tools.divideVector = function(vector,scalar) {
  * Get distance between two vectors.
  * 
  * @function
- * @param {PhSim.Vector} vector1 
- * @param {PhSim.Vector} vector2
+ * @param {Vector} vector1 
+ * @param {Vector} vector2
  * @returns - The vector distance
  *  
  */
@@ -81,7 +81,7 @@ PhSim.Tools.calcVertDistance = function(vector1,vector2) {
  * Get length of the vector
  * 
  * @function
- * @param {PhSim.Vector} vector 
+ * @param {Vector} vector 
  * @returns {Number} - The length of the vector
  */
 
@@ -94,8 +94,8 @@ PhSim.Tools.getVectorLength = function(vector) {
  * Get normalized vector of some vector.
  * 
  * @function
- * @param {PhSim.Vector} vector - Vector to normalize.
- * @returns {PhSim.Vector} -  The Unit Vector
+ * @param {Vector} vector - Vector to normalize.
+ * @returns {Vector} -  The Unit Vector
  */
 
 PhSim.Tools.getUnitVector = function(vector) {
@@ -127,7 +127,7 @@ PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
  * @param {Number} a - Angle in radians
- * @returns {PhSim.Vector}
+ * @returns {Vector}
  */
 
 PhSim.Tools.rotatedVector = function(x,y,a) {

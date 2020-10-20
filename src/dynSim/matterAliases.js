@@ -5,8 +5,8 @@
  * 
  * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {PhSim.Vector} position 
- * @param {PhSim.Vector} forceVector
+ * @param {Vector} position 
+ * @param {Vector} forceVector
  *   
  */
 
@@ -20,33 +20,55 @@ PhSim.DynSim.prototype.applyForce = function(dynObject,position,forceVector) {
 /**
  * 
  * Apply velocity to a dynamic object.
- * Velocity is ineffective against locked, semi-locked and permanetly static objects.
+ * Velocity is ineffective against locked, semi-locked objects.
  * 
  * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {PhSim.Vector} velocityVector 
+ * @param {Vector} velocityVector 
  */
 
 PhSim.DynSim.prototype.setVelocity = function(dynObject,velocityVector) {
 	if(!dynObject.locked) {
 		return Matter.Body.setVelocity(dynObject.matter,velocityVector);
 	}
+
+	if(dynObject.noDyn) {
+
+	}
 }
 
 /**
  * 
  * Apply a transformation to a dynamic object.
- * Transformation is ineffective against locked and permanetly static objects.
+ * Transformation is ineffective against locked objects.
+ * However, it moves semi-locked objects and permanetly static objects.
  * 
  * @function
- * @param {PhSim.DynObject} dynObject 
- * @param {PhSim.Vector} translationVector 
+ * @param {PhSimObject} o 
+ * @param {Vector} translationVector 
  */
 
-PhSim.DynSim.prototype.translate = function(dynObject,translationVector) {
-	if(!dynObject.locked) {
-		return Matter.Body.translate(dynObject.matter,translationVector);
+PhSim.DynSim.prototype.translate = function(o,translationVector) {
+	if(!o.locked) {
+
+		if(o.path) {
+			for(var i = 0; i < o.verts.length; i++) {
+				o.verts[i].x = o.verts[i].x + translationVector.x;
+				o.verts[i].y = o.verts[i].y + translationVector.y;
+			}
+		}
+
+		if(o.circle || o.rectangle || o.regPolygon) {
+				o.x = o.x + translationVector.x;
+				o.y = o.y + translationVector.y;
+		}
+
+		if(!o.noDyn) {
+			return Matter.Body.translate(o.matter,translationVector);
+		}
+
 	}
+	
 }
 
 /**
@@ -55,11 +77,21 @@ PhSim.DynSim.prototype.translate = function(dynObject,translationVector) {
  * 
  * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {PhSim.Vector} positionVector 
+ * @param {Vector} positionVector 
  */
 
 PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
 	if(!dynObject.locked) {
+
+		if(o.circle || o.regPolygon) {
+				o.x = positionVector.x;
+				o.y = positionVector.y;
+		}
+
+		if(o.rectangle) {
+
+		}
+
 		Matter.Body.setPosition(dynObject.matter,positionVector);
 	}
 }
@@ -68,7 +100,7 @@ PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {Number} angle 
- * @param {PhSim.Vector} point 
+ * @param {Vector} point 
  */
 
 PhSim.DynSim.prototype.rotate = function(dynObject,angle,point) {

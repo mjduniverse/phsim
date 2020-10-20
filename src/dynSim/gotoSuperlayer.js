@@ -48,7 +48,7 @@ PhSim.DynSim.prototype.gotoSimulationIndex = function (i) {
 		var this_a = this;
 
 		this.matterJSWorld = Matter.World.create({
-			"gravity": new PhSim.Vector(0,this.simulation.grav),
+			"gravity": new PhSim.Vector(0,this.simulation.world.grav),
 		});
 
 		this.dynTree = [];
