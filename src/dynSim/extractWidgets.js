@@ -1,10 +1,235 @@
+/**
+ * @typedef {simpleEventOptions} Velocity
+ * @property {Boolean} velocity - Boolean for determining it is a velocity widget.
+ * @property {Vector} vector -  The velocity vector
+ */
+
+/**
+ * @typedef {simpleEventOptions} Force
+ * @property {Boolean} force - Boolean for determining it is a force widget.
+ * @property {Vector} vector -  The force vector
+ */
+
+/**
+ * @typedef {simpleEventOptions} Position
+ * @property {Boolean} position - Boolean for determining it is a position widget.
+ * @property {Vector} vector -  The position vector
+ */
+
+/**
+ * @typedef {simpleEventOptions} Translate
+ * @property {Boolean} force - Boolean for determining it is a translation widget.
+ * @property {Vector} vector -  The translation vector
+ */
+
+/**
+ * @typedef {simpleEventOptions} DeleteSelf
+ * @property {Boolean} deleteSelf - Boolean for determining it is a self-deletion widget.
+ */
+
+/**
+ * @typedef {Object} Draggable
+ * @property {Boolean} draggable - Boolean for determining it is a draggable object.
+ */
+
+/**
+ * @typedef {Object} Coin
+ * @property {Boolean} coin - Boolean for determining it is a coin.
+ */
+
+/**
+ * @typedef {Object} Hazard
+ * @property {Boolean} hazard - Boolean for determining it is a hazard.
+ */
+
+/**
+ * @typedef {Object} Health
+ * @property {Boolean} hazard - Boolean for determining it is a health object.
+ */
+
+/**
+ * @typedef {Object} Elevator
+ * @property {Boolean} elevator - Boolean for determining it is a hazard.
+ * @property {Vector} pointA - The first point of the elevator
+ * @property {Vector} pointB -  The second point of the elevator
+ */
+
+/**
+ * @typedef {Object} TransformCameraByObj
+ * @property {Boolean} transformCameraByObj - Boolean for determining it makes the object transform the camera.
+ */
+
+/**
+ * @typedef {Object} TransformWithCamera
+ * @property {Boolean} transformWithCamera - Boolean for determining the object moves with the camera.
+ * 
+ */
+
+/**
+ * @typedef {Object} KeyboardControls
+ * @property {Number} up - The up velocity
+ * @property {Number} down - The down velocity
+ * @property {Number} left - The left velocity
+ * @property {Number} right - The right velocity
+ * @property {Boolean} keyboardControls - Boolean for determining if it keyboard controls widget
+ */
+
+/**
+ * @typedef {Object} Alert
+ * @property {String} buttonTxt
+ * @property {String} name
+ * @property {String} text
+ * @property {Boolean} alert
+ */
+
+ /**
+  * @typedef {Object} Connection
+  * @property {LOAddress} objectA
+  * @property {LOAddress} objectB
+  * @property {Boolean} connection
+  */
+
+ /**
+  * @typedef {simpleEventOptions} Rotation
+  * @property {Boolean} rotation
+  * @property {Number} cycle 
+  * @property {Boolean} circularConstraintRotation - If true, rotate around any existing circular constraints. Else, rotate around centroid 
+  */
+
+ /**
+  * @typedef {simpleEventOptions} SetAngle
+  * @property {Boolean} rotation
+  * @property {Number} cycle 
+  * @property {Boolean} circularConstraintRotation - If true, rotate around any existing circular constraints. Else, rotate around centroid 
+  */
+
+/** 
+ * @typedef {Object} NoRotation
+ * @property {Boolean} noRotation
+ */
+
+ /**
+  * @typedef {Object} RectText
+  * @property {String} content
+  * @property {String} font
+  * @property {Number} margin
+  * @property {Number} size
+  * @property {Number} borderSize
+  * @property {String} fill
+  * @property {Boolean} rectText
+  * @property {String} lineWidth
+  * @property {String} borderColor
+  */
+
+/**
+ * @typedef {Object} NumVar 
+ * @property {String} name 
+ * @property {Number} value
+ * @property {Boolean} numVar
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetNumVar
+ * @property {Number} value
+ * @property {Boolean} setNumVar
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetColor
+ * @property {String} color
+ * @property {Boolean} setColor
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetBorderColor
+ * @property {String} color
+ * @property {Boolean} setBorderColor
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetLineWidth
+ * @property {Number} lineWidth
+ * @property {Boolean} setLineWidth
+ */
+
+/**
+ * @typedef {simpleEventOptions} PlayAudio
+ * @property {String} src
+ * @property {Boolean} playAudio
+ */
+
+/**
+ * @typedef {simpleEventOptions} ObjLink_a
+ * @property {LOAddress} target
+ * @property {Boolean} objLink_a 
+ */
+
+/**
+ * @typedef {Object} Game
+ * @property {Number} life
+ * @property {Number} goal
+ * @property {Number} score
+ * @property {Boolean} game - Boolean for enabling game widget
+ */
+
+/**
+ * @typedef {simpleEventOptions} ToggleLock
+ * @property {Boolean} toggleLock - Boolean for enabling toggle lock widget
+ */
+
+/**
+ * @typedef {simpleEventOptions} ToggleSemiLock
+ * @property {Boolean} toggleSemiLock - Boolean for enabling toggle lock widget
+ */
+
+/**
+ * @typedef {Object} CircularConstraint
+ * @property {Number} x - x-coordinate of circular constraint widget
+ * @property {Number} y - y-coordinate of circular constriant widget
+ * @property {Boolean} circularConstraint - Boolean for enabling circular constraing widget
+ */
+
+/**
+ * @typedef {Object} AdditionalSprite
+ * @property {Boolean} additionalSprite
+ */
+
+/**
+ * @typedef {simpleEventOptions} Clone
+ * @property {Vector} - Vector for initial velocity
+ * @property {Boolean} copyWidgets
+ * @property {Boolean} timeCloner
+ * @property {Boolean} clone
+ */
+
+
+/**
+ * @typedef {simpleEventOptions} InputBox
+ * @property {String} text
+ * @property {String} buttonTxt
+ * @property {String} name
+ * @property {Boolean} inputBox
+ */
+
+
+/**
+ * 
+ * @typedef {Velocity|Force|Position|Translate|DeleteSelf|Draggable|
+ * Coin|Hazard|Health|Elevator|TransformCameraByObj|
+ * TransformWithCamera|KeyboardControls|Alert|Connection
+ * |Rotation|SetAngle|NoRotation|RectText|NumVar|SetNumVar|
+ * SetBorderColor|SetLineWidth|PlayAudio|ObjLink_a|Game|ToggleLock|
+ * ToggleSemiLock|CircularConstraint|AdditionalSprite|Clone|InputBox} Widget
+ */
+
+
 /** 
  * 
  * Extract Widgets from Dynamic Object.
  * To extract a widget in PhSim is to read all of the objects in the "widgets" array found in each
  * well-formed PhSim object and then translate it into JavaScript.
  * 
- * @param {Object} widget - The Widget
+ * @param {Widget} widget - The Widget
  * @param {PhSim.DynObject} dyn_object The individual Dynamic Object
  * @returns undefined
  * 
