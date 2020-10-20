@@ -8,7 +8,7 @@
  * 
  * If an array is chosen, then it is used to create
  * 
- * /
+ */
 
 /** 
  * Dynamic Simulation Instance Object 
@@ -150,8 +150,13 @@ PhSim.DynSim.prototype.forAllObjects = function(call) {
 
 
 PhSim.DynSim.prototype.addToOverlayer = function(dynObject) {
-	Matter.World.add(this.matterJSWorld, dynObject.matter);
+	
+	if(!dynObject.permStatic) {
+		Matter.World.add(this.matterJSWorld, dynObject.matter);
+	}
+
 	this.objUniverse.push(dynObject);
+
 }
 
 require("./eventObjects");

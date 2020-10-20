@@ -1,3 +1,12 @@
+/**
+ * @function
+ * 
+ * Used to set event listeners for a canvas.
+ * This function works if @link{PhSim.DynSim.prototype#simCtx} 
+ * and @link{PhSim.DynSim.prototype#simCanvas} are set.
+ * 
+ */
+
 PhSim.DynSim.prototype.registerCanvasEvents = function() {
 
 	var self = this;

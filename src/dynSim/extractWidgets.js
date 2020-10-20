@@ -129,6 +129,10 @@ PhSim.DynSim.prototype.extractWidget = function(widget,dyn_object) {
                 triggerObj: dyn_object
             });		
         }
+
+        if(widget.setAngleByMouse) {
+            this.addEventListener("mousemove")
+        }
     
         if(widget.deleteSelf) {
     

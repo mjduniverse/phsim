@@ -211,6 +211,7 @@ PhSim.Vector = function(x,y) {
 	}
 
 	else {
+		console.trace();
 		throw "Expecting a number in argument 1";
 	}
 
@@ -219,6 +220,7 @@ PhSim.Vector = function(x,y) {
 	}
 
 	else {
+		console.trace()
 		throw "Expecting a number in argument 2"
 	}
 
@@ -319,15 +321,7 @@ PhSim.Static.lclGradient = function() {
 }
 
 /**
- * A path is defined by vertices. They can be used as a regular polygon.
- * Any object that contains an array of vectors and has the boolean property "path" set to true is reconized as a path.
- * Paths can be used to define any polygon in general.
- * 
- * In PhSim, a path is any object obj such that the following is true:
- * 
- * Array.isArray(obj) === true
- * obj.path === true
- * 
+ * Constuctor defining the minimal requirements for a {@link Path}.
  * @constructor
  * @param {PhSim.Vector[]} verts -  Vertcies
  */
@@ -342,6 +336,9 @@ PhSim.Static.Path = function(verts) {
 	this.verts;
 
 	if(Array.isArray(verts)) {
+
+		this.verts = verts;
+
 		for(var i = 0; i < verts.length; i++) {
 			var old = verts[i];
 			verts[i] = new PhSim.Vector(verts[i].x,verts[i].y);
@@ -361,6 +358,23 @@ PhSim.Static.Path = function(verts) {
 	this.path = true;
 }
 
+/**
+ * 
+ * A path is defined by vertices. They can be used as a regular polygon.
+ * Any object that contains an array of vectors and has the boolean property "path" set to true is reconized as a path.
+ * Paths can be used to define any polygon in general.
+ * 
+ * In PhSim, a path is any object obj such that the following is true:
+ * 
+ * Array.isArray(obj) === true
+ * obj.path === true
+ * 
+ * If a path is used as a polygon, it must have at least three vectors in the verts property. 
+ * 
+ * @typedef {PhSim.Static.Path} Path
+ * 
+ */
+ 
 
 /**
  * A circle is a set all points equidistant from some point known as the center.
@@ -728,7 +742,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.beforeupdate = [];
 
@@ -738,7 +752,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.objupdate = [];
 
@@ -749,7 +763,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.afterupdate = [];
 
@@ -759,7 +773,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.beforeslchange = [];
 
@@ -769,7 +783,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.afterslchange = [];
 
@@ -779,7 +793,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.beforespriteimgload = [];
 
@@ -2165,7 +2179,7 @@ PhSim.Tools.getRectangleCentroid = function(rectangle) {
 /** 
  * Find Centroid of a path polygon
  * @function
- * @param {PhSim.Static.Path} a - Path
+ * @param {Path} a - Path
  * @returns {PhSim.Vector}
  */
 
@@ -2415,6 +2429,12 @@ PhSim.DynObject = function(staticObject) {
 
 }
 
+/**
+ * A PhSimObject is either a static object or a dynamic object.
+ * 
+ * @typedef {PhSim.DynObject|StaticObject} PhSimObject
+ */
+
 /***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -2429,7 +2449,7 @@ PhSim.DynObject = function(staticObject) {
  * 
  * If an array is chosen, then it is used to create
  * 
- * /
+ */
 
 /** 
  * Dynamic Simulation Instance Object 
@@ -2571,8 +2591,13 @@ PhSim.DynSim.prototype.forAllObjects = function(call) {
 
 
 PhSim.DynSim.prototype.addToOverlayer = function(dynObject) {
-	Matter.World.add(this.matterJSWorld, dynObject.matter);
+	
+	if(!dynObject.permStatic) {
+		Matter.World.add(this.matterJSWorld, dynObject.matter);
+	}
+
 	this.objUniverse.push(dynObject);
+
 }
 
 __webpack_require__(15);
@@ -3022,9 +3047,15 @@ PhSim.DynSim.prototype.callObjLinkFunctions = function(dynObject) {
 	}
 }
 
-// Spawn Function
+/**
+ * 
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Object} options - The options used for creating a spawned object
+ * @param {PhSim.Vector} options.vector -  The velocity to add to an object when it got spawned.
+ * @param 
+ */
 
-PhSim.DynSim.prototype.spawnObject = function(dynObject) {
+PhSim.DynSim.prototype.spawnObject = function(dynObject,options = {}) {
 	var obj = new PhSim.DynObject(dynObject.static);
 	obj.cloned = true;
 	obj.loneParent = dynObject;
@@ -3407,6 +3438,12 @@ PhSim.DynSim.prototype.deregisterKeyEvents = function() {
 /***/ }),
 /* 22 */
 /***/ (function(module, exports) {
+
+/**
+ * 
+ * @typedef {""}
+ * 
+ */
 
 /**
  * 
@@ -4137,7 +4174,10 @@ PhSim.DynSim.prototype.gotoSimulationIndex = function (i) {
 
 		var this_a = this;
 
-		this.matterJSWorld = Matter.World.create();
+		this.matterJSWorld = Matter.World.create({
+			"gravity": new PhSim.Vector(0,this.simulation.grav),
+		});
+
 		this.dynTree = [];
 		this.objUniverse = [];
 		this.staticSprites = [];
@@ -4330,45 +4370,69 @@ PhSim.DynSim.prototype.initSim = function(simulationI) {
 /***/ (function(module, exports) {
 
 /**
+ * 
+ * Apply force to a dynamic object.
+ * Force is ineffective against locked, semi-locked and permanetly static objects.
+ * 
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} position 
- * @param {PhSim.Vector} forceVector 
+ * @param {PhSim.Vector} forceVector
+ *   
  */
 
 PhSim.DynSim.prototype.applyForce = function(dynObject,position,forceVector) {
-	return Matter.Body.applyForce(dynObject.matter,position,forceVector);
+	if(!dynObject.locked && !dynObject.permStatic) {
+		return Matter.Body.applyForce(dynObject.matter,position,forceVector);
+	}
 }
 
 
 /**
+ * 
+ * Apply velocity to a dynamic object.
+ * Velocity is ineffective against locked, semi-locked and permanetly static objects.
+ * 
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} velocityVector 
  */
 
 PhSim.DynSim.prototype.setVelocity = function(dynObject,velocityVector) {
-	return Matter.Body.setVelocity(dynObject.matter,velocityVector);
+	if(!dynObject.locked) {
+		return Matter.Body.setVelocity(dynObject.matter,velocityVector);
+	}
 }
 
 /**
+ * 
+ * Apply a transformation to a dynamic object.
+ * Transformation is ineffective against locked and permanetly static objects.
+ * 
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} translationVector 
  */
 
 PhSim.DynSim.prototype.translate = function(dynObject,translationVector) {
-	return Matter.Body.translate(dynObject.matter,translationVector);
+	if(!dynObject.locked) {
+		return Matter.Body.translate(dynObject.matter,translationVector);
+	}
 }
 
 /**
+ * Apply a transformation to a dynamic object.
+ * Setting positions is ineffective against locked and permanetly static objects.
+ * 
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} positionVector 
  */
 
 PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
-	Matter.Body.setPosition(dynObject.matter,positionVector);
+	if(!dynObject.locked) {
+		Matter.Body.setPosition(dynObject.matter,positionVector);
+	}
 }
 
 /**
@@ -4380,11 +4444,15 @@ PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
 
 PhSim.DynSim.prototype.rotate = function(dynObject,angle,point) {
 
-	if(dynObject.skinmesh) {
-		Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
-	}
+	if(!dynObject.locked) {
 
-	return Matter.Body.rotate(dynObject.matter, angle, point)
+		if(dynObject.skinmesh) {
+			Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
+		}
+
+		return Matter.Body.rotate(dynObject.matter, angle, point)
+
+	}
 }
 
 /**
@@ -4395,12 +4463,16 @@ PhSim.DynSim.prototype.rotate = function(dynObject,angle,point) {
 
 PhSim.DynSim.prototype.setAngle = function(dynObject,angle) {
 
-	if(dynObject.skinmesh) {
-		Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
-		Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
-	}
+	if(!dynObject.locked) {
 
-	return Matter.Body.setAngle(dynObject.matter,angle);
+		if(dynObject.skinmesh) {
+			Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
+			Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
+		}
+
+		return Matter.Body.setAngle(dynObject.matter,angle);
+
+	}
 }
 
 /***/ }),
@@ -4721,6 +4793,10 @@ PhSim.DynSim.prototype.extractWidget = function(widget,dyn_object) {
                 ...widget,
                 triggerObj: dyn_object
             });		
+        }
+
+        if(widget.setAngleByMouse) {
+            this.addEventListener("mousemove")
         }
     
         if(widget.deleteSelf) {
@@ -5437,7 +5513,10 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 /** 
  * 
  * 
- * Object Widgets
+ * Object Widgets Static Objects
+ * These are the objects that are used to define the options for a widget.
+ * PhSim.DynSim.prototype.extractWidget is used to link a widget to a dynamic object.
+ * 
  * @namespace
  * 
 */
@@ -5447,7 +5526,7 @@ PhSim.Widgets = {}
 PhSim.Widgets.Velocity = function() {
 	this.velocity = true;
 	this.key = null;
-	this.vector = new PhSim.Vector(null,null);
+	this.vector = new PhSim.Vector(0,0);
 }
 
 //PhSim.Widgets.VelocityKey.desc = "VelocityKey is a widget that allows the user to change the velocity of a physical object by some key."
@@ -5456,21 +5535,21 @@ PhSim.Widgets.Force = function() {
 	this.trigger = null;
 	this.force = true;
 	this.key = null;
-	this.vector = new PhSim.Vector(null,null);
+	this.vector = new PhSim.Vector(0,0);
 }
 
 PhSim.Widgets.Position = function() {
 	this.trigger = null;
 	this.position = true;
 	this.key = null;
-	this.vector = new PhSim.Vector(null,null);
+	this.vector = new PhSim.Vector(0,0);
 }
 
 PhSim.Widgets.Translate = function() {
 	this.trigger = null;
 	this.translate = true;
 	this.key = null;
-	this.vector = new PhSim.Vector(null,null);
+	this.vector = new PhSim.Vector(0,0);
 }
 
 PhSim.Widgets.Clone = function() {
@@ -5479,7 +5558,7 @@ PhSim.Widgets.Clone = function() {
 	this.time = null;
 	this.clone = true;
 	this.key = null;
-	this.vector = new PhSim.Vector(null,null);
+	this.vector = new PhSim.Vector(0,0);
 	this.copyWidgets = true;
 	this.maxN = null;
 }
@@ -5834,20 +5913,112 @@ PhSim.DynSim.SimpeEventRef = function(trigger,ref) {
 
 PhSim.DynSim.prototype.simpleEventRefs = [];
 
+/** 
+ * 
+ * @typedef {"key"} keyTriggerString
+ * 
+ * The "key" trigger means that the simple event will execute if a key is pressed.
+ */
+
+/** 
+* 
+* @typedef {"sensor"|"sensor_global"} sensorTriggerString
+* 
+* The "sensor" trigger means that the simple event will execute if the trigger object 
+* collides with an object that shares at least one of the sensor classes. However, 
+* the "sensor_global" trigger means that the function will execute if any two 
+* objects that share at least one sensor class collides.
+*/
+
+/** 
+ * 
+ * @typedef {"objclick"|"objclick_global"} objclickTriggerString
+ * 
+ * The "objclick" trigger means that the simple event will execute if the mouse clicks on the trigger object. 
+ * However, the "objclick_global" trigger means that the simple event will execute if the mouse clicks on any
+ * object in general.
+ */
+
+/**  
+ * @typedef {"objMouseDown"|"objmousedown_global"} objMouseDownTriggerString
+ * 
+ * The "objmousedown" trigger means that the simple event call is executed if the mouse
+ * is being pushed down on the object. The "objmousedown_global" trigger means that
+ * the simple event will execute if the mouse clicks on any object in general.
+ */
+
+/** 
+ * @typedef {"firstslupdate"} firstslupdateTriggerString
+ * 
+ * The "firstslupdate" trigger means that the simple event will execute during the first
+ * update of the simulation.
+ */
+
+/** 
+ * @typedef {"objmouseup"|"objmouseup_global"} objmouseupTriggerString
+ * 
+ * The "objmouseup" trigger means that the simple event will execute when the
+ * mouse is let go of while the mouse is over an object. The "objmouseup_global" trigger
+ * means that the simple event will execute if the mouse is let go of while it is 
+ * over an object.
+ */ 
+
+ /** 
+ * @typedef {"objlink"} objlinkTriggerString
+ * 
+ * The "objlink" trigger means that the simple event will execute if the trigger object
+ * is linked to another object by the objlink widget.
+ */
+
+/** @typedef {"afterslchange"} afterslchangeTriggerString
+ * 
+ * The "afterslchange" trigger means that the simple event will execute after the 
+ * superlayer changes.
+ * 
+ */
+
+/** 
+ * @typedef {"time"} timeTriggerString
+ * 
+ * The "time" trigger means that the simple event will execute by some interval of time.
+ */ 
+
+/** 
+ * @typedef {keyTriggerString|sensorTriggerString|objclickTriggerString|
+ * objMouseDownTriggerString|firstslupdateTriggerString|objmouseupTriggerString|
+ * objlinkTriggerString|afterslchangeTriggerString|timeTriggerString} simpleEventTriggerString
+ *
+ * 
+ * The simple event trigger string is a string defining {@link simpleEventOptions.trigger}
+ */
+
+/** 
+ * @typedef {Object} simpleEventOptions
+ * @property {@external https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key|KeyboardEvent.key} key - The event.key value for triggering a simple event.
+ * @property {Number} time - The time interval between a repeated event or a delay time for timeouts.
+ * @property {Number} maxN - The maximum number of times a repeated SimpleEvent can be executed.
+ * @property {PhSim.DynObject} triggerObj - Trigger object
+ * 
+ * The simple event options is an Object that is used for the {@link PhSim.DynSim#addSimpleEvent} function.
+ */
+
+ /**
+  * @callback SimpleEventCall
+  * @param {Event} e - event object
+  */
+
 /**
+ *
  * Create a SimpleEvent
  * @function
- * @param {string} trigger - The type of SimpleEvent.
- * @param {Function} call - The JavaScript function to be executed.
- * @param {Object} options - A JavaScript option for the various triggers.
- * @param {string} options.key -  The event.key value for triggering the simpleEvent.
- * @param {Number} options.time - The time interval between a repeated event or a delay time for timeouts.
- * Relevant when the trigger is set to "time".
- * @param {Number} options.maxN - The maximum number of times a repeated SimpleEvent can be executed.
- * @param {PhSim.DynObject} options.triggerObj - Trigger object
+ * 
+ * @param {simpleEventTriggerString} trigger - The type of SimpleEvent.
+ * @param {SimpleEventCall} call - The JavaScript function to be executed.
+ * @param {simpleEventOptions} options -  [The Simple Event Options Object]{@link simpleEventOptions}.
  * @returns {Number} - A reference to the simple event.
  * @this {PhSim.DynSim}
- * */
+ * 
+ */
 
 
 PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
@@ -5864,7 +6035,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 		
 			var f = function(e) {
 				if(options.key === e.key) {
-					call();
+					call(e);
 				}
 			}
 
@@ -5873,7 +6044,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 		else {
 
 			var f = function(e) {
-				call();
+				call(e);
 			}
 
 		}

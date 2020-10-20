@@ -19,7 +19,7 @@ PhSim.Tools.getRectangleCentroid = function(rectangle) {
 /** 
  * Find Centroid of a path polygon
  * @function
- * @param {PhSim.Static.Path} a - Path
+ * @param {Path} a - Path
  * @returns {PhSim.Vector}
  */
 

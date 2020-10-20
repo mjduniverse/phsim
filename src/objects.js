@@ -35,6 +35,7 @@ PhSim.Vector = function(x,y) {
 	}
 
 	else {
+		console.trace();
 		throw "Expecting a number in argument 1";
 	}
 
@@ -43,6 +44,7 @@ PhSim.Vector = function(x,y) {
 	}
 
 	else {
+		console.trace()
 		throw "Expecting a number in argument 2"
 	}
 
@@ -143,15 +145,7 @@ PhSim.Static.lclGradient = function() {
 }
 
 /**
- * A path is defined by vertices. They can be used as a regular polygon.
- * Any object that contains an array of vectors and has the boolean property "path" set to true is reconized as a path.
- * Paths can be used to define any polygon in general.
- * 
- * In PhSim, a path is any object obj such that the following is true:
- * 
- * Array.isArray(obj) === true
- * obj.path === true
- * 
+ * Constuctor defining the minimal requirements for a {@link Path}.
  * @constructor
  * @param {PhSim.Vector[]} verts -  Vertcies
  */
@@ -166,6 +160,9 @@ PhSim.Static.Path = function(verts) {
 	this.verts;
 
 	if(Array.isArray(verts)) {
+
+		this.verts = verts;
+
 		for(var i = 0; i < verts.length; i++) {
 			var old = verts[i];
 			verts[i] = new PhSim.Vector(verts[i].x,verts[i].y);
@@ -185,6 +182,23 @@ PhSim.Static.Path = function(verts) {
 	this.path = true;
 }
 
+/**
+ * 
+ * A path is defined by vertices. They can be used as a regular polygon.
+ * Any object that contains an array of vectors and has the boolean property "path" set to true is reconized as a path.
+ * Paths can be used to define any polygon in general.
+ * 
+ * In PhSim, a path is any object obj such that the following is true:
+ * 
+ * Array.isArray(obj) === true
+ * obj.path === true
+ * 
+ * If a path is used as a polygon, it must have at least three vectors in the verts property. 
+ * 
+ * @typedef {PhSim.Static.Path} Path
+ * 
+ */
+ 
 
 /**
  * A circle is a set all points equidistant from some point known as the center.

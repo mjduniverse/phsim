@@ -105,3 +105,9 @@ PhSim.DynObject = function(staticObject) {
 	this.matter.plugin.ph = this;
 
 }
+
+/**
+ * A PhSimObject is either a static object or a dynamic object.
+ * 
+ * @typedef {PhSim.DynObject|StaticObject} PhSimObject
+ */

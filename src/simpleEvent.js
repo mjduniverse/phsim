@@ -9,20 +9,112 @@ PhSim.DynSim.SimpeEventRef = function(trigger,ref) {
 
 PhSim.DynSim.prototype.simpleEventRefs = [];
 
+/** 
+ * 
+ * @typedef {"key"} keyTriggerString
+ * 
+ * The "key" trigger means that the simple event will execute if a key is pressed.
+ */
+
+/** 
+* 
+* @typedef {"sensor"|"sensor_global"} sensorTriggerString
+* 
+* The "sensor" trigger means that the simple event will execute if the trigger object 
+* collides with an object that shares at least one of the sensor classes. However, 
+* the "sensor_global" trigger means that the function will execute if any two 
+* objects that share at least one sensor class collides.
+*/
+
+/** 
+ * 
+ * @typedef {"objclick"|"objclick_global"} objclickTriggerString
+ * 
+ * The "objclick" trigger means that the simple event will execute if the mouse clicks on the trigger object. 
+ * However, the "objclick_global" trigger means that the simple event will execute if the mouse clicks on any
+ * object in general.
+ */
+
+/**  
+ * @typedef {"objMouseDown"|"objmousedown_global"} objMouseDownTriggerString
+ * 
+ * The "objmousedown" trigger means that the simple event call is executed if the mouse
+ * is being pushed down on the object. The "objmousedown_global" trigger means that
+ * the simple event will execute if the mouse clicks on any object in general.
+ */
+
+/** 
+ * @typedef {"firstslupdate"} firstslupdateTriggerString
+ * 
+ * The "firstslupdate" trigger means that the simple event will execute during the first
+ * update of the simulation.
+ */
+
+/** 
+ * @typedef {"objmouseup"|"objmouseup_global"} objmouseupTriggerString
+ * 
+ * The "objmouseup" trigger means that the simple event will execute when the
+ * mouse is let go of while the mouse is over an object. The "objmouseup_global" trigger
+ * means that the simple event will execute if the mouse is let go of while it is 
+ * over an object.
+ */ 
+
+ /** 
+ * @typedef {"objlink"} objlinkTriggerString
+ * 
+ * The "objlink" trigger means that the simple event will execute if the trigger object
+ * is linked to another object by the objlink widget.
+ */
+
+/** @typedef {"afterslchange"} afterslchangeTriggerString
+ * 
+ * The "afterslchange" trigger means that the simple event will execute after the 
+ * superlayer changes.
+ * 
+ */
+
+/** 
+ * @typedef {"time"} timeTriggerString
+ * 
+ * The "time" trigger means that the simple event will execute by some interval of time.
+ */ 
+
+/** 
+ * @typedef {keyTriggerString|sensorTriggerString|objclickTriggerString|
+ * objMouseDownTriggerString|firstslupdateTriggerString|objmouseupTriggerString|
+ * objlinkTriggerString|afterslchangeTriggerString|timeTriggerString} simpleEventTriggerString
+ *
+ * 
+ * The simple event trigger string is a string defining {@link simpleEventOptions.trigger}
+ */
+
+/** 
+ * @typedef {Object} simpleEventOptions
+ * @property {@external https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key|KeyboardEvent.key} key - The event.key value for triggering a simple event.
+ * @property {Number} time - The time interval between a repeated event or a delay time for timeouts.
+ * @property {Number} maxN - The maximum number of times a repeated SimpleEvent can be executed.
+ * @property {PhSim.DynObject} triggerObj - Trigger object
+ * 
+ * The simple event options is an Object that is used for the {@link PhSim.DynSim#addSimpleEvent} function.
+ */
+
+ /**
+  * @callback SimpleEventCall
+  * @param {Event} e - event object
+  */
+
 /**
+ *
  * Create a SimpleEvent
  * @function
- * @param {string} trigger - The type of SimpleEvent.
- * @param {Function} call - The JavaScript function to be executed.
- * @param {Object} options - A JavaScript option for the various triggers.
- * @param {string} options.key -  The event.key value for triggering the simpleEvent.
- * @param {Number} options.time - The time interval between a repeated event or a delay time for timeouts.
- * Relevant when the trigger is set to "time".
- * @param {Number} options.maxN - The maximum number of times a repeated SimpleEvent can be executed.
- * @param {PhSim.DynObject} options.triggerObj - Trigger object
+ * 
+ * @param {simpleEventTriggerString} trigger - The type of SimpleEvent.
+ * @param {SimpleEventCall} call - The JavaScript function to be executed.
+ * @param {simpleEventOptions} options -  [The Simple Event Options Object]{@link simpleEventOptions}.
  * @returns {Number} - A reference to the simple event.
  * @this {PhSim.DynSim}
- * */
+ * 
+ */
 
 
 PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
@@ -39,7 +131,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 		
 			var f = function(e) {
 				if(options.key === e.key) {
-					call();
+					call(e);
 				}
 			}
 
@@ -48,7 +140,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 		else {
 
 			var f = function(e) {
-				call();
+				call(e);
 			}
 
 		}

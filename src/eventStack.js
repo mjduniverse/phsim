@@ -22,7 +22,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.beforeupdate = [];
 
@@ -32,7 +32,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.objupdate = [];
 
@@ -43,7 +43,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.afterupdate = [];
 
@@ -53,7 +53,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.beforeslchange = [];
 
@@ -63,7 +63,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.afterslchange = [];
 
@@ -73,7 +73,7 @@ PhSim.EventStack = function() {
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
-	 * */
+	 */
 
 	this.beforespriteimgload = [];
 

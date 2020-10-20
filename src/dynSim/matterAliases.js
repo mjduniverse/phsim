@@ -1,43 +1,67 @@
 /**
+ * 
+ * Apply force to a dynamic object.
+ * Force is ineffective against locked, semi-locked and permanetly static objects.
+ * 
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} position 
- * @param {PhSim.Vector} forceVector 
+ * @param {PhSim.Vector} forceVector
+ *   
  */
 
 PhSim.DynSim.prototype.applyForce = function(dynObject,position,forceVector) {
-	return Matter.Body.applyForce(dynObject.matter,position,forceVector);
+	if(!dynObject.locked && !dynObject.permStatic) {
+		return Matter.Body.applyForce(dynObject.matter,position,forceVector);
+	}
 }
 
 
 /**
+ * 
+ * Apply velocity to a dynamic object.
+ * Velocity is ineffective against locked, semi-locked and permanetly static objects.
+ * 
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} velocityVector 
  */
 
 PhSim.DynSim.prototype.setVelocity = function(dynObject,velocityVector) {
-	return Matter.Body.setVelocity(dynObject.matter,velocityVector);
+	if(!dynObject.locked) {
+		return Matter.Body.setVelocity(dynObject.matter,velocityVector);
+	}
 }
 
 /**
+ * 
+ * Apply a transformation to a dynamic object.
+ * Transformation is ineffective against locked and permanetly static objects.
+ * 
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} translationVector 
  */
 
 PhSim.DynSim.prototype.translate = function(dynObject,translationVector) {
-	return Matter.Body.translate(dynObject.matter,translationVector);
+	if(!dynObject.locked) {
+		return Matter.Body.translate(dynObject.matter,translationVector);
+	}
 }
 
 /**
+ * Apply a transformation to a dynamic object.
+ * Setting positions is ineffective against locked and permanetly static objects.
+ * 
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {PhSim.Vector} positionVector 
  */
 
 PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
-	Matter.Body.setPosition(dynObject.matter,positionVector);
+	if(!dynObject.locked) {
+		Matter.Body.setPosition(dynObject.matter,positionVector);
+	}
 }
 
 /**
@@ -49,11 +73,15 @@ PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
 
 PhSim.DynSim.prototype.rotate = function(dynObject,angle,point) {
 
-	if(dynObject.skinmesh) {
-		Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
-	}
+	if(!dynObject.locked) {
 
-	return Matter.Body.rotate(dynObject.matter, angle, point)
+		if(dynObject.skinmesh) {
+			Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
+		}
+
+		return Matter.Body.rotate(dynObject.matter, angle, point)
+
+	}
 }
 
 /**
@@ -64,10 +92,14 @@ PhSim.DynSim.prototype.rotate = function(dynObject,angle,point) {
 
 PhSim.DynSim.prototype.setAngle = function(dynObject,angle) {
 
-	if(dynObject.skinmesh) {
-		Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
-		Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
-	}
+	if(!dynObject.locked) {
 
-	return Matter.Body.setAngle(dynObject.matter,angle);
+		if(dynObject.skinmesh) {
+			Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
+			Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
+		}
+
+		return Matter.Body.setAngle(dynObject.matter,angle);
+
+	}
 }

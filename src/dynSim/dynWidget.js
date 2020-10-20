@@ -139,9 +139,15 @@ PhSim.DynSim.prototype.callObjLinkFunctions = function(dynObject) {
 	}
 }
 
-// Spawn Function
+/**
+ * 
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Object} options - The options used for creating a spawned object
+ * @param {PhSim.Vector} options.vector -  The velocity to add to an object when it got spawned.
+ * @param 
+ */
 
-PhSim.DynSim.prototype.spawnObject = function(dynObject) {
+PhSim.DynSim.prototype.spawnObject = function(dynObject,options = {}) {
 	var obj = new PhSim.DynObject(dynObject.static);
 	obj.cloned = true;
 	obj.loneParent = dynObject;

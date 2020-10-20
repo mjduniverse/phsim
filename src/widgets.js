@@ -1,7 +1,10 @@
 /** 
  * 
  * 
- * Object Widgets
+ * Object Widgets Static Objects
+ * These are the objects that are used to define the options for a widget.
+ * PhSim.DynSim.prototype.extractWidget is used to link a widget to a dynamic object.
+ * 
  * @namespace
  * 
 */
@@ -11,7 +14,7 @@ PhSim.Widgets = {}
 PhSim.Widgets.Velocity = function() {
 	this.velocity = true;
 	this.key = null;
-	this.vector = new PhSim.Vector(null,null);
+	this.vector = new PhSim.Vector(0,0);
 }
 
 //PhSim.Widgets.VelocityKey.desc = "VelocityKey is a widget that allows the user to change the velocity of a physical object by some key."
@@ -20,21 +23,21 @@ PhSim.Widgets.Force = function() {
 	this.trigger = null;
 	this.force = true;
 	this.key = null;
-	this.vector = new PhSim.Vector(null,null);
+	this.vector = new PhSim.Vector(0,0);
 }
 
 PhSim.Widgets.Position = function() {
 	this.trigger = null;
 	this.position = true;
 	this.key = null;
-	this.vector = new PhSim.Vector(null,null);
+	this.vector = new PhSim.Vector(0,0);
 }
 
 PhSim.Widgets.Translate = function() {
 	this.trigger = null;
 	this.translate = true;
 	this.key = null;
-	this.vector = new PhSim.Vector(null,null);
+	this.vector = new PhSim.Vector(0,0);
 }
 
 PhSim.Widgets.Clone = function() {
@@ -43,7 +46,7 @@ PhSim.Widgets.Clone = function() {
 	this.time = null;
 	this.clone = true;
 	this.key = null;
-	this.vector = new PhSim.Vector(null,null);
+	this.vector = new PhSim.Vector(0,0);
 	this.copyWidgets = true;
 	this.maxN = null;
 }
