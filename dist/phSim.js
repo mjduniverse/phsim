@@ -148,21 +148,22 @@ __webpack_require__(4);
 __webpack_require__(5);
 
 __webpack_require__(6);
+
 __webpack_require__(7);
 __webpack_require__(8);
 __webpack_require__(9);
 __webpack_require__(10);
 __webpack_require__(11);
+__webpack_require__(12);
 
 // Bounding box functions
-
-__webpack_require__(12);
 
 __webpack_require__(13);
 
 __webpack_require__(14);
 
-__webpack_require__(31);
+__webpack_require__(15);
+
 __webpack_require__(32);
 __webpack_require__(33);
 __webpack_require__(34);
@@ -1420,19 +1421,6 @@ PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
 
 }
 
-/**
- * 
- * A renderable object is any {@link PhSimObject} with any of the properties that 
- * can be dealt with by {@link PhSim.PhRender}.
- * 
- * @typedef {Object} RenderableObject
- * @property {String} [fillStyle] -  Fill Color 
- * @property {String} [strokeStyle] - Stroke Color
- * @property {String} [lineWidth] - Stroke Width
- * @property {PhSim.Sprites.Sprite} [sprite] - Sprite Object
- * 
- */
-
 // Draw Static object
 
 /**
@@ -1870,6 +1858,28 @@ PhSim.Audio.AudioArray = function(p_audio,onload) {
 /* 6 */
 /***/ (function(module, exports) {
 
+PhSim.CollisionClass = function(name) {
+
+	var this_a = this;
+
+	this.name = name;
+
+	this.world = Matter.World.create();
+
+	this.engine = Matter.Engine.create({
+		world: this_a.world
+	});
+
+}
+
+PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
+	return Matter.World.add(this.world,dynObject.matter);
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
 // Tools declaration
 
 /**
@@ -1881,7 +1891,7 @@ PhSim.Tools = {}
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 /**
@@ -2032,7 +2042,7 @@ PhSim.Tools.svgVector = function(x,y) {
 }
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 /**
@@ -2066,7 +2076,7 @@ PhSim.Tools.checkObjectType = function (objectTypeStr) {
 }
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 /**
@@ -2094,7 +2104,7 @@ PhSim.Tools.diagRect = function(x1,y1,x2,y2) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 
@@ -2204,7 +2214,7 @@ PhSim.Tools.getRectangleCorners = function(rectangle) {
 }
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /**
@@ -2250,7 +2260,7 @@ PhSim.Tools.findCentroidOfPath = function(a) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /**
@@ -2367,7 +2377,7 @@ PhSim.Tools.getDynBoundingBox = function(dynObj) {
 }
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -2476,7 +2486,7 @@ PhSim.DynObject = function(staticObject) {
  */
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -2640,7 +2650,6 @@ PhSim.DynSim.prototype.addToOverlayer = function(dynObject) {
 
 }
 
-__webpack_require__(15);
 __webpack_require__(16);
 __webpack_require__(17);
 __webpack_require__(18);
@@ -2656,9 +2665,10 @@ __webpack_require__(27);
 __webpack_require__(28);
 __webpack_require__(29);
 __webpack_require__(30);
+__webpack_require__(31);
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.removeClickRectRegion = function(reference) {
@@ -2740,7 +2750,7 @@ PhSim.CollisionReport = function() {
 }
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.prototype.L = function(L) {
@@ -2757,7 +2767,7 @@ PhSim.DynSim.prototype.getObjectFromLOStr = function(str) {
 }
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 
@@ -2855,7 +2865,7 @@ PhSim.DynSim.prototype.configRender = function() {
 }
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.prototype.configFilter = function(container) {
@@ -2943,7 +2953,7 @@ PhSim.DynSim.prototype.alert = function(options) {
 }
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /** 
@@ -3196,7 +3206,7 @@ PhSim.DynSim.prototype.toggleSemiLock = function(dynObject) {
 }
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 
@@ -3268,7 +3278,7 @@ PhSim.DynSim.prototype.toggleAudioByIndex = function(i) {
 }
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /**
@@ -3503,7 +3513,7 @@ PhSim.DynSim.prototype.deregisterKeyEvents = function() {
 }
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /**
@@ -3616,7 +3626,7 @@ PhSim.DynSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
 }
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /**
@@ -4119,7 +4129,7 @@ PhSim.DynSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports) {
 
 // Newtonian Gravity
@@ -4143,7 +4153,7 @@ PhSim.DynSim.prototype.applyGravitationalField = function() {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.prototype.play = function() {
@@ -4189,7 +4199,7 @@ PhSim.DynSim.prototype.exit = function() {
 }
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /**
@@ -4433,7 +4443,7 @@ PhSim.DynSim.prototype.initSim = function(simulationI) {
 }
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 /**
@@ -4575,7 +4585,7 @@ PhSim.DynSim.prototype.setAngle = function(dynObject,angle) {
 }
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.prototype.assignPhRender = function(phRender) {
@@ -4639,7 +4649,7 @@ PhSim.DynSim.prototype.setLineWidth = function(dyn_object,lineWidth) {
 }
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 PhSim.DynSim.prototype.updateDynObj = function(currentObj) {
@@ -4759,7 +4769,7 @@ PhSim.DynSim.prototype.loopFunction = function() {
 }
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /** 
@@ -5388,7 +5398,7 @@ PhSim.DynSim.prototype.extractWidget = function(widget,dyn_object) {
     
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /**
@@ -5576,7 +5586,7 @@ PhSim.DynSim.prototype.extractLclGame = function(localSettings) {
 }
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 
@@ -5606,50 +5616,236 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 }
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 /** 
  * 
  * 
  * Object Widgets Static Objects
- * These are the objects that are used to define the options for a widget.
+ * These are constructors for objects that are used to define the options for a widget.
  * PhSim.DynSim.prototype.extractWidget is used to link a widget to a dynamic object.
  * 
  * @namespace
  * 
 */
 
-PhSim.Widgets = {}
+/**
+ * @typedef {simpleEventOptions} Velocity
+ * @property {Boolean} velocity - Boolean for determining it is a velocity widget.
+ * @property {Vector} vector -  The velocity vector
+ */
 
-PhSim.Widgets.Velocity = function() {
-	this.velocity = true;
-	this.key = null;
-	this.vector = new PhSim.Vector(0,0);
+/**
+ * @typedef {simpleEventOptions} Force
+ * @property {Boolean} force - Boolean for determining it is a force widget.
+ * @property {Vector} vector -  The force vector
+ */
+
+/**
+ * @typedef {simpleEventOptions} Position
+ * @property {Boolean} position - Boolean for determining it is a position widget.
+ * @property {Vector} vector -  The position vector
+ */
+
+/**
+ * @typedef {simpleEventOptions} Translate
+ * @property {Boolean} force - Boolean for determining it is a translation widget.
+ * @property {Vector} vector -  The translation vector
+ */
+
+/**
+ * @typedef {simpleEventOptions} DeleteSelf
+ * @property {Boolean} deleteSelf - Boolean for determining it is a self-deletion widget.
+ */
+
+/**
+ * @typedef {Object} Draggable
+ * @property {Boolean} draggable - Boolean for determining it is a draggable object.
+ */
+
+/**
+ * @typedef {Object} Coin
+ * @property {Boolean} coin - Boolean for determining it is a coin.
+ */
+
+/**
+ * @typedef {Object} Hazard
+ * @property {Boolean} hazard - Boolean for determining it is a hazard.
+ */
+
+/**
+ * @typedef {Object} Health
+ * @property {Boolean} hazard - Boolean for determining it is a health object.
+ */
+
+/**
+ * @typedef {Object} Elevator
+ * @property {Boolean} elevator - Boolean for determining it is a hazard.
+ * @property {Vector} pointA - The first point of the elevator
+ * @property {Vector} pointB -  The second point of the elevator
+ */
+
+/**
+ * @typedef {Object} TransformCameraByObj
+ * @property {Boolean} transformCameraByObj - Boolean for determining it makes the object transform the camera.
+ */
+
+/**
+ * @typedef {Object} TransformWithCamera
+ * @property {Boolean} transformWithCamera - Boolean for determining the object moves with the camera.
+ * 
+ */
+
+/**
+ * @typedef {Object} KeyboardControls
+ * @property {Number} up - The up velocity
+ * @property {Number} down - The down velocity
+ * @property {Number} left - The left velocity
+ * @property {Number} right - The right velocity
+ * @property {Boolean} keyboardControls - Boolean for determining if it keyboard controls widget
+ */
+
+/**
+ * @typedef {Object} Alert
+ * @property {String} buttonTxt
+ * @property {String} name
+ * @property {String} text
+ * @property {Boolean} alert
+ */
+
+ /**
+  * @typedef {Object} Connection
+  * @property {LOAddress} objectA
+  * @property {LOAddress} objectB
+  * @property {Boolean} connection
+  */
+
+ /**
+  * @typedef {simpleEventOptions} Rotation
+  * @property {Boolean} rotation
+  * @property {Number} cycle 
+  * @property {Boolean} circularConstraintRotation - If true, rotate around any existing circular constraints. Else, rotate around centroid 
+  */
+
+ /**
+  * @typedef {simpleEventOptions} SetAngle
+  * @property {Boolean} rotation
+  * @property {Number} cycle 
+  * @property {Boolean} circularConstraintRotation - If true, rotate around any existing circular constraints. Else, rotate around centroid 
+  */
+
+/** 
+ * @typedef {Object} NoRotation
+ * @property {Boolean} noRotation
+ */
+
+ /**
+  * @typedef {Object} RectText
+  * @property {String} content
+  * @property {String} font
+  * @property {Number} margin
+  * @property {Number} size
+  * @property {Number} borderSize
+  * @property {String} fill
+  * @property {Boolean} rectText
+  * @property {String} lineWidth
+  * @property {String} borderColor
+  */
+
+/**
+ * @typedef {Object} NumVar 
+ * @property {String} name 
+ * @property {Number} value
+ * @property {Boolean} numVar
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetNumVar
+ * @property {Number} value
+ * @property {Boolean} setNumVar
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetColor
+ * @property {String} color
+ * @property {Boolean} setColor
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetBorderColor
+ * @property {String} color
+ * @property {Boolean} setBorderColor
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetLineWidth
+ * @property {Number} lineWidth
+ * @property {Boolean} setLineWidth
+ */
+
+/**
+ * @typedef {simpleEventOptions} PlayAudio
+ * @property {String} src
+ * @property {Boolean} playAudio
+ */
+
+/**
+ * @typedef {simpleEventOptions} ObjLink_a
+ * @property {LOAddress} target
+ * @property {Boolean} objLink_a 
+ */
+
+/**
+ * @typedef {Object} Game
+ * @property {Number} life
+ * @property {Number} goal
+ * @property {Number} score
+ * @property {Boolean} game - Boolean for enabling game widget
+ */
+
+/**
+ * @typedef {simpleEventOptions} ToggleLock
+ * @property {Boolean} toggleLock - Boolean for enabling toggle lock widget
+ */
+
+/**
+ * @typedef {simpleEventOptions} ToggleSemiLock
+ * @property {Boolean} toggleSemiLock - Boolean for enabling toggle lock widget
+ */
+
+/**
+ * @typedef {Object} CircularConstraint
+ * @property {Number} x
+ * @property {Number} y
+ * @property {Boolean} circularConstraint - Boolean for enabling circular constraing widget
+ */
+
+/**
+ * @typedef {Object} AdditionalSprite
+ * @property {Boolean} additionalSprite
+ * 
+ */
+
+/*
+
+Constraint types
+
+*/
+
+PhSim.Constraints = {
+    Static: {}
+}
+
+PhSim.Constraints.Static.Constraint = function() {
+	this.objectA = null;
+	this.objectB = null;
+	this.pointA = null;
+	this.pointB = null;
+	this.constraint = true;
 }
 
 //PhSim.Widgets.VelocityKey.desc = "VelocityKey is a widget that allows the user to change the velocity of a physical object by some key."
-
-PhSim.Widgets.Force = function() {
-	this.trigger = null;
-	this.force = true;
-	this.key = null;
-	this.vector = new PhSim.Vector(0,0);
-}
-
-PhSim.Widgets.Position = function() {
-	this.trigger = null;
-	this.position = true;
-	this.key = null;
-	this.vector = new PhSim.Vector(0,0);
-}
-
-PhSim.Widgets.Translate = function() {
-	this.trigger = null;
-	this.translate = true;
-	this.key = null;
-	this.vector = new PhSim.Vector(0,0);
-}
 
 PhSim.Widgets.Clone = function() {
 	this.trigger = null;
@@ -5662,70 +5858,11 @@ PhSim.Widgets.Clone = function() {
 	this.maxN = null;
 }
 
-PhSim.Widgets.DeleteSelf = function() {
-	this.deleteSelf = true;
-	this.trigger = null;
-}
 
 PhSim.Widgets.PointInWidgetsReturn = function() {
 	this.widget = null;
 	this.point = null;
 	this.pointInWidgetsReturn = true;
-}
-
-PhSim.Widgets.Draggable = function() {
-	this.draggable = true;
-}
-
-PhSim.Widgets.Coin = function() {
-	this.coin = true;
-}
-
-PhSim.Widgets.Hazard = function() {
-	this.hazard = true;
-}
-
-PhSim.Widgets.Health = function() {
-	this.health = true;
-}
-
-PhSim.Widgets.Elevator = function() {
-	
-	this.pointA = {
-		x: null,
-		y: null,
-	}
-
-	this.pointB = {
-		x: null,
-		y: null,
-	}
-
-	this.elevator = true;
-
-}
-
-PhSim.Widgets.TransformCameraByObj = function() {
-	this.transformCameraByObj = true;
-}
-
-PhSim.Widgets.TransformWithCamera = function() {
-	this.transformWithCamera = true;
-}
-
-PhSim.Widgets.KeyboardControls = function() {
-	this.up = null;
-	this.down = null;
-	this.left = null;
-	this.right = null;
-	this.keyboardControls = true;
-}
-
-PhSim.Widgets.SimpleEvent = function() {
-	this.simpleEvent = true;
-	this.trigger = null;
-	this.action = null;
-	this.args = []
 }
 
 PhSim.Widgets.InputBox = function() {
@@ -5735,238 +5872,6 @@ PhSim.Widgets.InputBox = function() {
 	this.name = null;
 	this.inputBox = true;
 }
-
-PhSim.Widgets.Alert = function() {
-	this.buttonTxt = null;
-	this.name = null;
-	this.text = null;
-	this.name = null;
-	this.alert = true;
-}
-
-
-PhSim.Widgets.SimpleEvent.actionStruct = [
-	"deleteSelf",
-	"addScore",
-	"subtractScore",
-	"explodeSelf",
-	"endGame",
-	"goto"
-]
-
-// Connection Widget
-
-PhSim.Widgets.Connection = function() {
-	
-	this.objectA = {
-		"L": null,
-		"O": null
-	};
-
-	this.objectB = {
-		"L": null,
-		"O": null
-	};
-
-	this.connection = true;
-}
-
-// 
-
-// Composite Widget
-
-PhSim.Widgets.Composite = function() {
-	this.objUniverse = [];
-	this.composite = true;
-}
-
-// Rotation Widget
-
-PhSim.Widgets.Rotation = function() {
-	this.trigger = null;
-	this.rotation = true;
-	this.key = null;
-	this.cycle = null;
-	this.circularConstraintRotation = null;
-}
-
-// Rotation Widget
-
-PhSim.Widgets.SetAngle = function() {
-	this.trigger = null;
-	this.setAngle = true;
-	this.key = null;
-	this.cycle = null;
-	this.circularConstraintRotation = null;
-}
-
-// Disable Rotation Widget
-
-PhSim.Widgets.NoRotation = function() {
-	this.noRotation = true;
-}
-
-// RectText Widget
-
-PhSim.Widgets.RectText = function() {
-	this.content = "";
-	this.font = "";
-	this.margin = 0;
-	this.size = null;
-	this.borderSize = 0;
-	this.fill = "#000000";
-	this.rectText = true;
-	this.lineWidth = null;
-	this.borderColor = null;
-}
-
-PhSim.Widgets.NumVar = function() {
-	this.name = null;
-	this.value = null;
-	this.numVar = true;
-}
-
-PhSim.Widgets.SetNumVar = function() {
-	this.value;
-	this.name = null;
-	this.trigger = null;
-	this.setNumVar = true;
-}
-
-PhSim.Widgets.SetColor = function() {
-	this.color = null;
-	this.trigger = null;
-	this.setColor = true;
-}
-
-PhSim.Widgets.SetBorderColor = function() {
-	this.color = null;
-	this.trigger = null;
-	this.setBorderColor = true;
-}
-
-PhSim.Widgets.SetLineWidth = function() {
-	this.lineWidth = null;
-	this.trigger = null;
-	this.setLineWidth = true;
-}
-
-PhSim.Widgets.Game = function() {
-	this.life = null;
-	this.goal = null;
-	this.score = null;
-	this.game = true;
-}
-
-PhSim.Widgets.PlayAudio = function() {
-	this.trigger = null;
-	this.src = null;
-	this.playAudio = true;
-}
-
-PhSim.Widgets.RectText.valueStruc = {
-	content: "",
-	textAlign: ["start","end","left","right","center"],
-	textBaseLine: ["top", "hanging", "middle", "alphabetic", "ideographic", "bottom"],
-	direction: ["ltr","rtl"],
-	font: ""
-}
-
-PhSim.Widgets.ObjLink_a = function() {
-	this.trigger = null;
-
-	this.target = {
-		"L": 0,
-		"O": 0
-	};
-
-	this.objLink_a = true;
-}
-
-PhSim.Widgets.ToggleLock = function() {
-	this.toggleLock = true;
-	this.trigger = null;
-}
-
-PhSim.Widgets.ToggleSemiLock = function() {
-	this.toggleSemiLock = true;
-	this.trigger = null;
-}
-
-PhSim.Widgets.CircularConstraint = function() {
-	this.x = 30;
-	this.y = 30;
-	this.circularConstraint = true;
-}
-
-PhSim.Widgets.AdditionalSprite = function() {
-	this.additionalSprite = true;
-	PhSim.Sprites.Sprite.call(this);
-}
-
-PhSim.Widgets.CompositeSprite = function() {
-	this.srcArray = [];
-}
-
-PhSim.Widgets.RectText.alignStruct = [
-	"left",
-	"right",
-	"center",
-]
-
-/*
-
-Constraint types
-
-*/
-
-PhSim.Constraints = {
-    Static: {}
-}
-
-PhSim.Constraints.Static.SingleObjectConstraint = function() {
-	this.damping = 0,
-	this.relativeEndPoint = new Vector();
-	this.point = new Vector();
-	this.object =  null;
-	this.SingleObjectConstraint = true;
-}
-
-PhSim.Constraints.Static.DoubleObjectConstraint = function(rel1,rel2) {
-	this.doubleObjectConstraint = true
-}
-
-PhSim.Constraints.Static.Constraint = function() {
-	this.objectA = null;
-	this.objectB = null;
-	this.pointA = null;
-	this.pointB = null;
-	this.constraint = true;
-}
-
-
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports) {
-
-PhSim.CollisionClass = function(name) {
-
-	var this_a = this;
-
-	this.name = name;
-
-	this.world = Matter.World.create();
-
-	this.engine = Matter.Engine.create({
-		world: this_a.world
-	});
-
-}
-
-PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
-	return Matter.World.add(this.world,dynObject.matter);
-};
 
 /***/ }),
 /* 35 */

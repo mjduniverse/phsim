@@ -56,6 +56,8 @@ require("./phRender");
 require("./sprites");
 require("./audio");
 
+require("./collisionClass");
+
 require("./tools/tools");
 require("./tools/vectorTools");
 require("./tools/objectChecker");
@@ -74,7 +76,6 @@ require("./dynSim/dynSim");
 require("./dynSimCamera");
 require("./gradient");
 require("./widgets");
-require("./collisionClass");
 require("./calc_skinmesh");
 require("./simpleEvent");
 require("./processVar");
