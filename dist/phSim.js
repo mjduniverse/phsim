@@ -4204,6 +4204,11 @@ PhSim.DynSim.prototype.exit = function() {
 
 /**
  * Go to simulation in the composite simulation
+ * 
+ * In a PhSim.DynSim object, there is a property known as PhSim.DynSim.prototype.sim. 
+ * This property is used to define a simulation.
+ * 
+ * When PhSim.DynSim.prototype.gotoSimulationIndex is used, it resets 
  * @param {Number} i 
  */
 
@@ -4227,10 +4232,6 @@ PhSim.DynSim.prototype.gotoSimulationIndex = function (i) {
 	    this.drawLoadingScreen();
 	}
 	
-	//this.dynsimulation = new DynSL(this.sim.simulations[i],this.simCtx);
-
-	this.slEventStack = new PhSim.EventStack();
-
 	this.simulation = this.sim.simulations[i];
 
 	this.simulationIndex = i;
@@ -4242,187 +4243,171 @@ PhSim.DynSim.prototype.gotoSimulationIndex = function (i) {
 	
 	this.paused = false;
 
+	var this_a = this;
 
-	if(this.paused) {
-		this.paused = false;
-	}
+	this.matterJSWorld = Matter.World.create();
 
-	else {
+	this.matterJSEngine = Matter.Engine.create({
+		world: this_a.matterJSWorld
+	});
 
-		var this_a = this;
+	this.dynTree = [];
+	this.objUniverse = [];
+	this.staticSprites = [];
+	this.staticAudio = [];
+	this.audioPlayers = 0;
+	this.collisionClasses = {};
+	this.slEventStack = new PhSim.EventStack();
 
-		this.matterJSWorld = Matter.World.create({
-			"gravity": new PhSim.Vector(0,this.simulation.world.grav),
-		});
+	var ncc = new PhSim.CollisionClass("__main");
+	ncc.engine = this.matterJSEngine;
+	ncc.world = this.matterJSWorld;
 
-		this.dynTree = [];
-		this.objUniverse = [];
-		this.staticSprites = [];
-		this.staticAudio = [];
-		this.audioPlayers = 0;
-		this.collisionClasses = {};
+	this.collisionClasses["__main"] = ncc;
 
-		this.matterJSEngine = Matter.Engine.create({
-			world: this_a.matterJSWorld
-		});
+	if(this.sim.simulations) {
+	
+		for(var L = 0; L < this.simulation.layers.length; L++) {
 
-		var ncc = new PhSim.CollisionClass("__main");
-		ncc.engine = this.matterJSEngine;
-		ncc.world = this.matterJSWorld;
+			var layerComposite = Matter.Composite.create();
+			var layerBranch = [];
 
-		this.collisionClasses["__main"] = ncc;
+			for(var O = 0; O < this.simulation.layers[L].objUniverse.length; O++) {
+				
+				if(this.simulation.layers[L].objUniverse[O].noDyn || this.simulation.layers[L].objUniverse[O].permStatic) {
+					layerBranch.push(this.simulation.layers[L].objUniverse[O]);
+					this.objUniverse.push(this.simulation.layers[L].objUniverse[O]);
+					this.staticSprites.push(this.simulation.layers[L].objUniverse[O].sprite)				
+				}
 
-		if(this.sim.simulations) {
-		
-			for(var L = 0; L < this.simulation.layers.length; L++) {
-
-				var layerComposite = Matter.Composite.create();
-				var layerBranch = [];
-
-				for(var O = 0; O < this.simulation.layers[L].objUniverse.length; O++) {
+				else {
+					var dynObject = new PhSim.DynObject(this.simulation.layers[L].objUniverse[O])
 					
-					if(this.simulation.layers[L].objUniverse[O].noDyn || this.simulation.layers[L].objUniverse[O].permStatic) {
-						layerBranch.push(this.simulation.layers[L].objUniverse[O]);
-						this.objUniverse.push(this.simulation.layers[L].objUniverse[O]);
-						this.staticSprites.push(this.simulation.layers[L].objUniverse[O].sprite)				
+					// If the collision class object exists
+
+					if(dynObject.static.collisionClass && dynObject.static.collisionClass.trim() !== "__main") {
+
+						var a = this.getCollisionClasses(dynObject);
+
+						for(var i = 0; i < a.length; i++) {
+							
+							if(this.collisionClasses[a[i]]) {
+								this.collisionClasses[a[i]].addDynObject(dynObject)
+							}
+
+							else {
+								var ncc = new PhSim.CollisionClass(a[i]);
+								ncc.addDynObject(dynObject);
+								this.collisionClasses[a[i]] = ncc;
+							}
+						}
+
 					}
 
 					else {
-						var dynObject = new PhSim.DynObject(this.simulation.layers[L].objUniverse[O])
-						
-						// If the collision class object exists
-
-						if(dynObject.static.collisionClass && dynObject.static.collisionClass.trim() !== "__main") {
-
-							var a = this.getCollisionClasses(dynObject);
-
-							for(var i = 0; i < a.length; i++) {
-								
-								if(this.collisionClasses[a[i]]) {
-									this.collisionClasses[a[i]].addDynObject(dynObject)
-								}
-
-								else {
-									var ncc = new PhSim.CollisionClass(a[i]);
-									ncc.addDynObject(dynObject);
-									this.collisionClasses[a[i]] = ncc;
-								}
-							}
-
-						}
-
-						else {
-							Matter.World.add(layerComposite,dynObject.matter);
-						}
-						
-						if(dynObject.static.widgets) {
-							this.extractWidgets(dynObject);
-						}
-
-						layerBranch.push(dynObject);
-						this.objUniverse.push(dynObject);
-						dynObject.layerBranch = layerBranch;
-						
-						if(dynObject.static.sprite) {
-							this.staticSprites.push(dynObject.static.sprite)
-						}
-
+						Matter.World.add(layerComposite,dynObject.matter);
 					}
+					
+					if(dynObject.static.widgets) {
+						this.extractWidgets(dynObject);
+					}
+
+					layerBranch.push(dynObject);
+					this.objUniverse.push(dynObject);
+					dynObject.layerBranch = layerBranch;
+					
+					if(dynObject.static.sprite) {
+						this.staticSprites.push(dynObject.static.sprite)
+					}
+
 				}
-
-				Matter.World.add(this.matterJSWorld,layerComposite);
-				this.dynTree.push(layerBranch);
-
-				var a = new PhSim.PhDynEvent();
-				this_a.callEventClass("matterJSLoad",this_a,a);
-
 			}
 
-		}
+			Matter.World.add(this.matterJSWorld,layerComposite);
+			this.dynTree.push(layerBranch);
 
-		Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
-			
 			var a = new PhSim.PhDynEvent();
-			a.matterEvent = event;
-			this_a.callEventClass("collisionstart",this_a,a);
-
-		});
-
-		if(this.simulation.game) {
-			this.lclGame = this.extractLclGame(this.simulation.game);
-		}
-
-		for(var C = 0; C < this_a.simulation.widgets.length; C++) {
-				
-			var a = this_a.simulation.widgets[C];
-
-			if(a.constraint) {
-
-				var b = {}
-
-				if(a.objectA) {
-					b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);;
-				}
-
-				if(a.objectB) {
-					b.bodyB = this_a.LO(a.objectB.L,a.objectB.O);
-				}
-
-				if(a.pointA) {
-					b.pointA = a.pointA;
-				}
-
-				if(a.pointB) {
-					b.pointB = a.pointB;
-				}
-
-				var c = Matter.Constraint.create(b);
-
-				Matter.World.add(this.matterJSWorld,c)
-
-			}
-
-			if(a.connection) {
-
-				this_a.connectDynObjects(this_a.dynTree[a.objectA.L][a.objectA.O],this_a.dynTree[a.objectB.L][a.objectB.O]);
-
-			}
-
-
+			this_a.callEventClass("matterJSLoad",this_a,a);
 
 		}
-
-		var promise = new Promise(function(resolve,reject){
-
-			if(self.phRender) {
-				self.phRender.spriteImgArray = new PhSim.Sprites.SpriteImgArray(self.staticSprites,function() {
-					resolve();
-				});
-			}
-
-			else {
-				resolve();
-			}
-
-		}).then(function() {
-			return new Promise(function(resolve,reject){
-				self.audioArray = new PhSim.Audio.AudioArray(self.staticAudio,function(){
-					resolve();
-				});
-			})
-		}).then(function(){
-			this_a.intervalLoop = setInterval(this_a.loopFunction.bind(this_a),this_a.delta);
-			this_a.init = true;
-		});
-
-		
-		//return this.MatterJSEngine;
 
 	}
 
+	Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
+		
+		var a = new PhSim.PhDynEvent();
+		a.matterEvent = event;
+		this_a.callEventClass("collisionstart",this_a,a);
+
+	});
+
+	if(this.simulation.game) {
+		this.lclGame = this.extractLclGame(this.simulation.game);
+	}
+
+	for(var C = 0; C < this_a.simulation.widgets.length; C++) {
+			
+		var a = this_a.simulation.widgets[C];
+
+		if(a.constraint) {
+
+			var b = {}
+
+			if(a.objectA) {
+				b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);;
+			}
+
+			if(a.objectB) {
+				b.bodyB = this_a.LO(a.objectB.L,a.objectB.O);
+			}
+
+			if(a.pointA) {
+				b.pointA = a.pointA;
+			}
+
+			if(a.pointB) {
+				b.pointB = a.pointB;
+			}
+
+			var c = Matter.Constraint.create(b);
+
+			Matter.World.add(this.matterJSWorld,c)
+
+		}
+
+		if(a.connection) {
+
+			this_a.connectDynObjects(this_a.dynTree[a.objectA.L][a.objectA.O],this_a.dynTree[a.objectB.L][a.objectB.O]);
+
+		}
 
 
-	return this.dynsimulation;
+
+	}
+
+	var promise = new Promise(function(resolve,reject){
+
+		if(self.phRender) {
+			self.phRender.spriteImgArray = new PhSim.Sprites.SpriteImgArray(self.staticSprites,function() {
+				resolve();
+			});
+		}
+
+		else {
+			resolve();
+		}
+
+	}).then(function() {
+		return new Promise(function(resolve,reject){
+			self.audioArray = new PhSim.Audio.AudioArray(self.staticAudio,function(){
+				resolve();
+			});
+		})
+	}).then(function(){
+		this_a.intervalLoop = setInterval(this_a.loopFunction.bind(this_a),this_a.delta);
+		this_a.init = true;
+	});
+
 }
 
 PhSim.DynSim.prototype.initSim = function(simulationI) {
@@ -4772,13 +4757,239 @@ PhSim.DynSim.prototype.loopFunction = function() {
 /* 31 */
 /***/ (function(module, exports) {
 
+window.apple = 1; 
+/**
+ * @typedef {simpleEventOptions} Velocity
+ * @property {Boolean} velocity - Boolean for determining it is a velocity widget.
+ * @property {Vector} vector -  The velocity vector
+ */
+
+/**
+ * @typedef {simpleEventOptions} Force
+ * @property {Boolean} force - Boolean for determining it is a force widget.
+ * @property {Vector} vector -  The force vector
+ */
+
+/**
+ * @typedef {simpleEventOptions} Position
+ * @property {Boolean} position - Boolean for determining it is a position widget.
+ * @property {Vector} vector -  The position vector
+ */
+
+/**
+ * @typedef {simpleEventOptions} Translate
+ * @property {Boolean} force - Boolean for determining it is a translation widget.
+ * @property {Vector} vector -  The translation vector
+ */
+
+/**
+ * @typedef {simpleEventOptions} DeleteSelf
+ * @property {Boolean} deleteSelf - Boolean for determining it is a self-deletion widget.
+ */
+
+/**
+ * @typedef {Object} Draggable
+ * @property {Boolean} draggable - Boolean for determining it is a draggable object.
+ */
+
+/**
+ * @typedef {Object} Coin
+ * @property {Boolean} coin - Boolean for determining it is a coin.
+ */
+
+/**
+ * @typedef {Object} Hazard
+ * @property {Boolean} hazard - Boolean for determining it is a hazard.
+ */
+
+/**
+ * @typedef {Object} Health
+ * @property {Boolean} hazard - Boolean for determining it is a health object.
+ */
+
+/**
+ * @typedef {Object} Elevator
+ * @property {Boolean} elevator - Boolean for determining it is a hazard.
+ * @property {Vector} pointA - The first point of the elevator
+ * @property {Vector} pointB -  The second point of the elevator
+ */
+
+/**
+ * @typedef {Object} TransformCameraByObj
+ * @property {Boolean} transformCameraByObj - Boolean for determining it makes the object transform the camera.
+ */
+
+/**
+ * @typedef {Object} TransformWithCamera
+ * @property {Boolean} transformWithCamera - Boolean for determining the object moves with the camera.
+ * 
+ */
+
+/**
+ * @typedef {Object} KeyboardControls
+ * @property {Number} up - The up velocity
+ * @property {Number} down - The down velocity
+ * @property {Number} left - The left velocity
+ * @property {Number} right - The right velocity
+ * @property {Boolean} keyboardControls - Boolean for determining if it keyboard controls widget
+ */
+
+/**
+ * @typedef {Object} Alert
+ * @property {String} buttonTxt
+ * @property {String} name
+ * @property {String} text
+ * @property {Boolean} alert
+ */
+
+ /**
+  * @typedef {Object} Connection
+  * @property {LOAddress} objectA
+  * @property {LOAddress} objectB
+  * @property {Boolean} connection
+  */
+
+ /**
+  * @typedef {simpleEventOptions} Rotation
+  * @property {Boolean} rotation
+  * @property {Number} cycle 
+  * @property {Boolean} circularConstraintRotation - If true, rotate around any existing circular constraints. Else, rotate around centroid 
+  */
+
+ /**
+  * @typedef {simpleEventOptions} SetAngle
+  * @property {Boolean} rotation
+  * @property {Number} cycle 
+  * @property {Boolean} circularConstraintRotation - If true, rotate around any existing circular constraints. Else, rotate around centroid 
+  */
+
+/** 
+ * @typedef {Object} NoRotation
+ * @property {Boolean} noRotation
+ */
+
+ /**
+  * @typedef {Object} RectText
+  * @property {String} content
+  * @property {String} font
+  * @property {Number} margin
+  * @property {Number} size
+  * @property {Number} borderSize
+  * @property {String} fill
+  * @property {Boolean} rectText
+  * @property {String} lineWidth
+  * @property {String} borderColor
+  */
+
+/**
+ * @typedef {Object} NumVar 
+ * @property {String} name 
+ * @property {Number} value
+ * @property {Boolean} numVar
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetNumVar
+ * @property {Number} value
+ * @property {Boolean} setNumVar
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetColor
+ * @property {String} color
+ * @property {Boolean} setColor
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetBorderColor
+ * @property {String} color
+ * @property {Boolean} setBorderColor
+ */
+
+/**
+ * @typedef {simpleEventOptions} SetLineWidth
+ * @property {Number} lineWidth
+ * @property {Boolean} setLineWidth
+ */
+
+/**
+ * @typedef {simpleEventOptions} PlayAudio
+ * @property {String} src
+ * @property {Boolean} playAudio
+ */
+
+/**
+ * @typedef {simpleEventOptions} ObjLink_a
+ * @property {LOAddress} target
+ * @property {Boolean} objLink_a 
+ */
+
+/**
+ * @typedef {Object} Game
+ * @property {Number} life
+ * @property {Number} goal
+ * @property {Number} score
+ * @property {Boolean} game - Boolean for enabling game widget
+ */
+
+/**
+ * @typedef {simpleEventOptions} ToggleLock
+ * @property {Boolean} toggleLock - Boolean for enabling toggle lock widget
+ */
+
+/**
+ * @typedef {simpleEventOptions} ToggleSemiLock
+ * @property {Boolean} toggleSemiLock - Boolean for enabling toggle lock widget
+ */
+
+/**
+ * @typedef {Object} CircularConstraint
+ * @property {Number} x - x-coordinate of circular constraint widget
+ * @property {Number} y - y-coordinate of circular constriant widget
+ * @property {Boolean} circularConstraint - Boolean for enabling circular constraing widget
+ */
+
+/**
+ * @typedef {Object} AdditionalSprite
+ * @property {Boolean} additionalSprite
+ */
+
+/**
+ * @typedef {simpleEventOptions} Clone
+ * @property {Vector} - Vector for initial velocity
+ * @property {Boolean} copyWidgets
+ * @property {Boolean} timeCloner
+ * @property {Boolean} clone
+ */
+
+
+/**
+ * @typedef {simpleEventOptions} InputBox
+ * @property {String} text
+ * @property {String} buttonTxt
+ * @property {String} name
+ * @property {Boolean} inputBox
+ */
+
+
+/**
+ * 
+ * @typedef {Velocity|Force|Position|Translate|DeleteSelf|Draggable|
+ * Coin|Hazard|Health|Elevator|TransformCameraByObj|
+ * TransformWithCamera|KeyboardControls|Alert|Connection
+ * |Rotation|SetAngle|NoRotation|RectText|NumVar|SetNumVar|
+ * SetBorderColor|SetLineWidth|PlayAudio|ObjLink_a|Game|ToggleLock|
+ * ToggleSemiLock|CircularConstraint|AdditionalSprite|Clone|InputBox} Widget
+ */
+
+
 /** 
  * 
  * Extract Widgets from Dynamic Object.
  * To extract a widget in PhSim is to read all of the objects in the "widgets" array found in each
  * well-formed PhSim object and then translate it into JavaScript.
  * 
- * @param {Object} widget - The Widget
+ * @param {Widget} widget - The Widget
  * @param {PhSim.DynObject} dyn_object The individual Dynamic Object
  * @returns undefined
  * 
@@ -5619,214 +5830,6 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 /* 34 */
 /***/ (function(module, exports) {
 
-/** 
- * 
- * 
- * Object Widgets Static Objects
- * These are constructors for objects that are used to define the options for a widget.
- * PhSim.DynSim.prototype.extractWidget is used to link a widget to a dynamic object.
- * 
- * @namespace
- * 
-*/
-
-/**
- * @typedef {simpleEventOptions} Velocity
- * @property {Boolean} velocity - Boolean for determining it is a velocity widget.
- * @property {Vector} vector -  The velocity vector
- */
-
-/**
- * @typedef {simpleEventOptions} Force
- * @property {Boolean} force - Boolean for determining it is a force widget.
- * @property {Vector} vector -  The force vector
- */
-
-/**
- * @typedef {simpleEventOptions} Position
- * @property {Boolean} position - Boolean for determining it is a position widget.
- * @property {Vector} vector -  The position vector
- */
-
-/**
- * @typedef {simpleEventOptions} Translate
- * @property {Boolean} force - Boolean for determining it is a translation widget.
- * @property {Vector} vector -  The translation vector
- */
-
-/**
- * @typedef {simpleEventOptions} DeleteSelf
- * @property {Boolean} deleteSelf - Boolean for determining it is a self-deletion widget.
- */
-
-/**
- * @typedef {Object} Draggable
- * @property {Boolean} draggable - Boolean for determining it is a draggable object.
- */
-
-/**
- * @typedef {Object} Coin
- * @property {Boolean} coin - Boolean for determining it is a coin.
- */
-
-/**
- * @typedef {Object} Hazard
- * @property {Boolean} hazard - Boolean for determining it is a hazard.
- */
-
-/**
- * @typedef {Object} Health
- * @property {Boolean} hazard - Boolean for determining it is a health object.
- */
-
-/**
- * @typedef {Object} Elevator
- * @property {Boolean} elevator - Boolean for determining it is a hazard.
- * @property {Vector} pointA - The first point of the elevator
- * @property {Vector} pointB -  The second point of the elevator
- */
-
-/**
- * @typedef {Object} TransformCameraByObj
- * @property {Boolean} transformCameraByObj - Boolean for determining it makes the object transform the camera.
- */
-
-/**
- * @typedef {Object} TransformWithCamera
- * @property {Boolean} transformWithCamera - Boolean for determining the object moves with the camera.
- * 
- */
-
-/**
- * @typedef {Object} KeyboardControls
- * @property {Number} up - The up velocity
- * @property {Number} down - The down velocity
- * @property {Number} left - The left velocity
- * @property {Number} right - The right velocity
- * @property {Boolean} keyboardControls - Boolean for determining if it keyboard controls widget
- */
-
-/**
- * @typedef {Object} Alert
- * @property {String} buttonTxt
- * @property {String} name
- * @property {String} text
- * @property {Boolean} alert
- */
-
- /**
-  * @typedef {Object} Connection
-  * @property {LOAddress} objectA
-  * @property {LOAddress} objectB
-  * @property {Boolean} connection
-  */
-
- /**
-  * @typedef {simpleEventOptions} Rotation
-  * @property {Boolean} rotation
-  * @property {Number} cycle 
-  * @property {Boolean} circularConstraintRotation - If true, rotate around any existing circular constraints. Else, rotate around centroid 
-  */
-
- /**
-  * @typedef {simpleEventOptions} SetAngle
-  * @property {Boolean} rotation
-  * @property {Number} cycle 
-  * @property {Boolean} circularConstraintRotation - If true, rotate around any existing circular constraints. Else, rotate around centroid 
-  */
-
-/** 
- * @typedef {Object} NoRotation
- * @property {Boolean} noRotation
- */
-
- /**
-  * @typedef {Object} RectText
-  * @property {String} content
-  * @property {String} font
-  * @property {Number} margin
-  * @property {Number} size
-  * @property {Number} borderSize
-  * @property {String} fill
-  * @property {Boolean} rectText
-  * @property {String} lineWidth
-  * @property {String} borderColor
-  */
-
-/**
- * @typedef {Object} NumVar 
- * @property {String} name 
- * @property {Number} value
- * @property {Boolean} numVar
- */
-
-/**
- * @typedef {simpleEventOptions} SetNumVar
- * @property {Number} value
- * @property {Boolean} setNumVar
- */
-
-/**
- * @typedef {simpleEventOptions} SetColor
- * @property {String} color
- * @property {Boolean} setColor
- */
-
-/**
- * @typedef {simpleEventOptions} SetBorderColor
- * @property {String} color
- * @property {Boolean} setBorderColor
- */
-
-/**
- * @typedef {simpleEventOptions} SetLineWidth
- * @property {Number} lineWidth
- * @property {Boolean} setLineWidth
- */
-
-/**
- * @typedef {simpleEventOptions} PlayAudio
- * @property {String} src
- * @property {Boolean} playAudio
- */
-
-/**
- * @typedef {simpleEventOptions} ObjLink_a
- * @property {LOAddress} target
- * @property {Boolean} objLink_a 
- */
-
-/**
- * @typedef {Object} Game
- * @property {Number} life
- * @property {Number} goal
- * @property {Number} score
- * @property {Boolean} game - Boolean for enabling game widget
- */
-
-/**
- * @typedef {simpleEventOptions} ToggleLock
- * @property {Boolean} toggleLock - Boolean for enabling toggle lock widget
- */
-
-/**
- * @typedef {simpleEventOptions} ToggleSemiLock
- * @property {Boolean} toggleSemiLock - Boolean for enabling toggle lock widget
- */
-
-/**
- * @typedef {Object} CircularConstraint
- * @property {Number} x
- * @property {Number} y
- * @property {Boolean} circularConstraint - Boolean for enabling circular constraing widget
- */
-
-/**
- * @typedef {Object} AdditionalSprite
- * @property {Boolean} additionalSprite
- * 
- */
-
 /*
 
 Constraint types
@@ -5845,33 +5848,6 @@ PhSim.Constraints.Static.Constraint = function() {
 	this.constraint = true;
 }
 
-//PhSim.Widgets.VelocityKey.desc = "VelocityKey is a widget that allows the user to change the velocity of a physical object by some key."
-
-PhSim.Widgets.Clone = function() {
-	this.trigger = null;
-	this.timeCloner = true;
-	this.time = null;
-	this.clone = true;
-	this.key = null;
-	this.vector = new PhSim.Vector(0,0);
-	this.copyWidgets = true;
-	this.maxN = null;
-}
-
-
-PhSim.Widgets.PointInWidgetsReturn = function() {
-	this.widget = null;
-	this.point = null;
-	this.pointInWidgetsReturn = true;
-}
-
-PhSim.Widgets.InputBox = function() {
-	this.trigger = null;
-	this.text = null;
-	this.buttonTxt = null;
-	this.name = null;
-	this.inputBox = true;
-}
 
 /***/ }),
 /* 35 */
