@@ -1,6 +1,6 @@
 {
   "name": "phsim",
-  "version": "1.0.0",
+  "version": "0.1.0-alpha",
   "description": "A library that allows one to easily create web simulations. Runs on top of Matter.js.",
   "main": "/src/phSim.js",
   "directories": {
@@ -16,7 +16,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx webpack"
+    "build": "./build.sh"  
   },
   "keywords": [
     "phSim",
@@ -24,6 +24,6 @@
     "physics",
     "games"
   ],
-  "author": "Mjduniverse.com",
+  "author": "mjduniverse",
   "license": "MIT"
 }

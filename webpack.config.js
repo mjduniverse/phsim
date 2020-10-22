@@ -1,7 +1,10 @@
 const path = require('path');
 
 module.exports = {
-    entry: "./src/phSim.js",
+    entry: [
+        "./src/phSim.js",
+        "./widgets-js-gen/widgetTypes.js"
+    ],
     mode: "none",
     node: false,
     optimization: {
@@ -14,5 +17,5 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
         filename: "phSim.js",
         globalObject: 'this',
-    }
+    },
 };
