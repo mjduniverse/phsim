@@ -3,11 +3,11 @@
  * @function
  * @param {Object} sim 
  * @param {HTMLCanvasElement} canvas
- * @memberof PhSim.DynSim 
+ * @memberof PhSim 
  */
 
-PhSim.DynSim.createFromCanvas = function(sim,canvas) {
-	var p = new PhSim.DynSim(sim);
+PhSim.createFromCanvas = function(sim,canvas) {
+	var p = new PhSim(sim);
 	p.simCanvas = canvas;
 	p.simCtx = canvas.getContext("2d");
 	p.simCanvas.width = p.sim.box.width;
@@ -21,10 +21,10 @@ PhSim.DynSim.createFromCanvas = function(sim,canvas) {
  * @function
  * @param {Object} sim 
  * @param {HTMLElement} simContainer 
- * @memberof PhSim.DynSim 
+ * @memberof PhSim 
  */
 
-PhSim.DynSim.createFromContainer = function(sim,simContainer) {
+PhSim.createFromContainer = function(sim,simContainer) {
 	
 	// Canvas
 
@@ -32,7 +32,7 @@ PhSim.DynSim.createFromContainer = function(sim,simContainer) {
 
 	// Simulation object
 
-	var p = PhSim.DynSim.createFromCanvas(sim,canvas);
+	var p = PhSim.createFromCanvas(sim,canvas);
 
 	p.simContainer = simContainer;
 
@@ -50,7 +50,7 @@ PhSim.DynSim.createFromContainer = function(sim,simContainer) {
  * @memberof PhSim.DymSim 
  */
 
-PhSim.DynSim.createContainer = function(sim) {
+PhSim.createContainer = function(sim) {
 	var container = document.createElement("div");
 	return this.createFromContainer(sim,container);
 }
@@ -59,16 +59,16 @@ PhSim.DynSim.createContainer = function(sim) {
  * @function
  * @param {String} jsonURL - URL For JSON File
  * @param {function} onload - Onload function
- * @memberof PhSim.DynSim 
+ * @memberof PhSim 
  */
 
-PhSim.DynSim.loadFromJSON = function(jsonURL,onload) {
+PhSim.loadFromJSON = function(jsonURL,onload) {
 
 	var x = new XMLHttpRequest();
 	x.open("GET",jsonURL);
 
 	x.addEventListener("load",function(){
-		var o = PhSim.DynSim.createContainer(JSON.parse(x.responseText));
+		var o = PhSim.createContainer(JSON.parse(x.responseText));
 		onload(o);
 	})
 
@@ -78,15 +78,15 @@ PhSim.DynSim.loadFromJSON = function(jsonURL,onload) {
 
 /**
  * @function
- * @memberof PhSim.DynSim 
+ * @memberof PhSim 
  */
 
-PhSim.DynSim.prototype.configRender = function() {
+PhSim.prototype.configRender = function() {
 	
 	this.assignPhRender(new PhSim.PhRender(this.simCtx));
 	
 	if(!this.noCamera) {
-		this.camera = new PhSim.DynSimCamera(this);
+		this.camera = new PhSim.Camera(this);
 		this.camera.translate(-this.camera.x,-this.camera.y);
 	}
 

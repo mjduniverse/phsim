@@ -10,7 +10,7 @@
  *   
  */
 
-PhSim.DynSim.prototype.applyForce = function(dynObject,position,forceVector) {
+PhSim.prototype.applyForce = function(dynObject,position,forceVector) {
 	if(!dynObject.locked && !dynObject.permStatic) {
 		return Matter.Body.applyForce(dynObject.matter,position,forceVector);
 	}
@@ -27,7 +27,7 @@ PhSim.DynSim.prototype.applyForce = function(dynObject,position,forceVector) {
  * @param {Vector} velocityVector 
  */
 
-PhSim.DynSim.prototype.setVelocity = function(dynObject,velocityVector) {
+PhSim.prototype.setVelocity = function(dynObject,velocityVector) {
 	if(!dynObject.locked) {
 		return Matter.Body.setVelocity(dynObject.matter,velocityVector);
 	}
@@ -48,7 +48,7 @@ PhSim.DynSim.prototype.setVelocity = function(dynObject,velocityVector) {
  * @param {Vector} translationVector 
  */
 
-PhSim.DynSim.prototype.translate = function(o,translationVector) {
+PhSim.prototype.translate = function(o,translationVector) {
 	if(!o.locked) {
 
 		if(o.path) {
@@ -80,7 +80,7 @@ PhSim.DynSim.prototype.translate = function(o,translationVector) {
  * @param {Vector} positionVector 
  */
 
-PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
+PhSim.prototype.setPosition = function(dynObject,positionVector) {
 	if(!dynObject.locked) {
 
 		if(o.circle || o.regPolygon) {
@@ -103,7 +103,7 @@ PhSim.DynSim.prototype.setPosition = function(dynObject,positionVector) {
  * @param {Vector} point 
  */
 
-PhSim.DynSim.prototype.rotate = function(dynObject,angle,point) {
+PhSim.prototype.rotate = function(dynObject,angle,point) {
 
 	if(!dynObject.locked) {
 
@@ -122,7 +122,7 @@ PhSim.DynSim.prototype.rotate = function(dynObject,angle,point) {
  * @param {Number} angle 
  */
 
-PhSim.DynSim.prototype.setAngle = function(dynObject,angle) {
+PhSim.prototype.setAngle = function(dynObject,angle) {
 
 	if(!dynObject.locked) {
 

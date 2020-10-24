@@ -1,14 +1,14 @@
 /**
  * Go to simulation in the composite simulation
  * 
- * In a PhSim.DynSim object, there is a property known as PhSim.DynSim.prototype.sim. 
+ * In a PhSim object, there is a property known as PhSim.prototype.sim. 
  * This property is used to define a simulation.
  * 
- * When PhSim.DynSim.prototype.gotoSimulationIndex is used, it resets 
+ * When PhSim.prototype.gotoSimulationIndex is used, it resets 
  * @param {Number} i 
  */
 
-PhSim.DynSim.prototype.gotoSimulationIndex = function (i) {
+PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	var self = this;
 
@@ -206,7 +206,7 @@ PhSim.DynSim.prototype.gotoSimulationIndex = function (i) {
 
 }
 
-PhSim.DynSim.prototype.initSim = function(simulationI) {
+PhSim.prototype.initSim = function(simulationI) {
 
 	this.status = 1;
 	var self = this;

@@ -1,4 +1,4 @@
-PhSim.DynSim.prototype.updateDynObj = function(currentObj) {
+PhSim.prototype.updateDynObj = function(currentObj) {
 
 
 	// Loop must start at index 1 because the first element in the array is a reference to the parent object itself.
@@ -48,7 +48,7 @@ PhSim.DynSim.prototype.updateDynObj = function(currentObj) {
 
 }
 
-PhSim.DynSim.prototype.loopFunction = function() {
+PhSim.prototype.loopFunction = function() {
 
 	if(this.paused === false) {
 

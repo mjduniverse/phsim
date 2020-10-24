@@ -11,7 +11,7 @@
  * 
 */
 
-PhSim.DynSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
+PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 
 	var self = this;
 	
@@ -73,7 +73,7 @@ PhSim.DynSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 
 // Object Connection
 
-PhSim.DynSim.prototype.connectDynObjects = function(parent,child) {
+PhSim.prototype.connectDynObjects = function(parent,child) {
 
 	Matter.Body.setStatic(child,true);
 
@@ -98,7 +98,7 @@ PhSim.DynSim.prototype.connectDynObjects = function(parent,child) {
 
 }
 
-PhSim.DynSim.prototype.createCircularConstraint = function(dynObject,x,y) {
+PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 	
 	var c = Matter.Constraint.create({
 		
@@ -133,7 +133,7 @@ PhSim.DynSim.prototype.createCircularConstraint = function(dynObject,x,y) {
  * @param {*} dynObject 
  */
 
-PhSim.DynSim.prototype.callObjLinkFunctions = function(dynObject) {
+PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 	for(var i = 0; i < dynObject.objLinkFunctions.length; i++) {
 		dynObject.objLinkFunctions[i]();
 	}
@@ -147,7 +147,7 @@ PhSim.DynSim.prototype.callObjLinkFunctions = function(dynObject) {
  * @param 
  */
 
-PhSim.DynSim.prototype.spawnObject = function(dynObject,options = {}) {
+PhSim.prototype.spawnObject = function(dynObject,options = {}) {
 	var obj = new PhSim.DynObject(dynObject.static);
 	obj.cloned = true;
 	obj.loneParent = dynObject;
@@ -167,7 +167,7 @@ Keyboard Controls
 
 ***/
 
-PhSim.DynSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
+PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 	var f = function(event) {
 		if(event.code == "ArrowRight") {
@@ -199,7 +199,7 @@ PhSim.DynSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
  * @param {PhSim.DynObject}  dynObject - Dynamic Object
  */
 
-PhSim.DynSim.prototype.removeDynObj = function(dynObject) {
+PhSim.prototype.removeDynObj = function(dynObject) {
 	Matter.Composite.remove(this.matterJSWorld,dynObject.matter,true);
 	this.objUniverse.splice(this.objUniverse.indexOf(dynObject),1);
 }
@@ -213,7 +213,7 @@ PhSim.DynSim.prototype.removeDynObj = function(dynObject) {
  * 
  */
 
-PhSim.DynSim.prototype.setDynObjectLifespan = function(dynObject,lifespan) {
+PhSim.prototype.setDynObjectLifespan = function(dynObject,lifespan) {
 
 	var self = this;
 
@@ -223,7 +223,7 @@ PhSim.DynSim.prototype.setDynObjectLifespan = function(dynObject,lifespan) {
 
 }
 
-PhSim.DynSim.prototype.renderAllCounters = function() {
+PhSim.prototype.renderAllCounters = function() {
 	for(var i = 0; i < this.counterArray.length; i++) {
 		this.renderCounterByIndex(i);
 	}
@@ -234,7 +234,7 @@ PhSim.DynSim.prototype.renderAllCounters = function() {
  * @param {PhSim.DynObject} dynObject 
  */
 
-PhSim.DynSim.prototype.toggleLock = function(dynObject) {
+PhSim.prototype.toggleLock = function(dynObject) {
 	dynObject
 }
 
@@ -243,6 +243,6 @@ PhSim.DynSim.prototype.toggleLock = function(dynObject) {
  * @param {PhSim.DynObject} dynObject 
  */
 
-PhSim.DynSim.prototype.toggleSemiLock = function(dynObject) {
+PhSim.prototype.toggleSemiLock = function(dynObject) {
 
 }

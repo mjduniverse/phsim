@@ -69,6 +69,32 @@ PhSim.DynObject = function(staticObject) {
 		//PhSim.Static.RegPolygon.call(this);
 	}
 
+	if(typeof matterParts === "undefined") {
+		var matterParts = [];
+	}
+
+	if(staticObject.composite === true) {
+
+		// Flattened tree of Matter.js objects
+
+		// New parts array for object
+
+		var dynParts = [];
+
+		for(var i = 0; i < o.parts.length; i++)  {
+			var dynObject = new PhSim.DynObject(o.parts[i]);
+
+			for(var j = 1; j < dynObject.parts.length; j++) {
+				matterParts.push(dynObject.parts[j]);
+			}
+
+			dynParts.push(dynObject);
+		}
+		
+		this.parts = dynParts;
+
+	}
+
 	
 	/** 
 	 * Reference to static object used to create the DynObject
@@ -82,9 +108,9 @@ PhSim.DynObject = function(staticObject) {
 	 * @type {String}
 	 * */
 
-	this.id = PhSim.DynSim.nextId;
+	this.id = PhSim.nextId;
 
-	PhSim.DynSim.nextId = (Number.parseInt(PhSim.DynSim.nextId,36) + 1).toString(36);
+	PhSim.nextId = (Number.parseInt(PhSim.nextId,36) + 1).toString(36);
 	
 	/** 
 	 * Refernce of DynObj in matter object 

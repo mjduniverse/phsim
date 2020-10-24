@@ -1,4 +1,4 @@
-PhSim.DynSim.prototype.play = function() {
+PhSim.prototype.play = function() {
 
 	if(this.init === false) {
 		this.initSim(0);
@@ -10,7 +10,7 @@ PhSim.DynSim.prototype.play = function() {
 
 }
 
-PhSim.DynSim.prototype.toggle = function() {
+PhSim.prototype.toggle = function() {
 	
 	if(this.paused === false) {
 		this.paused = true;
@@ -24,17 +24,17 @@ PhSim.DynSim.prototype.toggle = function() {
 
 }
 
-PhSim.DynSim.prototype.pause = function() {
+PhSim.prototype.pause = function() {
 	this.paused = true;
 }
 
-PhSim.DynSim.prototype.exitSl = function() {
+PhSim.prototype.exitSl = function() {
 	this.callEventClass("beforeslchange",this,new PhSim.PhEvent());
 	this.paused = false;
 	clearInterval(this.intervalLoop);
 }
 
-PhSim.DynSim.prototype.exit = function() {
+PhSim.prototype.exit = function() {
 	this.callEventClass("exit",this,new PhSim.PhEvent());
 	this.deregisterKeyEvents();
 	this.exitSl();

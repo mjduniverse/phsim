@@ -561,14 +561,36 @@ PhSim.Static.CompositeSimulation = function() {
 
 }
 
+PhSim.Static.LO = function(L,O) {
+
+}
+
+/**
+ * 
+ * Specify object location by layer and object indexes.
+ * 
+ * @typedef LOAddress
+ * @property {Number} L - layer
+ * @property {Number} O - object
+ * 
+ */
+
+PhSim.Static.SLO = function(S,L,O) {
+
+}
+
+ /**
+  * Specify object location by superlayer, layer and object indexes.
+  * 
+  * @typedef SLOAddress
+  * @property {Number} S - superlayer
+  * @property {Number} L - layer
+  * @property {Number} O - object
+  */
+
+
 /**
  * Matter.js body
  * @external {MatterBody}
  * @see {@link https://brm.io/matter-js/docs/classes/Body.html|MatterBody} 
  */
-
-
- /**
-  * @typedef {Object} PhSimObjectBase
-  * @augments RenderableObject
-  */

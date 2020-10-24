@@ -1,6 +1,6 @@
 // Newtonian Gravity
 
-PhSim.DynSim.prototype.applyGravitationalField = function() {
+PhSim.prototype.applyGravitationalField = function() {
 	
 	var a = this.objUniverse;
 

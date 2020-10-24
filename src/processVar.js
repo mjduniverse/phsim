@@ -8,7 +8,7 @@
  * 
  */
 
-PhSim.DynSim.prototype.processVar = function(str) {
+PhSim.prototype.processVar = function(str) {
 
 	var str = str;
 	

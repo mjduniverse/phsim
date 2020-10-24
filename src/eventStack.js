@@ -28,7 +28,7 @@ PhSim.EventStack = function() {
 
 	/** 
 	 * 
-	 * Array of functions to be exected when PhSim.DynSim.updateDynObject is called 
+	 * Array of functions to be exected when PhSim.updateDynObject is called 
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 

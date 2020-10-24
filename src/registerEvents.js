@@ -1,14 +1,14 @@
 /**
  * 
  * Used to set event listeners for a canvas.
- * This function works if {@link PhSim.DynSim.prototype#simCtx} 
- * and {@link PhSim.DynSim.prototype#simCanvas} are set.
+ * This function works if {@link PhSim.prototype#simCtx} 
+ * and {@link PhSim.prototype#simCanvas} are set.
  * 
  * @function
  *  
  */
 
-PhSim.DynSim.prototype.registerCanvasEvents = function() {
+PhSim.prototype.registerCanvasEvents = function() {
 
 	var self = this;
 
@@ -199,7 +199,7 @@ PhSim.DynSim.prototype.registerCanvasEvents = function() {
 
 }
 
-PhSim.DynSim.prototype.registerKeyEvents = function() {
+PhSim.prototype.registerKeyEvents = function() {
 
 	this.windowObj = this.windowObj || window;
 
@@ -225,6 +225,6 @@ PhSim.DynSim.prototype.registerKeyEvents = function() {
 	this.windowObj.addEventListener("keydown",this.keydownBridgeWrapper);
 }
 
-PhSim.DynSim.prototype.deregisterKeyEvents = function() {
+PhSim.prototype.deregisterKeyEvents = function() {
 	this.windowObj.removeEventListener("keydown",this.keydownBridgeWrapper);
 }

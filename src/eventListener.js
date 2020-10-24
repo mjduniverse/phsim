@@ -17,7 +17,7 @@
  * 
  */
 
-PhSim.DynSim.prototype.addEventListener = function(eventStr,call,options = {}) {
+PhSim.prototype.addEventListener = function(eventStr,call,options = {}) {
 	
 	
 
@@ -64,7 +64,7 @@ PhSim.DynSim.prototype.addEventListener = function(eventStr,call,options = {}) {
  */
 
 
-PhSim.DynSim.prototype.removeEventListener = function(eventStr,call) {
+PhSim.prototype.removeEventListener = function(eventStr,call) {
 	
 	if(this.eventStack[eventStr] && this.eventStack[eventStr].includes(call)) {
 		var callIndex = this.eventStack[eventStr].indexOf(call);
@@ -85,7 +85,7 @@ PhSim.DynSim.prototype.removeEventListener = function(eventStr,call) {
  * @param {Object} eventArg 
  */
 
-PhSim.DynSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
+PhSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
 	
 	if(this.eventStack[eventStr]) {
 		for(var i = 0; i < this.eventStack[eventStr].length; i++) {

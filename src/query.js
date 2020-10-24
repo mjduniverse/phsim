@@ -47,8 +47,8 @@ PhSim.Tools.getSpecialRectanglePoints = function(rectangle) {
  * @function
  */
 
-PhSim.DynSim.prototype.getStatusStr = function() {
-	return PhSim.DynSim.statusStruct[this.status];
+PhSim.prototype.getStatusStr = function() {
+	return PhSim.statusStruct[this.status];
 }
 
 /**
@@ -61,7 +61,7 @@ PhSim.DynSim.prototype.getStatusStr = function() {
  * 
  */
 
-PhSim.DynSim.prototype.getCollisionClasses = function(dynObject) {
+PhSim.prototype.getCollisionClasses = function(dynObject) {
 
 	if(dynObject.collisionClass) {
 		var a = dynObject.collisionClass;
@@ -78,7 +78,7 @@ PhSim.DynSim.prototype.getCollisionClasses = function(dynObject) {
  * @function
  */
 
-PhSim.DynSim.prototype.getUniversalObjArray = function() {
+PhSim.prototype.getUniversalObjArray = function() {
 	
 	var array = []
 	
@@ -101,22 +101,15 @@ PhSim.DynSim.prototype.getUniversalObjArray = function() {
 }
 
 /**
- * 
- * @param {Object} widget 
+ * Check widget type and return the widget type
+ * @param {Widget} widget 
  */
 
 PhSim.Tools.chkWidgetType = function(widget) {
-
-	var widgetKeys = Object.keys(PhSim.Widgets);
-
-	for(var i = 0; i < widgetKeys.length; i++) {
-
-		var sa1 = widgetKeys[i].split("");
-		sa1[0] = sa1[0].toLowerCase();
-		var sa2 = sa1.join("");
-
-		if(widget[sa2]) {
-			return sa2;
+	
+	for(var i = 0; i < PhSim.boolKey_lc.length; i++) {
+		if(widget[PhSim.boolKey_lc[i]]) {
+			return PhSim.boolKey_lc[i];
 		}
 	}
 
@@ -129,7 +122,7 @@ PhSim.Tools.chkWidgetType = function(widget) {
  * @param {PhSim.DynObject} dynObject - The dynamic object
  */
 
-PhSim.DynSim.prototype.getStatic = function(dynObject) {
+PhSim.prototype.getStatic = function(dynObject) {
 	
 	if(dynObject.permStatic || dynObject.permStatic) {
 		return null;
@@ -148,7 +141,7 @@ PhSim.DynSim.prototype.getStatic = function(dynObject) {
  * @returns {PhSim.DynObject}
  */
 
-PhSim.DynSim.prototype.getObjectByName = function(str) {
+PhSim.prototype.getObjectByName = function(str) {
 
 	var returnObj;
 	var self = this;
@@ -172,7 +165,7 @@ PhSim.DynSim.prototype.getObjectByName = function(str) {
  * @returns {Boolean} 
  */
 
-PhSim.DynSim.prototype.collided = function(dynObjectA,dynObjectB) {
+PhSim.prototype.collided = function(dynObjectA,dynObjectB) {
 	return Matter.SAT.collides(dynObjectA.matter,dynObjectB.matter).collided;
 }
 
@@ -183,7 +176,7 @@ PhSim.DynSim.prototype.collided = function(dynObjectA,dynObjectB) {
  * @returns {Boolean}
  */
 
-PhSim.DynSim.prototype.isInCollision = function(dynObject) {
+PhSim.prototype.isInCollision = function(dynObject) {
 
 	var self = this;
 
@@ -211,7 +204,7 @@ PhSim.DynSim.prototype.isInCollision = function(dynObject) {
  * @returns {Boolean}
  */
 
-PhSim.DynSim.prototype.pointInObject = function(dynObject,x,y) {
+PhSim.prototype.pointInObject = function(dynObject,x,y) {
 	var c = document.createElement("canvas");
 	
 	var l = c.getContext("2d");
@@ -230,7 +223,7 @@ PhSim.DynSim.prototype.pointInObject = function(dynObject,x,y) {
  * 
  */
 
-PhSim.DynSim.prototype.getDynObjectByID = function(idNum) {
+PhSim.prototype.getDynObjectByID = function(idNum) {
 
 	var a = this.getUniversalObjArray();
 
@@ -253,7 +246,7 @@ PhSim.DynSim.prototype.getDynObjectByID = function(idNum) {
  * 
  */
 
-PhSim.DynSim.prototype.pointObjArray = function(x,y) {
+PhSim.prototype.pointObjArray = function(x,y) {
 
 	var b = [];
 
@@ -278,7 +271,7 @@ PhSim.DynSim.prototype.pointObjArray = function(x,y) {
  * 
  */
 
-PhSim.DynSim.prototype.getCollisionList = function(dynObject) {
+PhSim.prototype.getCollisionList = function(dynObject) {
 
 	var z = [];
 
@@ -313,7 +306,7 @@ PhSim.DynSim.prototype.getCollisionList = function(dynObject) {
  * 
  */
 
-PhSim.DynSim.prototype.getCollidingObjects = function(dynObject) {
+PhSim.prototype.getCollidingObjects = function(dynObject) {
 	
 	var a = this.getCollisionList(dynObject);
 	var b = []
@@ -342,7 +335,7 @@ PhSim.DynSim.prototype.getCollidingObjects = function(dynObject) {
  * @returns {String[]}
  */
 
-PhSim.DynSim.prototype.getSensorClasses = function(dynObject) {
+PhSim.prototype.getSensorClasses = function(dynObject) {
 
 	if(dynObject.sensorClass) {
 		var a = dynObject.sensorClass;
@@ -365,7 +358,7 @@ PhSim.DynSim.prototype.getSensorClasses = function(dynObject) {
  * @returns {Boolean}
  */
 
-PhSim.DynSim.prototype.sameSensorClasses = function(dynObjectA,dynObjectB) {
+PhSim.prototype.sameSensorClasses = function(dynObjectA,dynObjectB) {
 	return intersectionExists(this.getSensorClasses(dynObjectA),this.getSensorClasses(dynObjectB));
 }
 
@@ -390,7 +383,7 @@ function intersectionExists(array1,array2) {
  * @returns {PhSim.DynObject[]} 
  */
 
-PhSim.DynSim.prototype.getCollidingSensorObjects = function(dynObject) {
+PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
 	
 	var a = this.getCollisionList(dynObject);
 	var b = []
@@ -420,7 +413,7 @@ PhSim.DynSim.prototype.getCollidingSensorObjects = function(dynObject) {
  * @returns {Boolean}
  */
 
-PhSim.DynSim.prototype.inSensorCollision = function(dynObject) {
+PhSim.prototype.inSensorCollision = function(dynObject) {
 	
 	var a = this.getCollidingSensorObjects(dynObject); 
 	
@@ -467,7 +460,7 @@ PhSim.Tools.isPointInRawRectangle = function(cx,cy,cw,ch,px,py) {
  * @returns {PhSim.CollisionReport} - A collision report that updates itself after each update
  */
 
-PhSim.DynSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
+PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 
 	var self = this;
 	var report = new PhSim.CollisionReport();

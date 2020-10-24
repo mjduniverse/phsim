@@ -1,13 +1,13 @@
 // Simple Event Reference
 
-PhSim.DynSim.SimpeEventRef = function(trigger,ref) {
+PhSim.SimpeEventRef = function(trigger,ref) {
 	this.trigger = trigger;
 	this.ref = ref;
 }
 
 // Simple Event Reference Array
 
-PhSim.DynSim.prototype.simpleEventRefs = [];
+PhSim.prototype.simpleEventRefs = [];
 
 /** 
  * 
@@ -89,13 +89,15 @@ PhSim.DynSim.prototype.simpleEventRefs = [];
  */
 
 /** 
+ * Properties for a simple event.
+ *
  * @typedef {Object} simpleEventOptions
  * @property {@external https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key|KeyboardEvent.key} key - The event.key value for triggering a simple event.
  * @property {Number} time - The time interval between a repeated event or a delay time for timeouts.
  * @property {Number} maxN - The maximum number of times a repeated SimpleEvent can be executed.
  * @property {PhSim.DynObject} triggerObj - Trigger object
  * 
- * The simple event options is an Object that is used for the {@link PhSim.DynSim#addSimpleEvent} function.
+ * The simple event options is an Object that is used for the {@link PhSim#addSimpleEvent} function.
  */
 
  /**
@@ -112,12 +114,12 @@ PhSim.DynSim.prototype.simpleEventRefs = [];
  * @param {SimpleEventCall} call - The JavaScript function to be executed.
  * @param {simpleEventOptions} options -  [The Simple Event Options Object]{@link simpleEventOptions}.
  * @returns {Number} - A reference to the simple event.
- * @this {PhSim.DynSim}
+ * @this {PhSim}
  * 
  */
 
 
-PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
+PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 	if(trigger.match(/_global$/)) {
 		options.triggerObj = null;
@@ -149,7 +151,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			"slEvent": true
 		});
 
-		return this.simpleEventRefs.push(new PhSim.DynSim.SimpeEventRef(trigger,f)) - 1;
+		return this.simpleEventRefs.push(new PhSim.SimpeEventRef(trigger,f)) - 1;
 		
 	}
 
@@ -180,7 +182,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			"slEvent": true
 		});
 
-		return this.simpleEventRefs.push(new PhSim.DynSim.SimpeEventRef(trigger,f)) - 1;
+		return this.simpleEventRefs.push(new PhSim.SimpeEventRef(trigger,f)) - 1;
 
 	}
 
@@ -194,7 +196,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			slEvent: true
 		});
 
-		return this.simpleEventRefs.push(new PhSim.DynSim.SimpeEventRef(trigger,f)) - 1;
+		return this.simpleEventRefs.push(new PhSim.SimpeEventRef(trigger,f)) - 1;
 		
 	}
 
@@ -218,7 +220,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			slEvent: true
 		});
 
-		return this.simpleEventRefs.push(new PhSim.DynSim.SimpeEventRef(trigger,f)) - 1;
+		return this.simpleEventRefs.push(new PhSim.SimpeEventRef(trigger,f)) - 1;
 	}
 
 	if(trigger === "objmousedown" || trigger === "objmousedown_global") {
@@ -241,7 +243,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			slEvent: true
 		});
 
-		return this.simpleEventRefs.push(new PhSim.DynSim.SimpeEventRef(trigger,f)) - 1;
+		return this.simpleEventRefs.push(new PhSim.SimpeEventRef(trigger,f)) - 1;
 	}
 
 	if(trigger === "firstslupdate") {
@@ -274,7 +276,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			slEvent: true
 		});
 
-		return this.simpleEventRefs.push(new PhSim.DynSim.SimpeEventRef(trigger,f)) - 1;
+		return this.simpleEventRefs.push(new PhSim.SimpeEventRef(trigger,f)) - 1;
 	}
 
 	if(trigger === "objlink") {
@@ -301,7 +303,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			slEvent: true
 		});
 
-		return this.simpleEventRefs.push(new PhSim.DynSim.SimpeEventRef(trigger,f)) - 1;
+		return this.simpleEventRefs.push(new PhSim.SimpeEventRef(trigger,f)) - 1;
 
 	}
 
@@ -361,7 +363,7 @@ PhSim.DynSim.prototype.addSimpleEvent = function(trigger,call,options) {
  * 
 */
 
-PhSim.DynSim.prototype.removeSimpleEvent = function(refNumber) {
+PhSim.prototype.removeSimpleEvent = function(refNumber) {
 	
 	var o = this.simpleEventRefs[refNumber];
 

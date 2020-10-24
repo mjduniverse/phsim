@@ -4,7 +4,7 @@
  * @param {Number} i - Index in audio array. 
  */
 
-PhSim.DynSim.prototype.playAudioByIndex = function(i) {
+PhSim.prototype.playAudioByIndex = function(i) {
 	return this.audioArray.array[i].play();
 }
 
@@ -13,7 +13,7 @@ PhSim.DynSim.prototype.playAudioByIndex = function(i) {
  * @param {*} i 
  */
 
-PhSim.DynSim.prototype.pauseAudioByIndex = function(i) {
+PhSim.prototype.pauseAudioByIndex = function(i) {
 	return this.audioArray.array[i].pause();
 }
 
@@ -22,7 +22,7 @@ PhSim.DynSim.prototype.pauseAudioByIndex = function(i) {
  * @param {*} i 
  */
 
-PhSim.DynSim.prototype.pauseAudioByIndex = function(i) {
+PhSim.prototype.pauseAudioByIndex = function(i) {
 	return this.audioArray.array[i].pause();
 }
 
@@ -32,7 +32,7 @@ PhSim.DynSim.prototype.pauseAudioByIndex = function(i) {
  * @param {*} v 
  */
 
-PhSim.DynSim.prototype.setAudioVolByIndex = function(i,v) {
+PhSim.prototype.setAudioVolByIndex = function(i,v) {
 	this.audioArray.array[i].volume = v;
 	return this.audioArray.array[i].volume; 
 }
@@ -42,7 +42,7 @@ PhSim.DynSim.prototype.setAudioVolByIndex = function(i,v) {
  * @param {*} i 
  */
 
-PhSim.DynSim.prototype.setAudioMuteByIndex = function(i) {
+PhSim.prototype.setAudioMuteByIndex = function(i) {
 	this.audioArray.array[i].muted = v;
 	return this.audioArray.array[i].muted;
 }
@@ -52,7 +52,7 @@ PhSim.DynSim.prototype.setAudioMuteByIndex = function(i) {
  * @param {*} i 
  */
 
-PhSim.DynSim.prototype.toggleAudioByIndex = function(i) {
+PhSim.prototype.toggleAudioByIndex = function(i) {
 	
 	if(	this.audioArray.array[i].muted === true) {
 		this.audioArray.array[i].muted = false;

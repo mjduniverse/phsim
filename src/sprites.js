@@ -51,6 +51,13 @@ PhSim.Sprites.circularSpriteRenderCanvas = function(ctx,canvas,angle) {
 
 }
 
+/**
+ * 
+ * @constructor
+ * @param {PhSim.Sprites.Sprite[]} sprites 
+ * @param {Function} onload 
+ */
+
 PhSim.Sprites.SpriteImgArray = function(sprites,onload = function() {}) {
 	
 	// Force load if sprites list is empty
@@ -81,20 +88,43 @@ PhSim.Sprites.SpriteImgArray = function(sprites,onload = function() {}) {
 
 }
 
+/**
+ * 
+ * Add sprite to the Sprite Image Array.
+ * 
+ * @param {PhSim.Sprites.Sprite|PhSim.Sprite.Sprite[]} staticObj - This could be a sprite or an array of sprites
+ * @param {Function} [onload] - a function that is executed when the image loads.
+ */
+
 PhSim.Sprites.SpriteImgArray.prototype.addSprite = function(staticObj,onload = function() {} ) {
 	
 	var self = this;
 	
-	var img = document.createElement("img");
+	if(Array.isArray(staticObj)) {
+		for(var i = 0; i < staticObj.length; i++) {
+			this.addSprite(staticObj[i]);
+		}
+	}
 
-	img.addEventListener("load",function() {
-		onload();
-	});
+	else {
 
-	img.src = staticObj.src;
+		if(staticObj.src) {
 
-	this.static[staticObj.src] = staticObj;
-	this[staticObj.src] = img;
+			var img = document.createElement("img");
 
-	this.length++;
+			img.addEventListener("load",function() {
+				onload();
+			});
+		
+			img.src = staticObj.src;
+		
+			this.static[staticObj.src] = staticObj;
+			this[staticObj.src] = img;
+		
+			this.length++;
+
+		}
+
+	}
+
 }

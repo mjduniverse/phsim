@@ -3,11 +3,11 @@
  * @param {*} dynSim 
  */
 
-PhSim.DynSimCamera = function(dynSim) {
+PhSim.Camera = function(dynSim) {
 
 	/**
 	 * Dynamic Simulation
-	 * @type {PhSim.DynSim}
+	 * @type {PhSim}
 	 */
 
 	this.dynSim = dynSim;
@@ -19,42 +19,42 @@ PhSim.DynSimCamera = function(dynSim) {
  * @type {Number}
  */
 
-PhSim.DynSimCamera.prototype.scale = 1;
+PhSim.Camera.prototype.scale = 1;
 
 /**
  * Camera offset x 
  * @type {Number}
  */
 
-PhSim.DynSimCamera.prototype.x = 0;
+PhSim.Camera.prototype.x = 0;
 
 /**
  * Camera offset y
  * @type {Number}
  */
 
-PhSim.DynSimCamera.prototype.y = 0;
+PhSim.Camera.prototype.y = 0;
 
 /**
  * Target object
  * @type {StaticObject}
  */
 
-PhSim.DynSimCamera.prototype.targetObj = null;
+PhSim.Camera.prototype.targetObj = null;
 
 /**
  * Objects that will transform with the camera
  * @type {StaticObject[]}
  */
 
-PhSim.DynSimCamera.prototype.transformingObjects = []
+PhSim.Camera.prototype.transformingObjects = []
 
-PhSim.DynSimCamera.prototype.zoomIn = function(scaleFactor) {
+PhSim.Camera.prototype.zoomIn = function(scaleFactor) {
 	this.scale = this.scale * scaleFactor;
 	this.dynSim.simCtx.scale(scaleFactor,scaleFactor);
 }
 
-PhSim.DynSimCamera.prototype.translate = function(dx,dy) {
+PhSim.Camera.prototype.translate = function(dx,dy) {
 	this.x = this.x + dx;
 	this.y = this.y + dy;
 	this.dynSim.simCtx.translate(dx,dy);
@@ -64,14 +64,14 @@ PhSim.DynSimCamera.prototype.translate = function(dx,dy) {
 	}
 }
 
-PhSim.DynSimCamera.prototype.setPosition = function(x,y) {
+PhSim.Camera.prototype.setPosition = function(x,y) {
 	this.dynSim.simCtx.translate(-this.x,-this.y)
 	this.x = x;
 	this.y = y;
 }
 
 
-PhSim.DynSim.prototype.loading = {
+PhSim.prototype.loading = {
 	"bgClr": "black",
 	"txtClr": "White",
 	"txtFace": "arial",
@@ -81,7 +81,7 @@ PhSim.DynSim.prototype.loading = {
 	"txtSize": 20
 }
 
-PhSim.DynSim.prototype.drawLoadingScreen = function() {
+PhSim.prototype.drawLoadingScreen = function() {
 	this.simCtx.fillStyle = this.loading.bgClr;
 	this.simCtx.fillRect(0,0,this.camera.scale,this.simCanvas.height);
 	this.simCtx.fillStyle = this.loading.txtClr;
@@ -90,7 +90,7 @@ PhSim.DynSim.prototype.drawLoadingScreen = function() {
 	this.simCtx.fillText(this.loading.txt,this.simCanvas.width / 2,this.simCanvas.height / 2)
 }
 
-PhSim.DynSim.prototype.extractLclGame = function(localSettings) {
+PhSim.prototype.extractLclGame = function(localSettings) {
 
 	var self = this;
 

@@ -26,23 +26,52 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ***/
 
 /**
- * PhSim Module
- * @namespace
- * @global
+ * 
+ * @typedef {PhSim.Static.CompositeSimulation|PhSim.Static.Simulation|StaticObject[]} DynSimOptions
+ * 
+ * The options that can be used to create a dynamic simulation could be a 
+ * CompositeSimulation object, a simulation object or an array 
+ * of static objects.
+ * 
+ * If an array is chosen, then it is used to create
+ * 
  */
 
-var PhSim = {}
-
-/**
- * PhSim Name
- * @readonly
+/** 
+ * Dynamic Simulation Instance Object 
+ * 
+ * @constructor
+ * @param {DynSimOptions} sim - The simulation object
+ * 
  */
 
-PhSim.name = "phsim"
+var PhSim = function(dynSimOptions) {
+
+	/**
+	 * The static simulation object
+	 */
+
+	if(Array.isArray(dynSimOptions.simulations)) {
+		this.sim = dynSimOptions;
+	}
+
+	else if(Array.isArray(dynSimOptions.layers)) {
+		this.sim = new PhSim.Static.CompositeSimulation();
+		this.sim.simulations[0] = dynSimOptions;
+	}
+
+	else if(Array.isArray(dynSimOptions)) {
+		this.sim = new PhSim.Static.CompositeSimulation();
+		this.sim.simulations[0].layers[0] = dynSimOptions;
+	}
+
+	this.registerKeyEvents();
+
+}
 
 /**
  * PhSim version
- * @readonly
+ * 
  */
 
 PhSim.version = "0.1.0-alpha"
@@ -50,6 +79,7 @@ PhSim.version = "0.1.0-alpha"
 if(typeof window === "object") {
 	window.PhSim = PhSim;
 }
+
 require("./objects" );
 require("./eventStack" );
 require("./phRender");
@@ -71,7 +101,22 @@ require("./tools/boundingBox");
 
 require("./dynObject");
 
-require("./dynSim/dynSim");
+require("./eventObjects");
+require("./lo");
+require("./makeQuickly");
+require("./filter");
+require("./dynWidget");
+require("./audioToggle");
+require("./registerEvents");
+require("./eventListener");
+require("./query");
+require("./gravity");
+require("./toggle");
+require("./gotoSuperlayer");
+require("./matterAliases");
+require("./set");
+require("./update");
+require("./extractWidgets");
 
 require("./dynSimCamera");
 require("./gradient");
@@ -79,3 +124,120 @@ require("./widgets");
 require("./calc_skinmesh");
 require("./simpleEvent");
 require("./processVar");
+
+/**
+ * Number of frames per second
+ */
+
+PhSim.prototype.delta = 50/3; // 16 frames per second, or 16 frames per 1000ms
+
+/**
+ * Boolean property for telling if the simulation has loaded a simulation at least one time.
+ * @type {Boolean}
+ */
+
+PhSim.prototype.init = false;
+
+/**
+ * Time for inside the world
+ * @type {Number}
+ */
+
+PhSim.prototype.sl_time = 0;
+
+/**
+ * Index of the current simulation
+ * @type {Number}
+ */
+
+PhSim.prototype.simulationIndex = null;
+
+/**
+ * Loading status of the dynamic simulation
+ * @type {Number}
+ */
+
+PhSim.prototype.status = 0;
+
+/**
+ * x-coordinate of the mouse
+ * @type {Number}
+ */
+
+PhSim.prototype.mouseX = null;
+
+/**
+ * y-coordinate of the mouse
+ * @type {Number}
+ */
+
+PhSim.prototype.mouseY = null;
+
+/**
+ * Boolean property to tell if the simulation is paused or not.
+ * @type {Boolean}
+ */
+
+PhSim.prototype.paused = true;
+
+/**
+ * Global event stack
+ * @type {PhSim.EventStack}
+ */
+
+PhSim.prototype.eventStack = new PhSim.EventStack();
+
+
+/**
+ * Event stack for simulation specfic events
+ * @type {PhSim.EventStack}
+ */
+
+PhSim.prototype.slEventStack = new PhSim.EventStack();
+
+ /**
+  * 
+  * @callback PhSimEventCall
+  * @param {PhSim.PhEvent} phEvent
+  * 
+  */
+
+ PhSim.nextId = "0";
+
+/**
+ * Structure giving more human-readable meaning to PhSim status.
+ * @type {String[]}
+ */
+
+PhSim.statusStruct = {
+	0: "Unloaded",
+	1: "Initalized",
+	2: "Loaded Images",
+	3: "Loaded Audio",
+	4: "Loaded Simulation"
+}
+
+
+
+PhSim.prototype.forAllObjects = function(call) {
+	
+	var a = this.getUniversalObjArray();
+
+	for(var i = 0; i < a.length; i++) {
+		var z = call(a[i]);
+		if(z === false) {
+			break;
+		}
+	}
+}
+
+
+PhSim.prototype.addToOverlayer = function(dynObject) {
+	
+	if(!dynObject.permStatic) {
+		Matter.World.add(this.matterJSWorld, dynObject.matter);
+	}
+
+	this.objUniverse.push(dynObject);
+
+}

@@ -1,4 +1,4 @@
-PhSim.DynSim.prototype.configFilter = function(container) {
+PhSim.prototype.configFilter = function(container) {
 	this.htmlFilter = document.createElement("div");
 	this.htmlFilter.style.background = "rgba(3,3,3,0.7)";
 	this.htmlFilter.style.position = "absolute";
@@ -7,7 +7,7 @@ PhSim.DynSim.prototype.configFilter = function(container) {
 	container.appendChild(this.htmlFilter);
 }
 
-PhSim.DynSim.prototype.enableFilter = function() {
+PhSim.prototype.enableFilter = function() {
 	var elmBox = this.simCanvas.getBoundingClientRect();
 	this.htmlFilter.style.display = "inline-block";
 	this.htmlFilter.style.left = "0px";
@@ -17,11 +17,11 @@ PhSim.DynSim.prototype.enableFilter = function() {
 	this.htmlFilter.style.height = Math.floor(elmBox.height) + "px";
 }
 
-PhSim.DynSim.prototype.disableFilter = function() {
+PhSim.prototype.disableFilter = function() {
 	this.htmlFilter.style.display = "none";
 }
 
-PhSim.DynSim.prototype.toggleFilter = function() {
+PhSim.prototype.toggleFilter = function() {
 
 	if(this.htmlFilter.style.display === "none") {
 		this.enableFilter();
@@ -45,7 +45,7 @@ PhSim.DynSim.prototype.toggleFilter = function() {
  *  
  */
 
-PhSim.DynSim.prototype.alert = function(options) {
+PhSim.prototype.alert = function(options) {
 	
 	var alertBox = document.createElement("div");
 	alertBox.style.backgroundColor = options.bgColor;

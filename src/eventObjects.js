@@ -1,4 +1,4 @@
-PhSim.DynSim.removeClickRectRegion = function(reference) {
+PhSim.removeClickRectRegion = function(reference) {
 	this.removeEventListener("mousedown",reference);
 }
 

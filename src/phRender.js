@@ -78,8 +78,11 @@ PhSim.PhRender.prototype.setCtx = function(object) {
 }
 
 /**
+ * 
+ * Render a {@link Path} as a polygon.
+ * 
  * @function
- * @param {*} path 
+ * @param {Path}} path 
  */
 
 PhSim.PhRender.prototype.static_path = function (path) {
@@ -539,8 +542,8 @@ PhSim.PhRender.prototype.renderStatic = function(obj) {
 	}
 
 	if( obj.composite === true) {
-		for(var i = 0; i < obj.objUniverse.length; i++) {
-			this.renderStatic(obj.objUniverse[i]);
+		for(var i = 0; i < obj.parts.length; i++) {
+			this.renderStatic(obj.parts[i]);
 		}
 	}
 
