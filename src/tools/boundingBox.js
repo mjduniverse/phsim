@@ -7,7 +7,7 @@
  * @param {Array} verts 
  */
 
-PhSim.Tools.getVertBoundingBox = function(verts) {
+PhSim.getVertBoundingBox = function(verts) {
 
 	var verts = JSON.parse(JSON.stringify(verts));
 
@@ -55,18 +55,18 @@ PhSim.Tools.getVertBoundingBox = function(verts) {
  * @returns {Object} 
  */
 
-PhSim.Tools.getStaticBoundingBox = function(object) {
+PhSim.getStaticBoundingBox = function(object) {
 	
 	if(object.path) {
-		return PhSim.Tools.getVertBoundingBox(object.verts);
+		return PhSim.getVertBoundingBox(object.verts);
 	}
 
 	if(object.regPolygon) {
-		return PhSim.Tools.getVertBoundingBox(PhSim.Tools.getRegPolygonVerts(object));
+		return PhSim.getVertBoundingBox(PhSim.getRegPolygonVerts(object));
 	}
 
 	if(object.rectangle) {
-		return PhSim.Tools.getVertBoundingBox(PhSim.Tools.getRectangleVertArray(object,true));
+		return PhSim.getVertBoundingBox(PhSim.getRectangleVertArray(object,true));
 	}
 
 	if(object.circle) {
@@ -76,7 +76,7 @@ PhSim.Tools.getStaticBoundingBox = function(object) {
 		var bx = object.x + object.radius;
 		var by = object.y + object.radius;
 
-		return PhSim.Tools.diagRect(ax,ay,bx,by,0);
+		return PhSim.diagRect(ax,ay,bx,by,0);
 	}
 
 	if(object.composite) {
@@ -84,12 +84,12 @@ PhSim.Tools.getStaticBoundingBox = function(object) {
 		var a = [];
 
 		for(var i = 0; i < object.objUniverse.length; i++) {
-			a.push( PhSim.Tools.getRectangleVertArray( this.getStaticBoundingBox(object.objUniverse[i]) ) );
+			a.push( PhSim.getRectangleVertArray( this.getStaticBoundingBox(object.objUniverse[i]) ) );
 		}
 
 		a = a.flat(Infinity);
 
-		return PhSim.Tools.getVertBoundingBox(a);
+		return PhSim.getVertBoundingBox(a);
 
 	}
 }
@@ -102,7 +102,7 @@ PhSim.Tools.getStaticBoundingBox = function(object) {
  * @param {PhSim.DynObject} dynObj 
  */
 
-PhSim.Tools.getDynBoundingBox = function(dynObj) {
+PhSim.getDynBoundingBox = function(dynObj) {
 	return {
 		"x": dynObj.matter.bounds.min.x,
 		"y": dynObj.matter.bounds.min.y,

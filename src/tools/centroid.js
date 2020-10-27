@@ -8,7 +8,7 @@
  *  
  */
 
-PhSim.Tools.getRectangleCentroid = function(rectangle) {
+PhSim.getRectangleCentroid = function(rectangle) {
 	return {
 		"x": rectangle.x + 0.5 * rectangle.w,
 		"y": rectangle.y + 0.5 * rectangle.h
@@ -23,7 +23,7 @@ PhSim.Tools.getRectangleCentroid = function(rectangle) {
  * @returns {Vector}
  */
 
-PhSim.Tools.findCentroidOfPath = function(a) {
+PhSim.findCentroidOfPath = function(a) {
 		
 	var v = new PhSim.Vector(0,0);
 	

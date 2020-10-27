@@ -8,7 +8,7 @@
  * @returns {Vector} - The sum of the two vectors
  */
 
-PhSim.Tools.addVectors = function(vector1,vector2) {
+PhSim.addVectors = function(vector1,vector2) {
 	return new PhSim.Vector(vector1.x + vector2.x, vector1.y + vector2.y);
 }
 
@@ -22,7 +22,7 @@ PhSim.Tools.addVectors = function(vector1,vector2) {
  * @returns {Vector} - The difference between the two vectors
  */
 
-PhSim.Tools.subtractVectors = function(vector1,vector2) {
+PhSim.subtractVectors = function(vector1,vector2) {
 	return new PhSim.Vector(vector1.x - vector2.x, vector1.y - vector2.y);
 }
 
@@ -37,7 +37,7 @@ PhSim.Tools.subtractVectors = function(vector1,vector2) {
  * 
  */
 
-PhSim.Tools.scaleVector = function(vector,scalar) {
+PhSim.scaleVector = function(vector,scalar) {
 	return new PhSim.Vector(vector.x * scalar,vector.y * scalar)
 }
 
@@ -52,7 +52,7 @@ PhSim.Tools.scaleVector = function(vector,scalar) {
  *  
  */
 
-PhSim.Tools.divideVector = function(vector,scalar) {
+PhSim.divideVector = function(vector,scalar) {
 	return new PhSim.Vector(vector.x * (1/scalar),vector.y * (1/scalar));
 }
 
@@ -67,7 +67,7 @@ PhSim.Tools.divideVector = function(vector,scalar) {
  *  
  */
 
-PhSim.Tools.calcVertDistance = function(vector1,vector2) {
+PhSim.calcVertDistance = function(vector1,vector2) {
 	
 	var l1 = Math.pow(vector1.x - vector2.x,2);
 	var l2 = Math.pow(vector1.y - vector2.y,2);
@@ -85,7 +85,7 @@ PhSim.Tools.calcVertDistance = function(vector1,vector2) {
  * @returns {Number} - The length of the vector
  */
 
-PhSim.Tools.getVectorLength = function(vector) {
+PhSim.getVectorLength = function(vector) {
 	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
 }
 
@@ -98,8 +98,8 @@ PhSim.Tools.getVectorLength = function(vector) {
  * @returns {Vector} -  The Unit Vector
  */
 
-PhSim.Tools.getUnitVector = function(vector) {
-	return PhSim.Tools.scaleVector(vector,1/PhSim.Tools.getVectorLength(vector));
+PhSim.getUnitVector = function(vector) {
+	return PhSim.scaleVector(vector,1/PhSim.getVectorLength(vector));
 }
 
 /**
@@ -115,7 +115,7 @@ PhSim.Tools.getUnitVector = function(vector) {
  * @returns - The transformed vector 
  */
 
-PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
+PhSim.applyTransformation = function(a11,a12,a21,a22,x,y) {
 	return new PhSim.Vector(a11 * x + a12 * y,a21 * x + a22 * y);
 }
 
@@ -130,8 +130,8 @@ PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
  * @returns {Vector}
  */
 
-PhSim.Tools.rotatedVector = function(x,y,a) {
-	return PhSim.Tools.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
+PhSim.rotatedVector = function(x,y,a) {
+	return PhSim.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
 }
 
 /**
@@ -141,6 +141,6 @@ PhSim.Tools.rotatedVector = function(x,y,a) {
  * @returns {String} - SVG Vector String 
  */
 
-PhSim.Tools.svgVector = function(x,y) {
+PhSim.svgVector = function(x,y) {
 	return x + "," + y;
 }

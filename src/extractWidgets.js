@@ -387,9 +387,9 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 var type = widget.type;
     
                 var obj = dyn_object;
-                var relVec = PhSim.Tools.subtractVectors(widget.pointB,widget.pointA);
+                var relVec = PhSim.subtractVectors(widget.pointB,widget.pointA);
                 
-                var u = PhSim.Tools.getUnitVector(relVec);
+                var u = PhSim.getUnitVector(relVec);
                 
                 var ax;
                 var ay;
@@ -449,7 +449,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 var inRange = function() {
         
                 if( cond_f() ) {
-                self.translate(obj,PhSim.Tools.scaleVector(u,1));
+                self.translate(obj,PhSim.scaleVector(u,1));
                         reversable = true;
                 }
                   
@@ -466,7 +466,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                         }
     
                         else {
-                            self.translate(obj,PhSim.Tools.scaleVector(u,1));
+                            self.translate(obj,PhSim.scaleVector(u,1));
                         }
                     
                     }

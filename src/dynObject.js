@@ -5,7 +5,7 @@
  * @returns {PhSimObject[]} - The array of objects found in the composites. 
  */
 
-PhSim.Tools.flattenComposite = function(composite) {
+PhSim.flattenComposite = function(composite) {
 
 	var a = [];
 	
@@ -14,7 +14,7 @@ PhSim.Tools.flattenComposite = function(composite) {
 		for(var i = 0; i < composite.parts.length; i++) {
 
 			if(composite.parts[i].composite) {
-				PhSim.Tools.flattenComposite(composite.parts[i].composite);
+				PhSim.flattenComposite(composite.parts[i].composite);
 			}
 
 			else {
@@ -31,7 +31,7 @@ PhSim.Tools.flattenComposite = function(composite) {
 
 }
 
-PhSim.Tools.
+PhSim.
 
 /**
  * 
@@ -46,7 +46,7 @@ PhSim.DynObject = function(staticObject) {
 
 	Object.assign(this,staticObject);
 
-	this.matter = PhSim.Tools.createMatterObject(staticObject);
+	this.matter = PhSim.createMatterObject(staticObject);
 
 	if(staticObject.path === true) {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
@@ -55,7 +55,7 @@ PhSim.DynObject = function(staticObject) {
 	this.firstCycle = staticObject.cycle;
 
 	if(staticObject.composite === true) {
-		this.flattenedParts = PhSim.Tools.flattenComposite();
+		this.flattenedParts = PhSim.flattenComposite();
 	}
 
 	
@@ -93,7 +93,7 @@ PhSim.DynObject = function(staticObject) {
  * @returns {MatterBody} 
  */
 
-PhSim.Tools.createMatterObject = function(staticObject) {
+PhSim.createMatterObject = function(staticObject) {
 
 	var opts = staticObject;
 
@@ -133,12 +133,12 @@ PhSim.Tools.createMatterObject = function(staticObject) {
 
 
 	else if(staticObject.rectangle === true) {
-		var set = PhSim.Tools.getRectangleVertArray(staticObject);
+		var set = PhSim.getRectangleVertArray(staticObject);
 		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 
 	else if(staticObject.regPolygon === true) {
-		var set = PhSim.Tools.getRegPolygonVerts(staticObject);
+		var set = PhSim.getRegPolygonVerts(staticObject);
 		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 
