@@ -52,78 +52,31 @@ var PhSim = function(dynSimOptions) {
 	 */
 
 	if(Array.isArray(dynSimOptions.simulations)) {
-		this.sim = dynSimOptions;
+		this.options = dynSimOptions;
 	}
 
 	else if(Array.isArray(dynSimOptions.layers)) {
-		this.sim = new PhSim.Static.CompositeSimulation();
-		this.sim.simulations[0] = dynSimOptions;
+		this.options = new PhSim.Static.CompositeSimulation();
+		this.options.simulations[0] = dynSimOptions;
 	}
 
 	else if(Array.isArray(dynSimOptions)) {
-		this.sim = new PhSim.Static.CompositeSimulation();
-		this.sim.simulations[0].layers[0] = dynSimOptions;
+		this.options = new PhSim.Static.CompositeSimulation();
+		this.options.simulations[0].layers[0] = dynSimOptions;
 	}
 
 	this.registerKeyEvents();
 
 }
 
-/**
- * PhSim version
- * 
- */
-
-PhSim.version = "0.1.0-alpha"
-
-if(typeof window === "object") {
-	window.PhSim = PhSim;
+PhSim.prototype.connectCanvas = function(canvas) {
+	this.simCanvas = canvas;
+	this.simCtx = canvas.getContext("2d");
+	this.simCanvas.width = this.options.box.width;
+	this.simCanvas.height = this.options.box.height;
+	this.registerCanvasEvents();
+	this.configRender(this.simCtx);
 }
-
-require("./objects" );
-require("./eventStack" );
-require("./phRender");
-require("./sprites");
-require("./audio");
-
-require("./collisionClass");
-
-require("./tools/tools");
-require("./tools/vectorTools");
-require("./tools/objectChecker");
-require("./tools/diagRect");
-require("./tools/vertex");
-require("./tools/centroid");
-
-// Bounding box functions
-
-require("./tools/boundingBox");
-
-require("./dynObject");
-
-require("./eventObjects");
-require("./lo");
-require("./makeQuickly");
-require("./filter");
-require("./dynWidget");
-require("./audioToggle");
-require("./registerEvents");
-require("./eventListener");
-require("./query");
-require("./gravity");
-require("./toggle");
-require("./gotoSuperlayer");
-require("./matterAliases");
-require("./set");
-require("./update");
-require("./extractWidgets");
-
-require("./dynSimCamera");
-require("./gradient");
-require("./widgets");
-require("./calc_skinmesh");
-require("./simpleEvent");
-require("./processVar");
 
 /**
  * Number of frames per second
@@ -181,6 +134,128 @@ PhSim.prototype.mouseY = null;
 PhSim.prototype.paused = true;
 
 /**
+  * 
+  * @callback PhSimEventCall
+  * @param {PhSim.PhEvent} phEvent
+  * 
+  */
+
+ PhSim.nextId = "0";
+
+
+/**
+ * The matter.js world for the __main collision filter
+ * Resets when {@link PhSim#gotoSimulationIndex} is executed.
+ * @type {Object}
+ */
+
+PhSim.prototype.matterJSWorld = null;
+
+/**
+ * The matter.js engine for the __main collision filter
+ * Resets when {@link PhSim#gotoSimulationIndex} is executed.
+ * @type {Object}
+ */
+
+PhSim.prototype.matterJSEngine = null;
+
+/**
+ * An tree that is used to preserve layer distinctions.
+ * It is an array of arrays. The arrays in this array have {@link PhSimObject} objects.
+ * Resets when {@link PhSim#gotoSimulationIndex} is executed.
+ * @type {PhSimObjectArr[]} 
+ */
+
+PhSim.prototype.dynTree = [];
+
+/**
+ * Array of objects in the PhSim simulation
+ * Resets when {@link PhSim#gotoSimulationIndex} is executed.
+ * @type {PhSimObjectArr} 
+ */
+
+PhSim.prototype.objUniverse = [];
+
+/**
+ * Array of static sprite objects that are to be extracted by 
+ */
+
+PhSim.prototype.staticSprites = [];
+
+PhSim.prototype.staticAudio = [];
+
+/**
+ * Number of audio players.
+ * This is reset to 0 whenever {@link PhSim#gotoSimulationIndex} is executed.
+ * @type {Number}
+ */
+
+PhSim.prototype.audioPlayers = 0;
+
+/**
+ * Array of collision classes
+ * @type {PhSim.CollisionClass}
+ */
+
+PhSim.prototype.collisionClasses = {};
+
+/**
+ * PhSim version
+ * 
+ */
+
+PhSim.version = "0.1.0-alpha"
+
+if(typeof window === "object") {
+	window.PhSim = PhSim;
+}
+
+require("./objects" );
+require("./eventStack" );
+require("./phRender");
+require("./sprites");
+require("./audio");
+
+require("./collisionClass");
+
+require("./tools/vectorTools");
+require("./tools/objectChecker");
+require("./tools/diagRect");
+require("./tools/vertex");
+require("./tools/centroid");
+
+// Bounding box functions
+
+require("./tools/boundingBox");
+
+require("./dynObject");
+
+require("./eventObjects");
+require("./lo");
+require("./makeQuickly");
+require("./filter");
+require("./dynWidget");
+require("./audioToggle");
+require("./registerEvents");
+require("./eventListener");
+require("./query");
+require("./gravity");
+require("./toggle");
+require("./gotoSuperlayer");
+require("./matterAliases");
+require("./set");
+require("./update");
+require("./extractWidgets");
+
+require("./dynSimCamera");
+require("./gradient");
+require("./widgets");
+require("./calc_skinmesh");
+require("./simpleEvent");
+require("./processVar");
+
+
+/**
  * Global event stack
  * @type {PhSim.EventStack}
  */
@@ -195,14 +270,7 @@ PhSim.prototype.eventStack = new PhSim.EventStack();
 
 PhSim.prototype.slEventStack = new PhSim.EventStack();
 
- /**
-  * 
-  * @callback PhSimEventCall
-  * @param {PhSim.PhEvent} phEvent
-  * 
-  */
-
- PhSim.nextId = "0";
+ 
 
 /**
  * Structure giving more human-readable meaning to PhSim status.

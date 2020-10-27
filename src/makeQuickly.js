@@ -8,12 +8,7 @@
 
 PhSim.createFromCanvas = function(sim,canvas) {
 	var p = new PhSim(sim);
-	p.simCanvas = canvas;
-	p.simCtx = canvas.getContext("2d");
-	p.simCanvas.width = p.sim.box.width;
-	p.simCanvas.height = p.sim.box.height;
-	p.registerCanvasEvents();
-	p.configRender(p.simCtx);
+	p.connectCanvas(canvas);
 	return p;
 }
 

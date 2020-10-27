@@ -89,7 +89,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(1);
-module.exports = __webpack_require__(38);
+module.exports = __webpack_require__(37);
 
 
 /***/ }),
@@ -151,78 +151,31 @@ var PhSim = function(dynSimOptions) {
 	 */
 
 	if(Array.isArray(dynSimOptions.simulations)) {
-		this.sim = dynSimOptions;
+		this.options = dynSimOptions;
 	}
 
 	else if(Array.isArray(dynSimOptions.layers)) {
-		this.sim = new PhSim.Static.CompositeSimulation();
-		this.sim.simulations[0] = dynSimOptions;
+		this.options = new PhSim.Static.CompositeSimulation();
+		this.options.simulations[0] = dynSimOptions;
 	}
 
 	else if(Array.isArray(dynSimOptions)) {
-		this.sim = new PhSim.Static.CompositeSimulation();
-		this.sim.simulations[0].layers[0] = dynSimOptions;
+		this.options = new PhSim.Static.CompositeSimulation();
+		this.options.simulations[0].layers[0] = dynSimOptions;
 	}
 
 	this.registerKeyEvents();
 
 }
 
-/**
- * PhSim version
- * 
- */
-
-PhSim.version = "0.1.0-alpha"
-
-if(typeof window === "object") {
-	window.PhSim = PhSim;
+PhSim.prototype.connectCanvas = function(canvas) {
+	this.simCanvas = canvas;
+	this.simCtx = canvas.getContext("2d");
+	this.simCanvas.width = this.options.box.width;
+	this.simCanvas.height = this.options.box.height;
+	this.registerCanvasEvents();
+	this.configRender(this.simCtx);
 }
-
-__webpack_require__(2 );
-__webpack_require__(3 );
-__webpack_require__(4);
-__webpack_require__(5);
-__webpack_require__(6);
-
-__webpack_require__(7);
-
-__webpack_require__(8);
-__webpack_require__(9);
-__webpack_require__(10);
-__webpack_require__(11);
-__webpack_require__(12);
-__webpack_require__(13);
-
-// Bounding box functions
-
-__webpack_require__(14);
-
-__webpack_require__(15);
-
-__webpack_require__(16);
-__webpack_require__(17);
-__webpack_require__(18);
-__webpack_require__(19);
-__webpack_require__(20);
-__webpack_require__(21);
-__webpack_require__(22);
-__webpack_require__(23);
-__webpack_require__(24);
-__webpack_require__(25);
-__webpack_require__(26);
-__webpack_require__(27);
-__webpack_require__(28);
-__webpack_require__(29);
-__webpack_require__(30);
-__webpack_require__(31);
-
-__webpack_require__(32);
-__webpack_require__(33);
-__webpack_require__(34);
-__webpack_require__(35);
-__webpack_require__(36);
-__webpack_require__(37);
 
 /**
  * Number of frames per second
@@ -280,6 +233,128 @@ PhSim.prototype.mouseY = null;
 PhSim.prototype.paused = true;
 
 /**
+  * 
+  * @callback PhSimEventCall
+  * @param {PhSim.PhEvent} phEvent
+  * 
+  */
+
+ PhSim.nextId = "0";
+
+
+/**
+ * The matter.js world for the __main collision filter
+ * Resets when {@link PhSim#gotoSimulationIndex} is executed.
+ * @type {Object}
+ */
+
+PhSim.prototype.matterJSWorld = null;
+
+/**
+ * The matter.js engine for the __main collision filter
+ * Resets when {@link PhSim#gotoSimulationIndex} is executed.
+ * @type {Object}
+ */
+
+PhSim.prototype.matterJSEngine = null;
+
+/**
+ * An tree that is used to preserve layer distinctions.
+ * It is an array of arrays. The arrays in this array have {@link PhSimObject} objects.
+ * Resets when {@link PhSim#gotoSimulationIndex} is executed.
+ * @type {PhSimObjectArr[]} 
+ */
+
+PhSim.prototype.dynTree = [];
+
+/**
+ * Array of objects in the PhSim simulation
+ * Resets when {@link PhSim#gotoSimulationIndex} is executed.
+ * @type {PhSimObjectArr} 
+ */
+
+PhSim.prototype.objUniverse = [];
+
+/**
+ * Array of static sprite objects that are to be extracted by 
+ */
+
+PhSim.prototype.staticSprites = [];
+
+PhSim.prototype.staticAudio = [];
+
+/**
+ * Number of audio players.
+ * This is reset to 0 whenever {@link PhSim#gotoSimulationIndex} is executed.
+ * @type {Number}
+ */
+
+PhSim.prototype.audioPlayers = 0;
+
+/**
+ * Array of collision classes
+ * @type {PhSim.CollisionClass}
+ */
+
+PhSim.prototype.collisionClasses = {};
+
+/**
+ * PhSim version
+ * 
+ */
+
+PhSim.version = "0.1.0-alpha"
+
+if(typeof window === "object") {
+	window.PhSim = PhSim;
+}
+
+__webpack_require__(2 );
+__webpack_require__(3 );
+__webpack_require__(4);
+__webpack_require__(5);
+__webpack_require__(6);
+
+__webpack_require__(7);
+
+__webpack_require__(8);
+__webpack_require__(9);
+__webpack_require__(10);
+__webpack_require__(11);
+__webpack_require__(12);
+
+// Bounding box functions
+
+__webpack_require__(13);
+
+__webpack_require__(14);
+
+__webpack_require__(15);
+__webpack_require__(16);
+__webpack_require__(17);
+__webpack_require__(18);
+__webpack_require__(19);
+__webpack_require__(20);
+__webpack_require__(21);
+__webpack_require__(22);
+__webpack_require__(23);
+__webpack_require__(24);
+__webpack_require__(25);
+__webpack_require__(26);
+__webpack_require__(27);
+__webpack_require__(28);
+__webpack_require__(29);
+__webpack_require__(30);
+
+__webpack_require__(31);
+__webpack_require__(32);
+__webpack_require__(33);
+__webpack_require__(34);
+__webpack_require__(35);
+__webpack_require__(36);
+
+
+/**
  * Global event stack
  * @type {PhSim.EventStack}
  */
@@ -294,14 +369,7 @@ PhSim.prototype.eventStack = new PhSim.EventStack();
 
 PhSim.prototype.slEventStack = new PhSim.EventStack();
 
- /**
-  * 
-  * @callback PhSimEventCall
-  * @param {PhSim.PhEvent} phEvent
-  * 
-  */
-
- PhSim.nextId = "0";
+ 
 
 /**
  * Structure giving more human-readable meaning to PhSim status.
@@ -2105,20 +2173,6 @@ PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
 /* 8 */
 /***/ (function(module, exports) {
 
-// Tools declaration
-
-/**
- * @namespace
- */
-
-PhSim.Tools = {}
-
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
 /**
  * 
  * Perform vector addition
@@ -2267,7 +2321,7 @@ PhSim.svgVector = function(x,y) {
 }
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports) {
 
 /**
@@ -2301,7 +2355,7 @@ PhSim.checkObjectType = function (objectTypeStr) {
 }
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports) {
 
 /**
@@ -2329,7 +2383,7 @@ PhSim.diagRect = function(x1,y1,x2,y2) {
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 
@@ -2439,7 +2493,7 @@ PhSim.getRectangleCorners = function(rectangle) {
 }
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /**
@@ -2485,7 +2539,7 @@ PhSim.findCentroidOfPath = function(a) {
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /**
@@ -2602,7 +2656,7 @@ PhSim.getDynBoundingBox = function(dynObj) {
 }
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -2615,6 +2669,12 @@ PhSim.getDynBoundingBox = function(dynObj) {
 PhSim.flattenComposite = function(composite) {
 
 	var a = [];
+
+	/**
+	 * 
+	 * @param {*} composite
+	 * @inner
+	 */
 	
 	var __f = function(composite) {
 
@@ -2637,8 +2697,6 @@ PhSim.flattenComposite = function(composite) {
 	return a;
 
 }
-
-PhSim.
 
 /**
  * 
@@ -2757,11 +2815,15 @@ PhSim.createMatterObject = function(staticObject) {
  * 
  * @typedef {PhSim.DynObject|StaticObject} PhSimObject
  * 
- *
  */
 
+ /**
+  * A PhSimObject array is an array of PhSimObject objects
+  * @typedef {PhSimObject[]} PhSimObjectArr
+  */
+
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
 PhSim.removeClickRectRegion = function(reference) {
@@ -2843,7 +2905,7 @@ PhSim.CollisionReport = function() {
 }
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.L = function(L) {
@@ -2860,7 +2922,7 @@ PhSim.prototype.getObjectFromLOStr = function(str) {
 }
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 
@@ -2873,12 +2935,7 @@ PhSim.prototype.getObjectFromLOStr = function(str) {
 
 PhSim.createFromCanvas = function(sim,canvas) {
 	var p = new PhSim(sim);
-	p.simCanvas = canvas;
-	p.simCtx = canvas.getContext("2d");
-	p.simCanvas.width = p.sim.box.width;
-	p.simCanvas.height = p.sim.box.height;
-	p.registerCanvasEvents();
-	p.configRender(p.simCtx);
+	p.connectCanvas(canvas);
 	return p;
 }
 
@@ -2958,7 +3015,7 @@ PhSim.prototype.configRender = function() {
 }
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.configFilter = function(container) {
@@ -3046,7 +3103,7 @@ PhSim.prototype.alert = function(options) {
 }
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /** 
@@ -3299,12 +3356,12 @@ PhSim.prototype.toggleSemiLock = function(dynObject) {
 }
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports) {
 
 
 /**
- * 
+ * Play audio in 
  * @param {Number} i - Index in audio array. 
  */
 
@@ -3371,7 +3428,7 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
 }
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports) {
 
 /**
@@ -3606,7 +3663,7 @@ PhSim.prototype.deregisterKeyEvents = function() {
 }
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /**
@@ -3719,7 +3776,7 @@ PhSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
 }
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /**
@@ -4215,7 +4272,7 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports) {
 
 // Newtonian Gravity
@@ -4239,7 +4296,7 @@ PhSim.prototype.applyGravitationalField = function() {
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.play = function() {
@@ -4285,7 +4342,7 @@ PhSim.prototype.exit = function() {
 }
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports) {
 
 /**
@@ -4295,7 +4352,9 @@ PhSim.prototype.exit = function() {
  * This property is used to define a simulation.
  * 
  * When PhSim.prototype.gotoSimulationIndex is used, it resets 
- * @param {Number} i 
+ * @param {Number} i
+ * @function
+ *  
  */
 
 PhSim.prototype.gotoSimulationIndex = function (i) {
@@ -4318,7 +4377,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	    this.drawLoadingScreen();
 	}
 	
-	this.simulation = this.sim.simulations[i];
+	this.simulation = this.options.simulations[i];
 
 	this.simulationIndex = i;
 
@@ -4351,7 +4410,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	this.collisionClasses["__main"] = ncc;
 
-	if(this.sim.simulations) {
+	if(this.options.simulations) {
 	
 		for(var L = 0; L < this.simulation.layers.length; L++) {
 
@@ -4514,7 +4573,7 @@ PhSim.prototype.initSim = function(simulationI) {
 }
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /**
@@ -4656,7 +4715,7 @@ PhSim.prototype.setAngle = function(dynObject,angle) {
 }
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.assignPhRender = function(phRender) {
@@ -4720,7 +4779,7 @@ PhSim.prototype.setLineWidth = function(dyn_object,lineWidth) {
 }
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.updateDynObj = function(currentObj) {
@@ -4840,7 +4899,7 @@ PhSim.prototype.loopFunction = function() {
 }
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports) {
 
 /** 
@@ -5469,7 +5528,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /**
@@ -5657,7 +5716,7 @@ PhSim.prototype.extractLclGame = function(localSettings) {
 }
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports) {
 
 
@@ -5687,7 +5746,7 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 }
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports) {
 
 /*
@@ -5710,7 +5769,7 @@ PhSim.Constraints.Static.Constraint = function() {
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports) {
 
 /**
@@ -5744,7 +5803,7 @@ PhSim.calc_skinmesh = function(dynObject) {
 }
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports) {
 
 // Simple Event Reference
@@ -6131,7 +6190,7 @@ PhSim.prototype.removeSimpleEvent = function(refNumber) {
 }
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports) {
 
 /**
@@ -6173,11 +6232,11 @@ PhSim.prototype.processVar = function(str) {
 }
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports) {
 
 // Generated by TypeDefGen module 
-// Built on Tue Oct 27 2020 12:19:23 GMT-0500 (Central Daylight Time)
+// Built on Tue Oct 27 2020 14:10:31 GMT-0500 (Central Daylight Time)
 PhSim.boolKey = ["Velocity","Force","Position","Translate","DeleteSelf","Draggable","Coin","Hazard","Health","Elevator","TransformCameraByObject","TransformWithCamera","KeyboardControls","Alert","Connection","SetAngle","Rotation","NoRotation","RectText","NumVar","SetNumVar","SetColor","SetBorderColor","SetLineWidth","PlayAudio","ObjLink_a","Game","DeleteSelf","ToggleLock","CircularConstraint","DeleteSelf","ToggleSemiLock"];
 PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","draggable","coin","hazard","health","elevator","transformCameraByObject","transformWithCamera","keyboardControls","alert","connection","setAngle","rotation","noRotation","rectText","numVar","setNumVar","setColor","setBorderColor","setLineWidth","playAudio","objLink_a","game","deleteSelf","toggleLock","circularConstraint","deleteSelf","toggleSemiLock"];
 

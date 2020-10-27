@@ -8,6 +8,12 @@
 PhSim.flattenComposite = function(composite) {
 
 	var a = [];
+
+	/**
+	 * 
+	 * @param {*} composite
+	 * @inner
+	 */
 	
 	var __f = function(composite) {
 
@@ -30,8 +36,6 @@ PhSim.flattenComposite = function(composite) {
 	return a;
 
 }
-
-PhSim.
 
 /**
  * 
@@ -150,5 +154,9 @@ PhSim.createMatterObject = function(staticObject) {
  * 
  * @typedef {PhSim.DynObject|StaticObject} PhSimObject
  * 
- *
  */
+
+ /**
+  * A PhSimObject array is an array of PhSimObject objects
+  * @typedef {PhSimObject[]} PhSimObjectArr
+  */

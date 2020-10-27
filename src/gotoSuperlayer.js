@@ -5,7 +5,9 @@
  * This property is used to define a simulation.
  * 
  * When PhSim.prototype.gotoSimulationIndex is used, it resets 
- * @param {Number} i 
+ * @param {Number} i
+ * @function
+ *  
  */
 
 PhSim.prototype.gotoSimulationIndex = function (i) {
@@ -28,7 +30,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	    this.drawLoadingScreen();
 	}
 	
-	this.simulation = this.sim.simulations[i];
+	this.simulation = this.options.simulations[i];
 
 	this.simulationIndex = i;
 
@@ -61,7 +63,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	this.collisionClasses["__main"] = ncc;
 
-	if(this.sim.simulations) {
+	if(this.options.simulations) {
 	
 		for(var L = 0; L < this.simulation.layers.length; L++) {
 
