@@ -1251,7 +1251,7 @@ PhSim.PhRender.prototype.static_path = function (path) {
 
 			this.ctx.clip();
 
-			var box = PhSim.Tools.getStaticBoundingBox(path);
+			var box = PhSim.getStaticBoundingBox(path);
 
 			var h = img.height * (box.w/img.width);
 
@@ -1385,7 +1385,7 @@ PhSim.PhRender.prototype.static_circle = function (circle) {
 			this.ctx.rotate(circle.cycle);
 			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
 			this.ctx.clip();
-			var box = PhSim.Tools.getStaticBoundingBox(circle);
+			var box = PhSim.getStaticBoundingBox(circle);
 
 			var h = img.height * (box.w/img.width);
 
@@ -1413,7 +1413,7 @@ PhSim.PhRender.prototype.static_circle = function (circle) {
 
 PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 
-	var c = PhSim.Tools.getRectangleCentroid(rectangle);
+	var c = PhSim.getRectangleCentroid(rectangle);
 
 	var x = -rectangle.w * 0.5;
 	var y = -rectangle.h * 0.5;
@@ -1534,7 +1534,7 @@ PhSim.PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 
 PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
 
-	var vertSet = PhSim.Tools.getRegPolygonVerts(regPolygon);
+	var vertSet = PhSim.getRegPolygonVerts(regPolygon);
 	
 	this.setCtx(regPolygon);
 
@@ -1599,7 +1599,7 @@ PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
 			this.ctx.translate(regPolygon.x,regPolygon.y);
 			this.ctx.rotate(regPolygon.cycle);
 
-			var box = PhSim.Tools.getStaticBoundingBox(regPolygon);
+			var box = PhSim.getStaticBoundingBox(regPolygon);
 
 			var h = img.height * (box.w/img.width);
 
@@ -1842,7 +1842,7 @@ PhSim.PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 	
 				this.ctx.clip();
 	
-				var box = PhSim.Tools.getStaticBoundingBox(dynObject);
+				var box = PhSim.getStaticBoundingBox(dynObject);
 	
 				var h = img.height * (box.w/img.width);
 	
@@ -2129,7 +2129,7 @@ PhSim.Tools = {}
  * @returns {Vector} - The sum of the two vectors
  */
 
-PhSim.Tools.addVectors = function(vector1,vector2) {
+PhSim.addVectors = function(vector1,vector2) {
 	return new PhSim.Vector(vector1.x + vector2.x, vector1.y + vector2.y);
 }
 
@@ -2143,7 +2143,7 @@ PhSim.Tools.addVectors = function(vector1,vector2) {
  * @returns {Vector} - The difference between the two vectors
  */
 
-PhSim.Tools.subtractVectors = function(vector1,vector2) {
+PhSim.subtractVectors = function(vector1,vector2) {
 	return new PhSim.Vector(vector1.x - vector2.x, vector1.y - vector2.y);
 }
 
@@ -2158,7 +2158,7 @@ PhSim.Tools.subtractVectors = function(vector1,vector2) {
  * 
  */
 
-PhSim.Tools.scaleVector = function(vector,scalar) {
+PhSim.scaleVector = function(vector,scalar) {
 	return new PhSim.Vector(vector.x * scalar,vector.y * scalar)
 }
 
@@ -2173,7 +2173,7 @@ PhSim.Tools.scaleVector = function(vector,scalar) {
  *  
  */
 
-PhSim.Tools.divideVector = function(vector,scalar) {
+PhSim.divideVector = function(vector,scalar) {
 	return new PhSim.Vector(vector.x * (1/scalar),vector.y * (1/scalar));
 }
 
@@ -2188,7 +2188,7 @@ PhSim.Tools.divideVector = function(vector,scalar) {
  *  
  */
 
-PhSim.Tools.calcVertDistance = function(vector1,vector2) {
+PhSim.calcVertDistance = function(vector1,vector2) {
 	
 	var l1 = Math.pow(vector1.x - vector2.x,2);
 	var l2 = Math.pow(vector1.y - vector2.y,2);
@@ -2206,7 +2206,7 @@ PhSim.Tools.calcVertDistance = function(vector1,vector2) {
  * @returns {Number} - The length of the vector
  */
 
-PhSim.Tools.getVectorLength = function(vector) {
+PhSim.getVectorLength = function(vector) {
 	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
 }
 
@@ -2219,8 +2219,8 @@ PhSim.Tools.getVectorLength = function(vector) {
  * @returns {Vector} -  The Unit Vector
  */
 
-PhSim.Tools.getUnitVector = function(vector) {
-	return PhSim.Tools.scaleVector(vector,1/PhSim.Tools.getVectorLength(vector));
+PhSim.getUnitVector = function(vector) {
+	return PhSim.scaleVector(vector,1/PhSim.getVectorLength(vector));
 }
 
 /**
@@ -2236,7 +2236,7 @@ PhSim.Tools.getUnitVector = function(vector) {
  * @returns - The transformed vector 
  */
 
-PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
+PhSim.applyTransformation = function(a11,a12,a21,a22,x,y) {
 	return new PhSim.Vector(a11 * x + a12 * y,a21 * x + a22 * y);
 }
 
@@ -2251,8 +2251,8 @@ PhSim.Tools.applyTransformation = function(a11,a12,a21,a22,x,y) {
  * @returns {Vector}
  */
 
-PhSim.Tools.rotatedVector = function(x,y,a) {
-	return PhSim.Tools.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
+PhSim.rotatedVector = function(x,y,a) {
+	return PhSim.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
 }
 
 /**
@@ -2262,7 +2262,7 @@ PhSim.Tools.rotatedVector = function(x,y,a) {
  * @returns {String} - SVG Vector String 
  */
 
-PhSim.Tools.svgVector = function(x,y) {
+PhSim.svgVector = function(x,y) {
 	return x + "," + y;
 }
 
@@ -2292,7 +2292,7 @@ PhSim.objectTypes = {
  * 
  */
 
-PhSim.Tools.checkObjectType = function (objectTypeStr) {
+PhSim.checkObjectType = function (objectTypeStr) {
 	if(objectTypes[objectTypeStr])
 		return false;
 	else {
@@ -2318,7 +2318,7 @@ PhSim.Tools.checkObjectType = function (objectTypeStr) {
  * 
  */
 
-PhSim.Tools.diagRect = function(x1,y1,x2,y2) {
+PhSim.diagRect = function(x1,y1,x2,y2) {
 
 	var w = x2 - x1;
 	var h = y2 - y1;
@@ -2343,7 +2343,7 @@ PhSim.Tools.diagRect = function(x1,y1,x2,y2) {
  * 
  */
 
-PhSim.Tools.getRegPolygonVerts = function(regularPolygon) {
+PhSim.getRegPolygonVerts = function(regularPolygon) {
 
 	var a = []
 	
@@ -2369,7 +2369,7 @@ PhSim.Tools.getRegPolygonVerts = function(regularPolygon) {
  * @returns {Object[]} 
  */
 
-PhSim.Tools.getRectangleVertArray = function(rectangle) {
+PhSim.getRectangleVertArray = function(rectangle) {
 
 	var a = [
 
@@ -2399,7 +2399,7 @@ PhSim.Tools.getRectangleVertArray = function(rectangle) {
 	
 	];
 
-	Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Tools.getRectangleCentroid(rectangle));
+	Matter.Vertices.rotate(a, rectangle.cycle, PhSim.getRectangleCentroid(rectangle));
 
 
 	return a;
@@ -2416,10 +2416,10 @@ PhSim.Tools.getRectangleVertArray = function(rectangle) {
  */
 
 
-PhSim.Tools.getRectangleCorners = function(rectangle) {
+PhSim.getRectangleCorners = function(rectangle) {
 
 
-	var a = PhSim.Tools.getRectangleVertArray(rectangle)
+	var a = PhSim.getRectangleVertArray(rectangle)
 
 	
 	var z = {
@@ -2452,7 +2452,7 @@ PhSim.Tools.getRectangleCorners = function(rectangle) {
  *  
  */
 
-PhSim.Tools.getRectangleCentroid = function(rectangle) {
+PhSim.getRectangleCentroid = function(rectangle) {
 	return {
 		"x": rectangle.x + 0.5 * rectangle.w,
 		"y": rectangle.y + 0.5 * rectangle.h
@@ -2467,7 +2467,7 @@ PhSim.Tools.getRectangleCentroid = function(rectangle) {
  * @returns {Vector}
  */
 
-PhSim.Tools.findCentroidOfPath = function(a) {
+PhSim.findCentroidOfPath = function(a) {
 		
 	var v = new PhSim.Vector(0,0);
 	
@@ -2497,7 +2497,7 @@ PhSim.Tools.findCentroidOfPath = function(a) {
  * @param {Array} verts 
  */
 
-PhSim.Tools.getVertBoundingBox = function(verts) {
+PhSim.getVertBoundingBox = function(verts) {
 
 	var verts = JSON.parse(JSON.stringify(verts));
 
@@ -2545,18 +2545,18 @@ PhSim.Tools.getVertBoundingBox = function(verts) {
  * @returns {Object} 
  */
 
-PhSim.Tools.getStaticBoundingBox = function(object) {
+PhSim.getStaticBoundingBox = function(object) {
 	
 	if(object.path) {
-		return PhSim.Tools.getVertBoundingBox(object.verts);
+		return PhSim.getVertBoundingBox(object.verts);
 	}
 
 	if(object.regPolygon) {
-		return PhSim.Tools.getVertBoundingBox(PhSim.Tools.getRegPolygonVerts(object));
+		return PhSim.getVertBoundingBox(PhSim.getRegPolygonVerts(object));
 	}
 
 	if(object.rectangle) {
-		return PhSim.Tools.getVertBoundingBox(PhSim.Tools.getRectangleVertArray(object,true));
+		return PhSim.getVertBoundingBox(PhSim.getRectangleVertArray(object,true));
 	}
 
 	if(object.circle) {
@@ -2566,7 +2566,7 @@ PhSim.Tools.getStaticBoundingBox = function(object) {
 		var bx = object.x + object.radius;
 		var by = object.y + object.radius;
 
-		return PhSim.Tools.diagRect(ax,ay,bx,by,0);
+		return PhSim.diagRect(ax,ay,bx,by,0);
 	}
 
 	if(object.composite) {
@@ -2574,12 +2574,12 @@ PhSim.Tools.getStaticBoundingBox = function(object) {
 		var a = [];
 
 		for(var i = 0; i < object.objUniverse.length; i++) {
-			a.push( PhSim.Tools.getRectangleVertArray( this.getStaticBoundingBox(object.objUniverse[i]) ) );
+			a.push( PhSim.getRectangleVertArray( this.getStaticBoundingBox(object.objUniverse[i]) ) );
 		}
 
 		a = a.flat(Infinity);
 
-		return PhSim.Tools.getVertBoundingBox(a);
+		return PhSim.getVertBoundingBox(a);
 
 	}
 }
@@ -2592,7 +2592,7 @@ PhSim.Tools.getStaticBoundingBox = function(object) {
  * @param {PhSim.DynObject} dynObj 
  */
 
-PhSim.Tools.getDynBoundingBox = function(dynObj) {
+PhSim.getDynBoundingBox = function(dynObj) {
 	return {
 		"x": dynObj.matter.bounds.min.x,
 		"y": dynObj.matter.bounds.min.y,
@@ -2607,6 +2607,41 @@ PhSim.Tools.getDynBoundingBox = function(dynObj) {
 
 /**
  * 
+ * @function
+ * @param {PhSimObject} composite - The composite to be flattened.
+ * @returns {PhSimObject[]} - The array of objects found in the composites. 
+ */
+
+PhSim.flattenComposite = function(composite) {
+
+	var a = [];
+	
+	var __f = function(composite) {
+
+		for(var i = 0; i < composite.parts.length; i++) {
+
+			if(composite.parts[i].composite) {
+				PhSim.flattenComposite(composite.parts[i].composite);
+			}
+
+			else {
+				a.push(composite.parts[i]);
+			}
+
+		}
+
+	}
+
+	__f(composite);
+
+	return a;
+
+}
+
+PhSim.
+
+/**
+ * 
  * Create Dynamic Object from static object
  * @constructor
  * @param {PhSimObject} staticObject - Static Object
@@ -2617,6 +2652,55 @@ PhSim.Tools.getDynBoundingBox = function(dynObj) {
 PhSim.DynObject = function(staticObject) {
 
 	Object.assign(this,staticObject);
+
+	this.matter = PhSim.createMatterObject(staticObject);
+
+	if(staticObject.path === true) {
+		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
+	}
+
+	this.firstCycle = staticObject.cycle;
+
+	if(staticObject.composite === true) {
+		this.flattenedParts = PhSim.flattenComposite();
+	}
+
+	
+	/** 
+	 * Reference to static object used to create the DynObject
+	 * @type {StaticObject}
+	 */
+
+	this.static = staticObject;
+
+	/** 
+	 * Object ID 
+	 * @type {String}
+	 * */
+
+	this.id = PhSim.nextId;
+
+	PhSim.nextId = (Number.parseInt(PhSim.nextId,36) + 1).toString(36);
+	
+	/** 
+	 * Refernce of DynObj in matter object 
+	 * @type {Object}
+	 * */
+
+	this.matter.plugin.ph = this;
+
+}
+
+/**
+ * 
+ * Create a matter.js object from a DynSim static object
+ * 
+ * @function
+ * @param {StaticObject} staticObject
+ * @returns {MatterBody} 
+ */
+
+PhSim.createMatterObject = function(staticObject) {
 
 	var opts = staticObject;
 
@@ -2644,96 +2728,27 @@ PhSim.DynObject = function(staticObject) {
 		opts.collisionFilter = staticObject.collisionNum;
 	}
 
+
 	if(staticObject.path === true) {
-
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
-
-		/** Irregular polygon skinmesh */
-
-		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
-
-		//PhSim.Static.Path.call(this);
-
-	}
-
-	if(staticObject.circle === true) {
-		this.matter = Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
-		this.firstCycle = staticObject.cycle;
-		//PhSim.Static.Circle.call(this);
-	}
-
-	if(staticObject.rectangle === true) {
-		var set = PhSim.Tools.getRectangleVertArray(staticObject);
-		this.firstCycle = staticObject.cycle;
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-		//PhSim.Static.Rectangle.call(this);
-	}
-
-	if(staticObject.regPolygon === true) {
-		var set = PhSim.Tools.getRegPolygonVerts(staticObject);
-		this.firstCycle = staticObject.cycle;
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-		//PhSim.Static.RegPolygon.call(this);
-	}
-
-	if(typeof matterParts === "undefined") {
-		var matterParts = [];
-		this.matterParts = matterParts;
-	}
-
-	if(staticObject.composite === true) {
-
-		// Flattened tree of Matter.js objects
-
-		// New parts array for object
-
-		var dynParts = [];
-
-		for(var i = 0; i < staticObject.parts.length; i++)  {
-			var dynObject = new PhSim.DynObject(staticObject.parts[i]);
-
-			dynObject.parent = this;
-
-			if(dynObject.matter.parts.length > 0) {
-				for(var j = 1; j < dynObject.matter.parts.length; j++) {
-					matterParts.push(dynObject.matter.parts[j]);
-				}
-			}
-
-			else {
-				matterParts.push(dynObject.matter.parts[0]);
-			}
-
-			dynParts.push(dynObject);
-		}
-		
-		this.parts = dynParts;
-
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
 	}
 
 	
-	/** 
-	 * Reference to static object used to create the DynObject
-	 * @type {StaticObject}
-	 */
+	else if(staticObject.circle === true) {
+		return Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
+	}
 
-	this.static = staticObject;
 
-	/** 
-	 * Object ID 
-	 * @type {String}
-	 * */
+	else if(staticObject.rectangle === true) {
+		var set = PhSim.getRectangleVertArray(staticObject);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+	}
 
-	this.id = PhSim.nextId;
+	else if(staticObject.regPolygon === true) {
+		var set = PhSim.getRegPolygonVerts(staticObject);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+	}
 
-	PhSim.nextId = (Number.parseInt(PhSim.nextId,36) + 1).toString(36);
-	
-	/** 
-	 * Refernce of DynObj in matter object 
-	 * @type {Object}
-	 * */
-
-	this.matter.plugin.ph = this;
 
 }
 
@@ -3715,7 +3730,7 @@ PhSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
  * @param {Object} rectangle 
  */
 
-PhSim.Tools.getSpecialRectanglePoints = function(rectangle) {
+PhSim.getSpecialRectanglePoints = function(rectangle) {
 	
 	var o = {
 
@@ -3814,7 +3829,7 @@ PhSim.prototype.getUniversalObjArray = function() {
  * @param {Widget} widget 
  */
 
-PhSim.Tools.chkWidgetType = function(widget) {
+PhSim.chkWidgetType = function(widget) {
 	
 	for(var i = 0; i < PhSim.boolKey_lc.length; i++) {
 		if(widget[PhSim.boolKey_lc[i]]) {
@@ -4146,7 +4161,7 @@ PhSim.prototype.inSensorCollision = function(dynObject) {
  * @returns {Boolean}
  */
 
-PhSim.Tools.isPointInRawRectangle = function(cx,cy,cw,ch,px,py) {
+PhSim.isPointInRawRectangle = function(cx,cy,cw,ch,px,py) {
 	
 	var cond = (cx < px) && (px < cx + cw) && (cy < py) && (py < cy + ch) 
 
@@ -4212,9 +4227,9 @@ PhSim.prototype.applyGravitationalField = function() {
 	for(var i = 0; i < a.length; i++) {
 		for(var j = 0; j < a.length; j++) {
 			if(i !== j && !a[i].matter.isStatic && !a[j].matter.isStatic) {
-				var a1 = PhSim.Tools.scaleVector(PhSim.Tools.subtractVectors(a[j].matter.position,a[i].matter.position),6.67 * Math.pow(10,-11) * a[i].matter.mass * a[j].matter.mass * -1)
-				var b1 = Math.pow(PhSim.Tools.calcVertDistance(a[j].matter.position,a[i].matter.position),3);
-				var c = PhSim.Tools.divideVector(a1,b1);
+				var a1 = PhSim.scaleVector(PhSim.subtractVectors(a[j].matter.position,a[i].matter.position),6.67 * Math.pow(10,-11) * a[i].matter.mass * a[j].matter.mass * -1)
+				var b1 = Math.pow(PhSim.calcVertDistance(a[j].matter.position,a[i].matter.position),3);
+				var c = PhSim.divideVector(a1,b1);
 				this.applyForce(a[j],a[i].matter.position,c);
 			}
 		}	
@@ -5217,9 +5232,9 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 var type = widget.type;
     
                 var obj = dyn_object;
-                var relVec = PhSim.Tools.subtractVectors(widget.pointB,widget.pointA);
+                var relVec = PhSim.subtractVectors(widget.pointB,widget.pointA);
                 
-                var u = PhSim.Tools.getUnitVector(relVec);
+                var u = PhSim.getUnitVector(relVec);
                 
                 var ax;
                 var ay;
@@ -5279,7 +5294,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 var inRange = function() {
         
                 if( cond_f() ) {
-                self.translate(obj,PhSim.Tools.scaleVector(u,1));
+                self.translate(obj,PhSim.scaleVector(u,1));
                         reversable = true;
                 }
                   
@@ -5296,7 +5311,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                         }
     
                         else {
-                            self.translate(obj,PhSim.Tools.scaleVector(u,1));
+                            self.translate(obj,PhSim.scaleVector(u,1));
                         }
                     
                     }
@@ -6162,7 +6177,7 @@ PhSim.prototype.processVar = function(str) {
 /***/ (function(module, exports) {
 
 // Generated by TypeDefGen module 
-// Built on Mon Oct 26 2020 22:35:10 GMT-0500 (Central Daylight Time)
+// Built on Tue Oct 27 2020 12:19:23 GMT-0500 (Central Daylight Time)
 PhSim.boolKey = ["Velocity","Force","Position","Translate","DeleteSelf","Draggable","Coin","Hazard","Health","Elevator","TransformCameraByObject","TransformWithCamera","KeyboardControls","Alert","Connection","SetAngle","Rotation","NoRotation","RectText","NumVar","SetNumVar","SetColor","SetBorderColor","SetLineWidth","PlayAudio","ObjLink_a","Game","DeleteSelf","ToggleLock","CircularConstraint","DeleteSelf","ToggleSemiLock"];
 PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","draggable","coin","hazard","health","elevator","transformCameraByObject","transformWithCamera","keyboardControls","alert","connection","setAngle","rotation","noRotation","rectText","numVar","setNumVar","setColor","setBorderColor","setLineWidth","playAudio","objLink_a","game","deleteSelf","toggleLock","circularConstraint","deleteSelf","toggleSemiLock"];
 
