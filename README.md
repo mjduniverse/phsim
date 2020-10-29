@@ -12,6 +12,7 @@ PhSim could be used to create games as well.
 <li>Newtonian Gravitational Fields</li>
 <li>Gradients</li>
 <li>Audio</li>
+<li>Scripting (see wFunctions)</li>
 <li>Objects that can be dragged by the mouse</li>
 <li>The ablity to easily create games by treating composite simulations as games and the individual simulations as levels.</li>
 </ul>
