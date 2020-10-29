@@ -60,6 +60,10 @@ PhSim.prototype.loopFunction = function() {
 	
 		this.callEventClass("beforeupdate",this,beforeUpdateEvent);
 
+		if(!this.firstSlUpdate) {
+			this.callEventClass("beforefirstslupdate",this,afterUpdateEvent);
+		}
+
 		this.updateDate = new Date();
 
 		if(this.prevDate) {

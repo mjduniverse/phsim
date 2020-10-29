@@ -538,7 +538,7 @@ PhSim.Static.CompositeSimulation = function() {
 	 * @type {Number}
 	 */
 
-	this.version = 1;
+	this.version = PhSim.version;
 
 	/** 
 	 * PhSim Static simulation Array 

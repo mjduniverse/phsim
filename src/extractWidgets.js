@@ -581,6 +581,27 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             self.camera.translate(dyn_object.x,dyn_object.y);
             self.camera.scale()
         }
+
+        if(widget.wFunction) {
+
+            var wf = self.createWFunction(widget.function,dyn_object);
+
+            var closure = function() {
+
+                var f = function(){
+                    wf();
+                };
+
+                return f;
+
+            }
+
+            var f = this.addSimpleEvent(widget.trigger,closure(),{
+                ...widget,
+                triggerObj: dyn_object
+            });
+
+        }
     
         if(widget.objLink_a) {
     

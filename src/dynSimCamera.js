@@ -111,7 +111,7 @@ PhSim.prototype.extractLclGame = function(localSettings) {
 				self.pause();
 				self.enableFilter();
 
-				if(self.simulationIndex + 1 === self.sim.simulations.length) {
+				if(self.simulationIndex + 1 === self.options.simulations.length) {
 					var a = self.alert({
 						msg:"You Win!",
 						closeButtonTxt:"Play again",

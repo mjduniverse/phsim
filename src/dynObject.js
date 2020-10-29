@@ -79,6 +79,13 @@ PhSim.DynObject = function(staticObject) {
 
 	PhSim.nextId = (Number.parseInt(PhSim.nextId,36) + 1).toString(36);
 	
+	/**
+	 * Reference to parent simulation
+	 * @type {null|PhSim}
+	 */
+
+	this.phSim;
+
 	/** 
 	 * Refernce of DynObj in matter object 
 	 * @type {Object}

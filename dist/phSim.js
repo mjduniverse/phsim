@@ -89,7 +89,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(1);
-module.exports = __webpack_require__(37);
+module.exports = __webpack_require__(38);
 
 
 /***/ }),
@@ -99,30 +99,133 @@ module.exports = __webpack_require__(37);
 "use strict";
 
 
-/***
+/**
+ * @author Mjduniverse
+ * @copyright 2020 Mjduniverse 
+ * @license
+ *
+ * Physics Simulator Class Library
+ *
+ * Copyright 2020 Mjduniverse.com
+ * 
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
+ * and associated documentation files (the "Software"), to deal in the Software without restriction, 
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+  * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, 
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial 
+ * portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+ * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
 
-Physics Simulator Class Library
+__webpack_require__(2);
+__webpack_require__(3 );
+__webpack_require__(4 );
+__webpack_require__(5);
+__webpack_require__(6);
+__webpack_require__(7);
 
-Copyright 2020 Mjduniverse.com
+__webpack_require__(8);
 
-@author Mjduniverse.com
+__webpack_require__(9);
+__webpack_require__(10);
+__webpack_require__(11);
+__webpack_require__(12);
+__webpack_require__(13);
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
-and associated documentation files (the "Software"), to deal in the Software without restriction, 
-including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, 
-subject to the following conditions:
+// Bounding box functions
 
-The above copyright notice and this permission notice shall be included in all copies or substantial 
-portions of the Software.
+__webpack_require__(14);
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
-LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+__webpack_require__(15);
 
-***/
+__webpack_require__(16);
+__webpack_require__(17);
+__webpack_require__(18);
+__webpack_require__(19);
+__webpack_require__(20);
+__webpack_require__(21);
+__webpack_require__(22);
+__webpack_require__(23);
+__webpack_require__(24);
+__webpack_require__(25);
+__webpack_require__(26);
+__webpack_require__(27);
+__webpack_require__(28);
+__webpack_require__(29);
+__webpack_require__(30);
+__webpack_require__(31);
+
+__webpack_require__(32);
+__webpack_require__(33);
+__webpack_require__(34);
+__webpack_require__(35);
+__webpack_require__(36);
+__webpack_require__(37);
+
+
+/**
+ * Global event stack
+ * @type {PhSim.EventStack}
+ */
+
+PhSim.prototype.eventStack = new PhSim.EventStack();
+
+
+/**
+ * Event stack for simulation specfic events
+ * @type {PhSim.EventStack}
+ */
+
+PhSim.prototype.slEventStack = new PhSim.EventStack();
+
+ 
+
+/**
+ * Structure giving more human-readable meaning to PhSim status.
+ * @type {String[]}
+ */
+
+PhSim.statusStruct = {
+	0: "Unloaded",
+	1: "Initalized",
+	2: "Loaded Images",
+	3: "Loaded Audio",
+	4: "Loaded Simulation"
+}
+
+
+
+PhSim.prototype.forAllObjects = function(call) {
+	
+	var a = this.getUniversalObjArray();
+
+	for(var i = 0; i < a.length; i++) {
+		var z = call(a[i]);
+		if(z === false) {
+			break;
+		}
+	}
+}
+
+
+PhSim.prototype.addToOverlayer = function(dynObject) {
+	
+	if(!dynObject.permStatic) {
+		Matter.World.add(this.matterJSWorld, dynObject.matter);
+	}
+
+	this.objUniverse.push(dynObject);
+
+}
 
 /**
  * 
@@ -136,6 +239,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
  */
 
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
 /** 
  * Dynamic Simulation Instance Object 
  * 
@@ -144,7 +251,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
  */
 
-var PhSim = function(dynSimOptions) {
+function PhSim(dynSimOptions) {
 
 	/**
 	 * The static simulation object
@@ -224,6 +331,20 @@ PhSim.prototype.mouseX = null;
  */
 
 PhSim.prototype.mouseY = null;
+
+/**
+ * Simulation options
+ * @deprecated
+ */
+
+PhSim.prototype.sim = null;
+
+/**
+ * Current simulation options
+ * @deprecated
+ */
+
+PhSim.prototype.simulation = null;
 
 /**
  * Boolean property to tell if the simulation is paused or not.
@@ -309,108 +430,8 @@ if(typeof window === "object") {
 	window.PhSim = PhSim;
 }
 
-__webpack_require__(2 );
-__webpack_require__(3 );
-__webpack_require__(4);
-__webpack_require__(5);
-__webpack_require__(6);
-
-__webpack_require__(7);
-
-__webpack_require__(8);
-__webpack_require__(9);
-__webpack_require__(10);
-__webpack_require__(11);
-__webpack_require__(12);
-
-// Bounding box functions
-
-__webpack_require__(13);
-
-__webpack_require__(14);
-
-__webpack_require__(15);
-__webpack_require__(16);
-__webpack_require__(17);
-__webpack_require__(18);
-__webpack_require__(19);
-__webpack_require__(20);
-__webpack_require__(21);
-__webpack_require__(22);
-__webpack_require__(23);
-__webpack_require__(24);
-__webpack_require__(25);
-__webpack_require__(26);
-__webpack_require__(27);
-__webpack_require__(28);
-__webpack_require__(29);
-__webpack_require__(30);
-
-__webpack_require__(31);
-__webpack_require__(32);
-__webpack_require__(33);
-__webpack_require__(34);
-__webpack_require__(35);
-__webpack_require__(36);
-
-
-/**
- * Global event stack
- * @type {PhSim.EventStack}
- */
-
-PhSim.prototype.eventStack = new PhSim.EventStack();
-
-
-/**
- * Event stack for simulation specfic events
- * @type {PhSim.EventStack}
- */
-
-PhSim.prototype.slEventStack = new PhSim.EventStack();
-
- 
-
-/**
- * Structure giving more human-readable meaning to PhSim status.
- * @type {String[]}
- */
-
-PhSim.statusStruct = {
-	0: "Unloaded",
-	1: "Initalized",
-	2: "Loaded Images",
-	3: "Loaded Audio",
-	4: "Loaded Simulation"
-}
-
-
-
-PhSim.prototype.forAllObjects = function(call) {
-	
-	var a = this.getUniversalObjArray();
-
-	for(var i = 0; i < a.length; i++) {
-		var z = call(a[i]);
-		if(z === false) {
-			break;
-		}
-	}
-}
-
-
-PhSim.prototype.addToOverlayer = function(dynObject) {
-	
-	if(!dynObject.permStatic) {
-		Matter.World.add(this.matterJSWorld, dynObject.matter);
-	}
-
-	this.objUniverse.push(dynObject);
-
-}
-
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports) {
 
 
@@ -953,7 +974,7 @@ PhSim.Static.CompositeSimulation = function() {
 	 * @type {Number}
 	 */
 
-	this.version = 1;
+	this.version = PhSim.version;
 
 	/** 
 	 * PhSim Static simulation Array 
@@ -1012,7 +1033,7 @@ PhSim.Static.SLO = function(S,L,O) {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 /**
@@ -1160,10 +1181,26 @@ PhSim.EventStack = function() {
 	/** Array of functions to be executed before the simulation exit */
 
 	this.exit = []
+
+	/** Array of functions to be executed when the canvas is clicked down on */
+
+	this.mousedown = [];
+
+	/** Array of functions to be executed when the canvas is clicked on */
+
+	this.click = [];
+
+	this.objclick = [];
+
+	this.objmousemove = [];
+
+	this.objmouseup = [];
+
+
 }
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /** 
@@ -1967,7 +2004,7 @@ PhSim.PhRender.prototype.dynamicDrawLayer = function(L) {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /*** Sprites ***/
@@ -2102,10 +2139,16 @@ PhSim.Sprites.SpriteImgArray.prototype.addSprite = function(staticObj,onload = f
 }
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 PhSim.Audio = {}
+
+/**
+ * @function
+ * @param {Object} p_audio - Static Audio Object
+ * @param {Function} onload 
+ */
 
 PhSim.Audio.AudioArray = function(p_audio,onload) {
 
@@ -2148,7 +2191,7 @@ PhSim.Audio.AudioArray = function(p_audio,onload) {
 }
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 PhSim.CollisionClass = function(name) {
@@ -2170,7 +2213,7 @@ PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
 };
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 /**
@@ -2321,7 +2364,7 @@ PhSim.svgVector = function(x,y) {
 }
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 /**
@@ -2355,7 +2398,7 @@ PhSim.checkObjectType = function (objectTypeStr) {
 }
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /**
@@ -2383,7 +2426,7 @@ PhSim.diagRect = function(x1,y1,x2,y2) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 
@@ -2493,7 +2536,7 @@ PhSim.getRectangleCorners = function(rectangle) {
 }
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /**
@@ -2539,7 +2582,7 @@ PhSim.findCentroidOfPath = function(a) {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -2656,7 +2699,7 @@ PhSim.getDynBoundingBox = function(dynObj) {
 }
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /**
@@ -2823,7 +2866,7 @@ PhSim.createMatterObject = function(staticObject) {
   */
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 PhSim.removeClickRectRegion = function(reference) {
@@ -2905,7 +2948,7 @@ PhSim.CollisionReport = function() {
 }
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.L = function(L) {
@@ -2922,7 +2965,7 @@ PhSim.prototype.getObjectFromLOStr = function(str) {
 }
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 
@@ -3015,7 +3058,7 @@ PhSim.prototype.configRender = function() {
 }
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.configFilter = function(container) {
@@ -3103,7 +3146,7 @@ PhSim.prototype.alert = function(options) {
 }
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /** 
@@ -3355,8 +3398,48 @@ PhSim.prototype.toggleSemiLock = function(dynObject) {
 
 }
 
+/**
+ * A widget function is a function that used for the WidgetFunction widget.
+ * The "this" keyword in the body of function refers to the current instance of
+ * PhSim simulation.
+ * 
+ * @typedef {Function} WFunction
+ */
+
+/**
+ * Array of widget functions
+ * @type {WFunctions[]}
+ */
+
+PhSim.prototype.wFunctions = [];
+
+/**
+ * Create a widget function and push it to the wFunctions array.
+ * @function
+ * @param {String|Function} arg - content of function if string, function if function
+ * @param {Object} thisRef - 
+ * @returns {WFunction}
+ */
+
+PhSim.prototype.createWFunction = function(arg,thisRef) {
+
+	if(typeof arg === "string") {
+		var o = new Function(arg).bind(thisRef);
+	}
+
+	else if(typeof arg === "function") {
+		var o = arg.bind(thisRef);
+	}
+
+	else {
+		throw "Expecting \"function\" or \"string\" type";
+	}
+
+    return o;
+}
+
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 
@@ -3428,8 +3511,207 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
 }
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
+
+/**
+ * Fire the mousedown event for PhSim.
+ * If {@link PhSim#objMouseArr} length is greater than zero, 
+ * this also executes the objmousedown event
+ *
+ * @listens objmousedown
+ * @function
+ * @param {MouseEvent} e - Mouse Event Object
+ */
+
+PhSim.prototype.mousedownListener = function(e) {
+
+	var eventObj = new PhSim.PhMouseEvent();
+	var canvas = this.simCtx.canvas;
+	var rect = canvas.getBoundingClientRect();
+	eventObj.domEvent = e;
+	eventObj.x =  e.clientX - rect.left;
+	eventObj.y = e.clientY - rect.top;
+	eventObj.type = "mousedown";
+	eventObj.dynArr = this.pointObjArray(eventObj.x,eventObj.y);
+
+	if(!this.paused) {
+		if(this.objMouseArr.length > 0) {
+
+				/**
+				 * @event objmousedown
+				 * @type {PhSim.PhMouseEvent}
+				 */
+
+
+			this.callEventClass("objmousedown",canvas,eventObj);
+		}
+	}
+
+	this.callEventClass("mousedown",canvas,eventObj);
+}
+
+/**
+ * Listens click event
+ * @function
+ * @listens MouseEvent
+ * @param {MouseEvent} e 
+ */
+
+PhSim.prototype.clickListener = function(e) {
+	var eventObj = new PhSim.PhMouseEvent();
+	var canvas = this.simCtx.canvas;
+	var rect = canvas.getBoundingClientRect();
+	eventObj.domEvent = e;
+	eventObj.x =  e.clientX - rect.left;
+	eventObj.y = e.clientY - rect.top;
+	eventObj.type = "click";
+	eventObj.dynArr = this.pointObjArray(eventObj.x,eventObj.y);
+
+
+	if(this.objMouseArr.length > 0) {
+		this.callEventClass("objclick",canvas,eventObj);
+	}
+
+	this.callEventClass("click",canvas,eventObj);
+}
+
+/**
+ * Fire the mousedown event for PhSim.
+ * If {@link PhSim#objMouseArr} length is greater than zero, 
+ * this also executes the objmousedown event
+ *
+ * @listens MouseEvent
+ * @function
+ * @param {MouseEvent} e - Mouse Event Object
+ */
+
+PhSim.prototype.mousemoveListener = function(e) {
+	var eventObj = new PhSim.PhMouseEvent();
+	var canvas = this.simCtx.canvas;
+	var rect = canvas.getBoundingClientRect();
+	eventObj.domEvent = e;
+
+	eventObj.x =  e.clientX - rect.left;
+	eventObj.y = e.clientY - rect.top;
+
+	if(this.mouseX && this.mouseY) {
+		this.prevMouseX = this.mouseX;
+		this.prevMouseY = this.mouseY;
+	}
+
+	this.prevObjMouseArr = [];
+
+	if(this.objMouseArr) {
+		this.prevObjMouseArr = [...this.objMouseArr];
+	}
+
+	this.mouseX = eventObj.x;
+	this.mouseY = eventObj.y;
+
+	this.dynArr = this.objMouseArr;
+
+	this.objMouseArr = [];
+	this.formerMouseObjs = [];
+	this.newMouseObjs = [];
+
+	if(this.init) {
+
+		for(i = 0; i < this.objUniverse.length; i++) {
+
+			if(this.pointInObject(this.objUniverse[i],this.mouseX,this.mouseY)) {
+				this.objMouseArr.push(this.objUniverse[i])
+			}
+
+			if(!this.objMouseArr.includes(this.objUniverse[i]) && this.prevObjMouseArr.includes(this.objUniverse[i])) {
+				this.formerMouseObjs.push(this.objUniverse[i])
+			}
+
+			if(this.objMouseArr.includes(this.objUniverse[i]) && !this.prevObjMouseArr.includes(this.objUniverse[i])) {
+				this.newMouseObjs.push(this.objUniverse[i])
+			}
+
+		}
+
+		if(this.objMouseArr.length > 0) {
+			this.callEventClass("objmousemove",canvas,eventObj);
+		}
+
+		if(this.newMouseObjs.length > 0) {
+			eventObj.newMouseObjs = this.newMouseObjs;
+			this.callEventClass("objmouseover",canvas,eventObj);
+		}
+
+		if(this.formerMouseObjs.length > 0) {
+			eventObj.formerMouseObjs = this.formerMouseObjs;
+			this.callEventClass("objmouseout",canvas,eventObj);
+		}
+	}
+
+	/**
+	 * @event mousemove
+	 */
+
+	this.callEventClass("mousemove",canvas,eventObj);
+
+	//console.log(eventObj);
+}
+
+/**
+ * @function
+ * @param {MouseEvent} e 
+ */
+
+PhSim.prototype.mouseupListener = function(e) {
+	var eventObj = new PhSim.PhMouseEvent();
+	var canvas = this.simCtx.canvas;
+	var rect = canvas.getBoundingClientRect();
+	eventObj.domEvent = e;
+	eventObj.x =  e.clientX - rect.left;
+	eventObj.y = e.clientY - rect.top;
+	this.mouseX = eventObj.x;
+	this.mouseY = eventObj.y;
+
+	if(this.objMouseArr.length > 0) {
+		this.callEventClass("objmouseup",canvas,eventObj);
+	}
+
+	this.callEventClass("mouseup",canvas,eventObj);
+}
+
+/**
+ * @function
+ * @param {MouseEvent} e 
+ */
+
+PhSim.prototype.mouseoutListener = function(e) {
+	var eventObj = new PhSim.PhMouseEvent();
+	var canvas = this.simCtx.canvas;
+	var rect = canvas.getBoundingClientRect();
+	eventObj.domEvent = e;
+	eventObj.x =  e.clientX - rect.left;
+	eventObj.y = e.clientY - rect.top;
+	this.mouseX = eventObj.x;
+	this.mouseY = eventObj.y;
+	this.callEventClass("mouseout",canvas,eventObj);
+}
+
+/**
+ * 
+ * Create a wrapping function that is used for events.
+ * 
+ * @param {Function} f - Function
+ * 
+ */
+
+PhSim.prototype.getEventBridge = function(f) {
+
+	var self = this;
+
+	return function(e) {
+		f.call(self,e);
+	}
+}
 
 /**
  * 
@@ -3442,203 +3724,19 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
  */
 
 PhSim.prototype.registerCanvasEvents = function() {
-
-	var self = this;
-
-	// onmousedown
-
-	this.eventStack.mousedown = []
-
-	this.mousedownBridge = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
-		var canvas = this.simCtx.canvas;
-		var rect = canvas.getBoundingClientRect();
-		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
-		eventObj.type = "mousedown";
-		eventObj.dynArr = this.pointObjArray(eventObj.x,eventObj.y);
-
-		if(!self.paused) {
-			if(self.objMouseArr.length > 0) {
-				self.callEventClass("objmousedown",canvas,eventObj);
-			}
-		}
-
-		self.callEventClass("mousedown",canvas,eventObj);
-	}
-
-	this.simCanvas.addEventListener("mousedown",function(e) {
-		if(!self.filter) {
-			self.mousedownBridge(e);
-		}
-	});
-
-	// click
-
-	this.eventStack.click = []
-	this.eventStack.objclick = []
-
-	this.clickBridge = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
-		var canvas = this.simCtx.canvas;
-		var rect = canvas.getBoundingClientRect();
-		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
-		eventObj.type = "click";
-		eventObj.dynArr = this.pointObjArray(eventObj.x,eventObj.y);
-
-
-		if(self.objMouseArr.length > 0) {
-			self.callEventClass("objclick",canvas,eventObj);
-		}
-
-		self.callEventClass("click",canvas,eventObj);
-	}
-
-	this.simCanvas.addEventListener("click",function(e) {
-		if(!self.filter) {
-			self.clickBridge(e);
-		}
-	});
-
-	//mousemove
-
-	this.eventStack.mousemove = this.eventStack.mousemove || []
-	this.eventStack.objmousemove = this.eventStack.objmousemove || []
-
-	this.mousemoveBridge = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
-		var canvas = this.simCtx.canvas;
-		var rect = canvas.getBoundingClientRect();
-		eventObj.domEvent = e;
-
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
-
-		if(self.mouseX && self.mouseY) {
-			self.prevMouseX = self.mouseX;
-			self.prevMouseY = self.mouseY;
-		}
-
-		self.prevObjMouseArr = [];
-
-		if(self.objMouseArr) {
-			self.prevObjMouseArr = [...self.objMouseArr];
-		}
-
-		self.mouseX = eventObj.x;
-		self.mouseY = eventObj.y;
-	
-		self.dynArr = self.objMouseArr;
-
-		self.objMouseArr = [];
-		self.formerMouseObjs = [];
-		self.newMouseObjs = [];
-
-		if(self.init) {
-
-			for(i = 0; i < self.objUniverse.length; i++) {
-
-				if(self.pointInObject(self.objUniverse[i],self.mouseX,self.mouseY)) {
-					self.objMouseArr.push(self.objUniverse[i])
-				}
-	
-				if(!self.objMouseArr.includes(self.objUniverse[i]) && self.prevObjMouseArr.includes(self.objUniverse[i])) {
-					self.formerMouseObjs.push(self.objUniverse[i])
-				}
-	
-				if(self.objMouseArr.includes(self.objUniverse[i]) && !self.prevObjMouseArr.includes(self.objUniverse[i])) {
-					self.newMouseObjs.push(self.objUniverse[i])
-				}
-	
-			}
-
-			if(self.objMouseArr.length > 0) {
-				self.callEventClass("objmousemove",canvas,eventObj);
-			}
-
-			if(self.newMouseObjs.length > 0) {
-				eventObj.newMouseObjs = self.newMouseObjs;
-				self.callEventClass("objmouseover",canvas,eventObj);
-			}
-
-			if(self.formerMouseObjs.length > 0) {
-				eventObj.formerMouseObjs = self.formerMouseObjs;
-				self.callEventClass("objmouseout",canvas,eventObj);
-			}
-		}
-
-		//console.log(self.objMouseArr)
-
-		self.callEventClass("mousemove",canvas,eventObj);
-
-		//console.log(eventObj);
-	}
-
-	this.simCanvas.addEventListener("mousemove",function(e) {
-		if(!self.filter) {
-			self.mousemoveBridge(e);
-		}
-	});
-
-	/*** Mouseup bridge ***/
-
-	this.eventStack.objmouseup = [];
-
-	this.mouseupBridge = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
-		var canvas = this.simCtx.canvas;
-		var rect = canvas.getBoundingClientRect();
-		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
-		self.mouseX = eventObj.x;
-		self.mouseY = eventObj.y;
-
-		if(self.objMouseArr.length > 0) {
-			self.callEventClass("objmouseup",canvas,eventObj);
-		}
-
-		self.callEventClass("mouseup",canvas,eventObj);
-	}
-
-	this.simCanvas.addEventListener("mouseup",function(e) {
-		if(!self.filter) {
-			self.mouseupBridge(e);
-		}
-	});
-
-	/*** Mouseout bridge ***/
-
-	this.mouseoutBridge = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
-		var canvas = this.simCtx.canvas;
-		var rect = canvas.getBoundingClientRect();
-		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
-		self.mouseX = eventObj.x;
-		self.mouseY = eventObj.y;
-		self.callEventClass("mouseout",canvas,eventObj);
-	}
-
-	this.simCanvas.addEventListener("mouseout",function(e) {
-		if(!self.filter) {
-			self.mouseoutBridge(e);
-		}
-	});
+	this.simCanvas.addEventListener("mousedown",this.getEventBridge(this.mousedownListener));
+	this.simCanvas.addEventListener("click",this.getEventBridge(this.clickListener));
+	this.simCanvas.addEventListener("mousemove",this.getEventBridge(this.mousemoveListener));
+	this.simCanvas.addEventListener("mouseup",this.getEventBridge(this.mouseupListener));
+	this.simCanvas.addEventListener("mouseout",this.getEventBridge(this.mouseoutListener));
 
 }
 
 PhSim.prototype.registerKeyEvents = function() {
 
-	this.windowObj = this.windowObj || window;
-
 	var self = this;
 
-	this.keyElm = document.createElement("div");
+	this.windowObj = this.windowObj || window;
 
 	this.keydownBridge = function(e) {
 		var eventObj = new PhSim.PhKeyEvent();
@@ -3646,7 +3744,7 @@ PhSim.prototype.registerKeyEvents = function() {
 		eventObj.key = e.key;
 		eventObj.code = e.code;
 		eventObj.type = "keydown";
-		self.callEventClass("keydown",self,eventObj);
+		self.callEventClass("keydown",this,eventObj);
 	}
 
 	this.keydownBridgeWrapper = function(e) {
@@ -3663,7 +3761,7 @@ PhSim.prototype.deregisterKeyEvents = function() {
 }
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /**
@@ -3776,7 +3874,7 @@ PhSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
 }
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /**
@@ -4272,7 +4370,7 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports) {
 
 // Newtonian Gravity
@@ -4296,7 +4394,7 @@ PhSim.prototype.applyGravitationalField = function() {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.play = function() {
@@ -4342,7 +4440,7 @@ PhSim.prototype.exit = function() {
 }
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /**
@@ -4353,7 +4451,9 @@ PhSim.prototype.exit = function() {
  * 
  * When PhSim.prototype.gotoSimulationIndex is used, it resets 
  * @param {Number} i
+ * @this PhSim
  * @function
+ * 
  *  
  */
 
@@ -4376,8 +4476,9 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	if(this.simCtx) {
 	    this.drawLoadingScreen();
 	}
-	
+
 	this.simulation = this.options.simulations[i];
+	this.simOptions = this.options.simulations[i];
 
 	this.simulationIndex = i;
 
@@ -4412,22 +4513,24 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	if(this.options.simulations) {
 	
-		for(var L = 0; L < this.simulation.layers.length; L++) {
+		for(var L = 0; L < this.simOptions.layers.length; L++) {
 
 			var layerComposite = Matter.Composite.create();
 			var layerBranch = [];
 
-			for(var O = 0; O < this.simulation.layers[L].objUniverse.length; O++) {
+			for(var O = 0; O < this.simOptions.layers[L].objUniverse.length; O++) {
 				
-				if(this.simulation.layers[L].objUniverse[O].noDyn || this.simulation.layers[L].objUniverse[O].permStatic) {
-					layerBranch.push(this.simulation.layers[L].objUniverse[O]);
-					this.objUniverse.push(this.simulation.layers[L].objUniverse[O]);
-					this.staticSprites.push(this.simulation.layers[L].objUniverse[O].sprite)				
+				if(this.simOptions.layers[L].objUniverse[O].noDyn || this.simOptions.layers[L].objUniverse[O].permStatic) {
+					layerBranch.push(this.simOptions.layers[L].objUniverse[O]);
+					this.objUniverse.push(this.simOptions.layers[L].objUniverse[O]);
+					this.staticSprites.push(this.simOptions.layers[L].objUniverse[O].sprite)				
 				}
 
 				else {
-					var dynObject = new PhSim.DynObject(this.simulation.layers[L].objUniverse[O])
 					
+					var dynObject = new PhSim.DynObject(this.simOptions.layers[L].objUniverse[O])
+					dynObject.phSim = this;
+
 					// If the collision class object exists
 
 					if(dynObject.static.collisionClass && dynObject.static.collisionClass.trim() !== "__main") {
@@ -4486,8 +4589,8 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	});
 
-	if(this.simulation.game) {
-		this.lclGame = this.extractLclGame(this.simulation.game);
+	if(this.simOptions.game) {
+		this.lclGame = this.extractLclGame(this.simOptions.game);
 	}
 
 	for(var C = 0; C < this_a.simulation.widgets.length; C++) {
@@ -4525,6 +4628,24 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 			this_a.connectDynObjects(this_a.dynTree[a.objectA.L][a.objectA.O],this_a.dynTree[a.objectB.L][a.objectB.O]);
 
 		}
+
+		if(a.wFunction) {
+
+            var wf = self.createWFunction(a.function,this_a);
+
+            var closure = function() {
+
+                var f = function(){
+                    wf();
+                };
+
+                return f;
+
+            }
+
+            var f = this.addSimpleEvent(a.trigger,closure(),a);
+
+        }
 
 
 
@@ -4573,7 +4694,7 @@ PhSim.prototype.initSim = function(simulationI) {
 }
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 /**
@@ -4715,7 +4836,7 @@ PhSim.prototype.setAngle = function(dynObject,angle) {
 }
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.assignPhRender = function(phRender) {
@@ -4779,7 +4900,7 @@ PhSim.prototype.setLineWidth = function(dyn_object,lineWidth) {
 }
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.updateDynObj = function(currentObj) {
@@ -4844,6 +4965,10 @@ PhSim.prototype.loopFunction = function() {
 	
 		this.callEventClass("beforeupdate",this,beforeUpdateEvent);
 
+		if(!this.firstSlUpdate) {
+			this.callEventClass("beforefirstslupdate",this,afterUpdateEvent);
+		}
+
 		this.updateDate = new Date();
 
 		if(this.prevDate) {
@@ -4899,7 +5024,7 @@ PhSim.prototype.loopFunction = function() {
 }
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /** 
@@ -5485,6 +5610,27 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             self.camera.translate(dyn_object.x,dyn_object.y);
             self.camera.scale()
         }
+
+        if(widget.wFunction) {
+
+            var wf = self.createWFunction(widget.function,dyn_object);
+
+            var closure = function() {
+
+                var f = function(){
+                    wf();
+                };
+
+                return f;
+
+            }
+
+            var f = this.addSimpleEvent(widget.trigger,closure(),{
+                ...widget,
+                triggerObj: dyn_object
+            });
+
+        }
     
         if(widget.objLink_a) {
     
@@ -5528,7 +5674,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /**
@@ -5716,7 +5862,7 @@ PhSim.prototype.extractLclGame = function(localSettings) {
 }
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 
@@ -5746,7 +5892,7 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 }
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 /*
@@ -5769,7 +5915,7 @@ PhSim.Constraints.Static.Constraint = function() {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /**
@@ -5803,7 +5949,7 @@ PhSim.calc_skinmesh = function(dynObject) {
 }
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 // Simple Event Reference
@@ -6190,12 +6336,29 @@ PhSim.prototype.removeSimpleEvent = function(refNumber) {
 }
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 /**
+ * Object containing variables that can be read by widgets such as
+ * the {@link|RectText} widget. 
+ */
+
+PhSim.prototype.vars = {}
+
+/**
  * 
- * Process string by replacing magical words
+ * Process string by replacing magical words and the values of elements in
+ * [PhSim.prototype.vars]{@link|PhSim#vars}.
+ * 
+ * Some of the magic words are the following:
+ * 
+ * {__game__score} - The game score
+ * {__game__life} -  The game life
+ * {__game__goal} - The game goal
+ * {__game__int_life} - The inital life value for the game
+ * 
+ * The expression ${key} is replaced by the value of PhSim.prototype.vars[key].
  * 
  * @function
  * @param {String} str 
@@ -6227,18 +6390,31 @@ PhSim.prototype.processVar = function(str) {
 		str = str.replace(/{__game__int_score}/g,this.lclGame.intScore);
 	}
 
+	var a = Object.keys(this.vars);
+
+	for(var i = 0; i < a.length; i++) {
+
+		var v = "\\$\\{" + a[i] + "\\}";
+		var regex = new RegExp(v,"g");
+		var s = str.search(regex);
+
+		if(s !== -1) {
+			str = str.replace(regex,this.vars[ a[i] ]);
+		}
+	}
+
 	return str;
 
 }
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports) {
 
 // Generated by TypeDefGen module 
-// Built on Tue Oct 27 2020 14:10:31 GMT-0500 (Central Daylight Time)
-PhSim.boolKey = ["Velocity","Force","Position","Translate","DeleteSelf","Draggable","Coin","Hazard","Health","Elevator","TransformCameraByObject","TransformWithCamera","KeyboardControls","Alert","Connection","SetAngle","Rotation","NoRotation","RectText","NumVar","SetNumVar","SetColor","SetBorderColor","SetLineWidth","PlayAudio","ObjLink_a","Game","DeleteSelf","ToggleLock","CircularConstraint","DeleteSelf","ToggleSemiLock"];
-PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","draggable","coin","hazard","health","elevator","transformCameraByObject","transformWithCamera","keyboardControls","alert","connection","setAngle","rotation","noRotation","rectText","numVar","setNumVar","setColor","setBorderColor","setLineWidth","playAudio","objLink_a","game","deleteSelf","toggleLock","circularConstraint","deleteSelf","toggleSemiLock"];
+// Built on Wed Oct 28 2020 13:14:50 GMT-0500 (Central Daylight Time)
+PhSim.boolKey = ["Velocity","Force","Position","Translate","DeleteSelf","Draggable","Coin","Hazard","Health","Elevator","TransformCameraByObject","TransformWithCamera","KeyboardControls","Alert","Connection","SetAngle","Rotation","NoRotation","RectText","NumVar","SetNumVar","SetColor","SetBorderColor","SetLineWidth","PlayAudio","ObjLink_a","Game","DeleteSelf","ToggleLock","CircularConstraint","DeleteSelf","ToggleSemiLock","WFunction"];
+PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","draggable","coin","hazard","health","elevator","transformCameraByObject","transformWithCamera","keyboardControls","alert","connection","setAngle","rotation","noRotation","rectText","numVar","setNumVar","setColor","setBorderColor","setLineWidth","playAudio","objLink_a","game","deleteSelf","toggleLock","circularConstraint","deleteSelf","toggleSemiLock","wFunction"];
 
  
  
@@ -6442,8 +6618,14 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 * @property {Boolean} toggleSemiLock - Boolean for enabling the toggle semi-lock widget
 */
  
+/**
+* @typedef {simpleEventOptions|WFunction}
+* @property {Function|String} function - WFunction widget
+* @property {Boolean} wFunction - Boolean for enabling wFunction widget.
+*/
+ 
 /** 
- * @typedef {Velocity|Force|Position|Translate|DeleteSelf|Draggable|Coin|Hazard|Health|Elevator|TransformCameraByObject|TransformWithCamera|KeyboardControls|Alert|Connection|SetAngle|Rotation|NoRotation|RectText|NumVar|SetNumVar|SetColor|SetBorderColor|SetLineWidth|PlayAudio|ObjLink_a|Game|DeleteSelf|ToggleLock|CircularConstraint|DeleteSelf|ToggleSemiLock} Widget 
+ * @typedef {Velocity|Force|Position|Translate|DeleteSelf|Draggable|Coin|Hazard|Health|Elevator|TransformCameraByObject|TransformWithCamera|KeyboardControls|Alert|Connection|SetAngle|Rotation|NoRotation|RectText|NumVar|SetNumVar|SetColor|SetBorderColor|SetLineWidth|PlayAudio|ObjLink_a|Game|DeleteSelf|ToggleLock|CircularConstraint|DeleteSelf|ToggleSemiLock|WFunction} Widget 
 */
 
 

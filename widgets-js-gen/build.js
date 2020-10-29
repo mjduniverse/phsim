@@ -172,6 +172,11 @@ const widgets = [
     new TypeDefGen.Type("ToggleSemiLock","simpleEventOptions",[
         new TypeDefGen.Property("Boolean","toggleSemiLock","Boolean for enabling the toggle semi-lock widget"),
     ]),
+
+    new TypeDefGen.Type("WFunction","simpleEventOptions",[
+        new TypeDefGen.Property("Function|String","function","WFunction widget"),
+        new TypeDefGen.Property("Boolean","wFunction","Boolean for enabling wFunction widget.")
+    ])
 ]
 
 var typeDefGen = new TypeDefGen(widgets);
