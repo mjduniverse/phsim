@@ -1,0 +1,29 @@
+{
+  "name": "phsim",
+  "version": "0.1.0-alpha",
+  "description": "A library that allows one to easily create web simulations. Runs on top of Matter.js.",
+  "main": "/src/phSim.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "matter-js": "^0.14.2"
+  },
+  "devDependencies": {
+    "script-loader": "^0.7.2",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./build.sh"  
+  },
+  "keywords": [
+    "phSim",
+    "matter-js",
+    "physics",
+    "games"
+  ],
+  "author": "mjduniverse",
+  "license": "MIT"
+}

@@ -1,0 +1,6 @@
+#!/bin/bash
+echo Starting to build PhSim...
+node ./widgets-js-gen/build.js
+echo Attempting to start webpack...
+npx webpack
+echo PhSim build attempt completed. 
