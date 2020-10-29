@@ -151,7 +151,7 @@ PhSim.PhRender.prototype.static_path = function (path) {
 
 			this.ctx.clip();
 
-			var box = PhSim.Tools.getStaticBoundingBox(path);
+			var box = PhSim.getStaticBoundingBox(path);
 
 			var h = img.height * (box.w/img.width);
 
@@ -285,7 +285,7 @@ PhSim.PhRender.prototype.static_circle = function (circle) {
 			this.ctx.rotate(circle.cycle);
 			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
 			this.ctx.clip();
-			var box = PhSim.Tools.getStaticBoundingBox(circle);
+			var box = PhSim.getStaticBoundingBox(circle);
 
 			var h = img.height * (box.w/img.width);
 
@@ -313,7 +313,7 @@ PhSim.PhRender.prototype.static_circle = function (circle) {
 
 PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 
-	var c = PhSim.Tools.getRectangleCentroid(rectangle);
+	var c = PhSim.getRectangleCentroid(rectangle);
 
 	var x = -rectangle.w * 0.5;
 	var y = -rectangle.h * 0.5;
@@ -434,7 +434,7 @@ PhSim.PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 
 PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
 
-	var vertSet = PhSim.Tools.getRegPolygonVerts(regPolygon);
+	var vertSet = PhSim.getRegPolygonVerts(regPolygon);
 	
 	this.setCtx(regPolygon);
 
@@ -499,7 +499,7 @@ PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
 			this.ctx.translate(regPolygon.x,regPolygon.y);
 			this.ctx.rotate(regPolygon.cycle);
 
-			var box = PhSim.Tools.getStaticBoundingBox(regPolygon);
+			var box = PhSim.getStaticBoundingBox(regPolygon);
 
 			var h = img.height * (box.w/img.width);
 
@@ -742,7 +742,7 @@ PhSim.PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 	
 				this.ctx.clip();
 	
-				var box = PhSim.Tools.getStaticBoundingBox(dynObject);
+				var box = PhSim.getStaticBoundingBox(dynObject);
 	
 				var h = img.height * (box.w/img.width);
 	

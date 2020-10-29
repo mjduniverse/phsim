@@ -5,7 +5,11 @@
  * This property is used to define a simulation.
  * 
  * When PhSim.prototype.gotoSimulationIndex is used, it resets 
- * @param {Number} i 
+ * @param {Number} i
+ * @this PhSim
+ * @function
+ * 
+ *  
  */
 
 PhSim.prototype.gotoSimulationIndex = function (i) {
@@ -27,8 +31,9 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	if(this.simCtx) {
 	    this.drawLoadingScreen();
 	}
-	
-	this.simulation = this.sim.simulations[i];
+
+	this.simulation = this.options.simulations[i];
+	this.simOptions = this.options.simulations[i];
 
 	this.simulationIndex = i;
 
@@ -61,24 +66,26 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	this.collisionClasses["__main"] = ncc;
 
-	if(this.sim.simulations) {
+	if(this.options.simulations) {
 	
-		for(var L = 0; L < this.simulation.layers.length; L++) {
+		for(var L = 0; L < this.simOptions.layers.length; L++) {
 
 			var layerComposite = Matter.Composite.create();
 			var layerBranch = [];
 
-			for(var O = 0; O < this.simulation.layers[L].objUniverse.length; O++) {
+			for(var O = 0; O < this.simOptions.layers[L].objUniverse.length; O++) {
 				
-				if(this.simulation.layers[L].objUniverse[O].noDyn || this.simulation.layers[L].objUniverse[O].permStatic) {
-					layerBranch.push(this.simulation.layers[L].objUniverse[O]);
-					this.objUniverse.push(this.simulation.layers[L].objUniverse[O]);
-					this.staticSprites.push(this.simulation.layers[L].objUniverse[O].sprite)				
+				if(this.simOptions.layers[L].objUniverse[O].noDyn || this.simOptions.layers[L].objUniverse[O].permStatic) {
+					layerBranch.push(this.simOptions.layers[L].objUniverse[O]);
+					this.objUniverse.push(this.simOptions.layers[L].objUniverse[O]);
+					this.staticSprites.push(this.simOptions.layers[L].objUniverse[O].sprite)				
 				}
 
 				else {
-					var dynObject = new PhSim.DynObject(this.simulation.layers[L].objUniverse[O])
 					
+					var dynObject = new PhSim.DynObject(this.simOptions.layers[L].objUniverse[O])
+					dynObject.phSim = this;
+
 					// If the collision class object exists
 
 					if(dynObject.static.collisionClass && dynObject.static.collisionClass.trim() !== "__main") {
@@ -137,8 +144,8 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	});
 
-	if(this.simulation.game) {
-		this.lclGame = this.extractLclGame(this.simulation.game);
+	if(this.simOptions.game) {
+		this.lclGame = this.extractLclGame(this.simOptions.game);
 	}
 
 	for(var C = 0; C < this_a.simulation.widgets.length; C++) {
@@ -176,6 +183,24 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 			this_a.connectDynObjects(this_a.dynTree[a.objectA.L][a.objectA.O],this_a.dynTree[a.objectB.L][a.objectB.O]);
 
 		}
+
+		if(a.wFunction) {
+
+            var wf = self.createWFunction(a.function,this_a);
+
+            var closure = function() {
+
+                var f = function(){
+                    wf();
+                };
+
+                return f;
+
+            }
+
+            var f = this.addSimpleEvent(a.trigger,closure(),a);
+
+        }
 
 
 

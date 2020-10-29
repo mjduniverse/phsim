@@ -20,7 +20,7 @@ PhSim.objectTypes = {
  * 
  */
 
-PhSim.Tools.checkObjectType = function (objectTypeStr) {
+PhSim.checkObjectType = function (objectTypeStr) {
 	if(objectTypes[objectTypeStr])
 		return false;
 	else {

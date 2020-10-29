@@ -6,7 +6,7 @@
  * @param {Object} rectangle 
  */
 
-PhSim.Tools.getSpecialRectanglePoints = function(rectangle) {
+PhSim.getSpecialRectanglePoints = function(rectangle) {
 	
 	var o = {
 
@@ -105,7 +105,7 @@ PhSim.prototype.getUniversalObjArray = function() {
  * @param {Widget} widget 
  */
 
-PhSim.Tools.chkWidgetType = function(widget) {
+PhSim.chkWidgetType = function(widget) {
 	
 	for(var i = 0; i < PhSim.boolKey_lc.length; i++) {
 		if(widget[PhSim.boolKey_lc[i]]) {
@@ -437,7 +437,7 @@ PhSim.prototype.inSensorCollision = function(dynObject) {
  * @returns {Boolean}
  */
 
-PhSim.Tools.isPointInRawRectangle = function(cx,cy,cw,ch,px,py) {
+PhSim.isPointInRawRectangle = function(cx,cy,cw,ch,px,py) {
 	
 	var cond = (cx < px) && (px < cx + cw) && (cy < py) && (py < cy + ch) 
 

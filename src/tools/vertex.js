@@ -9,7 +9,7 @@
  * 
  */
 
-PhSim.Tools.getRegPolygonVerts = function(regularPolygon) {
+PhSim.getRegPolygonVerts = function(regularPolygon) {
 
 	var a = []
 	
@@ -35,7 +35,7 @@ PhSim.Tools.getRegPolygonVerts = function(regularPolygon) {
  * @returns {Object[]} 
  */
 
-PhSim.Tools.getRectangleVertArray = function(rectangle) {
+PhSim.getRectangleVertArray = function(rectangle) {
 
 	var a = [
 
@@ -65,7 +65,7 @@ PhSim.Tools.getRectangleVertArray = function(rectangle) {
 	
 	];
 
-	Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Tools.getRectangleCentroid(rectangle));
+	Matter.Vertices.rotate(a, rectangle.cycle, PhSim.getRectangleCentroid(rectangle));
 
 
 	return a;
@@ -82,10 +82,10 @@ PhSim.Tools.getRectangleVertArray = function(rectangle) {
  */
 
 
-PhSim.Tools.getRectangleCorners = function(rectangle) {
+PhSim.getRectangleCorners = function(rectangle) {
 
 
-	var a = PhSim.Tools.getRectangleVertArray(rectangle)
+	var a = PhSim.getRectangleVertArray(rectangle)
 
 	
 	var z = {

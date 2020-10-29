@@ -143,4 +143,20 @@ PhSim.EventStack = function() {
 	/** Array of functions to be executed before the simulation exit */
 
 	this.exit = []
+
+	/** Array of functions to be executed when the canvas is clicked down on */
+
+	this.mousedown = [];
+
+	/** Array of functions to be executed when the canvas is clicked on */
+
+	this.click = [];
+
+	this.objclick = [];
+
+	this.objmousemove = [];
+
+	this.objmouseup = [];
+
+
 }

@@ -1,5 +1,11 @@
 PhSim.Audio = {}
 
+/**
+ * @function
+ * @param {Object} p_audio - Static Audio Object
+ * @param {Function} onload 
+ */
+
 PhSim.Audio.AudioArray = function(p_audio,onload) {
 
 	// force load function if audio list is empty

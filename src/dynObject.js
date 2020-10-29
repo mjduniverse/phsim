@@ -1,5 +1,44 @@
 /**
  * 
+ * @function
+ * @param {PhSimObject} composite - The composite to be flattened.
+ * @returns {PhSimObject[]} - The array of objects found in the composites. 
+ */
+
+PhSim.flattenComposite = function(composite) {
+
+	var a = [];
+
+	/**
+	 * 
+	 * @param {*} composite
+	 * @inner
+	 */
+	
+	var __f = function(composite) {
+
+		for(var i = 0; i < composite.parts.length; i++) {
+
+			if(composite.parts[i].composite) {
+				PhSim.flattenComposite(composite.parts[i].composite);
+			}
+
+			else {
+				a.push(composite.parts[i]);
+			}
+
+		}
+
+	}
+
+	__f(composite);
+
+	return a;
+
+}
+
+/**
+ * 
  * Create Dynamic Object from static object
  * @constructor
  * @param {PhSimObject} staticObject - Static Object
@@ -10,6 +49,62 @@
 PhSim.DynObject = function(staticObject) {
 
 	Object.assign(this,staticObject);
+
+	this.matter = PhSim.createMatterObject(staticObject);
+
+	if(staticObject.path === true) {
+		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
+	}
+
+	this.firstCycle = staticObject.cycle;
+
+	if(staticObject.composite === true) {
+		this.flattenedParts = PhSim.flattenComposite();
+	}
+
+	
+	/** 
+	 * Reference to static object used to create the DynObject
+	 * @type {StaticObject}
+	 */
+
+	this.static = staticObject;
+
+	/** 
+	 * Object ID 
+	 * @type {String}
+	 * */
+
+	this.id = PhSim.nextId;
+
+	PhSim.nextId = (Number.parseInt(PhSim.nextId,36) + 1).toString(36);
+	
+	/**
+	 * Reference to parent simulation
+	 * @type {null|PhSim}
+	 */
+
+	this.phSim;
+
+	/** 
+	 * Refernce of DynObj in matter object 
+	 * @type {Object}
+	 * */
+
+	this.matter.plugin.ph = this;
+
+}
+
+/**
+ * 
+ * Create a matter.js object from a DynSim static object
+ * 
+ * @function
+ * @param {StaticObject} staticObject
+ * @returns {MatterBody} 
+ */
+
+PhSim.createMatterObject = function(staticObject) {
 
 	var opts = staticObject;
 
@@ -37,87 +132,27 @@ PhSim.DynObject = function(staticObject) {
 		opts.collisionFilter = staticObject.collisionNum;
 	}
 
+
 	if(staticObject.path === true) {
-
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
-
-		/** Irregular polygon skinmesh */
-
-		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
-
-		//PhSim.Static.Path.call(this);
-
-	}
-
-	if(staticObject.circle === true) {
-		this.matter = Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
-		this.firstCycle = staticObject.cycle;
-		//PhSim.Static.Circle.call(this);
-	}
-
-	if(staticObject.rectangle === true) {
-		var set = PhSim.Tools.getRectangleVertArray(staticObject);
-		this.firstCycle = staticObject.cycle;
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-		//PhSim.Static.Rectangle.call(this);
-	}
-
-	if(staticObject.regPolygon === true) {
-		var set = PhSim.Tools.getRegPolygonVerts(staticObject);
-		this.firstCycle = staticObject.cycle;
-		this.matter = Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-		//PhSim.Static.RegPolygon.call(this);
-	}
-
-	if(typeof matterParts === "undefined") {
-		var matterParts = [];
-	}
-
-	if(staticObject.composite === true) {
-
-		// Flattened tree of Matter.js objects
-
-		// New parts array for object
-
-		var dynParts = [];
-
-		for(var i = 0; i < o.parts.length; i++)  {
-			var dynObject = new PhSim.DynObject(o.parts[i]);
-
-			for(var j = 1; j < dynObject.parts.length; j++) {
-				matterParts.push(dynObject.parts[j]);
-			}
-
-			dynParts.push(dynObject);
-		}
-		
-		this.parts = dynParts;
-
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
 	}
 
 	
-	/** 
-	 * Reference to static object used to create the DynObject
-	 * @type {StaticObject}
-	 */
+	else if(staticObject.circle === true) {
+		return Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
+	}
 
-	this.static = staticObject;
 
-	/** 
-	 * Object ID 
-	 * @type {String}
-	 * */
+	else if(staticObject.rectangle === true) {
+		var set = PhSim.getRectangleVertArray(staticObject);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+	}
 
-	this.id = PhSim.nextId;
+	else if(staticObject.regPolygon === true) {
+		var set = PhSim.getRegPolygonVerts(staticObject);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+	}
 
-	PhSim.nextId = (Number.parseInt(PhSim.nextId,36) + 1).toString(36);
-	
-	/** 
-	 * Refernce of DynObj in matter object 
-	 * @type {Object}
-	 * */
-
-	this.matter.plugin.ph = this;
 
 }
 
@@ -126,5 +161,9 @@ PhSim.DynObject = function(staticObject) {
  * 
  * @typedef {PhSim.DynObject|StaticObject} PhSimObject
  * 
- *
  */
+
+ /**
+  * A PhSimObject array is an array of PhSimObject objects
+  * @typedef {PhSimObject[]} PhSimObjectArr
+  */
