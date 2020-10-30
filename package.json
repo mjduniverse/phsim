@@ -6,11 +6,17 @@
   "directories": {
     "test": "test"
   },
+  
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mjduniverse/phsim.git"
+  },
+
   "dependencies": {
-    "matter-js": "^0.14.2"
+    "matter-js": "^0.14.2",
+    "poly-decomp": "^0.3.0"
   },
   "devDependencies": {
-    "poly-decomp": "^0.3.0",
     "script-loader": "^0.7.2",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
