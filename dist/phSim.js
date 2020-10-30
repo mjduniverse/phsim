@@ -4025,22 +4025,18 @@ PhSim.prototype.getStatic = function(dynObject) {
  * 
  * @function
  * @param {String} str - String for the name
- * @returns {PhSim.DynObject}
+ * @returns {PhSimObject|null} -  Returns the object if found, but returns "null" object if not.
  */
 
 PhSim.prototype.getObjectByName = function(str) {
 
-	var returnObj;
-	var self = this;
-	
-	this.forAllObjects(function(dynObject) {
-		if(self.getStatic(dynObject).name === str) {
-			returnObj = dynObject;
-			return false;
+	for(var i = 0; i < this.objUniverse.length; i++) {
+		if(this.objUniverse[i].name === str) {
+			return this.objUniverse[i];
 		}
-	});
+	}
 
-	return returnObj;
+	return null;
 
 }
 
