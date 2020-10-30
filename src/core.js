@@ -184,3 +184,7 @@ PhSim.version = "0.1.0-alpha"
 if(typeof window === "object") {
 	window.PhSim = PhSim;
 }
+
+if(typeof module === "object") {
+    module.exports = PhSim;
+}

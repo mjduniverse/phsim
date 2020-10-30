@@ -157,7 +157,41 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
         }
     
         if(widget.toggleLock) {
-            
+
+            var closure = function() {
+
+                var o = dyn_object;
+
+                var f = function() {
+                    self.toggleLock(o);
+                }
+
+                return f;
+            }
+
+            this.addSimpleEvent(widget.trigger,closure(),{
+                ...widget,
+                triggerObj: dyn_object
+            });
+        }
+
+        if(widget.toggleSemiLock) {
+
+            var closure = function() {
+
+                var o = dyn_object;
+
+                var f = function() {
+                    self.toggleSemiLock(o);
+                }
+
+                return f;
+            }
+
+            this.addSimpleEvent(widget.trigger,closure(),{
+                ...widget,
+                triggerObj: dyn_object
+            });
         }
     
         if(widget.clone) {

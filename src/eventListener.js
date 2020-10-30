@@ -1,11 +1,5 @@
 /**
  * 
- * @typedef {""}
- * 
- */
-
-/**
- * 
  * Used to add events to a PhSim simulation
  * 
  * @function

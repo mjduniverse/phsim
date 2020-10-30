@@ -126,7 +126,8 @@ module.exports = __webpack_require__(38);
  *
  */
 
-__webpack_require__(2);
+module.exports = __webpack_require__(2);
+
 __webpack_require__(3 );
 __webpack_require__(4 );
 __webpack_require__(5);
@@ -241,7 +242,7 @@ PhSim.prototype.addToOverlayer = function(dynObject) {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 /** 
  * Dynamic Simulation Instance Object 
@@ -305,7 +306,7 @@ PhSim.prototype.init = false;
 PhSim.prototype.sl_time = 0;
 
 /**
- * Index of the current simulation
+ * Index of the current simulation.
  * @type {Number}
  */
 
@@ -334,14 +335,14 @@ PhSim.prototype.mouseY = null;
 
 /**
  * Simulation options
- * @deprecated
+ * @deprecated Due to confusing name.
  */
 
 PhSim.prototype.sim = null;
 
 /**
  * Current simulation options
- * @deprecated
+ * @deprecated Due to confusing name.
  */
 
 PhSim.prototype.simulation = null;
@@ -428,6 +429,10 @@ PhSim.version = "0.1.0-alpha"
 
 if(typeof window === "object") {
 	window.PhSim = PhSim;
+}
+
+if(true) {
+    module.exports = PhSim;
 }
 
 /***/ }),
@@ -2783,6 +2788,13 @@ PhSim.DynObject = function(staticObject) {
 
 	PhSim.nextId = (Number.parseInt(PhSim.nextId,36) + 1).toString(36);
 	
+	/**
+	 * Reference to parent simulation
+	 * @type {null|PhSim}
+	 */
+
+	this.phSim;
+
 	/** 
 	 * Refernce of DynObj in matter object 
 	 * @type {Object}
@@ -3386,7 +3398,8 @@ PhSim.prototype.renderAllCounters = function() {
  */
 
 PhSim.prototype.toggleLock = function(dynObject) {
-	dynObject
+	dynObject.locked = !dynObject.locked;
+	Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
 /**
@@ -3395,7 +3408,8 @@ PhSim.prototype.toggleLock = function(dynObject) {
  */
 
 PhSim.prototype.toggleSemiLock = function(dynObject) {
-
+	dynObject.locked = !dynObject.locked;
+	Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
 /**
@@ -3763,12 +3777,6 @@ PhSim.prototype.deregisterKeyEvents = function() {
 /***/ }),
 /* 23 */
 /***/ (function(module, exports) {
-
-/**
- * 
- * @typedef {""}
- * 
- */
 
 /**
  * 
@@ -5186,7 +5194,41 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
         }
     
         if(widget.toggleLock) {
-            
+
+            var closure = function() {
+
+                var o = dyn_object;
+
+                var f = function() {
+                    self.toggleLock(o);
+                }
+
+                return f;
+            }
+
+            this.addSimpleEvent(widget.trigger,closure(),{
+                ...widget,
+                triggerObj: dyn_object
+            });
+        }
+
+        if(widget.toggleSemiLock) {
+
+            var closure = function() {
+
+                var o = dyn_object;
+
+                var f = function() {
+                    self.toggleSemiLock(o);
+                }
+
+                return f;
+            }
+
+            this.addSimpleEvent(widget.trigger,closure(),{
+                ...widget,
+                triggerObj: dyn_object
+            });
         }
     
         if(widget.clone) {
@@ -5790,7 +5832,7 @@ PhSim.prototype.extractLclGame = function(localSettings) {
 				self.pause();
 				self.enableFilter();
 
-				if(self.simulationIndex + 1 === self.sim.simulations.length) {
+				if(self.simulationIndex + 1 === self.options.simulations.length) {
 					var a = self.alert({
 						msg:"You Win!",
 						closeButtonTxt:"Play again",
