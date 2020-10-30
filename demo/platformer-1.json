@@ -1,0 +1,321 @@
+{
+    "scripts": [],
+    "version": 1,
+    "audio": [],
+    "sprites": [],
+    "gradients": [],
+    "simulations": [
+        {
+            "layers": [
+                {
+                    "objUniverse": [
+                        {
+                            "strokeStyle": "black",
+                            "lineWidth": 3,
+                            "sprite": null,
+                            "fillStyle": "gray",
+                            "globalAlpha": 1,
+                            "widgets": [],
+                            "locked": true,
+                            "sensorClass": "",
+                            "name": "Untitled",
+                            "cycle": 0,
+                            "rectangle": true,
+                            "x": 20,
+                            "y": 547,
+                            "w": 758,
+                            "h": 31,
+                            "text": null
+                        },
+                        {
+                            "strokeStyle": "black",
+                            "lineWidth": 3,
+                            "sprite": null,
+                            "fillStyle": "gray",
+                            "globalAlpha": 1,
+                            "widgets": [],
+                            "locked": true,
+                            "sensorClass": "",
+                            "name": "Untitled",
+                            "cycle": 0,
+                            "rectangle": true,
+                            "x": 24,
+                            "y": 413,
+                            "w": 199,
+                            "h": 27,
+                            "text": null
+                        },
+                        {
+                            "strokeStyle": "black",
+                            "lineWidth": 3,
+                            "sprite": null,
+                            "fillStyle": "gray",
+                            "globalAlpha": 1,
+                            "widgets": [],
+                            "locked": true,
+                            "sensorClass": "",
+                            "name": "Untitled",
+                            "cycle": 0,
+                            "rectangle": true,
+                            "x": 568,
+                            "y": 398,
+                            "w": 209,
+                            "h": 34,
+                            "text": null
+                        },
+                        {
+                            "strokeStyle": "black",
+                            "lineWidth": 3,
+                            "sprite": null,
+                            "fillStyle": "gray",
+                            "globalAlpha": 1,
+                            "widgets": [],
+                            "locked": true,
+                            "sensorClass": "",
+                            "name": "Untitled",
+                            "cycle": 0,
+                            "rectangle": true,
+                            "x": 227,
+                            "y": 321,
+                            "w": 343,
+                            "h": 24,
+                            "text": null
+                        },
+                        {
+                            "strokeStyle": "black",
+                            "lineWidth": 3,
+                            "sprite": null,
+                            "fillStyle": "gray",
+                            "globalAlpha": 1,
+                            "widgets": [],
+                            "locked": true,
+                            "sensorClass": "",
+                            "name": "Untitled",
+                            "cycle": 0,
+                            "rectangle": true,
+                            "x": 16,
+                            "y": 164,
+                            "w": 187,
+                            "h": 35,
+                            "text": null
+                        },
+                        {
+                            "strokeStyle": "black",
+                            "lineWidth": 3,
+                            "sprite": null,
+                            "fillStyle": "gray",
+                            "globalAlpha": 1,
+                            "widgets": [],
+                            "locked": true,
+                            "sensorClass": "",
+                            "name": "Untitled",
+                            "cycle": 0,
+                            "rectangle": true,
+                            "x": 580,
+                            "y": 156,
+                            "w": 201,
+                            "h": 39,
+                            "text": null
+                        },
+                        {
+                            "strokeStyle": "#000000",
+                            "lineWidth": 0,
+                            "sprite": null,
+                            "fillStyle": "#ffd900",
+                            "globalAlpha": 1,
+                            "widgets": [
+                                {
+                                    "deleteSelf": true,
+                                    "trigger": "sensor"
+                                }
+                            ],
+                            "locked": true,
+                            "sensorClass": "coins",
+                            "name": "Untitled",
+                            "cycle": 1.1071487177940904,
+                            "circle": true,
+                            "x": 91,
+                            "y": 363,
+                            "radius": 26.832815729997478
+                        },
+                        {
+                            "strokeStyle": "black",
+                            "lineWidth": 3,
+                            "sprite": null,
+                            "fillStyle": "gray",
+                            "globalAlpha": 1,
+                            "widgets": [
+                                {
+                                    "velocity": true,
+                                    "key": "ArrowRight",
+                                    "vector": {
+                                        "x": 10,
+                                        "y": 0
+                                    },
+                                    "trigger": "key"
+                                },
+                                {
+                                    "velocity": true,
+                                    "trigger": "key",
+                                    "key": "ArrowRight",
+                                    "vector": {
+                                        "x": 10,
+                                        "y": 10
+                                    }
+                                },
+                                {
+                                    "velocity": true,
+                                    "trigger": "key",
+                                    "key": "ArrowRight",
+                                    "vector": {
+                                        "x": 10,
+                                        "y": 10
+                                    }
+                                },
+                                {
+                                    "velocity": true,
+                                    "key": "ArrowLeft",
+                                    "vector": {
+                                        "x": -10,
+                                        "y": 0
+                                    },
+                                    "trigger": "key"
+                                },
+                                {
+                                    "velocity": true,
+                                    "key": "ArrowUp",
+                                    "vector": {
+                                        "x": 0,
+                                        "y": -10
+                                    },
+                                    "trigger": "key"
+                                },
+                                {
+                                    "noRotation": true
+                                }
+                            ],
+                            "locked": null,
+                            "sensorClass": "coins",
+                            "name": "Untitled",
+                            "cycle": 0,
+                            "rectangle": true,
+                            "x": 310,
+                            "y": 448,
+                            "w": 47,
+                            "h": 47,
+                            "text": null
+                        },
+                        {
+                            "strokeStyle": "#000000",
+                            "lineWidth": 0,
+                            "sprite": null,
+                            "fillStyle": "#ffd900",
+                            "globalAlpha": 1,
+                            "widgets": [
+                                {
+                                    "deleteSelf": true,
+                                    "trigger": "sensor"
+                                }
+                            ],
+                            "locked": true,
+                            "sensorClass": "coins",
+                            "name": "Untitled",
+                            "cycle": 1.1071487177940904,
+                            "circle": true,
+                            "x": 395,
+                            "y": 234,
+                            "radius": 26.832815729997478
+                        },
+                        {
+                            "strokeStyle": "#000000",
+                            "lineWidth": 0,
+                            "sprite": null,
+                            "fillStyle": "#ffd900",
+                            "globalAlpha": 1,
+                            "widgets": [
+                                {
+                                    "deleteSelf": true,
+                                    "trigger": "sensor"
+                                }
+                            ],
+                            "locked": true,
+                            "sensorClass": "coins",
+                            "name": "Untitled",
+                            "cycle": 1.1071487177940904,
+                            "circle": true,
+                            "x": 88,
+                            "y": 117,
+                            "radius": 26.832815729997478
+                        },
+                        {
+                            "strokeStyle": "#000000",
+                            "lineWidth": 0,
+                            "sprite": null,
+                            "fillStyle": "#ffd900",
+                            "globalAlpha": 1,
+                            "widgets": [
+                                {
+                                    "deleteSelf": true,
+                                    "trigger": "sensor"
+                                }
+                            ],
+                            "locked": true,
+                            "sensorClass": "coins",
+                            "name": "Untitled",
+                            "cycle": 1.1071487177940904,
+                            "circle": true,
+                            "x": 673,
+                            "y": 104,
+                            "radius": 26.832815729997478
+                        },
+                        {
+                            "strokeStyle": "#000000",
+                            "lineWidth": 0,
+                            "sprite": null,
+                            "fillStyle": "#ffd900",
+                            "globalAlpha": 1,
+                            "widgets": [
+                                {
+                                    "deleteSelf": true,
+                                    "trigger": "sensor"
+                                }
+                            ],
+                            "locked": true,
+                            "sensorClass": "coins",
+                            "name": "Untitled",
+                            "cycle": 1.1071487177940904,
+                            "circle": true,
+                            "x": 670,
+                            "y": 370,
+                            "radius": 26.832815729997478
+                        }
+                    ],
+                    "name": "Untitled Layer"
+                }
+            ],
+            "world": {
+                "grav": null,
+                "bg": "white",
+                "border": null,
+                "unit": 1
+            },
+            "superlayer": true,
+            "widgets": [],
+            "game": {
+                "life": null,
+                "goal": null,
+                "score": null
+            },
+            "name": "Untitled Superlayer"
+        }
+    ],
+    "box": {
+        "width": 800,
+        "height": 600
+    },
+    "camera": {
+        "x": 0,
+        "y": 0,
+        "c": 1
+    }
+}
