@@ -92,10 +92,10 @@ PhSim.prototype.simpleEventRefs = [];
  * Properties for a simple event.
  *
  * @typedef {Object} simpleEventOptions
- * @property {@external https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key|KeyboardEvent.key} key - The event.key value for triggering a simple event.
- * @property {Number} time - The time interval between a repeated event or a delay time for timeouts.
- * @property {Number} maxN - The maximum number of times a repeated SimpleEvent can be executed.
- * @property {PhSim.DynObject} triggerObj - Trigger object
+ * @property {@external https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key|KeyboardEvent.key} [key] - The event.key value for triggering a simple event.
+ * @property {Number} [time] - The time interval between a repeated event or a delay time for timeouts.
+ * @property {Number} [maxN] - The maximum number of times a repeated SimpleEvent can be executed.
+ * @property {PhSim.DynObject} [triggerObj] - Trigger object
  * 
  * The simple event options is an Object that is used for the {@link PhSim#addSimpleEvent} function.
  */
