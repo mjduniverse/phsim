@@ -235,7 +235,8 @@ PhSim.prototype.renderAllCounters = function() {
  */
 
 PhSim.prototype.toggleLock = function(dynObject) {
-	dynObject
+	dynObject.locked = !dynObject.locked;
+	Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
 /**
@@ -244,7 +245,8 @@ PhSim.prototype.toggleLock = function(dynObject) {
  */
 
 PhSim.prototype.toggleSemiLock = function(dynObject) {
-
+	dynObject.locked = !dynObject.locked;
+	Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
 /**

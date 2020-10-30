@@ -27,7 +27,8 @@
  *
  */
 
-require("./core");
+module.exports = require("./core");
+
 require("./objects" );
 require("./eventStack" );
 require("./phRender");
