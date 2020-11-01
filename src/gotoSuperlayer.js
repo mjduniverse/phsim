@@ -70,64 +70,34 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	
 		for(var L = 0; L < this.simOptions.layers.length; L++) {
 
-			var layerComposite = Matter.Composite.create();
-			var layerBranch = [];
+			this.dynTree.push([]);
 
 			for(var O = 0; O < this.simOptions.layers[L].objUniverse.length; O++) {
+
+				var o = this.simOptions.layers[L].objUniverse[O];
+
+				if(o.sprite) {
+					this.staticSprites.push(o.sprite);	
+				}
 				
-				if(this.simOptions.layers[L].objUniverse[O].noDyn || this.simOptions.layers[L].objUniverse[O].permStatic) {
-					layerBranch.push(this.simOptions.layers[L].objUniverse[O]);
-					this.objUniverse.push(this.simOptions.layers[L].objUniverse[O]);
-					this.staticSprites.push(this.simOptions.layers[L].objUniverse[O].sprite)				
+				if(o.noDyn || o.permStatic) {
+
+					this.addObject(o,{
+						layer: L
+					});
+			
 				}
 
 				else {
 					
-					var dynObject = new PhSim.DynObject(this.simOptions.layers[L].objUniverse[O])
-					dynObject.phSim = this;
+					var dynObject = new PhSim.DynObject(o);
 
-					// If the collision class object exists
-
-					if(dynObject.static.collisionClass && dynObject.static.collisionClass.trim() !== "__main") {
-
-						var a = this.getCollisionClasses(dynObject);
-
-						for(var i = 0; i < a.length; i++) {
-							
-							if(this.collisionClasses[a[i]]) {
-								this.collisionClasses[a[i]].addDynObject(dynObject)
-							}
-
-							else {
-								var ncc = new PhSim.CollisionClass(a[i]);
-								ncc.addDynObject(dynObject);
-								this.collisionClasses[a[i]] = ncc;
-							}
-						}
-
-					}
-
-					else {
-						Matter.World.add(layerComposite,dynObject.matter);
-					}
-					
-					if(dynObject.static.widgets) {
-						this.extractWidgets(dynObject);
-					}
-
-					layerBranch.push(dynObject);
-					this.objUniverse.push(dynObject);
-					dynObject.layerBranch = layerBranch;
-					
-					if(dynObject.static.sprite) {
-						this.staticSprites.push(dynObject.static.sprite)
-					}
+					this.addObject(dynObject,{
+						layer: L
+					});
 
 				}
 			}
-
-			Matter.World.add(this.matterJSWorld,layerComposite);
-			this.dynTree.push(layerBranch);
 
 			var a = new PhSim.PhDynEvent();
 			this_a.callEventClass("matterJSLoad",this_a,a);

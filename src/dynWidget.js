@@ -194,14 +194,120 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 }
 
+
+
+PhSim.prototype.forAllObjects = function(call) {
+	
+	var a = this.objUniverse;
+
+	for(var i = 0; i < a.length; i++) {
+		var z = call(a[i]);
+		if(z === false) {
+			break;
+		}
+	}
+}
+
+
+PhSim.prototype.addToOverlayer = function(dynObject) {
+	
+	if(!dynObject.permStatic) {
+		Matter.World.add(this.matterJSWorld, dynObject.matter);
+	}
+
+	this.objUniverse.push(dynObject);
+
+}
+
+PhSim.prototype.isNonDyn = function(o) {
+	return o.noDyn || o.permStatic;
+}
+
+/**
+ * 
+ * Add Object to PhSim simulation
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Object} options
+ * @param {Number} options.layer 
+ * @returns {PhSim.DynObject} - The added dynObject. 
+ */
+
+PhSim.prototype.addObject = function(dynObject,options = {}) {
+
+	if(typeof options.layer === "number") {
+		this.dynTree[options.layer].push(dynObject);
+
+		if(!this.isNonDyn(dynObject)) {
+			dynObject.layerBranch = this.dynTree[options.layer];
+		}
+
+	}
+
+	this.objUniverse.push(dynObject);
+
+	if(!this.isNonDyn(dynObject)) {
+
+		dynObject.phSim = this;
+
+		// If the collision class object exists
+
+		if(dynObject.static.collisionClass && dynObject.static.collisionClass.trim() !== "__main") {
+
+			var a = this.getCollisionClasses(dynObject);
+
+			for(var i = 0; i < a.length; i++) {
+				
+				if(this.collisionClasses[a[i]]) {
+					this.collisionClasses[a[i]].addDynObject(dynObject)
+				}
+
+				else {
+					var ncc = new PhSim.CollisionClass(a[i]);
+					ncc.addDynObject(dynObject);
+					this.collisionClasses[a[i]] = ncc;
+				}
+			}
+
+		}
+
+		else {
+			Matter.World.add(this.matterJSWorld,dynObject.matter);
+		}
+		
+		if(dynObject.static.widgets) {
+			this.extractWidgets(dynObject);
+		}
+
+	}
+
+	return dynObject;
+}
+
 /**
  * Remove dynamic object
+ * @function
  * @param {PhSim.DynObject}  dynObject - Dynamic Object
+ * @returns {PhSim.DynObject} - The removed Dynamic Object
  */
 
 PhSim.prototype.removeDynObj = function(dynObject) {
-	Matter.Composite.remove(this.matterJSWorld,dynObject.matter,true);
+
+	for(var i = 0; i < dynObject.collisionClasses.length; i++) {
+		dynObject.collisionClasses[i].removeDynObject(dynObject);
+	}
+
 	this.objUniverse.splice(this.objUniverse.indexOf(dynObject),1);
+
+	if(dynObject.layerBranch) {
+		var i = dynObject.layerBranch.indexOf(dynObject);
+		dynObject.layerBranch.splice(i,1);
+		dynObject.layerBranch = undefined;
+	}
+
+	return dynObject;
+
 }
 
 /**

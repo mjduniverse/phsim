@@ -203,31 +203,6 @@ PhSim.statusStruct = {
 	4: "Loaded Simulation"
 }
 
-
-
-PhSim.prototype.forAllObjects = function(call) {
-	
-	var a = this.getUniversalObjArray();
-
-	for(var i = 0; i < a.length; i++) {
-		var z = call(a[i]);
-		if(z === false) {
-			break;
-		}
-	}
-}
-
-
-PhSim.prototype.addToOverlayer = function(dynObject) {
-	
-	if(!dynObject.permStatic) {
-		Matter.World.add(this.matterJSWorld, dynObject.matter);
-	}
-
-	this.objUniverse.push(dynObject);
-
-}
-
 /**
  * 
  * @typedef {PhSim.Static.CompositeSimulation|PhSim.Static.Simulation|StaticObject[]} DynSimOptions
@@ -2199,6 +2174,11 @@ PhSim.Audio.AudioArray = function(p_audio,onload) {
 /* 8 */
 /***/ (function(module, exports) {
 
+/**
+ * @constructor
+ * @param {String} name - Collision class name 
+ */
+
 PhSim.CollisionClass = function(name) {
 
 	var this_a = this;
@@ -2213,9 +2193,33 @@ PhSim.CollisionClass = function(name) {
 
 }
 
+/**
+ * 
+ * Add dynamic object to collision class.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ */
+
 PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
-	return Matter.World.add(this.world,dynObject.matter);
+	dynObject.collisionClasses.push(this);
+	Matter.World.add(this.world,dynObject.matter);
 };
+
+/**
+ * 
+ * Remove object from collision class.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ * @returns {PhSim.DynObject} - The removed DynObject.
+ */
+
+PhSim.CollisionClass.prototype.removeDynObject = function(dynObject) {
+	dynObject.collisionClasses.splice(dynObject.collisionClasses.indexOf(this),1);
+	Matter.World.remove(this.world,dynObject.matter);
+	return dynObject
+}
 
 /***/ }),
 /* 9 */
@@ -2795,6 +2799,13 @@ PhSim.DynObject = function(staticObject) {
 
 	this.phSim;
 
+	/**
+	 * Collision Classes array
+	 * @type {PhSim.CollisionClass[]}
+	 */
+	
+	this.collisionClasses = [];
+
 	/** 
 	 * Refernce of DynObj in matter object 
 	 * @type {Object}
@@ -3357,14 +3368,120 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 }
 
+
+
+PhSim.prototype.forAllObjects = function(call) {
+	
+	var a = this.objUniverse;
+
+	for(var i = 0; i < a.length; i++) {
+		var z = call(a[i]);
+		if(z === false) {
+			break;
+		}
+	}
+}
+
+
+PhSim.prototype.addToOverlayer = function(dynObject) {
+	
+	if(!dynObject.permStatic) {
+		Matter.World.add(this.matterJSWorld, dynObject.matter);
+	}
+
+	this.objUniverse.push(dynObject);
+
+}
+
+PhSim.prototype.isNonDyn = function(o) {
+	return o.noDyn || o.permStatic;
+}
+
+/**
+ * 
+ * Add Object to PhSim simulation
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Object} options
+ * @param {Number} options.layer 
+ * @returns {PhSim.DynObject} - The added dynObject. 
+ */
+
+PhSim.prototype.addObject = function(dynObject,options = {}) {
+
+	if(typeof options.layer === "number") {
+		this.dynTree[options.layer].push(dynObject);
+
+		if(!this.isNonDyn(dynObject)) {
+			dynObject.layerBranch = this.dynTree[options.layer];
+		}
+
+	}
+
+	this.objUniverse.push(dynObject);
+
+	if(!this.isNonDyn(dynObject)) {
+
+		dynObject.phSim = this;
+
+		// If the collision class object exists
+
+		if(dynObject.static.collisionClass && dynObject.static.collisionClass.trim() !== "__main") {
+
+			var a = this.getCollisionClasses(dynObject);
+
+			for(var i = 0; i < a.length; i++) {
+				
+				if(this.collisionClasses[a[i]]) {
+					this.collisionClasses[a[i]].addDynObject(dynObject)
+				}
+
+				else {
+					var ncc = new PhSim.CollisionClass(a[i]);
+					ncc.addDynObject(dynObject);
+					this.collisionClasses[a[i]] = ncc;
+				}
+			}
+
+		}
+
+		else {
+			Matter.World.add(this.matterJSWorld,dynObject.matter);
+		}
+		
+		if(dynObject.static.widgets) {
+			this.extractWidgets(dynObject);
+		}
+
+	}
+
+	return dynObject;
+}
+
 /**
  * Remove dynamic object
+ * @function
  * @param {PhSim.DynObject}  dynObject - Dynamic Object
+ * @returns {PhSim.DynObject} - The removed Dynamic Object
  */
 
 PhSim.prototype.removeDynObj = function(dynObject) {
-	Matter.Composite.remove(this.matterJSWorld,dynObject.matter,true);
+
+	for(var i = 0; i < dynObject.collisionClasses.length; i++) {
+		dynObject.collisionClasses[i].removeDynObject(dynObject);
+	}
+
 	this.objUniverse.splice(this.objUniverse.indexOf(dynObject),1);
+
+	if(dynObject.layerBranch) {
+		var i = dynObject.layerBranch.indexOf(dynObject);
+		dynObject.layerBranch.splice(i,1);
+		dynObject.layerBranch = undefined;
+	}
+
+	return dynObject;
+
 }
 
 /**
@@ -4385,7 +4502,7 @@ PhSim.prototype.applyGravitationalField = function() {
 
 	for(var i = 0; i < a.length; i++) {
 		for(var j = 0; j < a.length; j++) {
-			if(i !== j && !a[i].matter.isStatic && !a[j].matter.isStatic) {
+			if(i !== j && !this.isNonDyn(a[i]) && !this.isNonDyn(a[j]) && !a[i].matter.isStatic && !a[j].matter.isStatic) {
 				var a1 = PhSim.scaleVector(PhSim.subtractVectors(a[j].matter.position,a[i].matter.position),6.67 * Math.pow(10,-11) * a[i].matter.mass * a[j].matter.mass * -1)
 				var b1 = Math.pow(PhSim.calcVertDistance(a[j].matter.position,a[i].matter.position),3);
 				var c = PhSim.divideVector(a1,b1);
@@ -4519,64 +4636,34 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	
 		for(var L = 0; L < this.simOptions.layers.length; L++) {
 
-			var layerComposite = Matter.Composite.create();
-			var layerBranch = [];
+			this.dynTree.push([]);
 
 			for(var O = 0; O < this.simOptions.layers[L].objUniverse.length; O++) {
+
+				var o = this.simOptions.layers[L].objUniverse[O];
+
+				if(o.sprite) {
+					this.staticSprites.push(o.sprite);	
+				}
 				
-				if(this.simOptions.layers[L].objUniverse[O].noDyn || this.simOptions.layers[L].objUniverse[O].permStatic) {
-					layerBranch.push(this.simOptions.layers[L].objUniverse[O]);
-					this.objUniverse.push(this.simOptions.layers[L].objUniverse[O]);
-					this.staticSprites.push(this.simOptions.layers[L].objUniverse[O].sprite)				
+				if(o.noDyn || o.permStatic) {
+
+					this.addObject(o,{
+						layer: L
+					});
+			
 				}
 
 				else {
 					
-					var dynObject = new PhSim.DynObject(this.simOptions.layers[L].objUniverse[O])
-					dynObject.phSim = this;
+					var dynObject = new PhSim.DynObject(o);
 
-					// If the collision class object exists
-
-					if(dynObject.static.collisionClass && dynObject.static.collisionClass.trim() !== "__main") {
-
-						var a = this.getCollisionClasses(dynObject);
-
-						for(var i = 0; i < a.length; i++) {
-							
-							if(this.collisionClasses[a[i]]) {
-								this.collisionClasses[a[i]].addDynObject(dynObject)
-							}
-
-							else {
-								var ncc = new PhSim.CollisionClass(a[i]);
-								ncc.addDynObject(dynObject);
-								this.collisionClasses[a[i]] = ncc;
-							}
-						}
-
-					}
-
-					else {
-						Matter.World.add(layerComposite,dynObject.matter);
-					}
-					
-					if(dynObject.static.widgets) {
-						this.extractWidgets(dynObject);
-					}
-
-					layerBranch.push(dynObject);
-					this.objUniverse.push(dynObject);
-					dynObject.layerBranch = layerBranch;
-					
-					if(dynObject.static.sprite) {
-						this.staticSprites.push(dynObject.static.sprite)
-					}
+					this.addObject(dynObject,{
+						layer: L
+					});
 
 				}
 			}
-
-			Matter.World.add(this.matterJSWorld,layerComposite);
-			this.dynTree.push(layerBranch);
 
 			var a = new PhSim.PhDynEvent();
 			this_a.callEventClass("matterJSLoad",this_a,a);
@@ -6084,10 +6171,10 @@ PhSim.prototype.simpleEventRefs = [];
  * Properties for a simple event.
  *
  * @typedef {Object} simpleEventOptions
- * @property {@external https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key|KeyboardEvent.key} key - The event.key value for triggering a simple event.
- * @property {Number} time - The time interval between a repeated event or a delay time for timeouts.
- * @property {Number} maxN - The maximum number of times a repeated SimpleEvent can be executed.
- * @property {PhSim.DynObject} triggerObj - Trigger object
+ * @property {@external https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key|KeyboardEvent.key} [key] - The event.key value for triggering a simple event.
+ * @property {Number} [time] - The time interval between a repeated event or a delay time for timeouts.
+ * @property {Number} [maxN] - The maximum number of times a repeated SimpleEvent can be executed.
+ * @property {PhSim.DynObject} [triggerObj] - Trigger object
  * 
  * The simple event options is an Object that is used for the {@link PhSim#addSimpleEvent} function.
  */
