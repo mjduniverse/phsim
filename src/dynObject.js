@@ -86,6 +86,13 @@ PhSim.DynObject = function(staticObject) {
 
 	this.phSim;
 
+	/**
+	 * Collision Classes array
+	 * @type {PhSim.CollisionClass[]}
+	 */
+	
+	this.collisionClasses = [];
+
 	/** 
 	 * Refernce of DynObj in matter object 
 	 * @type {Object}

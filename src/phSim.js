@@ -104,31 +104,6 @@ PhSim.statusStruct = {
 	4: "Loaded Simulation"
 }
 
-
-
-PhSim.prototype.forAllObjects = function(call) {
-	
-	var a = this.getUniversalObjArray();
-
-	for(var i = 0; i < a.length; i++) {
-		var z = call(a[i]);
-		if(z === false) {
-			break;
-		}
-	}
-}
-
-
-PhSim.prototype.addToOverlayer = function(dynObject) {
-	
-	if(!dynObject.permStatic) {
-		Matter.World.add(this.matterJSWorld, dynObject.matter);
-	}
-
-	this.objUniverse.push(dynObject);
-
-}
-
 /**
  * 
  * @typedef {PhSim.Static.CompositeSimulation|PhSim.Static.Simulation|StaticObject[]} DynSimOptions
