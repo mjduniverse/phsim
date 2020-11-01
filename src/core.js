@@ -6,7 +6,7 @@
  * 
  */
 
-function PhSim(dynSimOptions = new PhSim.Static.CompositeSimulation()) {
+function PhSim(dynSimOptions = new PhSim.Options.CompositeSimulation()) {
 
 	/**
 	 * The static simulation object
@@ -17,12 +17,12 @@ function PhSim(dynSimOptions = new PhSim.Static.CompositeSimulation()) {
 	}
 
 	else if(Array.isArray(dynSimOptions.layers)) {
-		this.options = new PhSim.Static.CompositeSimulation();
+		this.options = new PhSim.Options.CompositeSimulation();
 		this.options.simulations[0] = dynSimOptions;
 	}
 
 	else if(Array.isArray(dynSimOptions)) {
-		this.options = new PhSim.Static.CompositeSimulation();
+		this.options = new PhSim.Options.CompositeSimulation();
 		this.options.simulations[0].layers[0] = dynSimOptions;
 	}
 
