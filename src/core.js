@@ -2,11 +2,11 @@
  * Dynamic Simulation Instance Object 
  * 
  * @constructor
- * @param {DynSimOptions} sim - The simulation object
+ * @param {DynSimOptions} [sim] - The simulation object
  * 
  */
 
-function PhSim(dynSimOptions) {
+function PhSim(dynSimOptions = new PhSim.Static.CompositeSimulation()) {
 
 	/**
 	 * The static simulation object
@@ -61,10 +61,11 @@ PhSim.prototype.sl_time = 0;
 
 /**
  * Index of the current simulation.
+ * @default 0
  * @type {Number}
  */
 
-PhSim.prototype.simulationIndex = null;
+PhSim.prototype.simulationIndex = 0;
 
 /**
  * Loading status of the dynamic simulation
@@ -175,8 +176,18 @@ PhSim.prototype.audioPlayers = 0;
 PhSim.prototype.collisionClasses = {};
 
 /**
- * PhSim version
+ * Background fill style for rendering.
+ * When {@link PhSim#gotoSimulationIndex} is run, the function sets this value to the
+ * value of {@link PhSim.simOptions.box.bgColor} if it is not a {@link Falsey} value;
  * 
+ * @type {String}
+ */
+
+PhSim.prototype.bgFillStyle = "white";
+
+/**
+ * PhSim version
+ * @type {String}
  */
 
 PhSim.version = "0.1.0-alpha"
@@ -188,3 +199,10 @@ if(typeof window === "object") {
 if(typeof module === "object") {
     module.exports = PhSim;
 }
+
+/**
+ * A falsey value is any value v such that !v === true.
+ * 
+ * @typedef {false|null|undefined|0|NaN|""|0n|-0} Falsey
+ * @see {@link https://developer.mozilla.org/en-US/docs/Glossary/Falsy}
+ */

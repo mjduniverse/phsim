@@ -76,7 +76,7 @@ PhSim.prototype.loopFunction = function() {
 
 		if(this.simCtx) {
 
-			this.simCtx.fillStyle = this.simulation.world.bg;
+			this.simCtx.fillStyle = this.bgFillStyle;
 
 			if(this.noCamera) {
 				this.simCtx.fillRect(0,0,this.width,this.height);
