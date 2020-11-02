@@ -421,13 +421,6 @@ if(true) {
     module.exports = PhSim;
 }
 
-/**
- * A falsey value is any value v such that !v === true.
- * 
- * @typedef {false|null|undefined|0|NaN|""|0n|-0} Falsey
- * @see {@link https://developer.mozilla.org/en-US/docs/Glossary/Falsy}
- */
-
 /***/ }),
 /* 3 */
 /***/ (function(module, exports) {

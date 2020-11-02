@@ -199,10 +199,3 @@ if(typeof window === "object") {
 if(typeof module === "object") {
     module.exports = PhSim;
 }
-
-/**
- * A falsey value is any value v such that !v === true.
- * 
- * @typedef {false|null|undefined|0|NaN|""|0n|-0} Falsey
- * @see {@link https://developer.mozilla.org/en-US/docs/Glossary/Falsy}
- */
