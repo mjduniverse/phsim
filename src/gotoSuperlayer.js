@@ -63,7 +63,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	if(this.simOptions && this.simOptions.world && this.simOptions.world.bg) {
 		this.bgFillStyle = this.simOptions.world.bg;
 	}
-	
+
 	var ncc = new PhSim.CollisionClass("__main");
 	ncc.engine = this.matterJSEngine;
 	ncc.world = this.matterJSWorld;
@@ -119,7 +119,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	});
 
 	if(this.simOptions.game) {
-		this.lclGame = this.extractLclGame(this.simOptions.game);
+		this.lclGame = new PhSim.Game(this,this.simOptions.game);
 	}
 
 	for(var C = 0; C < this_a.simulation.widgets.length; C++) {

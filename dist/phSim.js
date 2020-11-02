@@ -89,7 +89,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(1);
-module.exports = __webpack_require__(38);
+module.exports = __webpack_require__(39);
 
 
 /***/ }),
@@ -171,6 +171,7 @@ __webpack_require__(34);
 __webpack_require__(35);
 __webpack_require__(36);
 __webpack_require__(37);
+__webpack_require__(38);
 
 
 /**
@@ -2186,7 +2187,7 @@ PhSim.CollisionClass.prototype.removeDynObject = function(dynObject) {
 /* 9 */
 /***/ (function(module, exports) {
 
-/*** 
+/** 
  * Constructor for the minimal requirements for being a {@link Vector}. 
  * @constructor
  * @param {Number} x 
@@ -2317,7 +2318,7 @@ PhSim.Vector.distance = function(vector1,vector2) {
  * @returns {Number} - The length of the vector
  */
 
-PhSim.Vector.length = function(vector) {
+PhSim.Vector.getLength = function(vector) {
 	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
 }
 
@@ -2331,7 +2332,7 @@ PhSim.Vector.length = function(vector) {
  */
 
 PhSim.Vector.unitVector = function(vector) {
-	return PhSim.Vector.scale(vector,1/PhSim.Vector.length(vector));
+	return PhSim.Vector.scale(vector,1/PhSim.Vector.getLength(vector));
 }
 
 /**
@@ -4635,7 +4636,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	if(this.simOptions && this.simOptions.world && this.simOptions.world.bg) {
 		this.bgFillStyle = this.simOptions.world.bg;
 	}
-	
+
 	var ncc = new PhSim.CollisionClass("__main");
 	ncc.engine = this.matterJSEngine;
 	ncc.world = this.matterJSWorld;
@@ -4691,7 +4692,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	});
 
 	if(this.simOptions.game) {
-		this.lclGame = this.extractLclGame(this.simOptions.game);
+		this.lclGame = new PhSim.Game(this,this.simOptions.game);
 	}
 
 	for(var C = 0; C < this_a.simulation.widgets.length; C++) {
@@ -5904,100 +5905,209 @@ PhSim.prototype.drawLoadingScreen = function() {
 	this.simCtx.fillText(this.loading.txt,this.simCanvas.width / 2,this.simCanvas.height / 2)
 }
 
-PhSim.prototype.extractLclGame = function(localSettings) {
+/***/ }),
+/* 33 */
+/***/ (function(module, exports) {
 
-	var self = this;
+/**
+ * 
+ * PhSim game constructor.
+ * 
+ * @constructor
+ * @param {PhSim} phSim 
+ * @param {PhSim.Game.Options} options 
+ */
 
-	var o = {
-		intLife: localSettings.life,
-		goal: localSettings.goal,
-		intScore: localSettings.score,
-		static: localSettings,
-		life: localSettings.life,
-		score: localSettings.score,
+PhSim.Game = function(phSim,options) {
 
-		setScore: function(c) {
+	/**
+     * Inital Life
+	 * @type {Number}
+	 */
 
-			o.score = c;
+	this.intLife = options.life;
 
-			if(o.score >= o.goal && Number.isInteger(o.score) && Number.isInteger(o.goal)) {
-			
-				self.pause();
-				self.enableFilter();
+	/**
+     * Game goal
+	 * @type {Number}
+	 */
 
-				if(self.simulationIndex + 1 === self.options.simulations.length) {
-					var a = self.alert({
-						msg:"You Win!",
-						closeButtonTxt:"Play again",
-						bgColor:"#333",
-						txtColor:"#fff",
-						w:300,
-						h:100,
-						onok: function() {
-							self.disableFilter();
-							a.parentNode.removeChild(a);
-							self.gotoSimulationIndex(0);
-						}
-					});
-				}
+	this.goal = options.goal;
 
-				else {
-					clearInterval(self.intervalLoop);
-					self.disableFilter();
-					self.gotoSimulationIndex(self.simulationIndex + 1);
-				}
+	/**
+     * Inital Score
+	 * @type {Number}
+	 */
+	
+	this.intScore = options.score;
 
+	/**
+     * 
+     * Options passed into the constructor
+	 * @type {Number}
+	 */
 
-			}
-		},
+	this.options = options;
 
-		setLife: function(c) {
-			o.life = c;
+	/**
+     * Life
+	 * @type {Number}
+     * 
+	 */
 
-			if(o.life === 0) {
-				o.end();
-			}
+	this.life = options.life;
 
-		},
+	/**
+     * Score
+	 * @type {Number}
+	 */
 
-		incrementLife: function() {
-			o.setLife(o.life + 1);
-		},
+	this.score = options.score;
 
-		decrementLife: function() {
-			o.setLife(o.life - 1);
-		},
+	/**
+     * Reference to the parent PhSim simulation
+	 * @type {PhSim}
+	 */
 
-		end: function() {
+	this.phSim = phSim;
+}
 
-			self.pause();
-			self.enableFilter();
+/**
+ * @constructor
+ * @param {Number} goal 
+ * @param {Number} life 
+ * @param {Number} score 
+ */
 
+PhSim.Game.Options = function(goal,life,score) {
 
-			var a = self.alert({
-				msg:"Game Over",
-				closeButtonTxt:"Try again",
+	/**
+     * Game Goal
+	 * @type {Number}
+	 */
+
+	this.goal = goal;
+
+	/**
+     * Game goal
+	 * @type {Number}
+	 */
+
+	this.life = life;
+
+	/**
+     * Game score
+	 * @type {Number}
+     * 
+	 */
+
+	this.score = score;
+}
+
+/**
+ * @function
+ * @param {Number} c - Score
+ */
+
+PhSim.Game.prototype.setScore = function(c) {
+
+    var self = this;
+
+	this.score = c;
+
+	if(this.score >= this.goal && Number.isInteger(this.score) && Number.isInteger(this.goal)) {
+	
+		this.phSim.pause();
+		this.phSim.enableFilter();
+
+		if(this.phSim.simulationIndex + 1 === this.phSim.options.simulations.length) {
+			var a = self.phSim.alert({
+				msg:"You Win!",
+				closeButtonTxt:"Play again",
 				bgColor:"#333",
 				txtColor:"#fff",
 				w:300,
 				h:100,
 				onok: function() {
-					self.gotoSimulationIndex(self.simulationIndex);
-					self.disableFilter();
-					a.parentNode.removeChild(a);	
+					self.phSim.disableFilter();
+					a.parentNode.removeChild(a);
+					self.phSim.gotoSimulationIndex(0);
 				}
 			});
-
 		}
 
-	}
+		else {
+			clearInterval(this.phSim.intervalLoop);
+			this.phSim.disableFilter();
+			this.phSim.gotoSimulationIndex(this.phSim.simulationIndex + 1);
+		}
 
-	return o;
+
+	}
+},
+
+/**
+ * @function
+ * @param {Number} c - Life value
+ */
+
+PhSim.Game.prototype.setLife = function(c) {
+	this.life = c;
+
+	if(this.life === 0) {
+		this.end();
+	}
+}
+
+/**
+ * @function
+ * Increment life (add 1 to the current life)
+ */
+
+PhSim.Game.prototype.incrementLife = function() {
+	this.setLife(this.life + 1);
+}
+
+/**
+ * @function
+ * Decrement life (subtract 1 from life)
+ */
+
+PhSim.Game.prototype.decrementLife = function() {
+	this.setLife(this.life - 1);
+}
+
+/**
+ * @function
+ * End game
+ */
+
+PhSim.Game.prototype.end = function() {
+
+	this.phSim.pause();
+	this.phSim.enableFilter();
+
+	var self = this;
+
+
+	var a = this.phSim.alert({
+		msg:"Game Over",
+		closeButtonTxt:"Try again",
+		bgColor:"#333",
+		txtColor:"#fff",
+		w:300,
+		h:100,
+		onok: function() {
+			self.phSim.gotoSimulationIndex(self.phSim.simulationIndex);
+			self.phSim.disableFilter();
+			a.parentNode.removeChild(a);	
+		}
+	});
 
 }
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 
@@ -6027,7 +6137,7 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 }
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /*
@@ -6050,7 +6160,7 @@ PhSim.Constraints.Static.Constraint = function() {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 /**
@@ -6084,7 +6194,7 @@ PhSim.calc_skinmesh = function(dynObject) {
 }
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 // Simple Event Reference
@@ -6471,7 +6581,7 @@ PhSim.prototype.removeSimpleEvent = function(refNumber) {
 }
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports) {
 
 /**
@@ -6543,7 +6653,7 @@ PhSim.prototype.processVar = function(str) {
 }
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports) {
 
 // Generated by TypeDefGen module 
