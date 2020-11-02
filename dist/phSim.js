@@ -470,50 +470,6 @@ PhSim.Options = function() {
 
 }
 
-/*** 
- * Constructor for the minimal requirements for being a {@link Vector}. 
- * @constructor
- * @param {Number} x 
- * @param {Number} y
- * 
- */
-
-PhSim.Vector = function(x,y) {
-	
-	/**
-	 * x-coordinate of the vector
-	 * @type {Number}
-	 */
-	
-	this.x;
-
-	/**
-	 * y-coordinate of the vector
-	 * @type {Number}
-	 */
-	
-	this.y;
-
-	if(typeof x === "number") {
-		this.x = x;
-	}
-
-	else {
-		console.trace();
-		throw "Expecting a number in argument 1";
-	}
-
-	if(typeof y === "number") {
-		this.y = y;
-	}
-
-	else {
-		console.trace()
-		throw "Expecting a number in argument 2"
-	}
-
-}
-
 /**
  * 
  * @typedef {PhSim.Vector|Circle|Rectangle|RegPolygon} Vector
@@ -2237,6 +2193,50 @@ PhSim.CollisionClass.prototype.removeDynObject = function(dynObject) {
 /* 9 */
 /***/ (function(module, exports) {
 
+/*** 
+ * Constructor for the minimal requirements for being a {@link Vector}. 
+ * @constructor
+ * @param {Number} x 
+ * @param {Number} y
+ * 
+ */
+
+PhSim.Vector = function(x,y) {
+	
+	/**
+	 * x-coordinate of the vector
+	 * @type {Number}
+	 */
+	
+	this.x;
+
+	/**
+	 * y-coordinate of the vector
+	 * @type {Number}
+	 */
+	
+	this.y;
+
+	if(typeof x === "number") {
+		this.x = x;
+	}
+
+	else {
+		console.trace();
+		throw "Expecting a number in argument 1";
+	}
+
+	if(typeof y === "number") {
+		this.y = y;
+	}
+
+	else {
+		console.trace()
+		throw "Expecting a number in argument 2"
+	}
+
+}
+
 /**
  * 
  * Perform vector addition
@@ -2247,7 +2247,7 @@ PhSim.CollisionClass.prototype.removeDynObject = function(dynObject) {
  * @returns {Vector} - The sum of the two vectors
  */
 
-PhSim.addVectors = function(vector1,vector2) {
+PhSim.Vector.add = function(vector1,vector2) {
 	return new PhSim.Vector(vector1.x + vector2.x, vector1.y + vector2.y);
 }
 
@@ -2261,7 +2261,7 @@ PhSim.addVectors = function(vector1,vector2) {
  * @returns {Vector} - The difference between the two vectors
  */
 
-PhSim.subtractVectors = function(vector1,vector2) {
+PhSim.Vector.subtract = function(vector1,vector2) {
 	return new PhSim.Vector(vector1.x - vector2.x, vector1.y - vector2.y);
 }
 
@@ -2276,7 +2276,7 @@ PhSim.subtractVectors = function(vector1,vector2) {
  * 
  */
 
-PhSim.scaleVector = function(vector,scalar) {
+PhSim.Vector.scale = function(vector,scalar) {
 	return new PhSim.Vector(vector.x * scalar,vector.y * scalar)
 }
 
@@ -2291,7 +2291,7 @@ PhSim.scaleVector = function(vector,scalar) {
  *  
  */
 
-PhSim.divideVector = function(vector,scalar) {
+PhSim.Vector.divide = function(vector,scalar) {
 	return new PhSim.Vector(vector.x * (1/scalar),vector.y * (1/scalar));
 }
 
@@ -2306,7 +2306,7 @@ PhSim.divideVector = function(vector,scalar) {
  *  
  */
 
-PhSim.calcVertDistance = function(vector1,vector2) {
+PhSim.Vector.distance = function(vector1,vector2) {
 	
 	var l1 = Math.pow(vector1.x - vector2.x,2);
 	var l2 = Math.pow(vector1.y - vector2.y,2);
@@ -2324,7 +2324,7 @@ PhSim.calcVertDistance = function(vector1,vector2) {
  * @returns {Number} - The length of the vector
  */
 
-PhSim.getVectorLength = function(vector) {
+PhSim.Vector.length = function(vector) {
 	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
 }
 
@@ -2337,8 +2337,8 @@ PhSim.getVectorLength = function(vector) {
  * @returns {Vector} -  The Unit Vector
  */
 
-PhSim.getUnitVector = function(vector) {
-	return PhSim.scaleVector(vector,1/PhSim.getVectorLength(vector));
+PhSim.Vector.unitVector = function(vector) {
+	return PhSim.Vector.scale(vector,1/PhSim.Vector.length(vector));
 }
 
 /**
@@ -2354,7 +2354,7 @@ PhSim.getUnitVector = function(vector) {
  * @returns - The transformed vector 
  */
 
-PhSim.applyTransformation = function(a11,a12,a21,a22,x,y) {
+PhSim.Vector.applyTransformation = function(a11,a12,a21,a22,x,y) {
 	return new PhSim.Vector(a11 * x + a12 * y,a21 * x + a22 * y);
 }
 
@@ -2369,8 +2369,8 @@ PhSim.applyTransformation = function(a11,a12,a21,a22,x,y) {
  * @returns {Vector}
  */
 
-PhSim.rotatedVector = function(x,y,a) {
-	return PhSim.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
+PhSim.Vector.rotate = function(x,y,a) {
+	return PhSim.Vector.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
 }
 
 /**
@@ -2380,7 +2380,7 @@ PhSim.rotatedVector = function(x,y,a) {
  * @returns {String} - SVG Vector String 
  */
 
-PhSim.svgVector = function(x,y) {
+PhSim.Vector.svgVector = function(x,y) {
 	return x + "," + y;
 }
 
@@ -4516,9 +4516,9 @@ PhSim.prototype.applyGravitationalField = function() {
 	for(var i = 0; i < a.length; i++) {
 		for(var j = 0; j < a.length; j++) {
 			if(i !== j && !this.isNonDyn(a[i]) && !this.isNonDyn(a[j]) && !a[i].matter.isStatic && !a[j].matter.isStatic) {
-				var a1 = PhSim.scaleVector(PhSim.subtractVectors(a[j].matter.position,a[i].matter.position),6.67 * Math.pow(10,-11) * a[i].matter.mass * a[j].matter.mass * -1)
-				var b1 = Math.pow(PhSim.calcVertDistance(a[j].matter.position,a[i].matter.position),3);
-				var c = PhSim.divideVector(a1,b1);
+				var a1 = PhSim.Vector.scale(PhSim.Vector.subtract(a[j].matter.position,a[i].matter.position),6.67 * Math.pow(10,-11) * a[i].matter.mass * a[j].matter.mass * -1)
+				var b1 = Math.pow(PhSim.Vector.distance(a[j].matter.position,a[i].matter.position),3);
+				var c = PhSim.Vector.divide(a1,b1);
 				this.applyForce(a[j],a[i].matter.position,c);
 			}
 		}	
@@ -5558,9 +5558,9 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 var type = widget.type;
     
                 var obj = dyn_object;
-                var relVec = PhSim.subtractVectors(widget.pointB,widget.pointA);
+                var relVec = PhSim.Vector.subtract(widget.pointB,widget.pointA);
                 
-                var u = PhSim.getUnitVector(relVec);
+                var u = PhSim.Vector.unitVector(relVec);
                 
                 var ax;
                 var ay;
@@ -5620,7 +5620,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 var inRange = function() {
         
                 if( cond_f() ) {
-                self.translate(obj,PhSim.scaleVector(u,1));
+                self.translate(obj,PhSim.Vector.scale(u,1));
                         reversable = true;
                 }
                   
@@ -5637,7 +5637,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                         }
     
                         else {
-                            self.translate(obj,PhSim.scaleVector(u,1));
+                            self.translate(obj,PhSim.Vector.scale(u,1));
                         }
                     
                     }

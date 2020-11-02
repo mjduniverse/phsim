@@ -37,7 +37,7 @@ require("./audio");
 
 require("./collisionClass");
 
-require("./tools/vectorTools");
+require("./tools/vector");
 require("./tools/objectChecker");
 require("./tools/diagRect");
 require("./tools/vertex");

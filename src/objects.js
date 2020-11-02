@@ -36,50 +36,6 @@ PhSim.Options = function() {
 
 }
 
-/*** 
- * Constructor for the minimal requirements for being a {@link Vector}. 
- * @constructor
- * @param {Number} x 
- * @param {Number} y
- * 
- */
-
-PhSim.Vector = function(x,y) {
-	
-	/**
-	 * x-coordinate of the vector
-	 * @type {Number}
-	 */
-	
-	this.x;
-
-	/**
-	 * y-coordinate of the vector
-	 * @type {Number}
-	 */
-	
-	this.y;
-
-	if(typeof x === "number") {
-		this.x = x;
-	}
-
-	else {
-		console.trace();
-		throw "Expecting a number in argument 1";
-	}
-
-	if(typeof y === "number") {
-		this.y = y;
-	}
-
-	else {
-		console.trace()
-		throw "Expecting a number in argument 2"
-	}
-
-}
-
 /**
  * 
  * @typedef {PhSim.Vector|Circle|Rectangle|RegPolygon} Vector
