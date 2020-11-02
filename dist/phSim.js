@@ -205,7 +205,7 @@ PhSim.statusStruct = {
 
 /**
  * 
- * @typedef {PhSim.Static.CompositeSimulation|PhSim.Static.Simulation|StaticObject[]} DynSimOptions
+ * @typedef {PhSim.Options|PhSim.Options.Simulation|StaticObject[]} DynSimOptions
  * 
  * The options that can be used to create a dynamic simulation could be a 
  * CompositeSimulation object, a simulation object or an array 
@@ -223,11 +223,11 @@ PhSim.statusStruct = {
  * Dynamic Simulation Instance Object 
  * 
  * @constructor
- * @param {DynSimOptions} sim - The simulation object
+ * @param {DynSimOptions} [sim] - The simulation object
  * 
  */
 
-function PhSim(dynSimOptions) {
+function PhSim(dynSimOptions = new PhSim.Options()) {
 
 	/**
 	 * The static simulation object
@@ -238,12 +238,12 @@ function PhSim(dynSimOptions) {
 	}
 
 	else if(Array.isArray(dynSimOptions.layers)) {
-		this.options = new PhSim.Static.CompositeSimulation();
+		this.options = new PhSim.Options();
 		this.options.simulations[0] = dynSimOptions;
 	}
 
 	else if(Array.isArray(dynSimOptions)) {
-		this.options = new PhSim.Static.CompositeSimulation();
+		this.options = new PhSim.Options();
 		this.options.simulations[0].layers[0] = dynSimOptions;
 	}
 
@@ -282,10 +282,11 @@ PhSim.prototype.sl_time = 0;
 
 /**
  * Index of the current simulation.
+ * @default 0
  * @type {Number}
  */
 
-PhSim.prototype.simulationIndex = null;
+PhSim.prototype.simulationIndex = 0;
 
 /**
  * Loading status of the dynamic simulation
@@ -396,8 +397,18 @@ PhSim.prototype.audioPlayers = 0;
 PhSim.prototype.collisionClasses = {};
 
 /**
- * PhSim version
+ * Background fill style for rendering.
+ * When {@link PhSim#gotoSimulationIndex} is run, the function sets this value to the
+ * value of {@link PhSim.simOptions.box.bgColor} if it is not a {@link Falsey} value;
  * 
+ * @type {String}
+ */
+
+PhSim.prototype.bgFillStyle = "white";
+
+/**
+ * PhSim version
+ * @type {String}
  */
 
 PhSim.version = "0.1.0-alpha"
@@ -417,52 +428,38 @@ if(true) {
 
 /**
  * Objects module
- * @namespace
- */
-
-PhSim.Static = {}
-
-/*** 
- * Constructor for the minimal requirements for being a {@link Vector}. 
+   @namespace
  * @constructor
- * @param {Number} x 
- * @param {Number} y
  * 
  */
 
-PhSim.Vector = function(x,y) {
-	
-	/**
-	 * x-coordinate of the vector
-	 * @type {Number}
-	 */
-	
-	this.x;
+PhSim.Options = function() {
 
 	/**
-	 * y-coordinate of the vector
+	 * PhSim version
 	 * @type {Number}
 	 */
+
+	this.version = PhSim.version;
+
+	/** 
+	 * PhSim Static simulation Array 
+	 * @type {PhSim.Options.Simulation[]}
+	 */
+
+	this.simulations = [];
 	
-	this.y;
+	this.simulations.push(new PhSim.Options.Simulation());
+	this.simulations[0].layers[0].name = "Untitled Layer"
+	this.simulations[0].name = "Untitled simulation";
 
-	if(typeof x === "number") {
-		this.x = x;
-	}
+	/** PhSim Box Settings */
 
-	else {
-		console.trace();
-		throw "Expecting a number in argument 1";
-	}
+	this.box = new PhSim.Options.SimBox(800,600);
 
-	if(typeof y === "number") {
-		this.y = y;
-	}
+	/** PhSim Camera */
 
-	else {
-		console.trace()
-		throw "Expecting a number in argument 2"
-	}
+	this.camera = new PhSim.Options.Camera(0,0,1);
 
 }
 
@@ -488,7 +485,7 @@ PhSim.Vector = function(x,y) {
  * @param {Number} y1 - y coordinate of the second point
  */
 
-PhSim.Static.GradientLimits = function(x0,y0,x1,y1) {
+PhSim.Options.GradientLimits = function(x0,y0,x1,y1) {
 
 	/**
 	 * Start vector
@@ -511,7 +508,7 @@ PhSim.Static.GradientLimits = function(x0,y0,x1,y1) {
  * @param {String} color - String denoting the color of the stop
  */
 
-PhSim.Static.GradientStop = function(pos,color) {
+PhSim.Options.GradientStop = function(pos,color) {
 	
 	/**
 	 * Gradient Color
@@ -529,11 +526,11 @@ PhSim.Static.GradientStop = function(pos,color) {
 }
 
 
-PhSim.Static.Gradient = function() {
+PhSim.Options.Gradient = function() {
 
 	/**
 	 * Gradient Stops
-	 * @type {PhSim.Static.GradientStop[]}
+	 * @type {PhSim.Options.GradientStop[]}
 	 */
 
 	this.stops = [];
@@ -567,9 +564,9 @@ PhSim.Static.Gradient = function() {
 	};
 }
 
-PhSim.Static.lclGradient = function() {
+PhSim.Options.lclGradient = function() {
 	this.src = null;
-	this.limits = new PhSim.Static.GradientLimits(x0,y0,x1,y1);
+	this.limits = new PhSim.Options.GradientLimits(x0,y0,x1,y1);
 	this.type = "linear";
 }
 
@@ -579,7 +576,7 @@ PhSim.Static.lclGradient = function() {
  * @param {PhSim.Vector[]} verts -  Vertcies
  */
 
-PhSim.Static.Path = function(verts) {
+PhSim.Options.Path = function(verts) {
 
 	/**
 	 * Array of vectors defining a path or a polygon
@@ -624,7 +621,7 @@ PhSim.Static.Path = function(verts) {
  * 
  * If a path is used as a polygon, it must have at least three vectors in the verts property. 
  * 
- * @typedef {PhSim.Static.Path} Path
+ * @typedef {PhSim.Options.Path} Path
  * 
  */
  
@@ -634,7 +631,7 @@ PhSim.Static.Path = function(verts) {
  * @constructor
  */
 
-PhSim.Static.Circle = function() {
+PhSim.Options.Circle = function() {
 
 	/**
 	 * Boolean indicating a circle
@@ -682,7 +679,7 @@ PhSim.Static.Circle = function() {
  * typeof obj.radius === number;
  * typeof obj.cycle === number || obj.cycle;
  * 
- * @typedef {PhSim.Static.Circle} Circle
+ * @typedef {PhSim.Options.Circle} Circle
  */
 
 /**
@@ -700,7 +697,7 @@ PhSim.Static.Circle = function() {
  * @param {Number} n - sides of the regular polygon
  */
 
-PhSim.Static.RegPolygon = function(x,y,r,n) {
+PhSim.Options.RegPolygon = function(x,y,r,n) {
 
 	/**
 	 * Boolean for indicating a regular polygon
@@ -757,7 +754,7 @@ PhSim.Static.RegPolygon = function(x,y,r,n) {
  * 
  */
 
-PhSim.Static.Rectangle = function(x,y,w,h) {
+PhSim.Options.Rectangle = function(x,y,w,h) {
 
 	/**
 	 * Boolean for indicating a rectangle
@@ -806,7 +803,7 @@ PhSim.Static.Rectangle = function(x,y,w,h) {
  * 
  * Static Object Type
  * 
- * @typedef {PhSim.Static.Rectangle | PhSim.Static.Circle | PhSim.Static.RegPolygon | PhSim.Static.Path} StaticObject
+ * @typedef {PhSim.Options.Rectangle | PhSim.Options.Circle | PhSim.Options.RegPolygon | PhSim.Options.Path} StaticObject
  * @property {Number} [mass] - The mass of the object.
  * @property {Number} [density] - The density of the object
  * @property {Boolean} [locked] - A boolean deterimining the lock status of the object
@@ -824,7 +821,7 @@ PhSim.Static.Rectangle = function(x,y,w,h) {
  * Composite Object 
  */
 
-PhSim.Static.Composite = function() {
+PhSim.Options.Composite = function() {
 	this.composite = true;
 	this.name = "Untitled";
 }
@@ -838,7 +835,7 @@ PhSim.Static.Composite = function() {
  * 
  */
 
-PhSim.Static.SimBox = function(w,h) {
+PhSim.Options.SimBox = function(w,h) {
 	
 	/**
 	 * Simulation Width
@@ -862,7 +859,7 @@ PhSim.Static.SimBox = function(w,h) {
  *
  */
 
-PhSim.Static.Camera = function(x,y,scale) {
+PhSim.Options.Camera = function(x,y,scale) {
 
 	/**
 	 * x-coordinate vector of camera
@@ -890,7 +887,7 @@ PhSim.Static.Camera = function(x,y,scale) {
  * @constructor
  */
 
-PhSim.Static.Layer = function() {
+PhSim.Options.Layer = function() {
 
 	/**
 	 * The array of objects
@@ -914,16 +911,16 @@ PhSim.Static.Layer = function() {
  * @constructor
  */
 
-PhSim.Static.Simulation = function() {
+PhSim.Options.Simulation = function() {
 
 	/**
 	 * Array of layers
-	 * @type {PhSim.Static.Layer[]}
+	 * @type {PhSim.Options.Layer[]}
 	 */
 
 	this.layers = [];
 
-	this.layers.push(new PhSim.Static.Layer())
+	this.layers.push(new PhSim.Options.Layer())
 	this.world = {
 		grav: 1,
 		bg: "white",
@@ -941,43 +938,7 @@ PhSim.Static.Simulation = function() {
 	this.widgets = [];
 }
 
-/**
- * Simulation Object
- * @constructor
- * 
- */
-
-PhSim.Static.CompositeSimulation = function() {
-
-	/**
-	 * PhSim version
-	 * @type {Number}
-	 */
-
-	this.version = PhSim.version;
-
-	/** 
-	 * PhSim Static simulation Array 
-	 * @type {PhSim.Static.Simulation[]}
-	 */
-
-	this.simulations = [];
-	
-	this.simulations.push(new PhSim.Static.Simulation());
-	this.simulations[0].layers[0].name = "Untitled Layer"
-	this.simulations[0].name = "Untitled simulation";
-
-	/** PhSim Box Settings */
-
-	this.box = new PhSim.Static.SimBox(800,600);
-
-	/** PhSim Camera */
-
-	this.camera = new PhSim.Static.Camera(0,0,1);
-
-}
-
-PhSim.Static.LO = function(L,O) {
+PhSim.Options.LO = function(L,O) {
 
 }
 
@@ -991,7 +952,7 @@ PhSim.Static.LO = function(L,O) {
  * 
  */
 
-PhSim.Static.SLO = function(S,L,O) {
+PhSim.Options.SLO = function(S,L,O) {
 
 }
 
@@ -1421,7 +1382,7 @@ PhSim.PhRender.prototype.renderConstraint = function (constraint) {
  * Render circle
  * 
  * @function
- * @param {PhSim.Static.Circle} circle 
+ * @param {PhSim.Options.Circle} circle 
  */
 
 PhSim.PhRender.prototype.static_circle = function (circle) {
@@ -1492,7 +1453,7 @@ PhSim.PhRender.prototype.static_circle = function (circle) {
  * Render rectangle
  * 
  * @function
- * @param {PhSim.Static.Rectangle} rectangle - Rectangle object
+ * @param {PhSim.Options.Rectangle} rectangle - Rectangle object
  * @param rectangle.sprite - Sprite Object
  */
 
@@ -1614,7 +1575,7 @@ PhSim.PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 
 /**
  * @function
- * @param {PhSim.Static.RegPolygon} regPolygon 
+ * @param {PhSim.Options.RegPolygon} regPolygon 
  */
 
 PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
@@ -2225,6 +2186,50 @@ PhSim.CollisionClass.prototype.removeDynObject = function(dynObject) {
 /* 9 */
 /***/ (function(module, exports) {
 
+/*** 
+ * Constructor for the minimal requirements for being a {@link Vector}. 
+ * @constructor
+ * @param {Number} x 
+ * @param {Number} y
+ * 
+ */
+
+PhSim.Vector = function(x,y) {
+	
+	/**
+	 * x-coordinate of the vector
+	 * @type {Number}
+	 */
+	
+	this.x;
+
+	/**
+	 * y-coordinate of the vector
+	 * @type {Number}
+	 */
+	
+	this.y;
+
+	if(typeof x === "number") {
+		this.x = x;
+	}
+
+	else {
+		console.trace();
+		throw "Expecting a number in argument 1";
+	}
+
+	if(typeof y === "number") {
+		this.y = y;
+	}
+
+	else {
+		console.trace()
+		throw "Expecting a number in argument 2"
+	}
+
+}
+
 /**
  * 
  * Perform vector addition
@@ -2235,7 +2240,7 @@ PhSim.CollisionClass.prototype.removeDynObject = function(dynObject) {
  * @returns {Vector} - The sum of the two vectors
  */
 
-PhSim.addVectors = function(vector1,vector2) {
+PhSim.Vector.add = function(vector1,vector2) {
 	return new PhSim.Vector(vector1.x + vector2.x, vector1.y + vector2.y);
 }
 
@@ -2249,7 +2254,7 @@ PhSim.addVectors = function(vector1,vector2) {
  * @returns {Vector} - The difference between the two vectors
  */
 
-PhSim.subtractVectors = function(vector1,vector2) {
+PhSim.Vector.subtract = function(vector1,vector2) {
 	return new PhSim.Vector(vector1.x - vector2.x, vector1.y - vector2.y);
 }
 
@@ -2264,7 +2269,7 @@ PhSim.subtractVectors = function(vector1,vector2) {
  * 
  */
 
-PhSim.scaleVector = function(vector,scalar) {
+PhSim.Vector.scale = function(vector,scalar) {
 	return new PhSim.Vector(vector.x * scalar,vector.y * scalar)
 }
 
@@ -2279,7 +2284,7 @@ PhSim.scaleVector = function(vector,scalar) {
  *  
  */
 
-PhSim.divideVector = function(vector,scalar) {
+PhSim.Vector.divide = function(vector,scalar) {
 	return new PhSim.Vector(vector.x * (1/scalar),vector.y * (1/scalar));
 }
 
@@ -2294,7 +2299,7 @@ PhSim.divideVector = function(vector,scalar) {
  *  
  */
 
-PhSim.calcVertDistance = function(vector1,vector2) {
+PhSim.Vector.distance = function(vector1,vector2) {
 	
 	var l1 = Math.pow(vector1.x - vector2.x,2);
 	var l2 = Math.pow(vector1.y - vector2.y,2);
@@ -2312,7 +2317,7 @@ PhSim.calcVertDistance = function(vector1,vector2) {
  * @returns {Number} - The length of the vector
  */
 
-PhSim.getVectorLength = function(vector) {
+PhSim.Vector.length = function(vector) {
 	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
 }
 
@@ -2325,8 +2330,8 @@ PhSim.getVectorLength = function(vector) {
  * @returns {Vector} -  The Unit Vector
  */
 
-PhSim.getUnitVector = function(vector) {
-	return PhSim.scaleVector(vector,1/PhSim.getVectorLength(vector));
+PhSim.Vector.unitVector = function(vector) {
+	return PhSim.Vector.scale(vector,1/PhSim.Vector.length(vector));
 }
 
 /**
@@ -2342,7 +2347,7 @@ PhSim.getUnitVector = function(vector) {
  * @returns - The transformed vector 
  */
 
-PhSim.applyTransformation = function(a11,a12,a21,a22,x,y) {
+PhSim.Vector.applyTransformation = function(a11,a12,a21,a22,x,y) {
 	return new PhSim.Vector(a11 * x + a12 * y,a21 * x + a22 * y);
 }
 
@@ -2357,8 +2362,8 @@ PhSim.applyTransformation = function(a11,a12,a21,a22,x,y) {
  * @returns {Vector}
  */
 
-PhSim.rotatedVector = function(x,y,a) {
-	return PhSim.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
+PhSim.Vector.rotate = function(x,y,a) {
+	return PhSim.Vector.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
 }
 
 /**
@@ -2368,7 +2373,7 @@ PhSim.rotatedVector = function(x,y,a) {
  * @returns {String} - SVG Vector String 
  */
 
-PhSim.svgVector = function(x,y) {
+PhSim.Vector.svgVector = function(x,y) {
 	return x + "," + y;
 }
 
@@ -2420,7 +2425,7 @@ PhSim.checkObjectType = function (objectTypeStr) {
  * @param {Number} y1
  * @param {Number} x2
  * @param {Number} y2 
- * @returns {PhSim.Static.Rectangle} - Rectangle Object
+ * @returns {PhSim.Options.Rectangle} - Rectangle Object
  * 
  */
 
@@ -2429,7 +2434,7 @@ PhSim.diagRect = function(x1,y1,x2,y2) {
 	var w = x2 - x1;
 	var h = y2 - y1;
 
-    return new PhSim.Static.Rectangle(x1,y1,w,h);
+    return new PhSim.Options.Rectangle(x1,y1,w,h);
     
  }
 
@@ -2444,7 +2449,7 @@ PhSim.diagRect = function(x1,y1,x2,y2) {
  * Get vertices for a static object representing a regular polygon.
  * 
  * @function
- * @param {PhSim.Static.RegPolygon} regularPolygon - The Static Regular Polygon Object
+ * @param {PhSim.Options.RegPolygon} regularPolygon - The Static Regular Polygon Object
  * @returns {PhSim.Vector[]}
  * 
  */
@@ -2471,7 +2476,7 @@ PhSim.getRegPolygonVerts = function(regularPolygon) {
  * Get vertices for a rectangle
  * 
  * @function
- * @param {PhSim.Static.Rectangle} rectangle
+ * @param {PhSim.Options.Rectangle} rectangle
  * @returns {Object[]} 
  */
 
@@ -2517,7 +2522,7 @@ PhSim.getRectangleVertArray = function(rectangle) {
  * Get rectangle corners
  * 
  * @function
- * @param {PhSim.Static.Rectangle} rectangle 
+ * @param {PhSim.Options.Rectangle} rectangle 
  * @returns {Object}
  */
 
@@ -2553,7 +2558,7 @@ PhSim.getRectangleCorners = function(rectangle) {
  * Get centroid of a rectangle
  * 
  * @function
- * @param {PhSim.Static.Rectangle} rectangle
+ * @param {PhSim.Options.Rectangle} rectangle
  * @returns {Vector}
  *  
  */
@@ -4205,6 +4210,7 @@ PhSim.prototype.isInCollision = function(dynObject) {
  */
 
 PhSim.prototype.pointInObject = function(dynObject,x,y) {
+
 	var c = document.createElement("canvas");
 	
 	var l = c.getContext("2d");
@@ -4503,9 +4509,9 @@ PhSim.prototype.applyGravitationalField = function() {
 	for(var i = 0; i < a.length; i++) {
 		for(var j = 0; j < a.length; j++) {
 			if(i !== j && !this.isNonDyn(a[i]) && !this.isNonDyn(a[j]) && !a[i].matter.isStatic && !a[j].matter.isStatic) {
-				var a1 = PhSim.scaleVector(PhSim.subtractVectors(a[j].matter.position,a[i].matter.position),6.67 * Math.pow(10,-11) * a[i].matter.mass * a[j].matter.mass * -1)
-				var b1 = Math.pow(PhSim.calcVertDistance(a[j].matter.position,a[i].matter.position),3);
-				var c = PhSim.divideVector(a1,b1);
+				var a1 = PhSim.Vector.scale(PhSim.Vector.subtract(a[j].matter.position,a[i].matter.position),6.67 * Math.pow(10,-11) * a[i].matter.mass * a[j].matter.mass * -1)
+				var b1 = Math.pow(PhSim.Vector.distance(a[j].matter.position,a[i].matter.position),3);
+				var c = PhSim.Vector.divide(a1,b1);
 				this.applyForce(a[j],a[i].matter.position,c);
 			}
 		}	
@@ -4626,6 +4632,10 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	this.collisionClasses = {};
 	this.slEventStack = new PhSim.EventStack();
 
+	if(this.simOptions && this.simOptions.world && this.simOptions.world.bg) {
+		this.bgFillStyle = this.simOptions.world.bg;
+	}
+	
 	var ncc = new PhSim.CollisionClass("__main");
 	ncc.engine = this.matterJSEngine;
 	ncc.world = this.matterJSWorld;
@@ -5072,7 +5082,7 @@ PhSim.prototype.loopFunction = function() {
 
 		if(this.simCtx) {
 
-			this.simCtx.fillStyle = this.simulation.world.bg;
+			this.simCtx.fillStyle = this.bgFillStyle;
 
 			if(this.noCamera) {
 				this.simCtx.fillRect(0,0,this.width,this.height);
@@ -5541,9 +5551,9 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 var type = widget.type;
     
                 var obj = dyn_object;
-                var relVec = PhSim.subtractVectors(widget.pointB,widget.pointA);
+                var relVec = PhSim.Vector.subtract(widget.pointB,widget.pointA);
                 
-                var u = PhSim.getUnitVector(relVec);
+                var u = PhSim.Vector.unitVector(relVec);
                 
                 var ax;
                 var ay;
@@ -5603,7 +5613,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 var inRange = function() {
         
                 if( cond_f() ) {
-                self.translate(obj,PhSim.scaleVector(u,1));
+                self.translate(obj,PhSim.Vector.scale(u,1));
                         reversable = true;
                 }
                   
@@ -5620,7 +5630,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                         }
     
                         else {
-                            self.translate(obj,PhSim.scaleVector(u,1));
+                            self.translate(obj,PhSim.Vector.scale(u,1));
                         }
                     
                     }
@@ -6001,7 +6011,7 @@ PhSim.Gradients = {}
 /**
  * @function
  * @param {CanvasRenderingContext2D} ctx 
- * @param {PhSim.Static.Gradient} jsObject 
+ * @param {PhSim.Options.Gradient} jsObject 
  */
 
 PhSim.Gradients.extractGradient = function(ctx,jsObject) {

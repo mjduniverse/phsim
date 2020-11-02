@@ -60,6 +60,10 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	this.collisionClasses = {};
 	this.slEventStack = new PhSim.EventStack();
 
+	if(this.simOptions && this.simOptions.world && this.simOptions.world.bg) {
+		this.bgFillStyle = this.simOptions.world.bg;
+	}
+	
 	var ncc = new PhSim.CollisionClass("__main");
 	ncc.engine = this.matterJSEngine;
 	ncc.world = this.matterJSWorld;

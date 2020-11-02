@@ -201,6 +201,7 @@ PhSim.prototype.isInCollision = function(dynObject) {
  */
 
 PhSim.prototype.pointInObject = function(dynObject,x,y) {
+
 	var c = document.createElement("canvas");
 	
 	var l = c.getContext("2d");
