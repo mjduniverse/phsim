@@ -106,7 +106,7 @@ PhSim.statusStruct = {
 
 /**
  * 
- * @typedef {PhSim.Options.CompositeSimulation|PhSim.Options.Simulation|StaticObject[]} DynSimOptions
+ * @typedef {PhSim.Options|PhSim.Options.Simulation|StaticObject[]} DynSimOptions
  * 
  * The options that can be used to create a dynamic simulation could be a 
  * CompositeSimulation object, a simulation object or an array 

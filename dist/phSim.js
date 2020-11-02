@@ -205,7 +205,7 @@ PhSim.statusStruct = {
 
 /**
  * 
- * @typedef {PhSim.Options.CompositeSimulation|PhSim.Options.Simulation|StaticObject[]} DynSimOptions
+ * @typedef {PhSim.Options|PhSim.Options.Simulation|StaticObject[]} DynSimOptions
  * 
  * The options that can be used to create a dynamic simulation could be a 
  * CompositeSimulation object, a simulation object or an array 
@@ -227,7 +227,7 @@ PhSim.statusStruct = {
  * 
  */
 
-function PhSim(dynSimOptions = new PhSim.Options.CompositeSimulation()) {
+function PhSim(dynSimOptions = new PhSim.Options()) {
 
 	/**
 	 * The static simulation object
@@ -238,12 +238,12 @@ function PhSim(dynSimOptions = new PhSim.Options.CompositeSimulation()) {
 	}
 
 	else if(Array.isArray(dynSimOptions.layers)) {
-		this.options = new PhSim.Options.CompositeSimulation();
+		this.options = new PhSim.Options();
 		this.options.simulations[0] = dynSimOptions;
 	}
 
 	else if(Array.isArray(dynSimOptions)) {
-		this.options = new PhSim.Options.CompositeSimulation();
+		this.options = new PhSim.Options();
 		this.options.simulations[0].layers[0] = dynSimOptions;
 	}
 
@@ -435,10 +435,40 @@ if(true) {
 
 /**
  * Objects module
- * @namespace
+   @namespace
+ * @constructor
+ * 
  */
 
-PhSim.Options = {}
+PhSim.Options = function() {
+
+	/**
+	 * PhSim version
+	 * @type {Number}
+	 */
+
+	this.version = PhSim.version;
+
+	/** 
+	 * PhSim Static simulation Array 
+	 * @type {PhSim.Options.Simulation[]}
+	 */
+
+	this.simulations = [];
+	
+	this.simulations.push(new PhSim.Options.Simulation());
+	this.simulations[0].layers[0].name = "Untitled Layer"
+	this.simulations[0].name = "Untitled simulation";
+
+	/** PhSim Box Settings */
+
+	this.box = new PhSim.Options.SimBox(800,600);
+
+	/** PhSim Camera */
+
+	this.camera = new PhSim.Options.Camera(0,0,1);
+
+}
 
 /*** 
  * Constructor for the minimal requirements for being a {@link Vector}. 
@@ -957,42 +987,6 @@ PhSim.Options.Simulation = function() {
 
 	this.simulation = true;
 	this.widgets = [];
-}
-
-/**
- * Simulation Object
- * @constructor
- * 
- */
-
-PhSim.Options.CompositeSimulation = function() {
-
-	/**
-	 * PhSim version
-	 * @type {Number}
-	 */
-
-	this.version = PhSim.version;
-
-	/** 
-	 * PhSim Static simulation Array 
-	 * @type {PhSim.Options.Simulation[]}
-	 */
-
-	this.simulations = [];
-	
-	this.simulations.push(new PhSim.Options.Simulation());
-	this.simulations[0].layers[0].name = "Untitled Layer"
-	this.simulations[0].name = "Untitled simulation";
-
-	/** PhSim Box Settings */
-
-	this.box = new PhSim.Options.SimBox(800,600);
-
-	/** PhSim Camera */
-
-	this.camera = new PhSim.Options.Camera(0,0,1);
-
 }
 
 PhSim.Options.LO = function(L,O) {

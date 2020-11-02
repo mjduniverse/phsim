@@ -1,10 +1,40 @@
 
 /**
  * Objects module
- * @namespace
+   @namespace
+ * @constructor
+ * 
  */
 
-PhSim.Options = {}
+PhSim.Options = function() {
+
+	/**
+	 * PhSim version
+	 * @type {Number}
+	 */
+
+	this.version = PhSim.version;
+
+	/** 
+	 * PhSim Static simulation Array 
+	 * @type {PhSim.Options.Simulation[]}
+	 */
+
+	this.simulations = [];
+	
+	this.simulations.push(new PhSim.Options.Simulation());
+	this.simulations[0].layers[0].name = "Untitled Layer"
+	this.simulations[0].name = "Untitled simulation";
+
+	/** PhSim Box Settings */
+
+	this.box = new PhSim.Options.SimBox(800,600);
+
+	/** PhSim Camera */
+
+	this.camera = new PhSim.Options.Camera(0,0,1);
+
+}
 
 /*** 
  * Constructor for the minimal requirements for being a {@link Vector}. 
@@ -523,42 +553,6 @@ PhSim.Options.Simulation = function() {
 
 	this.simulation = true;
 	this.widgets = [];
-}
-
-/**
- * Simulation Object
- * @constructor
- * 
- */
-
-PhSim.Options.CompositeSimulation = function() {
-
-	/**
-	 * PhSim version
-	 * @type {Number}
-	 */
-
-	this.version = PhSim.version;
-
-	/** 
-	 * PhSim Static simulation Array 
-	 * @type {PhSim.Options.Simulation[]}
-	 */
-
-	this.simulations = [];
-	
-	this.simulations.push(new PhSim.Options.Simulation());
-	this.simulations[0].layers[0].name = "Untitled Layer"
-	this.simulations[0].name = "Untitled simulation";
-
-	/** PhSim Box Settings */
-
-	this.box = new PhSim.Options.SimBox(800,600);
-
-	/** PhSim Camera */
-
-	this.camera = new PhSim.Options.Camera(0,0,1);
-
 }
 
 PhSim.Options.LO = function(L,O) {
