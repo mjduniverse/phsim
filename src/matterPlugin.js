@@ -56,27 +56,7 @@ PhSim.matterPlugin = {
                 }
 
             }
- 
-            //var c_classesA = PhSim.getCollisionClasses(broadphasePairs[0].plugin.ph);
-            //var c_classesB = PhSim.getCollisionClasses(broadphasePairs[1].plugin.ph);
 
-            /** 
-
-                if(c_classesA.length > 0 && c_classesB.length > 0) {
-                    if(PhSim.intersectionExists(c_classesA,c_classesB)) {
-                        a.push(broadphasePairs[i]);
-                    }
-                }
-
-                else {
-                    a.push(broadphasePairs[i]);
-                }
-
-            }
-
-            **/
-
-            //return a;
         }
     }
 
