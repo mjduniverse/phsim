@@ -70,9 +70,8 @@ PhSim.prototype.loopFunction = function() {
 			this.updateTimeInterval = this.updateDate - this.prevDate;
 		}
 
-		for(var c in this.collisionClasses) {
-			Matter.Engine.update(this.collisionClasses[c].engine,this.delta);
-		}
+
+		PhSim.Matter.Engine.update(this.matterJSEngine,this.delta);
 
 		if(this.simCtx) {
 

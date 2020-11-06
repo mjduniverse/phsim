@@ -30,6 +30,7 @@
 module.exports = require("./core");
 
 require("./objects" );
+require("./matterPlugin.js" );
 require("./eventStack" );
 require("./phRender");
 require("./sprites");

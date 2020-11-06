@@ -46,9 +46,9 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	var this_a = this;
 
-	this.matterJSWorld = Matter.World.create();
+	this.matterJSWorld = PhSim.Matter.World.create();
 
-	this.matterJSEngine = Matter.Engine.create({
+	this.matterJSEngine = PhSim.Matter.Engine.create({
 		world: this_a.matterJSWorld
 	});
 
@@ -64,11 +64,15 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 		this.bgFillStyle = this.simOptions.world.bg;
 	}
 
+	/** 
+
 	var ncc = new PhSim.CollisionClass("__main");
 	ncc.engine = this.matterJSEngine;
 	ncc.world = this.matterJSWorld;
 
 	this.collisionClasses["__main"] = ncc;
+
+	**/
 
 	if(this.options.simulations) {
 	
@@ -110,7 +114,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	}
 
-	Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
+	PhSim.Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
 		
 		var a = new PhSim.PhDynEvent();
 		a.matterEvent = event;
@@ -146,9 +150,9 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 				b.pointB = a.pointB;
 			}
 
-			var c = Matter.Constraint.create(b);
+			var c = PhSim.Matter.Constraint.create(b);
 
-			Matter.World.add(this.matterJSWorld,c)
+			PhSim.Matter.World.add(this.matterJSWorld,c)
 
 		}
 

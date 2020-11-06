@@ -61,7 +61,7 @@ PhSim.prototype.getStatusStr = function() {
  * 
  */
 
-PhSim.prototype.getCollisionClasses = function(dynObject) {
+PhSim.getCollisionClasses = function(dynObject) {
 
 	if(dynObject.collisionClass) {
 		var a = dynObject.collisionClass;
@@ -162,7 +162,7 @@ PhSim.prototype.getObjectByName = function(str) {
  */
 
 PhSim.prototype.collided = function(dynObjectA,dynObjectB) {
-	return Matter.SAT.collides(dynObjectA.matter,dynObjectB.matter).collided;
+	return PhSim.Matter.SAT.collides(dynObjectA.matter,dynObjectB.matter).collided;
 }
 
 /**
@@ -332,7 +332,7 @@ PhSim.prototype.getCollidingObjects = function(dynObject) {
  * @returns {String[]}
  */
 
-PhSim.prototype.getSensorClasses = function(dynObject) {
+PhSim.getSensorClasses = function(dynObject) {
 
 	if(dynObject.sensorClass) {
 		var a = dynObject.sensorClass;
@@ -355,11 +355,11 @@ PhSim.prototype.getSensorClasses = function(dynObject) {
  * @returns {Boolean}
  */
 
-PhSim.prototype.sameSensorClasses = function(dynObjectA,dynObjectB) {
-	return intersectionExists(this.getSensorClasses(dynObjectA),this.getSensorClasses(dynObjectB));
+PhSim.sameSensorClasses = function(dynObjectA,dynObjectB) {
+	return PhSim.intersectionExists(PhSim.getSensorClasses(dynObjectA),PhSim.getSensorClasses(dynObjectB));
 }
 
-function intersectionExists(array1,array2) {
+PhSim.intersectionExists = function(array1,array2) {
 
 	for(var i = 0; i < array1.length; i++) {
 		var a = array2.indexOf(array1[i]);
@@ -390,11 +390,11 @@ PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
 		var dynCol = a[i]
 		var matterCol = dynCol.matter;
 
-		if(matterCol.bodyA.plugin.ph.id === dynObject.id && this.sameSensorClasses(dynObject,dynCol.bodyB)) {
+		if(matterCol.bodyA.plugin.ph.id === dynObject.id && PhSim.sameSensorClasses(dynObject,dynCol.bodyB)) {
 			b.push(dynCol.bodyB);
 		}
 
-		if(matterCol.bodyB.plugin.ph.id === dynObject.id && this.sameSensorClasses(dynObject,dynCol.bodyA)) {
+		if(matterCol.bodyB.plugin.ph.id === dynObject.id && PhSim.sameSensorClasses(dynObject,dynCol.bodyA)) {
 			b.push(dynCol.bodyA);		
 		}
 

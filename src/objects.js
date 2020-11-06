@@ -28,7 +28,7 @@ PhSim.Options = function() {
 
 	/** PhSim Box Settings */
 
-	this.box = new PhSim.Options.SimBox(800,600);
+	this.box = new PhSim.Options.Rectangle(0,0,800,600);
 
 	/** PhSim Camera */
 

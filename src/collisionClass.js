@@ -9,9 +9,9 @@ PhSim.CollisionClass = function(name) {
 
 	this.name = name;
 
-	this.world = Matter.World.create();
+	this.world = PhSim.Matter.World.create();
 
-	this.engine = Matter.Engine.create({
+	this.engine = PhSim.Matter.Engine.create({
 		world: this_a.world
 	});
 
@@ -27,7 +27,7 @@ PhSim.CollisionClass = function(name) {
 
 PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
 	dynObject.collisionClasses.push(this);
-	Matter.World.add(this.world,dynObject.matter);
+	PhSim.Matter.World.add(this.world,dynObject.matter);
 };
 
 /**
@@ -41,6 +41,6 @@ PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
 
 PhSim.CollisionClass.prototype.removeDynObject = function(dynObject) {
 	dynObject.collisionClasses.splice(dynObject.collisionClasses.indexOf(this),1);
-	Matter.World.remove(this.world,dynObject.matter);
+	PhSim.Matter.World.remove(this.world,dynObject.matter);
 	return dynObject
 }

@@ -11,6 +11,10 @@
 */
 
 PhSim.prototype.extractWidget = function(widget,dyn_object) {
+
+    for(var i = 0; i < PhSim.Widgets.length; i++) {
+        PhSim.Widgets[i].onExtraction(widget,dyn_object);
+    }
 	
     var self = this;
     
@@ -38,7 +42,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
         }
         
         if(widget.keyboardControls) {
-            this.addKeyboardControls(dyn_object,widget)
+            this.addKeyboardControls(dyn_object,widget);
         }
     
         if(widget.circularConstraint) {
@@ -309,7 +313,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 }
     
                 var __onbeforeupdate = function() {
-                    Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
+                    PhSim.Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
                     self.setPosition(dyn_object,mV);
                 }
     
@@ -410,7 +414,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
         }
     
         if(widget.noRotation) {
-            Matter.Body.setInertia(dyn_object.matter, Infinity)
+            PhSim.Matter.Body.setInertia(dyn_object.matter, Infinity)
         }
     
         if(widget.elevator) {
@@ -476,7 +480,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 
                 // Set body static
                 
-                Matter.Body.setStatic(dyn_object.matter,true);
+                PhSim.Matter.Body.setStatic(dyn_object.matter,true);
                 
                 // Event function
     

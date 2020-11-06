@@ -19,9 +19,9 @@ PhSim.calc_skinmesh = function(dynObject) {
 
 	var transformAngle = dynObject.matter.angle - dynObject.matter.anglePrev 
 
-	Matter.Vertices.translate(dynObject.skinmesh,Matter.Vertices.centre(dynObject.skinmesh),-1);
-	Matter.Vertices.rotate(dynObject.skinmesh,transformAngle,{x: 0, y: 0});
-	Matter.Vertices.translate(dynObject.skinmesh,dynObject.matter.position,1);
+	PhSim.Matter.Vertices.translate(dynObject.skinmesh,PhSim.Matter.Vertices.centre(dynObject.skinmesh),-1);
+	PhSim.Matter.Vertices.rotate(dynObject.skinmesh,transformAngle,{x: 0, y: 0});
+	PhSim.Matter.Vertices.translate(dynObject.skinmesh,dynObject.matter.position,1);
 
 	dynObject.verts = dynObject.skinmesh;
 	dynObject.verts = dynObject.skinmesh;
