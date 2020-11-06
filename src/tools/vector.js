@@ -129,7 +129,7 @@ PhSim.Vector.distance = function(vector1,vector2) {
  * @returns {Number} - The length of the vector
  */
 
-PhSim.Vector.length = function(vector) {
+PhSim.Vector.getLength = function(vector) {
 	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
 }
 
@@ -143,7 +143,7 @@ PhSim.Vector.length = function(vector) {
  */
 
 PhSim.Vector.unitVector = function(vector) {
-	return PhSim.Vector.scale(vector,1/PhSim.Vector.length(vector));
+	return PhSim.Vector.scale(vector,1/PhSim.Vector.getLength(vector));
 }
 
 /**

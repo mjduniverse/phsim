@@ -33,8 +33,8 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 PhSim.prototype.connectCanvas = function(canvas) {
 	this.simCanvas = canvas;
 	this.simCtx = canvas.getContext("2d");
-	this.simCanvas.width = this.options.box.width;
-	this.simCanvas.height = this.options.box.height;
+	this.simCanvas.width = this.options.box.w || this.options.box.width;
+	this.simCanvas.height = this.options.box.h || this.options.box.height;
 	this.registerCanvasEvents();
 	this.configRender(this.simCtx);
 }
@@ -174,6 +174,14 @@ PhSim.prototype.audioPlayers = 0;
  */
 
 PhSim.prototype.collisionClasses = {};
+
+/**
+ * Classes
+ * When {@link PhSim#gotoSimulationIndex} is run, this is blanked and repopulated.
+ * @type {Object}
+ */
+
+PhSim.prototype.classes = {};
 
 /**
  * Background fill style for rendering.

@@ -12,7 +12,7 @@
 
 PhSim.prototype.applyForce = function(dynObject,position,forceVector) {
 	if(!dynObject.locked && !dynObject.permStatic) {
-		return Matter.Body.applyForce(dynObject.matter,position,forceVector);
+		return PhSim.Matter.Body.applyForce(dynObject.matter,position,forceVector);
 	}
 }
 
@@ -29,7 +29,7 @@ PhSim.prototype.applyForce = function(dynObject,position,forceVector) {
 
 PhSim.prototype.setVelocity = function(dynObject,velocityVector) {
 	if(!dynObject.locked) {
-		return Matter.Body.setVelocity(dynObject.matter,velocityVector);
+		return PhSim.Matter.Body.setVelocity(dynObject.matter,velocityVector);
 	}
 
 	if(dynObject.noDyn) {
@@ -64,7 +64,7 @@ PhSim.prototype.translate = function(o,translationVector) {
 		}
 
 		if(!o.noDyn) {
-			return Matter.Body.translate(o.matter,translationVector);
+			return PhSim.Matter.Body.translate(o.matter,translationVector);
 		}
 
 	}
@@ -92,7 +92,7 @@ PhSim.prototype.setPosition = function(dynObject,positionVector) {
 
 		}
 
-		Matter.Body.setPosition(dynObject.matter,positionVector);
+		PhSim.Matter.Body.setPosition(dynObject.matter,positionVector);
 	}
 }
 
@@ -108,10 +108,10 @@ PhSim.prototype.rotate = function(dynObject,angle,point) {
 	if(!dynObject.locked) {
 
 		if(dynObject.skinmesh) {
-			Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
+			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
 		}
 
-		return Matter.Body.rotate(dynObject.matter, angle, point)
+		return PhSim.Matter.Body.rotate(dynObject.matter, angle, point)
 
 	}
 }
@@ -127,11 +127,11 @@ PhSim.prototype.setAngle = function(dynObject,angle) {
 	if(!dynObject.locked) {
 
 		if(dynObject.skinmesh) {
-			Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
-			Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
+			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
+			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
 		}
 
-		return Matter.Body.setAngle(dynObject.matter,angle);
+		return PhSim.Matter.Body.setAngle(dynObject.matter,angle);
 
 	}
 }

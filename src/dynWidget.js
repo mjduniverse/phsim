@@ -75,7 +75,7 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 
 PhSim.prototype.connectDynObjects = function(parent,child) {
 
-	Matter.Body.setStatic(child,true);
+	PhSim.Matter.Body.setStatic(child,true);
 
 	var self = this;
 	
@@ -100,7 +100,7 @@ PhSim.prototype.connectDynObjects = function(parent,child) {
 
 PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 	
-	var c = Matter.Constraint.create({
+	var c = PhSim.Matter.Constraint.create({
 		
 		"bodyA": dynObject.matter,
 		
@@ -111,7 +111,7 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 	});
 
-	Matter.World.add(this.matterJSWorld,c)
+	PhSim.Matter.World.add(this.matterJSWorld,c)
 
 	var relAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x);
 
@@ -171,19 +171,19 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 	var f = function(event) {
 		if(event.code == "ArrowRight") {
-			Matter.Body.setVelocity(dynObj.matter, {x: keyboardControls.right, y: 0});
+			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: keyboardControls.right, y: 0});
 		}
 		
 		if(event.code == "ArrowUp") {
-			Matter.Body.setVelocity(dynObj.matter, {x: 0, y: -keyboardControls.up});
+			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: 0, y: -keyboardControls.up});
 		}
 		
 		if(event.code == "ArrowLeft") {
-			Matter.Body.setVelocity(dynObj.matter, {x: -keyboardControls.left, y: 0});
+			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: -keyboardControls.left, y: 0});
 		}
 		
 		if(event.code == "ArrowDown") {
-			Matter.Body.setVelocity(dynObj.matter, {x: 0, y: keyboardControls.down});
+			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: 0, y: keyboardControls.down});
 		}
 		
 	}
@@ -212,7 +212,7 @@ PhSim.prototype.forAllObjects = function(call) {
 PhSim.prototype.addToOverlayer = function(dynObject) {
 	
 	if(!dynObject.permStatic) {
-		Matter.World.add(this.matterJSWorld, dynObject.matter);
+		PhSim.Matter.World.add(this.matterJSWorld, dynObject.matter);
 	}
 
 	this.objUniverse.push(dynObject);
@@ -253,9 +253,11 @@ PhSim.prototype.addObject = function(dynObject,options = {}) {
 
 		// If the collision class object exists
 
+		/** 
+
 		if(dynObject.static.collisionClass && dynObject.static.collisionClass.trim() !== "__main") {
 
-			var a = this.getCollisionClasses(dynObject);
+			var a = PhSim.getCollisionClasses(dynObject);
 
 			for(var i = 0; i < a.length; i++) {
 				
@@ -272,9 +274,11 @@ PhSim.prototype.addObject = function(dynObject,options = {}) {
 
 		}
 
-		else {
-			Matter.World.add(this.matterJSWorld,dynObject.matter);
-		}
+		**/
+
+		/**else {**/
+			PhSim.Matter.World.add(this.matterJSWorld,dynObject.matter);
+		/**}**/
 		
 		if(dynObject.static.widgets) {
 			this.extractWidgets(dynObject);
@@ -342,7 +346,7 @@ PhSim.prototype.renderAllCounters = function() {
 
 PhSim.prototype.toggleLock = function(dynObject) {
 	dynObject.locked = !dynObject.locked;
-	Matter.Body.setStatic(dynObject.matter,dynObject.locked);
+	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
 /**
@@ -352,7 +356,7 @@ PhSim.prototype.toggleLock = function(dynObject) {
 
 PhSim.prototype.toggleSemiLock = function(dynObject) {
 	dynObject.locked = !dynObject.locked;
-	Matter.Body.setStatic(dynObject.matter,dynObject.locked);
+	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
 /**

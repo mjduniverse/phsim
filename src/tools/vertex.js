@@ -65,7 +65,7 @@ PhSim.getRectangleVertArray = function(rectangle) {
 	
 	];
 
-	Matter.Vertices.rotate(a, rectangle.cycle, PhSim.getRectangleCentroid(rectangle));
+	PhSim.Matter.Vertices.rotate(a, rectangle.cycle, PhSim.getRectangleCentroid(rectangle));
 
 
 	return a;

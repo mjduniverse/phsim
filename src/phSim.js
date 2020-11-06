@@ -30,6 +30,7 @@
 module.exports = require("./core");
 
 require("./objects" );
+require("./matterPlugin.js" );
 require("./eventStack" );
 require("./phRender");
 require("./sprites");
@@ -67,6 +68,7 @@ require("./update");
 require("./extractWidgets");
 
 require("./dynSimCamera");
+require("./game");
 require("./gradient");
 require("./widgets");
 require("./calc_skinmesh");
