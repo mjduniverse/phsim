@@ -1,5 +1,7 @@
 /**
  * Object that registers PhSim as a Matter.js plugin.
+ * @namespace
+ * 
  */
 
 PhSim.matterPlugin = {
