@@ -27,13 +27,15 @@ PhSim.matterPlugin = {
     /**
      * Detector patch for Matter.js.
      * 
+     * 
      */
 
     Detector: {
 
         /**
          * Matter.Detector.collisions patch for Matter.js.
-         * This modifies the function for checking collisions in Matter.js. 
+         * This modifies the function for checking collisions in Matter.js.
+         * @function 
          */
 
         collisions: function() {
