@@ -33,7 +33,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
             this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
     
@@ -65,7 +65,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
             this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
     
         }
@@ -74,7 +74,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             var f = this.createMotionFunction("force",dyn_object,widget.vector);
             this.addSimpleEvent(widget.trigger,f,{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
     
@@ -82,7 +82,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             var f = this.createMotionFunction("velocity",dyn_object,widget.vector);
             this.addSimpleEvent(widget.trigger,f,{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
     
@@ -90,7 +90,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             var f = this.createMotionFunction("translate",dyn_object,widget.vector);
             this.addSimpleEvent(widget.trigger,f,{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
     
@@ -98,7 +98,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             var f = this.createMotionFunction("position",dyn_object,widget.vector);
             this.addSimpleEvent(widget.trigger,f,{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
     
@@ -114,7 +114,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             
             this.addSimpleEvent(widget.trigger,f,{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
     
@@ -130,7 +130,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             
             this.addSimpleEvent(widget.trigger,f,{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });		
         }
 
@@ -156,7 +156,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
             var ref = this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
     
@@ -175,7 +175,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
 
             this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
 
@@ -194,7 +194,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
 
             this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
     
@@ -539,7 +539,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
             var f = this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
     
@@ -560,7 +560,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
             var f = this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
         
@@ -569,7 +569,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 self.setLineWidth(dyn_object,widget.color);
             },{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
         
@@ -577,7 +577,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             var f = this.createMotionFunction("position",dyn_object,widget.vector);
             this.addSimpleEvent(widget.trigger,f,{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
         
@@ -591,7 +591,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 self.playAudioByIndex(i);
             },{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
     
             this.audioPlayers++;
@@ -636,7 +636,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
 
             var f = this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
 
         }
@@ -661,7 +661,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
                 var options = {
                     ...widgetO,
-                    triggerObj: dyn_object
+                    simpleEventObj: dyn_object
                 }
     
                 var f = self.addSimpleEvent(widgetO.trigger,eventFuncClosure(),options);

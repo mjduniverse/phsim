@@ -90,12 +90,13 @@ PhSim.prototype.simpleEventRefs = [];
 
 /** 
  * Properties for a simple event.
+ * 
  *
  * @typedef {Object} simpleEventOptions
  * @property {@external https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key|KeyboardEvent.key} [key] - The event.key value for triggering a simple event.
  * @property {Number} [time] - The time interval between a repeated event or a delay time for timeouts.
  * @property {Number} [maxN] - The maximum number of times a repeated SimpleEvent can be executed.
- * @property {PhSim.DynObject} [triggerObj] - Trigger object
+ * @property {PhSim.DynObject} [simpleEventObj] - An object being affected 
  * 
  * The simple event options is an Object that is used for the {@link PhSim#addSimpleEvent} function.
  */
@@ -122,14 +123,14 @@ PhSim.prototype.simpleEventRefs = [];
 PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 	if(trigger.match(/_global$/)) {
-		options.triggerObj = null;
+		options.simpleEventObj = null;
 	}
 
 	var self = this;
 	
 	if(trigger === "key") {
 
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 		
 			var f = function(e) {
 				if(options.key === e.key) {
@@ -159,11 +160,11 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 		var self = this;
 
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 			
 			var f = function(e) {
 
-				var m = self.inSensorCollision(options.triggerObj)
+				var m = self.inSensorCollision(options.simpleEventObj)
 	
 				if(m) {
 					call(e);
@@ -202,9 +203,9 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 	if(trigger === "objclick" || trigger === "objclick_global") {
 
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 			var f = function(e) {
-				if(self.objMouseArr[self.objMouseArr.length - 1] === options.triggerObj) {
+				if(self.objMouseArr[self.objMouseArr.length - 1] === options.simpleEventObj) {
 					call(e);
 				}
 			}
@@ -225,9 +226,9 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 	if(trigger === "objmousedown" || trigger === "objmousedown_global") {
 
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 			var f = function(e) {
-				if(self.objMouseArr[self.objMouseArr.length - 1] === options.triggerObj) {
+				if(self.objMouseArr[self.objMouseArr.length - 1] === options.simpleEventObj) {
 					call(e);
 				}
 			}
@@ -258,9 +259,9 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 	
 	if(trigger === "objmouseup" || trigger === "objmouseup_global") {
 
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 			var f = function(e) {
-				if(self.objMouseArr[self.objMouseArr.length - 1] === options.triggerObj) {
+				if(self.objMouseArr[self.objMouseArr.length - 1] === options.simpleEventObj) {
 					call(e);
 				}
 			}
@@ -280,14 +281,14 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 	}
 
 	if(trigger === "objlink") {
-		options.triggerObj.objLinkFunctions = options.triggerObj.objLinkFunctions || [];
-		options.triggerObj.objLinkFunctions.push(call);
+		options.simpleEventObj.objLinkFunctions = options.simpleEventObj.objLinkFunctions || [];
+		options.simpleEventObj.objLinkFunctions.push(call);
 	}
 
 	if(trigger === "afterslchange") {
 
 		
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 			var f = function(e) {
 				call(e);
 			}
