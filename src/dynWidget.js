@@ -5,7 +5,7 @@
  * @function
  * @param {string} mode - The possible modes are "force","velocity","translate"
  * @param {dyn_object} dyn_object - The dynamic object to put in motion.
- * @param {*} motion - The vector or scalar that defines the motion.
+ * @param {Vector|Number} motion - The vector or scalar that defines the motion.
  * @returns {Function} - The method to 
  * 
  * 
@@ -251,35 +251,8 @@ PhSim.prototype.addObject = function(dynObject,options = {}) {
 
 		dynObject.phSim = this;
 
-		// If the collision class object exists
+		PhSim.Matter.World.add(this.matterJSWorld,dynObject.matter);
 
-		/** 
-
-		if(dynObject.static.collisionClass && dynObject.static.collisionClass.trim() !== "__main") {
-
-			var a = PhSim.getCollisionClasses(dynObject);
-
-			for(var i = 0; i < a.length; i++) {
-				
-				if(this.collisionClasses[a[i]]) {
-					this.collisionClasses[a[i]].addDynObject(dynObject)
-				}
-
-				else {
-					var ncc = new PhSim.CollisionClass(a[i]);
-					ncc.addDynObject(dynObject);
-					this.collisionClasses[a[i]] = ncc;
-				}
-			}
-
-		}
-
-		**/
-
-		/**else {**/
-			PhSim.Matter.World.add(this.matterJSWorld,dynObject.matter);
-		/**}**/
-		
 		if(dynObject.static.widgets) {
 			this.extractWidgets(dynObject);
 		}
