@@ -6,12 +6,10 @@
   "directories": {
     "test": "test"
   },
-  
   "repository": {
     "type": "git",
     "url": "https://github.com/mjduniverse/phsim.git"
   },
-
   "dependencies": {
     "matter-js": "^0.14.2",
     "poly-decomp": "^0.3.0"

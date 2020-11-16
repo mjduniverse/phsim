@@ -4,6 +4,7 @@
  * To extract a widget in PhSim is to read all of the objects in the "widgets" array found in each
  * well-formed PhSim object and then translate it into JavaScript.
  * 
+ * @function
  * @param {Widget} widget - The Widget
  * @param {PhSim.DynObject} dyn_object The individual Dynamic Object
  * @returns undefined
@@ -672,6 +673,11 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
         
     
     }
+
+    /**
+     * Extract all widgets from a dynamic object.
+     * @param {PhSim.DynObject} dyn_object 
+     */
     
     
     PhSim.prototype.extractWidgets = function(dyn_object) {

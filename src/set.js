@@ -30,8 +30,8 @@ PhSim.prototype.setRectWidthAndHeight = function(dynObject,w,h) {
 
 /**
  * 
- * @param {*} dyn_object - Dynamic Object
- * @param {*} colorStr - Color
+ * @param {PhSim.DynObject} dyn_object - Dynamic Object
+ * @param {String} colorStr - Color
  */
 
 PhSim.prototype.setColor = function(dyn_object,colorStr) {

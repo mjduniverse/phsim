@@ -98,6 +98,15 @@ PhSim.prototype.connectDynObjects = function(parent,child) {
 
 }
 
+/**
+ * Create circular constraint
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Number} x 
+ * @param {Number} y 
+ */
+
 PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 	
 	var c = PhSim.Matter.Constraint.create({
@@ -130,7 +139,10 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 /**
  * 
- * @param {*} dynObject 
+ * Call ObjLink functions
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
  */
 
 PhSim.prototype.callObjLinkFunctions = function(dynObject) {
@@ -141,6 +153,9 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 
 /**
  * 
+ * Spawn object
+ * 
+ * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {Object} options - The options used for creating a spawned object
  * @param {Vector} options.vector -  The velocity to add to an object when it got spawned.
@@ -161,11 +176,11 @@ PhSim.prototype.spawnObject = function(dynObject,options = {}) {
 	this.callEventClass("clone",this,eventObj);
 }
 
-/*** 
-
-Keyboard Controls
-
-***/
+/**
+ * @function
+ * @param {PhSim.DynObject} dynObj 
+ * @param {Object} keyboardControls - Keyboard Controls options 
+ */
 
 PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
@@ -194,7 +209,13 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 }
 
-
+/**
+ * 
+ * Run function on all objects.
+ * 
+ * @function
+ * @param {Function} call 
+ */
 
 PhSim.prototype.forAllObjects = function(call) {
 	
@@ -208,6 +229,12 @@ PhSim.prototype.forAllObjects = function(call) {
 	}
 }
 
+/**
+ * Add object to over layer.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ */
 
 PhSim.prototype.addToOverlayer = function(dynObject) {
 	
@@ -218,6 +245,13 @@ PhSim.prototype.addToOverlayer = function(dynObject) {
 	this.objUniverse.push(dynObject);
 
 }
+
+/**
+ * Check if the object is a dynamic object.
+ * 
+ * @function
+ * @param {PhSimObject} o 
+ */
 
 PhSim.prototype.isNonDyn = function(o) {
 	return o.noDyn || o.permStatic;
@@ -264,6 +298,7 @@ PhSim.prototype.addObject = function(dynObject,options = {}) {
 
 /**
  * Remove dynamic object
+ * 
  * @function
  * @param {PhSim.DynObject}  dynObject - Dynamic Object
  * @returns {PhSim.DynObject} - The removed Dynamic Object
@@ -314,6 +349,8 @@ PhSim.prototype.renderAllCounters = function() {
 
 /**
  * Toggle Lock Status of Dynamic Object.
+ * 
+ * @function
  * @param {PhSim.DynObject} dynObject 
  */
 
@@ -324,6 +361,8 @@ PhSim.prototype.toggleLock = function(dynObject) {
 
 /**
  * Toggle Semi-Lock Status of Dynamic Object.
+ * 
+ * @function
  * @param {PhSim.DynObject} dynObject 
  */
 
