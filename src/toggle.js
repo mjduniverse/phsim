@@ -1,31 +1,23 @@
 PhSim.prototype.play = function() {
+	this.paused = false;
+	this.intervalLoop = setInterval(this.loopFunction.bind(this),this.delta);
+}
 
-	if(this.init === false) {
-		this.initSim(0);
-	}
-
-	else {
-		this.paused = false;
-	}
-
+PhSim.prototype.pause = function() {
+	clearInterval(this.intervalLoop);
+	this.paused = true;
 }
 
 PhSim.prototype.toggle = function() {
 	
-	if(this.paused === false) {
-		this.paused = true;
-		return true;
+	if(this.paused) {
+		this.play();
 	}
 
-	if(this.paused === true) {
-		this.paused = false;
-		return false;
-	}; 
+	else {
+		this.pause();
+	}
 
-}
-
-PhSim.prototype.pause = function() {
-	this.paused = true;
 }
 
 PhSim.prototype.exitSl = function() {

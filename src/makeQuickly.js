@@ -7,36 +7,22 @@
  */
 
 PhSim.createFromCanvas = function(sim,canvas) {
-	var p = new PhSim(sim);
-	p.connectCanvas(canvas);
-	return p;
+	var o = Object.create(sim);
+	o.canvas = canvas;
+	return new PhSim(o);
 }
 
 /**
  * @function
  * @param {Object} sim 
- * @param {HTMLElement} simContainer 
+ * @param {HTMLElement} container 
  * @memberof PhSim 
  */
 
-PhSim.createFromContainer = function(sim,simContainer) {
-	
-	// Canvas
-
-	var canvas = document.createElement("canvas");
-
-	// Simulation object
-
-	var p = PhSim.createFromCanvas(sim,canvas);
-
-	p.simContainer = simContainer;
-
-	simContainer.appendChild(p.simCanvas);
-	simContainer.classList.add("phsim-container");
-
-	p.configFilter(simContainer);
-	
-	return p;
+PhSim.createFromContainer = function(sim,container) {
+	var o = Object.create(sim);
+	o.container = container;
+	return new PhSim(o);
 }
 
 /**

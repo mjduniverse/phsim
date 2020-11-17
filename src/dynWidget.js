@@ -1,74 +1,3 @@
-/** 
- * 
- * Generate a function to put some dynamic object in motion, given some mode and vector or scalar.
- * 
- * @function
- * @param {string} mode - The possible modes are "force","velocity","translate"
- * @param {dyn_object} dyn_object - The dynamic object to put in motion.
- * @param {Vector|Number} motion - The vector or scalar that defines the motion.
- * @returns {Function} - The method to 
- * 
- * 
-*/
-
-PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
-
-	var self = this;
-	
-	if(mode === "force") {
-		return function() {
-			return self.applyForce(dyn_object,dyn_object.matter.position,motion);
-		}
-	}
-
-	if(mode === "velocity") {
-		return function() {
-			return self.setVelocity(dyn_object,motion);
-		}
-	}
-
-	if(mode === "translate") {
-		return function() {
-			return self.translate(dyn_object,motion);
-		}
-	}
-
-	if(mode === "position") {
-		return function() {
-			return self.setPosition(dyn_object,motion)
-		}
-	}
-
-	if(mode === "rotation") {
-		return function() {
-			return self.rotate(dyn_object,motion,dyn_object.matter.position);
-		}
-	}
-
-	if(mode === "circular_constraint_rotation") {
-		return function() {
-			return self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
-		}
-	}
-
-	if(mode === "setAngle") {
-		return function() {
-			return self.setAngle(dyn_object,motion);
-		}
-	}
-
-	if(mode === "circular_constraint_setAngle") {
-		return function() {
-			var a = Math.atan2(dyn_object.y - dyn_object.circularConstraintVector.y,dyn_object.x - dyn_object.circularConstraintVector.x)
-			self.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
-			self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
-		}
-	}
-
-	return console.error("Parameter 'mode' must either be equal to the one of the following strings: 'force','velocity' or 'position'.");
-
-}
-
 // Set Angle to mouse.
 
 // Object Connection
@@ -149,31 +78,6 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 	for(var i = 0; i < dynObject.objLinkFunctions.length; i++) {
 		dynObject.objLinkFunctions[i]();
 	}
-}
-
-/**
- * 
- * Spawn object
- * 
- * @function
- * @param {PhSim.DynObject} dynObject 
- * @param {Object} options - The options used for creating a spawned object
- * @param {Vector} options.vector -  The velocity to add to an object when it got spawned.
- * @param 
- */
-
-PhSim.prototype.spawnObject = function(dynObject,options = {}) {
-	var obj = new PhSim.DynObject(dynObject.static);
-	obj.cloned = true;
-	obj.loneParent = dynObject;
-
-	this.addToOverlayer(obj);
-	
-	var eventObj = new PhSim.PhEvent;
-	eventObj.target = dynObject;
-	eventObj.clonedObj = obj;
-
-	this.callEventClass("clone",this,eventObj);
 }
 
 /**
@@ -345,30 +249,6 @@ PhSim.prototype.renderAllCounters = function() {
 	for(var i = 0; i < this.counterArray.length; i++) {
 		this.renderCounterByIndex(i);
 	}
-}
-
-/**
- * Toggle Lock Status of Dynamic Object.
- * 
- * @function
- * @param {PhSim.DynObject} dynObject 
- */
-
-PhSim.prototype.toggleLock = function(dynObject) {
-	dynObject.locked = !dynObject.locked;
-	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
-}
-
-/**
- * Toggle Semi-Lock Status of Dynamic Object.
- * 
- * @function
- * @param {PhSim.DynObject} dynObject 
- */
-
-PhSim.prototype.toggleSemiLock = function(dynObject) {
-	dynObject.locked = !dynObject.locked;
-	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
 /**

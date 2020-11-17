@@ -2,6 +2,7 @@
  * 
  * The event stack is an object that is used to store event listeners.
  * @constructor
+ * @enum {PhSimEventCall[]}
  * 
  */
 

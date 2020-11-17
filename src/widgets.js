@@ -40,11 +40,23 @@ PhSim.Widget = function(name,onExtraction) {
 
 /**
  * Array of custom widgets.
- * @type {PhSim.Widget[]}
+ * @enum {PhSim.Widget[]}
  */
 
-PhSim.Widgets = [];
+PhSim.Widgets = {};
 
 PhSim.chkWidgetType = function() {
 	
 }
+
+// Motion Widgets
+
+require("./widgets/motion");
+
+// Cloning Widgets
+
+require("./widgets/clone");
+
+// Draggable Object Widget
+
+require("./widgets/draggable");

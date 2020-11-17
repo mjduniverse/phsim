@@ -52,7 +52,7 @@ PhSim.PhRender.prototype.defaultFillStyle = "transparent";
  * using a {@link PhSimObject} object.
  * 
  * @function
- * @param {Object} object 
+ * @param {PhSimObject} object 
  */
 
 PhSim.PhRender.prototype.setCtx = function(object) {
@@ -93,7 +93,7 @@ PhSim.PhRender.prototype.setCtx = function(object) {
  * Render a {@link Path} as a polygon.
  * 
  * @function
- * @param {Path}} path 
+ * @param {Path} path 
  */
 
 PhSim.PhRender.prototype.static_path = function (path) {
