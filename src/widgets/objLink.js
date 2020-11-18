@@ -13,7 +13,7 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 }
 
 
-PhSim.Widgets.objLink_a = function() {
+PhSim.Widgets.objLink_a = function(widget,dyn_object) {
     
     var widgetO = widget;
 
