@@ -3391,59 +3391,6 @@ PhSim.prototype.connectDynObjects = function(parent,child) {
 }
 
 /**
- * Create circular constraint
- * 
- * @function
- * @param {PhSim.DynObject} dynObject 
- * @param {Number} x 
- * @param {Number} y 
- */
-
-PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
-	
-	var c = PhSim.Matter.Constraint.create({
-		
-		"bodyA": dynObject.matter,
-		
-		"pointB": {
-			"x": x,
-			"y": y
-		}
-
-	});
-
-	PhSim.Matter.World.add(this.matterJSWorld,c)
-
-	var relAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x);
-
-	this.addEventListener("afterupdate",function(){
-		var newAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x) - relAngle;
-		this.setAngle(dynObject,newAngle);
-	});
-
-
-	dynObject.circularConstraintVector = {
-		"x": x,
-		"y": y
-	}
-
-}
-
-/**
- * 
- * Call ObjLink functions
- * 
- * @function
- * @param {PhSim.DynObject} dynObject 
- */
-
-PhSim.prototype.callObjLinkFunctions = function(dynObject) {
-	for(var i = 0; i < dynObject.objLinkFunctions.length; i++) {
-		dynObject.objLinkFunctions[i]();
-	}
-}
-
-/**
  * @function
  * @param {PhSim.DynObject} dynObj 
  * @param {Object} keyboardControls - Keyboard Controls options 
@@ -3612,70 +3559,6 @@ PhSim.prototype.renderAllCounters = function() {
 	for(var i = 0; i < this.counterArray.length; i++) {
 		this.renderCounterByIndex(i);
 	}
-}
-
-/**
- * Toggle Lock Status of Dynamic Object.
- * 
- * @function
- * @param {PhSim.DynObject} dynObject 
- */
-
-PhSim.prototype.toggleLock = function(dynObject) {
-	dynObject.locked = !dynObject.locked;
-	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
-}
-
-/**
- * Toggle Semi-Lock Status of Dynamic Object.
- * 
- * @function
- * @param {PhSim.DynObject} dynObject 
- */
-
-PhSim.prototype.toggleSemiLock = function(dynObject) {
-	dynObject.locked = !dynObject.locked;
-	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
-}
-
-/**
- * A widget function is a function that used for the WidgetFunction widget.
- * The "this" keyword in the body of function refers to the current instance of
- * PhSim simulation.
- * 
- * @typedef {Function} WFunction
- */
-
-/**
- * Array of widget functions
- * @type {WFunctions[]}
- */
-
-PhSim.prototype.wFunctions = [];
-
-/**
- * Create a widget function and push it to the wFunctions array.
- * @function
- * @param {String|Function} arg - content of function if string, function if function
- * @param {Object} thisRef - 
- * @returns {WFunction}
- */
-
-PhSim.prototype.createWFunction = function(arg,thisRef) {
-
-	if(typeof arg === "string") {
-		var o = new Function(arg).bind(thisRef);
-	}
-
-	else if(typeof arg === "function") {
-		var o = arg.bind(thisRef);
-	}
-
-	else {
-		throw "Expecting \"function\" or \"string\" type";
-	}
-
-    return o;
 }
 
 /***/ }),
@@ -4805,13 +4688,21 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 			
 		var a = this_a.simulation.widgets[C];
 
-		if(a.constraint) {
+		if(a.type === "constraint") {
 
 			var b = {}
 
 			if(a.objectA) {
-				b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);;
-			}
+
+				if(typeof a.objectA.L === "number" && typeof a.objectA.O === "number") {
+					b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);
+				}
+
+				if(a.objectA instanceof PhSim) {
+					b.bodyA = a.objectA;
+				}
+
+ 			}
 
 			if(a.objectB) {
 				b.bodyB = this_a.LO(a.objectB.L,a.objectB.O);
@@ -5269,17 +5160,9 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 simpleEventObj: dyn_object
             });
         }
-    
-        if(widget.numVar) {
-            self.numVar[widget.name] === widget.value;
-        }
         
         if(widget.keyboardControls) {
             this.addKeyboardControls(dyn_object,widget);
-        }
-    
-        if(widget.circularConstraint) {
-            this.createCircularConstraint(dyn_object,widget.x,widget.y);
         }
     
         if(widget.setNumVar) {
@@ -5303,10 +5186,6 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
         }
     
-        if(widget.setAngleByMouse) {
-            this.addEventListener("mousemove")
-        }
-    
         if(widget.deleteSelf) {
     
             var ref = null;
@@ -5328,46 +5207,6 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 simpleEventObj: dyn_object
             });
         }
-    
-        if(widget.toggleLock) {
-
-            var closure = function() {
-
-                var o = dyn_object;
-
-                var f = function() {
-                    self.toggleLock(o);
-                }
-
-                return f;
-            }
-
-            this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-
-        if(widget.toggleSemiLock) {
-
-            var closure = function() {
-
-                var o = dyn_object;
-
-                var f = function() {
-                    self.toggleSemiLock(o);
-                }
-
-                return f;
-            }
-
-            this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-    
-
     
         if(widget.rectText) {
             dyn_object.rectTextWidget === true;
@@ -5574,57 +5413,6 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             self.camera.scale()
         }
 
-        if(widget.wFunction) {
-
-            var wf = self.createWFunction(widget.function,dyn_object);
-
-            var closure = function() {
-
-                var f = function(){
-                    wf();
-                };
-
-                return f;
-
-            }
-
-            var f = this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-
-        }
-    
-        if(widget.objLink_a) {
-    
-            var widgetO = widget;
-    
-            this.addEventListener("matterJSLoad",function(){
-                var eventFuncClosure = function() {
-    
-                    var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
-    
-                    var eventFunc = function(){
-                        self.callObjLinkFunctions(targetObj);
-                    } 
-    
-                    return eventFunc;
-                
-                }
-    
-    
-                var options = {
-                    ...widgetO,
-                    simpleEventObj: dyn_object
-                }
-    
-                var f = self.addSimpleEvent(widgetO.trigger,eventFuncClosure(),options);
-            });
-    
-        }
-    
-        
-    
     }
 
     /**
@@ -5990,7 +5778,7 @@ PhSim.Constraints.Static.Constraint = function() {
 	this.objectB = null;
 	this.pointA = null;
 	this.pointB = null;
-	this.constraint = true;
+	this.type = "constraint";
 }
 
 /**
@@ -6013,6 +5801,22 @@ PhSim.Constraints.Static.Constraint = function() {
 PhSim.Widget = function(name,onExtraction) {
 	this.name = name;
 	this.onExtraction = onExtraction;
+}
+
+/**
+ * 
+ * @param {PhSimObject} o 
+ */
+
+PhSim.Widget.defineByBoolean = function(o) {
+
+	Object.keys(PhSim.Widgets).forEach(function(p){
+		if(o[p]) {
+			o.type = p;
+		}
+	})
+
+	
 }
 
 /**
