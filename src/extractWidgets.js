@@ -67,10 +67,6 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
         }
     
-        if(widget.setAngleByMouse) {
-            this.addEventListener("mousemove")
-        }
-    
         if(widget.deleteSelf) {
     
             var ref = null;
@@ -298,57 +294,6 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             self.camera.scale()
         }
 
-        if(widget.wFunction) {
-
-            var wf = self.createWFunction(widget.function,dyn_object);
-
-            var closure = function() {
-
-                var f = function(){
-                    wf();
-                };
-
-                return f;
-
-            }
-
-            var f = this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-
-        }
-    
-        if(widget.objLink_a) {
-    
-            var widgetO = widget;
-    
-            this.addEventListener("matterJSLoad",function(){
-                var eventFuncClosure = function() {
-    
-                    var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
-    
-                    var eventFunc = function(){
-                        self.callObjLinkFunctions(targetObj);
-                    } 
-    
-                    return eventFunc;
-                
-                }
-    
-    
-                var options = {
-                    ...widgetO,
-                    simpleEventObj: dyn_object
-                }
-    
-                var f = self.addSimpleEvent(widgetO.trigger,eventFuncClosure(),options);
-            });
-    
-        }
-    
-        
-    
     }
 
     /**
