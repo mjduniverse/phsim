@@ -39,6 +39,22 @@ PhSim.Widget = function(name,onExtraction) {
 }
 
 /**
+ * 
+ * @param {PhSimObject} o 
+ */
+
+PhSim.Widget.defineByBoolean = function(o) {
+
+	Object.keys(PhSim.Widgets).forEach(function(p){
+		if(o[p]) {
+			o.type = p;
+		}
+	})
+
+	
+}
+
+/**
  * Array of custom widgets.
  * @enum {PhSim.Widget[]}
  */
