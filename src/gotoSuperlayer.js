@@ -134,13 +134,21 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 			
 		var a = this_a.simulation.widgets[C];
 
-		if(a.constraint) {
+		if(a.type === "constraint") {
 
 			var b = {}
 
 			if(a.objectA) {
-				b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);;
-			}
+
+				if(typeof a.objectA.L === "number" && typeof a.objectA.O === "number") {
+					b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);
+				}
+
+				if(a.objectA instanceof PhSim) {
+					b.bodyA = a.objectA;
+				}
+
+ 			}
 
 			if(a.objectB) {
 				b.bodyB = this_a.LO(a.objectB.L,a.objectB.O);

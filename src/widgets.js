@@ -13,7 +13,7 @@ PhSim.Constraints.Static.Constraint = function() {
 	this.objectB = null;
 	this.pointA = null;
 	this.pointB = null;
-	this.constraint = true;
+	this.type = "constraint";
 }
 
 /**
