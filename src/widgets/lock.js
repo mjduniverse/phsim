@@ -22,7 +22,7 @@ PhSim.prototype.toggleSemiLock = function(dynObject) {
 	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
-PhSim.Widgets.toggleLock = function() {
+PhSim.Widgets.toggleLock = function(widget,dyn_object) {
 
     var closure = function() {
 
@@ -41,7 +41,7 @@ PhSim.Widgets.toggleLock = function() {
     });
 }
 
-PhSim.Widgets.toggleSemiLock = function() {
+PhSim.Widgets.toggleSemiLock = function(widget,dyn_object) {
 
     var closure = function() {
 
