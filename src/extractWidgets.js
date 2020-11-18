@@ -1,9 +1,14 @@
+PhSim.prototype.booleanWPatch = function(o) {
+
+}
+
 /** 
  * 
  * Extract Widgets from Dynamic Object.
  * To extract a widget in PhSim is to read all of the objects in the "widgets" array found in each
  * well-formed PhSim object and then translate it into JavaScript.
  * 
+ * @function
  * @param {Widget} widget - The Widget
  * @param {PhSim.DynObject} dyn_object The individual Dynamic Object
  * @returns undefined
@@ -12,8 +17,8 @@
 
 PhSim.prototype.extractWidget = function(widget,dyn_object) {
 
-    for(var i = 0; i < PhSim.Widgets.length; i++) {
-        PhSim.Widgets[i].onExtraction(widget,dyn_object);
+    if(PhSim.Widgets[widget.type]) {
+        PhSim.Widgets[widget.type].call(this,widget,dyn_object);
     }
 	
     var self = this;
@@ -36,17 +41,9 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 simpleEventObj: dyn_object
             });
         }
-    
-        if(widget.numVar) {
-            self.numVar[widget.name] === widget.value;
-        }
         
         if(widget.keyboardControls) {
             this.addKeyboardControls(dyn_object,widget);
-        }
-    
-        if(widget.circularConstraint) {
-            this.createCircularConstraint(dyn_object,widget.x,widget.y);
         }
     
         if(widget.setNumVar) {
@@ -68,74 +65,6 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 simpleEventObj: dyn_object
             });
     
-        }
-    
-        if(widget.force) {
-            var f = this.createMotionFunction("force",dyn_object,widget.vector);
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-    
-        if(widget.velocity) {
-            var f = this.createMotionFunction("velocity",dyn_object,widget.vector);
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-    
-        if(widget.translate) {
-            var f = this.createMotionFunction("translate",dyn_object,widget.vector);
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-    
-        if(widget.position) {
-            var f = this.createMotionFunction("position",dyn_object,widget.vector);
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-    
-        if(widget.rotation) {
-    
-            if(widget.circularConstraintRotation) {
-                var f = this.createMotionFunction("circular_constraint_rotation",dyn_object,widget.cycle);
-            }
-    
-            else {
-                var f = this.createMotionFunction("rotation",dyn_object,widget.cycle);
-            }
-            
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-    
-        if(widget.setAngle) {
-            
-            if(widget.circularConstraintRotation) {
-                var f = this.createMotionFunction("circular_constraint_setAngle",dyn_object,widget.cycle);
-            }
-    
-            else {
-                var f = this.createMotionFunction("setAngle",dyn_object,widget.cycle);
-            }
-            
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                simpleEventObj: dyn_object
-            });		
-        }
-
-        if(widget.setAngleByMouse) {
-            this.addEventListener("mousemove")
         }
     
         if(widget.deleteSelf) {
@@ -160,258 +89,11 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             });
         }
     
-        if(widget.toggleLock) {
-
-            var closure = function() {
-
-                var o = dyn_object;
-
-                var f = function() {
-                    self.toggleLock(o);
-                }
-
-                return f;
-            }
-
-            this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-
-        if(widget.toggleSemiLock) {
-
-            var closure = function() {
-
-                var o = dyn_object;
-
-                var f = function() {
-                    self.toggleSemiLock(o);
-                }
-
-                return f;
-            }
-
-            this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-    
-        if(widget.clone) {
-    
-            // Clone By Time
-    
-            if(widget.trigger === "time") {
-            
-                var getFunction = function() {
-    
-                    var time = widget.time;
-                    var maxN = widget.maxN;
-    
-                    var func = null;
-    
-                    if(Number.isInteger(maxN)) {
-    
-                        func = function(e) {
-    
-                            if(func.__n === maxN) {
-                                clearInterval(func.__interN);
-                            }
-    
-                            else {
-                                if(!self.paused) {
-                                    self.spawnObject(dyn_object);
-                                    func.__n++;
-                                }
-                            }
-    
-                        }
-    
-                        func.__n = 0;
-    
-                    }
-    
-                    else {
-    
-                        func = function(e) {
-                            if(!self.paused) {
-                                self.spawnObject(dyn_object);
-                            }
-                        }
-    
-                    }
-    
-    
-                    func.__phtime = time;
-                    func.__interN = null;
-    
-                    return func;
-    
-                }
-    
-                var refFunc = getFunction();
-    
-                refFunc.__interN = setInterval(refFunc,refFunc.__phtime);
-    
-            }
-    
-            // Clone By Key
-    
-            if(widget.trigger === "key") {
-    
-                var getFunction = function() {
-    
-                    var kc = widget.key;
-                    var vc = widget.vector;
-    
-                    var cloneByKeyFunc = function(e) {
-                        if(e.key === kc) {
-                            self.spawnObject(dyn_object,vc);
-                        }
-                    }
-    
-                    return cloneByKeyFunc;
-    
-                }
-    
-                this.addEventListener("keydown",getFunction());
-    
-            }
-    
-        }
-    
-        if(widget.draggable) {
-    
-    
-            var func = function(e) {
-    
-                var change = false;
-                var __ismoving = true;
-                var constraint = null;
-    
-                // Displacement vector between mouse and centroid of object when the mouse is pushed downwards.
-    
-                var delta = {}
-    
-                // Mouse Position
-    
-                var mV = {
-                    x: null,
-                    y: null
-                }
-    
-                var __onmousemove = function(e) {
-                    mV.x = e.x - delta.x;
-                    mV.y = e.y - delta.y;
-                }
-    
-                var __onmouseup = function() {
-                    self.removeEventListener("mousemove",__onmousemove);
-                    self.removeEventListener("mouseup",__onmouseup);
-                    self.removeEventListener("beforeupdate",__onbeforeupdate);
-                }
-    
-                var __onbeforeupdate = function() {
-                    PhSim.Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
-                    self.setPosition(dyn_object,mV);
-                }
-    
-                var __onmousedown = function(e) {
-                    if(self.pointInObject(dyn_object,e.x,e.y)) {
-    
-                        delta.x = e.x - dyn_object.matter.position.x;
-                        delta.y = e.y - dyn_object.matter.position.y;
-    
-                        self.addEventListener("mousemove",__onmousemove);
-                        self.addEventListener("mouseup",__onmouseup);
-                        self.addEventListener("beforeupdate",__onbeforeupdate);
-    
-                        __onmousemove(e);
-                    }
-                }
-                
-                self.addEventListener("mouseout",__onmouseup);
-    
-                return __onmousedown;
-    
-            }
-    
-            this.addEventListener("mousedown",func());
-        }
-    
         if(widget.rectText) {
             dyn_object.rectTextWidget === true;
         }
     
-        if(widget.coin) {
-    
-            var func = function() {
-    
-                var obj1 = dyn_object;
-    
-                var a = function() {
-    
-                    if(self.inSensorCollision(obj1) && self.lclGame) {
-                        self.lclGame.setScore(self.lclGame.score + 1);
-                        self.removeEventListener("collisionstart",a);	
-                    }
-    
-                }
-    
-                return a;
-    
-            }
-    
-            self.addEventListener("collisionstart",func());
-        
-        }
-        
-        if(widget.hazard) {
-    
-            var func = function() {
-    
-                var obj1 = dyn_object;
-    
-                var a = function() {
-    
-                    if(self.inSensorCollision(obj1) && self.lclGame) {
-                        self.lclGame.decrementLife(self.lclGame.score + 1);
-                        self.removeEventListener("collisionstart",a);	
-                    }
-    
-                }
-    
-                return a;
-    
-            }
-    
-            self.addEventListener("collisionstart",func());
-    
-        }
-    
-        if(widget.health) {
-    
-            var func = function() {
-    
-                var obj1 = dyn_object;
-    
-                var a = function() {
-    
-                    if(self.inSensorCollision(obj1) && self.lclGame) {
-                        self.lclGame.incrementLife(self.lclGame.score + 1);
-                        self.removeEventListener("collisionstart",a);	
-                    }
-    
-                }
-    
-                return a;
-    
-            }
-    
-            self.addEventListener("collisionstart",func());
-    
-        }
+
     
         if(widget.noRotation) {
             PhSim.Matter.Body.setInertia(dyn_object.matter, Infinity)
@@ -573,14 +255,6 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             });
         }
         
-        if(widget.endGame) {
-            var f = this.createMotionFunction("position",dyn_object,widget.vector);
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-        
         if(widget.playAudio) {
     
             var i = this.audioPlayers;
@@ -620,58 +294,12 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             self.camera.scale()
         }
 
-        if(widget.wFunction) {
-
-            var wf = self.createWFunction(widget.function,dyn_object);
-
-            var closure = function() {
-
-                var f = function(){
-                    wf();
-                };
-
-                return f;
-
-            }
-
-            var f = this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-
-        }
-    
-        if(widget.objLink_a) {
-    
-            var widgetO = widget;
-    
-            this.addEventListener("matterJSLoad",function(){
-                var eventFuncClosure = function() {
-    
-                    var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
-    
-                    var eventFunc = function(){
-                        self.callObjLinkFunctions(targetObj);
-                    } 
-    
-                    return eventFunc;
-                
-                }
-    
-    
-                var options = {
-                    ...widgetO,
-                    simpleEventObj: dyn_object
-                }
-    
-                var f = self.addSimpleEvent(widgetO.trigger,eventFuncClosure(),options);
-            });
-    
-        }
-    
-        
-    
     }
+
+    /**
+     * Extract all widgets from a dynamic object.
+     * @param {PhSim.DynObject} dyn_object 
+     */
     
     
     PhSim.prototype.extractWidgets = function(dyn_object) {

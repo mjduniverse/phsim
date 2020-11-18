@@ -5,30 +5,7 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 
  
  
-/**
-* @typedef {simpleEventOptions|Velocity}
-* @property {Boolean} velocity - Boolean for enabling the velocity widget
-* @property {Vector} vector - Velocity vector
-*/
- 
-/**
-* @typedef {simpleEventOptions|Force}
-* @property {Boolean} force - Boolean for enabling the force widget
-* @property {Vector} vector - Force vector
-*/
- 
-/**
-* @typedef {simpleEventOptions|Position}
-* @property {Boolean} position - Boolean for enabling the position widget
-* @property {Vector} vector - Position vector
-*/
- 
-/**
-* @typedef {simpleEventOptions|Translate}
-* @property {Boolean} translate - Boolean for enabling the translation widget
-* @property {Vector} vector - Translation vector
-*/
- 
+
 /**
 * @typedef {simpleEventOptions|DeleteSelf}
 * @property {Boolean} deleteSelf - Boolean for enabling the force widget

@@ -1,7 +1,11 @@
+/**
+ * @namespace
+ */
+
 PhSim.Audio = {}
 
 /**
- * @function
+ * @constructor
  * @param {Object} p_audio - Static Audio Object
  * @param {Function} onload 
  */

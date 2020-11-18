@@ -89,7 +89,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(1);
-module.exports = __webpack_require__(40);
+module.exports = __webpack_require__(43);
 
 
 /***/ }),
@@ -170,9 +170,9 @@ __webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
 __webpack_require__(36);
-__webpack_require__(37);
-__webpack_require__(38);
-__webpack_require__(39);
+__webpack_require__(40);
+__webpack_require__(41);
+__webpack_require__(42);
 
 
 /**
@@ -205,9 +205,11 @@ PhSim.statusStruct = {
 	4: "Loaded Simulation"
 }
 
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
 /**
- * 
- * @typedef {PhSim.Options|PhSim.Options.Simulation|StaticObject[]} DynSimOptions
  * 
  * The options that can be used to create a dynamic simulation could be a 
  * CompositeSimulation object, a simulation object or an array 
@@ -215,17 +217,18 @@ PhSim.statusStruct = {
  * 
  * If an array is chosen, then it is used to create
  * 
+ * @typedef {PhSim.Options|PhSim.Options.Simulation|StaticObject[]} DynSimOptions
+ * @property {HTMLCanvas} canvas - Simulation canvas
+ * @property {Number} initSimIndex - The inital simulation index. If undefined, the simulation index is 0.
+ * @property {HTMLElement} container - The container 
+ * 
  */
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
 
 /** 
  * Dynamic Simulation Instance Object 
  * 
  * @constructor
- * @param {DynSimOptions} [sim] - The simulation object
+ * @param {DynSimOptions} [dynSimOptions] - The simulation object
  * 
  */
 
@@ -233,7 +236,10 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 
 	/**
 	 * The static simulation object
+	 * @typedef {DynSimOptions}
 	 */
+
+	this.options;
 
 	if(Array.isArray(dynSimOptions.simulations)) {
 		this.options = dynSimOptions;
@@ -249,7 +255,41 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 		this.options.simulations[0].layers[0] = dynSimOptions;
 	}
 
+	// Configure canvas
+
+	if(dynSimOptions.canvas) {
+		this.connectCanvas(dynSimOptions.canvas)
+	}
+
+	else {
+		var newCanvas = document.createElement("canvas");
+		this.connectCanvas(newCanvas);
+	}
+
+	// Configure container
+
+	if(dynSimOptions.container) {
+		this.connectContainer(dynSimOptions.container);
+	}
+
+	else {
+		var newContainer = document.createElement("canvas");
+		this.connectContainer(newContainer);
+	}
+
+	// Register event keys
+
 	this.registerKeyEvents();
+
+	// Inital Simulation
+
+	if(dynSimOptions.initSimIndex) {
+		this.gotoSimulationIndex(dynSimOptions.initSimIndex);
+	}
+
+	else {
+		this.gotoSimulationIndex(0);
+	}
 
 }
 
@@ -260,6 +300,17 @@ PhSim.prototype.connectCanvas = function(canvas) {
 	this.simCanvas.height = this.options.box.h || this.options.box.height;
 	this.registerCanvasEvents();
 	this.configRender(this.simCtx);
+}
+
+PhSim.prototype.connectContainer = function(c) {
+	
+	this.simContainer = c;
+
+	c.appendChild(this.simCanvas);
+	c.classList.add("phsim-container");
+
+	this.configFilter(c);
+
 }
 
 /**
@@ -641,7 +692,7 @@ PhSim.Options.Path = function(verts) {
  * @constructor
  */
 
-PhSim.Options.Circle = function() {
+PhSim.Options.Circle = function(x = null,y = null,r = null) {
 
 	/**
 	 * Boolean indicating a circle
@@ -989,6 +1040,8 @@ PhSim.Options.SLO = function(S,L,O) {
 
 /**
  * Object that registers PhSim as a Matter.js plugin.
+ * @namespace
+ * 
  */
 
 PhSim.matterPlugin = {
@@ -998,7 +1051,7 @@ PhSim.matterPlugin = {
     version: "0.1.0",
 
     /**
-     * 
+     * Installation function for plugin
      * @param {Matter} matter 
      */
 
@@ -1011,7 +1064,20 @@ PhSim.matterPlugin = {
 
     },
 
+    /**
+     * Detector patch for Matter.js.
+     * 
+     * 
+     */
+
     Detector: {
+
+        /**
+         * Matter.Detector.collisions patch for Matter.js.
+         * This modifies the function for checking collisions in Matter.js.
+         * @function 
+         */
+
         collisions: function() {
 
             for(var i = 0; i < this.length; i++) {
@@ -1021,33 +1087,18 @@ PhSim.matterPlugin = {
 
                 if(c_classesA.length > 0 && c_classesB.length > 0) {
                     if(!PhSim.intersectionExists(c_classesA,c_classesB)) {
+
                         this.splice(this.indexOf(this[i]),1);
+
+                        // Reset index to zero to make sure all collisions
+                        // that have no collision classes in common get removed
+
                         i = 0;
                     }
                 }
 
             }
- 
-            //var c_classesA = PhSim.getCollisionClasses(broadphasePairs[0].plugin.ph);
-            //var c_classesB = PhSim.getCollisionClasses(broadphasePairs[1].plugin.ph);
 
-            /** 
-
-                if(c_classesA.length > 0 && c_classesB.length > 0) {
-                    if(PhSim.intersectionExists(c_classesA,c_classesB)) {
-                        a.push(broadphasePairs[i]);
-                    }
-                }
-
-                else {
-                    a.push(broadphasePairs[i]);
-                }
-
-            }
-
-            **/
-
-            //return a;
         }
     }
 
@@ -1066,6 +1117,7 @@ Matter.use(PhSim.matterPlugin);
  * 
  * The event stack is an object that is used to store event listeners.
  * @constructor
+ * @enum {PhSimEventCall[]}
  * 
  */
 
@@ -1232,6 +1284,7 @@ PhSim.EventStack = function() {
 /** 
  * 
  * PhRender constructor
+ * PhRender is the rendering engine for PhSim.
  * 
  * @constructor
  * @param {CanvasRenderingContext2D} ctx - Canvas context
@@ -1242,6 +1295,7 @@ PhSim.PhRender = function(ctx) {
 
 	/**
 	 * PhRender Context
+	 * @type {CanvasRenderingContext2D}
 	 */
 
 	this.ctx = ctx;
@@ -1249,13 +1303,17 @@ PhSim.PhRender = function(ctx) {
 
 /**
  * Default Alpha
+ * This the alpha of an object that has no alpha defined.
+ * 
  * @type {Number}
  */
 
 PhSim.PhRender.prototype.defaultAlpha = 1;
 
 /**
- * Default stroke style
+ * Default stroke style.
+ * This is the stroke style of an object that has no stroke style defined.
+ * 
  * @type {String}
  */
 
@@ -1263,6 +1321,8 @@ PhSim.PhRender.prototype.defaultStrokeStyle = "transparent";
 
 /**
  * Default fill style
+ * This is the default fill style of an object.
+ * 
  * @type {String}
  */
 
@@ -1270,9 +1330,12 @@ PhSim.PhRender.prototype.defaultFillStyle = "transparent";
 
 /**
  * Setting context
+ * That is, this function sets the `globalAlpha`, `strokeStyle`, `fillStyle` and `lineWidth`
+ * properties of the {@link PhSim.PhRender#ctx} member of the {@link PhSim.PhRender} object
+ * using a {@link PhSimObject} object.
  * 
  * @function
- * @param {Object} object 
+ * @param {PhSimObject} object 
  */
 
 PhSim.PhRender.prototype.setCtx = function(object) {
@@ -1313,7 +1376,7 @@ PhSim.PhRender.prototype.setCtx = function(object) {
  * Render a {@link Path} as a polygon.
  * 
  * @function
- * @param {Path}} path 
+ * @param {Path} path 
  */
 
 PhSim.PhRender.prototype.static_path = function (path) {
@@ -2168,10 +2231,14 @@ PhSim.Sprites.SpriteImgArray.prototype.addSprite = function(staticObj,onload = f
 /* 8 */
 /***/ (function(module, exports) {
 
+/**
+ * @namespace
+ */
+
 PhSim.Audio = {}
 
 /**
- * @function
+ * @constructor
  * @param {Object} p_audio - Static Audio Object
  * @param {Function} onload 
  */
@@ -3064,13 +3131,39 @@ PhSim.CollisionReport = function() {
 /* 18 */
 /***/ (function(module, exports) {
 
+/**
+ * @function
+ * @param {Number} L 
+ */
+
 PhSim.prototype.L = function(L) {
-	return this.dynTree[L][O];
+	return this.dynTree[L];
 }
+
+/**
+ * @function
+ * @param {*} L 
+ * @param {*} O 
+ */
 
 PhSim.prototype.LO = function(L,O) {
 	return this.dynTree[L][O];
 }
+
+/**
+ * A Layer-Object string (LOStr) is a string specifying the layer and object indexes
+ * of an object in the DynTree.'
+ * 
+ * The form of the LOStr is:
+ * <layer_index>,<object_index>
+ * 
+ * @typedef {String} LOStr
+ */
+
+/**
+ * @function
+ * @param {LOStr} str 
+ */
 
 PhSim.prototype.getObjectFromLOStr = function(str) {
 	str.split(",");
@@ -3090,36 +3183,22 @@ PhSim.prototype.getObjectFromLOStr = function(str) {
  */
 
 PhSim.createFromCanvas = function(sim,canvas) {
-	var p = new PhSim(sim);
-	p.connectCanvas(canvas);
-	return p;
+	var o = Object.create(sim);
+	o.canvas = canvas;
+	return new PhSim(o);
 }
 
 /**
  * @function
  * @param {Object} sim 
- * @param {HTMLElement} simContainer 
+ * @param {HTMLElement} container 
  * @memberof PhSim 
  */
 
-PhSim.createFromContainer = function(sim,simContainer) {
-	
-	// Canvas
-
-	var canvas = document.createElement("canvas");
-
-	// Simulation object
-
-	var p = PhSim.createFromCanvas(sim,canvas);
-
-	p.simContainer = simContainer;
-
-	simContainer.appendChild(p.simCanvas);
-	simContainer.classList.add("phsim-container");
-
-	p.configFilter(simContainer);
-	
-	return p;
+PhSim.createFromContainer = function(sim,container) {
+	var o = Object.create(sim);
+	o.container = container;
+	return new PhSim(o);
 }
 
 /**
@@ -3174,6 +3253,11 @@ PhSim.prototype.configRender = function() {
 /* 20 */
 /***/ (function(module, exports) {
 
+/**
+ * Config filter
+ * @param {HTMLElement} container 
+ */
+
 PhSim.prototype.configFilter = function(container) {
 	this.htmlFilter = document.createElement("div");
 	this.htmlFilter.style.background = "rgba(3,3,3,0.7)";
@@ -3182,6 +3266,11 @@ PhSim.prototype.configFilter = function(container) {
 	this.htmlFilter.classList.add("dynsim-filter");
 	container.appendChild(this.htmlFilter);
 }
+
+/**
+ * Enable filter
+ * @function
+ */
 
 PhSim.prototype.enableFilter = function() {
 	var elmBox = this.simCanvas.getBoundingClientRect();
@@ -3193,9 +3282,19 @@ PhSim.prototype.enableFilter = function() {
 	this.htmlFilter.style.height = Math.floor(elmBox.height) + "px";
 }
 
+/**
+ * Disable filter
+ * @function
+ */
+
 PhSim.prototype.disableFilter = function() {
 	this.htmlFilter.style.display = "none";
 }
+
+/**
+ * Toggle filter
+ * @function
+ */
 
 PhSim.prototype.toggleFilter = function() {
 
@@ -3209,7 +3308,7 @@ PhSim.prototype.toggleFilter = function() {
 }
 
 /**
- * 
+ * @function
  * @param {Object} options - Options
  * @param {String} options.msg - The message
  * @param {String} options.closeButtonTxt - Inner text for closing button
@@ -3262,77 +3361,6 @@ PhSim.prototype.alert = function(options) {
 /* 21 */
 /***/ (function(module, exports) {
 
-/** 
- * 
- * Generate a function to put some dynamic object in motion, given some mode and vector or scalar.
- * 
- * @function
- * @param {string} mode - The possible modes are "force","velocity","translate"
- * @param {dyn_object} dyn_object - The dynamic object to put in motion.
- * @param {*} motion - The vector or scalar that defines the motion.
- * @returns {Function} - The method to 
- * 
- * 
-*/
-
-PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
-
-	var self = this;
-	
-	if(mode === "force") {
-		return function() {
-			return self.applyForce(dyn_object,dyn_object.matter.position,motion);
-		}
-	}
-
-	if(mode === "velocity") {
-		return function() {
-			return self.setVelocity(dyn_object,motion);
-		}
-	}
-
-	if(mode === "translate") {
-		return function() {
-			return self.translate(dyn_object,motion);
-		}
-	}
-
-	if(mode === "position") {
-		return function() {
-			return self.setPosition(dyn_object,motion)
-		}
-	}
-
-	if(mode === "rotation") {
-		return function() {
-			return self.rotate(dyn_object,motion,dyn_object.matter.position);
-		}
-	}
-
-	if(mode === "circular_constraint_rotation") {
-		return function() {
-			return self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
-		}
-	}
-
-	if(mode === "setAngle") {
-		return function() {
-			return self.setAngle(dyn_object,motion);
-		}
-	}
-
-	if(mode === "circular_constraint_setAngle") {
-		return function() {
-			var a = Math.atan2(dyn_object.y - dyn_object.circularConstraintVector.y,dyn_object.x - dyn_object.circularConstraintVector.x)
-			self.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
-			self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
-		}
-	}
-
-	return console.error("Parameter 'mode' must either be equal to the one of the following strings: 'force','velocity' or 'position'.");
-
-}
-
 // Set Angle to mouse.
 
 // Object Connection
@@ -3362,74 +3390,11 @@ PhSim.prototype.connectDynObjects = function(parent,child) {
 
 }
 
-PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
-	
-	var c = PhSim.Matter.Constraint.create({
-		
-		"bodyA": dynObject.matter,
-		
-		"pointB": {
-			"x": x,
-			"y": y
-		}
-
-	});
-
-	PhSim.Matter.World.add(this.matterJSWorld,c)
-
-	var relAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x);
-
-	this.addEventListener("afterupdate",function(){
-		var newAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x) - relAngle;
-		this.setAngle(dynObject,newAngle);
-	});
-
-
-	dynObject.circularConstraintVector = {
-		"x": x,
-		"y": y
-	}
-
-}
-
 /**
- * 
- * @param {*} dynObject 
+ * @function
+ * @param {PhSim.DynObject} dynObj 
+ * @param {Object} keyboardControls - Keyboard Controls options 
  */
-
-PhSim.prototype.callObjLinkFunctions = function(dynObject) {
-	for(var i = 0; i < dynObject.objLinkFunctions.length; i++) {
-		dynObject.objLinkFunctions[i]();
-	}
-}
-
-/**
- * 
- * @param {PhSim.DynObject} dynObject 
- * @param {Object} options - The options used for creating a spawned object
- * @param {Vector} options.vector -  The velocity to add to an object when it got spawned.
- * @param 
- */
-
-PhSim.prototype.spawnObject = function(dynObject,options = {}) {
-	var obj = new PhSim.DynObject(dynObject.static);
-	obj.cloned = true;
-	obj.loneParent = dynObject;
-
-	this.addToOverlayer(obj);
-	
-	var eventObj = new PhSim.PhEvent;
-	eventObj.target = dynObject;
-	eventObj.clonedObj = obj;
-
-	this.callEventClass("clone",this,eventObj);
-}
-
-/*** 
-
-Keyboard Controls
-
-***/
 
 PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
@@ -3458,7 +3423,13 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 }
 
-
+/**
+ * 
+ * Run function on all objects.
+ * 
+ * @function
+ * @param {Function} call 
+ */
 
 PhSim.prototype.forAllObjects = function(call) {
 	
@@ -3472,6 +3443,12 @@ PhSim.prototype.forAllObjects = function(call) {
 	}
 }
 
+/**
+ * Add object to over layer.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ */
 
 PhSim.prototype.addToOverlayer = function(dynObject) {
 	
@@ -3482,6 +3459,13 @@ PhSim.prototype.addToOverlayer = function(dynObject) {
 	this.objUniverse.push(dynObject);
 
 }
+
+/**
+ * Check if the object is a dynamic object.
+ * 
+ * @function
+ * @param {PhSimObject} o 
+ */
 
 PhSim.prototype.isNonDyn = function(o) {
 	return o.noDyn || o.permStatic;
@@ -3515,35 +3499,8 @@ PhSim.prototype.addObject = function(dynObject,options = {}) {
 
 		dynObject.phSim = this;
 
-		// If the collision class object exists
+		PhSim.Matter.World.add(this.matterJSWorld,dynObject.matter);
 
-		/** 
-
-		if(dynObject.static.collisionClass && dynObject.static.collisionClass.trim() !== "__main") {
-
-			var a = PhSim.getCollisionClasses(dynObject);
-
-			for(var i = 0; i < a.length; i++) {
-				
-				if(this.collisionClasses[a[i]]) {
-					this.collisionClasses[a[i]].addDynObject(dynObject)
-				}
-
-				else {
-					var ncc = new PhSim.CollisionClass(a[i]);
-					ncc.addDynObject(dynObject);
-					this.collisionClasses[a[i]] = ncc;
-				}
-			}
-
-		}
-
-		**/
-
-		/**else {**/
-			PhSim.Matter.World.add(this.matterJSWorld,dynObject.matter);
-		/**}**/
-		
 		if(dynObject.static.widgets) {
 			this.extractWidgets(dynObject);
 		}
@@ -3555,6 +3512,7 @@ PhSim.prototype.addObject = function(dynObject,options = {}) {
 
 /**
  * Remove dynamic object
+ * 
  * @function
  * @param {PhSim.DynObject}  dynObject - Dynamic Object
  * @returns {PhSim.DynObject} - The removed Dynamic Object
@@ -3603,73 +3561,14 @@ PhSim.prototype.renderAllCounters = function() {
 	}
 }
 
-/**
- * Toggle Lock Status of Dynamic Object.
- * @param {PhSim.DynObject} dynObject 
- */
-
-PhSim.prototype.toggleLock = function(dynObject) {
-	dynObject.locked = !dynObject.locked;
-	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
-}
-
-/**
- * Toggle Semi-Lock Status of Dynamic Object.
- * @param {PhSim.DynObject} dynObject 
- */
-
-PhSim.prototype.toggleSemiLock = function(dynObject) {
-	dynObject.locked = !dynObject.locked;
-	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
-}
-
-/**
- * A widget function is a function that used for the WidgetFunction widget.
- * The "this" keyword in the body of function refers to the current instance of
- * PhSim simulation.
- * 
- * @typedef {Function} WFunction
- */
-
-/**
- * Array of widget functions
- * @type {WFunctions[]}
- */
-
-PhSim.prototype.wFunctions = [];
-
-/**
- * Create a widget function and push it to the wFunctions array.
- * @function
- * @param {String|Function} arg - content of function if string, function if function
- * @param {Object} thisRef - 
- * @returns {WFunction}
- */
-
-PhSim.prototype.createWFunction = function(arg,thisRef) {
-
-	if(typeof arg === "string") {
-		var o = new Function(arg).bind(thisRef);
-	}
-
-	else if(typeof arg === "function") {
-		var o = arg.bind(thisRef);
-	}
-
-	else {
-		throw "Expecting \"function\" or \"string\" type";
-	}
-
-    return o;
-}
-
 /***/ }),
 /* 22 */
 /***/ (function(module, exports) {
 
 
 /**
- * Play audio in 
+ * Play audio in
+ * @function 
  * @param {Number} i - Index in audio array. 
  */
 
@@ -3678,8 +3577,8 @@ PhSim.prototype.playAudioByIndex = function(i) {
 }
 
 /**
- * 
- * @param {*} i 
+ * @function
+ * @param {Number} i 
  */
 
 PhSim.prototype.pauseAudioByIndex = function(i) {
@@ -3687,8 +3586,8 @@ PhSim.prototype.pauseAudioByIndex = function(i) {
 }
 
 /**
- * 
- * @param {*} i 
+ * @function
+ * @param {Number} i 
  */
 
 PhSim.prototype.pauseAudioByIndex = function(i) {
@@ -3696,9 +3595,9 @@ PhSim.prototype.pauseAudioByIndex = function(i) {
 }
 
 /**
- * 
- * @param {*} i 
- * @param {*} v 
+ * @function
+ * @param {Number} i 
+ * @param {Number} v 
  */
 
 PhSim.prototype.setAudioVolByIndex = function(i,v) {
@@ -3707,8 +3606,8 @@ PhSim.prototype.setAudioVolByIndex = function(i,v) {
 }
 
 /**
- * 
- * @param {*} i 
+ * @function
+ * @param {Number} i 
  */
 
 PhSim.prototype.setAudioMuteByIndex = function(i) {
@@ -3717,8 +3616,8 @@ PhSim.prototype.setAudioMuteByIndex = function(i) {
 }
 
 /**
- * 
- * @param {*} i 
+ * @function
+ * @param {Number} i 
  */
 
 PhSim.prototype.toggleAudioByIndex = function(i) {
@@ -4589,7 +4488,9 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 /* 26 */
 /***/ (function(module, exports) {
 
-// Newtonian Gravity
+/**
+ * Apply Newtonian gravity field.
+ */
 
 PhSim.prototype.applyGravitationalField = function() {
 	
@@ -4614,33 +4515,25 @@ PhSim.prototype.applyGravitationalField = function() {
 /***/ (function(module, exports) {
 
 PhSim.prototype.play = function() {
+	this.paused = false;
+	this.intervalLoop = setInterval(this.loopFunction.bind(this),this.delta);
+}
 
-	if(this.init === false) {
-		this.initSim(0);
-	}
-
-	else {
-		this.paused = false;
-	}
-
+PhSim.prototype.pause = function() {
+	clearInterval(this.intervalLoop);
+	this.paused = true;
 }
 
 PhSim.prototype.toggle = function() {
 	
-	if(this.paused === false) {
-		this.paused = true;
-		return true;
+	if(this.paused) {
+		this.play();
 	}
 
-	if(this.paused === true) {
-		this.paused = false;
-		return false;
-	}; 
+	else {
+		this.pause();
+	}
 
-}
-
-PhSim.prototype.pause = function() {
-	this.paused = true;
 }
 
 PhSim.prototype.exitSl = function() {
@@ -4657,7 +4550,7 @@ PhSim.prototype.exit = function() {
 
 /***/ }),
 /* 28 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Go to simulation in the composite simulation
@@ -4673,9 +4566,13 @@ PhSim.prototype.exit = function() {
  *  
  */
 
+const PhSim = __webpack_require__(2);
+
 PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	var self = this;
+
+	this.status = 0;
 
 	this.firstSlUpdate = false;
 
@@ -4791,13 +4688,21 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 			
 		var a = this_a.simulation.widgets[C];
 
-		if(a.constraint) {
+		if(a.type === "constraint") {
 
 			var b = {}
 
 			if(a.objectA) {
-				b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);;
-			}
+
+				if(typeof a.objectA.L === "number" && typeof a.objectA.O === "number") {
+					b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);
+				}
+
+				if(a.objectA instanceof PhSim) {
+					b.bodyA = a.objectA;
+				}
+
+ 			}
 
 			if(a.objectB) {
 				b.bodyB = this_a.LO(a.objectB.L,a.objectB.O);
@@ -4845,46 +4750,38 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	}
 
+	this.status = 1;
+
 	var promise = new Promise(function(resolve,reject){
 
 		if(self.phRender) {
 			self.phRender.spriteImgArray = new PhSim.Sprites.SpriteImgArray(self.staticSprites,function() {
 				resolve();
+				this.status = 2;
 			});
 		}
 
 		else {
 			resolve();
+			this.status = 2;
 		}
 
 	}).then(function() {
 		return new Promise(function(resolve,reject){
 			self.audioArray = new PhSim.Audio.AudioArray(self.staticAudio,function(){
 				resolve();
+				this.status = 3;
 			});
 		})
 	}).then(function(){
-		this_a.intervalLoop = setInterval(this_a.loopFunction.bind(this_a),this_a.delta);
 		this_a.init = true;
 	});
 
-}
+	this.status = 4;
 
-PhSim.prototype.initSim = function(simulationI) {
+	var e = new PhSim.PhDynEvent();
 
-	this.status = 1;
-	var self = this;
-	this.status = 2;
-
-	this.status = 3;
-	var e = new PhSim.PhEvent();
-	self.gotoSimulationIndex(0);
 	self.callEventClass("load",self,e);
-	self.addEventListener("collisionstart",function() {
-		//self.playAudioByIndex(self.simulation.collisionSound);
-	});
-	self.status = 4;
-
 }
 
 /***/ }),
@@ -5065,8 +4962,8 @@ PhSim.prototype.setRectWidthAndHeight = function(dynObject,w,h) {
 
 /**
  * 
- * @param {*} dyn_object - Dynamic Object
- * @param {*} colorStr - Color
+ * @param {PhSim.DynObject} dyn_object - Dynamic Object
+ * @param {String} colorStr - Color
  */
 
 PhSim.prototype.setColor = function(dyn_object,colorStr) {
@@ -5220,12 +5117,17 @@ PhSim.prototype.loopFunction = function() {
 /* 32 */
 /***/ (function(module, exports) {
 
+PhSim.prototype.booleanWPatch = function(o) {
+
+}
+
 /** 
  * 
  * Extract Widgets from Dynamic Object.
  * To extract a widget in PhSim is to read all of the objects in the "widgets" array found in each
  * well-formed PhSim object and then translate it into JavaScript.
  * 
+ * @function
  * @param {Widget} widget - The Widget
  * @param {PhSim.DynObject} dyn_object The individual Dynamic Object
  * @returns undefined
@@ -5234,8 +5136,8 @@ PhSim.prototype.loopFunction = function() {
 
 PhSim.prototype.extractWidget = function(widget,dyn_object) {
 
-    for(var i = 0; i < PhSim.Widgets.length; i++) {
-        PhSim.Widgets[i].onExtraction(widget,dyn_object);
+    if(PhSim.Widgets[widget.type]) {
+        PhSim.Widgets[widget.type].call(this,widget,dyn_object);
     }
 	
     var self = this;
@@ -5255,20 +5157,12 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
             this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
-        }
-    
-        if(widget.numVar) {
-            self.numVar[widget.name] === widget.value;
         }
         
         if(widget.keyboardControls) {
             this.addKeyboardControls(dyn_object,widget);
-        }
-    
-        if(widget.circularConstraint) {
-            this.createCircularConstraint(dyn_object,widget.x,widget.y);
         }
     
         if(widget.setNumVar) {
@@ -5287,77 +5181,9 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
             this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
     
-        }
-    
-        if(widget.force) {
-            var f = this.createMotionFunction("force",dyn_object,widget.vector);
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                triggerObj: dyn_object
-            });
-        }
-    
-        if(widget.velocity) {
-            var f = this.createMotionFunction("velocity",dyn_object,widget.vector);
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                triggerObj: dyn_object
-            });
-        }
-    
-        if(widget.translate) {
-            var f = this.createMotionFunction("translate",dyn_object,widget.vector);
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                triggerObj: dyn_object
-            });
-        }
-    
-        if(widget.position) {
-            var f = this.createMotionFunction("position",dyn_object,widget.vector);
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                triggerObj: dyn_object
-            });
-        }
-    
-        if(widget.rotation) {
-    
-            if(widget.circularConstraintRotation) {
-                var f = this.createMotionFunction("circular_constraint_rotation",dyn_object,widget.cycle);
-            }
-    
-            else {
-                var f = this.createMotionFunction("rotation",dyn_object,widget.cycle);
-            }
-            
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                triggerObj: dyn_object
-            });
-        }
-    
-        if(widget.setAngle) {
-            
-            if(widget.circularConstraintRotation) {
-                var f = this.createMotionFunction("circular_constraint_setAngle",dyn_object,widget.cycle);
-            }
-    
-            else {
-                var f = this.createMotionFunction("setAngle",dyn_object,widget.cycle);
-            }
-            
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                triggerObj: dyn_object
-            });		
-        }
-
-        if(widget.setAngleByMouse) {
-            this.addEventListener("mousemove")
         }
     
         if(widget.deleteSelf) {
@@ -5378,262 +5204,15 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
             var ref = this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
-        }
-    
-        if(widget.toggleLock) {
-
-            var closure = function() {
-
-                var o = dyn_object;
-
-                var f = function() {
-                    self.toggleLock(o);
-                }
-
-                return f;
-            }
-
-            this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                triggerObj: dyn_object
-            });
-        }
-
-        if(widget.toggleSemiLock) {
-
-            var closure = function() {
-
-                var o = dyn_object;
-
-                var f = function() {
-                    self.toggleSemiLock(o);
-                }
-
-                return f;
-            }
-
-            this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                triggerObj: dyn_object
-            });
-        }
-    
-        if(widget.clone) {
-    
-            // Clone By Time
-    
-            if(widget.trigger === "time") {
-            
-                var getFunction = function() {
-    
-                    var time = widget.time;
-                    var maxN = widget.maxN;
-    
-                    var func = null;
-    
-                    if(Number.isInteger(maxN)) {
-    
-                        func = function(e) {
-    
-                            if(func.__n === maxN) {
-                                clearInterval(func.__interN);
-                            }
-    
-                            else {
-                                if(!self.paused) {
-                                    self.spawnObject(dyn_object);
-                                    func.__n++;
-                                }
-                            }
-    
-                        }
-    
-                        func.__n = 0;
-    
-                    }
-    
-                    else {
-    
-                        func = function(e) {
-                            if(!self.paused) {
-                                self.spawnObject(dyn_object);
-                            }
-                        }
-    
-                    }
-    
-    
-                    func.__phtime = time;
-                    func.__interN = null;
-    
-                    return func;
-    
-                }
-    
-                var refFunc = getFunction();
-    
-                refFunc.__interN = setInterval(refFunc,refFunc.__phtime);
-    
-            }
-    
-            // Clone By Key
-    
-            if(widget.trigger === "key") {
-    
-                var getFunction = function() {
-    
-                    var kc = widget.key;
-                    var vc = widget.vector;
-    
-                    var cloneByKeyFunc = function(e) {
-                        if(e.key === kc) {
-                            self.spawnObject(dyn_object,vc);
-                        }
-                    }
-    
-                    return cloneByKeyFunc;
-    
-                }
-    
-                this.addEventListener("keydown",getFunction());
-    
-            }
-    
-        }
-    
-        if(widget.draggable) {
-    
-    
-            var func = function(e) {
-    
-                var change = false;
-                var __ismoving = true;
-                var constraint = null;
-    
-                // Displacement vector between mouse and centroid of object when the mouse is pushed downwards.
-    
-                var delta = {}
-    
-                // Mouse Position
-    
-                var mV = {
-                    x: null,
-                    y: null
-                }
-    
-                var __onmousemove = function(e) {
-                    mV.x = e.x - delta.x;
-                    mV.y = e.y - delta.y;
-                }
-    
-                var __onmouseup = function() {
-                    self.removeEventListener("mousemove",__onmousemove);
-                    self.removeEventListener("mouseup",__onmouseup);
-                    self.removeEventListener("beforeupdate",__onbeforeupdate);
-                }
-    
-                var __onbeforeupdate = function() {
-                    PhSim.Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
-                    self.setPosition(dyn_object,mV);
-                }
-    
-                var __onmousedown = function(e) {
-                    if(self.pointInObject(dyn_object,e.x,e.y)) {
-    
-                        delta.x = e.x - dyn_object.matter.position.x;
-                        delta.y = e.y - dyn_object.matter.position.y;
-    
-                        self.addEventListener("mousemove",__onmousemove);
-                        self.addEventListener("mouseup",__onmouseup);
-                        self.addEventListener("beforeupdate",__onbeforeupdate);
-    
-                        __onmousemove(e);
-                    }
-                }
-                
-                self.addEventListener("mouseout",__onmouseup);
-    
-                return __onmousedown;
-    
-            }
-    
-            this.addEventListener("mousedown",func());
         }
     
         if(widget.rectText) {
             dyn_object.rectTextWidget === true;
         }
     
-        if(widget.coin) {
-    
-            var func = function() {
-    
-                var obj1 = dyn_object;
-    
-                var a = function() {
-    
-                    if(self.inSensorCollision(obj1) && self.lclGame) {
-                        self.lclGame.setScore(self.lclGame.score + 1);
-                        self.removeEventListener("collisionstart",a);	
-                    }
-    
-                }
-    
-                return a;
-    
-            }
-    
-            self.addEventListener("collisionstart",func());
-        
-        }
-        
-        if(widget.hazard) {
-    
-            var func = function() {
-    
-                var obj1 = dyn_object;
-    
-                var a = function() {
-    
-                    if(self.inSensorCollision(obj1) && self.lclGame) {
-                        self.lclGame.decrementLife(self.lclGame.score + 1);
-                        self.removeEventListener("collisionstart",a);	
-                    }
-    
-                }
-    
-                return a;
-    
-            }
-    
-            self.addEventListener("collisionstart",func());
-    
-        }
-    
-        if(widget.health) {
-    
-            var func = function() {
-    
-                var obj1 = dyn_object;
-    
-                var a = function() {
-    
-                    if(self.inSensorCollision(obj1) && self.lclGame) {
-                        self.lclGame.incrementLife(self.lclGame.score + 1);
-                        self.removeEventListener("collisionstart",a);	
-                    }
-    
-                }
-    
-                return a;
-    
-            }
-    
-            self.addEventListener("collisionstart",func());
-    
-        }
+
     
         if(widget.noRotation) {
             PhSim.Matter.Body.setInertia(dyn_object.matter, Infinity)
@@ -5761,7 +5340,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
             var f = this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
     
@@ -5782,7 +5361,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
             var f = this.addSimpleEvent(widget.trigger,closure(),{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
         
@@ -5791,15 +5370,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 self.setLineWidth(dyn_object,widget.color);
             },{
                 ...widget,
-                triggerObj: dyn_object
-            });
-        }
-        
-        if(widget.endGame) {
-            var f = this.createMotionFunction("position",dyn_object,widget.vector);
-            this.addSimpleEvent(widget.trigger,f,{
-                ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
         }
         
@@ -5813,7 +5384,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 self.playAudioByIndex(i);
             },{
                 ...widget,
-                triggerObj: dyn_object
+                simpleEventObj: dyn_object
             });
     
             this.audioPlayers++;
@@ -5842,58 +5413,12 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             self.camera.scale()
         }
 
-        if(widget.wFunction) {
-
-            var wf = self.createWFunction(widget.function,dyn_object);
-
-            var closure = function() {
-
-                var f = function(){
-                    wf();
-                };
-
-                return f;
-
-            }
-
-            var f = this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                triggerObj: dyn_object
-            });
-
-        }
-    
-        if(widget.objLink_a) {
-    
-            var widgetO = widget;
-    
-            this.addEventListener("matterJSLoad",function(){
-                var eventFuncClosure = function() {
-    
-                    var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
-    
-                    var eventFunc = function(){
-                        self.callObjLinkFunctions(targetObj);
-                    } 
-    
-                    return eventFunc;
-                
-                }
-    
-    
-                var options = {
-                    ...widgetO,
-                    triggerObj: dyn_object
-                }
-    
-                var f = self.addSimpleEvent(widgetO.trigger,eventFuncClosure(),options);
-            });
-    
-        }
-    
-        
-    
     }
+
+    /**
+     * Extract all widgets from a dynamic object.
+     * @param {PhSim.DynObject} dyn_object 
+     */
     
     
     PhSim.prototype.extractWidgets = function(dyn_object) {
@@ -6236,7 +5761,7 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 
 /***/ }),
 /* 36 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 /*
 
@@ -6253,7 +5778,7 @@ PhSim.Constraints.Static.Constraint = function() {
 	this.objectB = null;
 	this.pointA = null;
 	this.pointB = null;
-	this.constraint = true;
+	this.type = "constraint";
 }
 
 /**
@@ -6279,14 +5804,402 @@ PhSim.Widget = function(name,onExtraction) {
 }
 
 /**
- * Array of custom widgets.
- * @type {PhSim.Widget[]}
+ * 
+ * @param {PhSimObject} o 
  */
 
-PhSim.Widgets = [];
+PhSim.Widget.defineByBoolean = function(o) {
+
+	Object.keys(PhSim.Widgets).forEach(function(p){
+		if(o[p]) {
+			o.type = p;
+		}
+	})
+
+	
+}
+
+/**
+ * Array of custom widgets.
+ * @enum {PhSim.Widget[]}
+ */
+
+PhSim.Widgets = {};
+
+PhSim.chkWidgetType = function() {
+	
+}
+
+// Motion Widgets
+
+__webpack_require__(37);
+
+// Cloning Widgets
+
+__webpack_require__(38);
+
+// Draggable Object Widget
+
+__webpack_require__(39);
 
 /***/ }),
 /* 37 */
+/***/ (function(module, exports) {
+
+
+/** 
+ * 
+ * Generate a function to put some dynamic object in motion, given some mode and vector or scalar.
+ * 
+ * @function
+ * @param {"setAngle"|"force"|"velocity"|"translate"|"position"|"rotation"|"circular_constraint_rotation"} mode - The possible modes are "force","velocity","translate"
+ * @param {dyn_object} dyn_object - The dynamic object to put in motion.
+ * @param {Vector|Number} motion - The vector or scalar that defines the motion.
+ * @returns {Function} - The method to 
+ * 
+ * 
+*/
+
+PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
+
+	var self = this;
+	
+	if(mode === "force") {
+		return function() {
+			return self.applyForce(dyn_object,dyn_object.matter.position,motion);
+		}
+	}
+
+	if(mode === "velocity") {
+		return function() {
+			return self.setVelocity(dyn_object,motion);
+		}
+	}
+
+	if(mode === "translate") {
+		return function() {
+			return self.translate(dyn_object,motion);
+		}
+	}
+
+	if(mode === "position") {
+		return function() {
+			return self.setPosition(dyn_object,motion)
+		}
+	}
+
+	if(mode === "rotation") {
+		return function() {
+			return self.rotate(dyn_object,motion,dyn_object.matter.position);
+		}
+	}
+
+	if(mode === "circular_constraint_rotation") {
+		return function() {
+			return self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+		}
+	}
+
+	if(mode === "setAngle") {
+		return function() {
+			return self.setAngle(dyn_object,motion);
+		}
+	}
+
+	if(mode === "circular_constraint_setAngle") {
+		return function() {
+			var a = Math.atan2(dyn_object.y - dyn_object.circularConstraintVector.y,dyn_object.x - dyn_object.circularConstraintVector.x)
+			self.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
+			self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+		}
+	}
+
+	return console.error("Parameter 'mode' must either be equal to the one of the following strings: 'force','velocity' or 'position'.");
+
+}
+
+/**
+ * 
+ * Velocity widget
+ * 
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Widget} widget
+ * @this {PhSim} 
+ */
+
+PhSim.Widgets.velocity = function(widget,dynObject) {
+    var f = this.createMotionFunction("velocity",dynObject,widget.vector);
+    this.addSimpleEvent(widget.trigger,f,{
+        ...widget,
+        simpleEventObj: dynObject
+    });
+}
+
+/**
+ * 
+ * Translatation widget
+ * 
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Widget} widget
+ * @this {PhSim} 
+ */
+
+PhSim.Widgets.translate = function(widget,dynObject) {
+    var f = this.createMotionFunction("translate",dynObject,widget.vector);
+    this.addSimpleEvent(widget.trigger,f,{
+        ...widget,
+        simpleEventObj: dynObject
+    });
+}
+
+/**
+ * 
+ * Position widget
+ * 
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Widget} widget
+ * @this {PhSim} 
+ */
+
+PhSim.Widgets.position = function(widget,dynObject) {
+    var f = this.createMotionFunction("position",dynObject,widget.vector);
+    this.addSimpleEvent(widget.trigger,f,{
+        ...widget,
+        simpleEventObj: dynObject
+    });
+}
+
+/**
+ * 
+ * Rotation widget
+ * 
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Widget} widget
+ * @this {PhSim} 
+ */
+
+PhSim.Widgets.rotation = function(widget,dynObject) {
+
+    if(widget.circularConstraintRotation) {
+        var f = this.createMotionFunction("circular_constraint_rotation",dynObject,widget.cycle);
+    }
+
+    else {
+        var f = this.createMotionFunction("rotation",dynObject,widget.cycle);
+    }
+    
+    this.addSimpleEvent(widget.trigger,f,{
+        ...widget,
+        simpleEventObj: dynObject
+    });
+}
+
+PhSim.Widgets.setAngle = function(widget,dynObject) {
+
+    if(widget.circularConstraintRotation) {
+        var f = this.createMotionFunction("circular_constraint_setAngle",dynObject,widget.cycle);
+    }
+
+    else {
+        var f = this.createMotionFunction("setAngle",dynObject,widget.cycle);
+    }
+    
+    this.addSimpleEvent(widget.trigger,f,{
+        ...widget,
+        simpleEventObj: dynObject
+    });
+
+}
+
+PhSim.Widgets.force = function(widget,dyn_object) {
+
+    var f = this.createMotionFunction("force",dyn_object,widget.vector);
+
+    this.addSimpleEvent(widget.trigger,f,{
+        ...widget,
+        simpleEventObj: dyn_object
+    });
+    
+}
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports) {
+
+/**
+ * 
+ * Clone object
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Object} options - The options used for creating a spawned object
+ * @param {Vector} options.vector -  The velocity to add to an object when it got spawned.
+ * @param 
+ */
+
+PhSim.prototype.cloneObject = function(dynObject,options = {}) {
+	var obj = new PhSim.DynObject(dynObject.static);
+	obj.cloned = true;
+	obj.loneParent = dynObject;
+
+	this.addToOverlayer(obj);
+	
+	var eventObj = new PhSim.PhEvent;
+	eventObj.target = dynObject;
+	eventObj.clonedObj = obj;
+
+	this.callEventClass("clone",this,eventObj);
+}
+
+PhSim.Widgets.clone = function(widget,dyn_object) {
+
+    var self = this;
+    
+    // Clone By Time
+
+    if(widget.trigger === "time") {
+    
+        var getFunction = function() {
+
+            var time = widget.time;
+            var maxN = widget.maxN;
+
+            var func = null;
+
+            if(Number.isInteger(maxN)) {
+
+                func = function(e) {
+
+                    if(func.__n === maxN) {
+                        clearInterval(func.__interN);
+                    }
+
+                    else {
+                        if(!self.paused) {
+                            self.cloneObject(dyn_object);
+                            func.__n++;
+                        }
+                    }
+
+                }
+
+                func.__n = 0;
+
+            }
+
+            else {
+
+                func = function(e) {
+                    if(!self.paused) {
+                        self.cloneObject(dyn_object);
+                    }
+                }
+
+            }
+
+
+            func.__phtime = time;
+            func.__interN = null;
+
+            return func;
+
+        }
+
+        var refFunc = getFunction();
+
+        refFunc.__interN = setInterval(refFunc,refFunc.__phtime);
+
+    }
+
+    // Clone By Key
+
+    if(widget.trigger === "key") {
+
+        var getFunction = function() {
+
+            var kc = widget.key;
+            var vc = widget.vector;
+
+            var cloneByKeyFunc = function(e) {
+                if(e.key === kc) {
+                    self.cloneObject(dyn_object,vc);
+                }
+            }
+
+            return cloneByKeyFunc;
+
+        }
+
+        this.addEventListener("keydown",getFunction());
+
+    }
+
+}
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports) {
+
+PhSim.Widgets.draggable = function(widget,dyn_object) {
+    
+    var func = function(e) {
+
+        var change = false;
+        var __ismoving = true;
+        var constraint = null;
+
+        // Displacement vector between mouse and centroid of object when the mouse is pushed downwards.
+
+        var delta = {}
+
+        // Mouse Position
+
+        var mV = {
+            x: null,
+            y: null
+        }
+
+        var __onmousemove = function(e) {
+            mV.x = e.x - delta.x;
+            mV.y = e.y - delta.y;
+        }
+
+        var __onmouseup = function() {
+            self.removeEventListener("mousemove",__onmousemove);
+            self.removeEventListener("mouseup",__onmouseup);
+            self.removeEventListener("beforeupdate",__onbeforeupdate);
+        }
+
+        var __onbeforeupdate = function() {
+            PhSim.Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
+            self.setPosition(dyn_object,mV);
+        }
+
+        var __onmousedown = function(e) {
+            if(self.pointInObject(dyn_object,e.x,e.y)) {
+
+                delta.x = e.x - dyn_object.matter.position.x;
+                delta.y = e.y - dyn_object.matter.position.y;
+
+                self.addEventListener("mousemove",__onmousemove);
+                self.addEventListener("mouseup",__onmouseup);
+                self.addEventListener("beforeupdate",__onbeforeupdate);
+
+                __onmousemove(e);
+            }
+        }
+        
+        self.addEventListener("mouseout",__onmouseup);
+
+        return __onmousedown;
+
+    }
+
+    this.addEventListener("mousedown",func());
+}
+
+/***/ }),
+/* 40 */
 /***/ (function(module, exports) {
 
 /**
@@ -6320,7 +6233,7 @@ PhSim.calc_skinmesh = function(dynObject) {
 }
 
 /***/ }),
-/* 38 */
+/* 41 */
 /***/ (function(module, exports) {
 
 // Simple Event Reference
@@ -6415,12 +6328,13 @@ PhSim.prototype.simpleEventRefs = [];
 
 /** 
  * Properties for a simple event.
+ * 
  *
  * @typedef {Object} simpleEventOptions
  * @property {@external https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key|KeyboardEvent.key} [key] - The event.key value for triggering a simple event.
  * @property {Number} [time] - The time interval between a repeated event or a delay time for timeouts.
  * @property {Number} [maxN] - The maximum number of times a repeated SimpleEvent can be executed.
- * @property {PhSim.DynObject} [triggerObj] - Trigger object
+ * @property {PhSim.DynObject} [simpleEventObj] - An object being affected 
  * 
  * The simple event options is an Object that is used for the {@link PhSim#addSimpleEvent} function.
  */
@@ -6447,14 +6361,14 @@ PhSim.prototype.simpleEventRefs = [];
 PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 	if(trigger.match(/_global$/)) {
-		options.triggerObj = null;
+		options.simpleEventObj = null;
 	}
 
 	var self = this;
 	
 	if(trigger === "key") {
 
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 		
 			var f = function(e) {
 				if(options.key === e.key) {
@@ -6484,11 +6398,11 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 		var self = this;
 
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 			
 			var f = function(e) {
 
-				var m = self.inSensorCollision(options.triggerObj)
+				var m = self.inSensorCollision(options.simpleEventObj)
 	
 				if(m) {
 					call(e);
@@ -6527,9 +6441,9 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 	if(trigger === "objclick" || trigger === "objclick_global") {
 
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 			var f = function(e) {
-				if(self.objMouseArr[self.objMouseArr.length - 1] === options.triggerObj) {
+				if(self.objMouseArr[self.objMouseArr.length - 1] === options.simpleEventObj) {
 					call(e);
 				}
 			}
@@ -6550,9 +6464,9 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 	if(trigger === "objmousedown" || trigger === "objmousedown_global") {
 
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 			var f = function(e) {
-				if(self.objMouseArr[self.objMouseArr.length - 1] === options.triggerObj) {
+				if(self.objMouseArr[self.objMouseArr.length - 1] === options.simpleEventObj) {
 					call(e);
 				}
 			}
@@ -6583,9 +6497,9 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 	
 	if(trigger === "objmouseup" || trigger === "objmouseup_global") {
 
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 			var f = function(e) {
-				if(self.objMouseArr[self.objMouseArr.length - 1] === options.triggerObj) {
+				if(self.objMouseArr[self.objMouseArr.length - 1] === options.simpleEventObj) {
 					call(e);
 				}
 			}
@@ -6605,14 +6519,14 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 	}
 
 	if(trigger === "objlink") {
-		options.triggerObj.objLinkFunctions = options.triggerObj.objLinkFunctions || [];
-		options.triggerObj.objLinkFunctions.push(call);
+		options.simpleEventObj.objLinkFunctions = options.simpleEventObj.objLinkFunctions || [];
+		options.simpleEventObj.objLinkFunctions.push(call);
 	}
 
 	if(trigger === "afterslchange") {
 
 		
-		if(options.triggerObj) {
+		if(options.simpleEventObj) {
 			var f = function(e) {
 				call(e);
 			}
@@ -6707,7 +6621,7 @@ PhSim.prototype.removeSimpleEvent = function(refNumber) {
 }
 
 /***/ }),
-/* 39 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /**
@@ -6779,7 +6693,7 @@ PhSim.prototype.processVar = function(str) {
 }
 
 /***/ }),
-/* 40 */
+/* 43 */
 /***/ (function(module, exports) {
 
 // Generated by TypeDefGen module 
@@ -6789,30 +6703,7 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 
  
  
-/**
-* @typedef {simpleEventOptions|Velocity}
-* @property {Boolean} velocity - Boolean for enabling the velocity widget
-* @property {Vector} vector - Velocity vector
-*/
- 
-/**
-* @typedef {simpleEventOptions|Force}
-* @property {Boolean} force - Boolean for enabling the force widget
-* @property {Vector} vector - Force vector
-*/
- 
-/**
-* @typedef {simpleEventOptions|Position}
-* @property {Boolean} position - Boolean for enabling the position widget
-* @property {Vector} vector - Position vector
-*/
- 
-/**
-* @typedef {simpleEventOptions|Translate}
-* @property {Boolean} translate - Boolean for enabling the translation widget
-* @property {Vector} vector - Translation vector
-*/
- 
+
 /**
 * @typedef {simpleEventOptions|DeleteSelf}
 * @property {Boolean} deleteSelf - Boolean for enabling the force widget

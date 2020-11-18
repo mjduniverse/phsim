@@ -1,3 +1,8 @@
+/**
+ * Config filter
+ * @param {HTMLElement} container 
+ */
+
 PhSim.prototype.configFilter = function(container) {
 	this.htmlFilter = document.createElement("div");
 	this.htmlFilter.style.background = "rgba(3,3,3,0.7)";
@@ -6,6 +11,11 @@ PhSim.prototype.configFilter = function(container) {
 	this.htmlFilter.classList.add("dynsim-filter");
 	container.appendChild(this.htmlFilter);
 }
+
+/**
+ * Enable filter
+ * @function
+ */
 
 PhSim.prototype.enableFilter = function() {
 	var elmBox = this.simCanvas.getBoundingClientRect();
@@ -17,9 +27,19 @@ PhSim.prototype.enableFilter = function() {
 	this.htmlFilter.style.height = Math.floor(elmBox.height) + "px";
 }
 
+/**
+ * Disable filter
+ * @function
+ */
+
 PhSim.prototype.disableFilter = function() {
 	this.htmlFilter.style.display = "none";
 }
+
+/**
+ * Toggle filter
+ * @function
+ */
 
 PhSim.prototype.toggleFilter = function() {
 
@@ -33,7 +53,7 @@ PhSim.prototype.toggleFilter = function() {
 }
 
 /**
- * 
+ * @function
  * @param {Object} options - Options
  * @param {String} options.msg - The message
  * @param {String} options.closeButtonTxt - Inner text for closing button

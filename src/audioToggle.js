@@ -1,6 +1,7 @@
 
 /**
- * Play audio in 
+ * Play audio in
+ * @function 
  * @param {Number} i - Index in audio array. 
  */
 
@@ -9,8 +10,8 @@ PhSim.prototype.playAudioByIndex = function(i) {
 }
 
 /**
- * 
- * @param {*} i 
+ * @function
+ * @param {Number} i 
  */
 
 PhSim.prototype.pauseAudioByIndex = function(i) {
@@ -18,8 +19,8 @@ PhSim.prototype.pauseAudioByIndex = function(i) {
 }
 
 /**
- * 
- * @param {*} i 
+ * @function
+ * @param {Number} i 
  */
 
 PhSim.prototype.pauseAudioByIndex = function(i) {
@@ -27,9 +28,9 @@ PhSim.prototype.pauseAudioByIndex = function(i) {
 }
 
 /**
- * 
- * @param {*} i 
- * @param {*} v 
+ * @function
+ * @param {Number} i 
+ * @param {Number} v 
  */
 
 PhSim.prototype.setAudioVolByIndex = function(i,v) {
@@ -38,8 +39,8 @@ PhSim.prototype.setAudioVolByIndex = function(i,v) {
 }
 
 /**
- * 
- * @param {*} i 
+ * @function
+ * @param {Number} i 
  */
 
 PhSim.prototype.setAudioMuteByIndex = function(i) {
@@ -48,8 +49,8 @@ PhSim.prototype.setAudioMuteByIndex = function(i) {
 }
 
 /**
- * 
- * @param {*} i 
+ * @function
+ * @param {Number} i 
  */
 
 PhSim.prototype.toggleAudioByIndex = function(i) {

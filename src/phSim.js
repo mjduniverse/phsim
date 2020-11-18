@@ -31,7 +31,7 @@ module.exports = require("./core");
 
 require("./objects" );
 require("./matterPlugin.js" );
-require("./eventStack" );
+require("./events/eventStack" );
 require("./phRender");
 require("./sprites");
 require("./audio");
@@ -50,14 +50,14 @@ require("./tools/boundingBox");
 
 require("./dynObject");
 
-require("./eventObjects");
+require("./events/eventObjects");
 require("./lo");
 require("./makeQuickly");
 require("./filter");
 require("./dynWidget");
 require("./audioToggle");
-require("./registerEvents");
-require("./eventListener");
+require("./events/registerEvents");
+require("./events/eventListener");
 require("./query");
 require("./gravity");
 require("./toggle");
@@ -72,7 +72,7 @@ require("./game");
 require("./gradient");
 require("./widgets");
 require("./calc_skinmesh");
-require("./simpleEvent");
+require("./events/simpleEvent");
 require("./processVar");
 
 
@@ -105,15 +105,3 @@ PhSim.statusStruct = {
 	3: "Loaded Audio",
 	4: "Loaded Simulation"
 }
-
-/**
- * 
- * @typedef {PhSim.Options|PhSim.Options.Simulation|StaticObject[]} DynSimOptions
- * 
- * The options that can be used to create a dynamic simulation could be a 
- * CompositeSimulation object, a simulation object or an array 
- * of static objects.
- * 
- * If an array is chosen, then it is used to create
- * 
- */

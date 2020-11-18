@@ -13,7 +13,7 @@ PhSim.Constraints.Static.Constraint = function() {
 	this.objectB = null;
 	this.pointA = null;
 	this.pointB = null;
-	this.constraint = true;
+	this.type = "constraint";
 }
 
 /**
@@ -39,12 +39,40 @@ PhSim.Widget = function(name,onExtraction) {
 }
 
 /**
- * Array of custom widgets.
- * @type {PhSim.Widget[]}
+ * 
+ * @param {PhSimObject} o 
  */
 
-PhSim.Widgets = [];
+PhSim.Widget.defineByBoolean = function(o) {
+
+	Object.keys(PhSim.Widgets).forEach(function(p){
+		if(o[p]) {
+			o.type = p;
+		}
+	})
+
+	
+}
+
+/**
+ * Array of custom widgets.
+ * @enum {PhSim.Widget[]}
+ */
+
+PhSim.Widgets = {};
 
 PhSim.chkWidgetType = function() {
 	
 }
+
+// Motion Widgets
+
+require("./widgets/motion");
+
+// Cloning Widgets
+
+require("./widgets/clone");
+
+// Draggable Object Widget
+
+require("./widgets/draggable");

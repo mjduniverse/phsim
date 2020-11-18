@@ -2,3 +2,5 @@ node_modules
 .cache
 out
 old_code
+clean-jsdoc-theme
+jsdoc.json

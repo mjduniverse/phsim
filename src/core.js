@@ -1,8 +1,23 @@
+/**
+ * 
+ * The options that can be used to create a dynamic simulation could be a 
+ * CompositeSimulation object, a simulation object or an array 
+ * of static objects.
+ * 
+ * If an array is chosen, then it is used to create
+ * 
+ * @typedef {PhSim.Options|PhSim.Options.Simulation|StaticObject[]} DynSimOptions
+ * @property {HTMLCanvas} canvas - Simulation canvas
+ * @property {Number} initSimIndex - The inital simulation index. If undefined, the simulation index is 0.
+ * @property {HTMLElement} container - The container 
+ * 
+ */
+
 /** 
  * Dynamic Simulation Instance Object 
  * 
  * @constructor
- * @param {DynSimOptions} [sim] - The simulation object
+ * @param {DynSimOptions} [dynSimOptions] - The simulation object
  * 
  */
 
@@ -10,7 +25,10 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 
 	/**
 	 * The static simulation object
+	 * @typedef {DynSimOptions}
 	 */
+
+	this.options;
 
 	if(Array.isArray(dynSimOptions.simulations)) {
 		this.options = dynSimOptions;
@@ -26,7 +44,41 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 		this.options.simulations[0].layers[0] = dynSimOptions;
 	}
 
+	// Configure canvas
+
+	if(dynSimOptions.canvas) {
+		this.connectCanvas(dynSimOptions.canvas)
+	}
+
+	else {
+		var newCanvas = document.createElement("canvas");
+		this.connectCanvas(newCanvas);
+	}
+
+	// Configure container
+
+	if(dynSimOptions.container) {
+		this.connectContainer(dynSimOptions.container);
+	}
+
+	else {
+		var newContainer = document.createElement("canvas");
+		this.connectContainer(newContainer);
+	}
+
+	// Register event keys
+
 	this.registerKeyEvents();
+
+	// Inital Simulation
+
+	if(dynSimOptions.initSimIndex) {
+		this.gotoSimulationIndex(dynSimOptions.initSimIndex);
+	}
+
+	else {
+		this.gotoSimulationIndex(0);
+	}
 
 }
 
@@ -37,6 +89,17 @@ PhSim.prototype.connectCanvas = function(canvas) {
 	this.simCanvas.height = this.options.box.h || this.options.box.height;
 	this.registerCanvasEvents();
 	this.configRender(this.simCtx);
+}
+
+PhSim.prototype.connectContainer = function(c) {
+	
+	this.simContainer = c;
+
+	c.appendChild(this.simCanvas);
+	c.classList.add("phsim-container");
+
+	this.configFilter(c);
+
 }
 
 /**

@@ -1,74 +1,3 @@
-/** 
- * 
- * Generate a function to put some dynamic object in motion, given some mode and vector or scalar.
- * 
- * @function
- * @param {string} mode - The possible modes are "force","velocity","translate"
- * @param {dyn_object} dyn_object - The dynamic object to put in motion.
- * @param {Vector|Number} motion - The vector or scalar that defines the motion.
- * @returns {Function} - The method to 
- * 
- * 
-*/
-
-PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
-
-	var self = this;
-	
-	if(mode === "force") {
-		return function() {
-			return self.applyForce(dyn_object,dyn_object.matter.position,motion);
-		}
-	}
-
-	if(mode === "velocity") {
-		return function() {
-			return self.setVelocity(dyn_object,motion);
-		}
-	}
-
-	if(mode === "translate") {
-		return function() {
-			return self.translate(dyn_object,motion);
-		}
-	}
-
-	if(mode === "position") {
-		return function() {
-			return self.setPosition(dyn_object,motion)
-		}
-	}
-
-	if(mode === "rotation") {
-		return function() {
-			return self.rotate(dyn_object,motion,dyn_object.matter.position);
-		}
-	}
-
-	if(mode === "circular_constraint_rotation") {
-		return function() {
-			return self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
-		}
-	}
-
-	if(mode === "setAngle") {
-		return function() {
-			return self.setAngle(dyn_object,motion);
-		}
-	}
-
-	if(mode === "circular_constraint_setAngle") {
-		return function() {
-			var a = Math.atan2(dyn_object.y - dyn_object.circularConstraintVector.y,dyn_object.x - dyn_object.circularConstraintVector.x)
-			self.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
-			self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
-		}
-	}
-
-	return console.error("Parameter 'mode' must either be equal to the one of the following strings: 'force','velocity' or 'position'.");
-
-}
-
 // Set Angle to mouse.
 
 // Object Connection
@@ -98,74 +27,11 @@ PhSim.prototype.connectDynObjects = function(parent,child) {
 
 }
 
-PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
-	
-	var c = PhSim.Matter.Constraint.create({
-		
-		"bodyA": dynObject.matter,
-		
-		"pointB": {
-			"x": x,
-			"y": y
-		}
-
-	});
-
-	PhSim.Matter.World.add(this.matterJSWorld,c)
-
-	var relAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x);
-
-	this.addEventListener("afterupdate",function(){
-		var newAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x) - relAngle;
-		this.setAngle(dynObject,newAngle);
-	});
-
-
-	dynObject.circularConstraintVector = {
-		"x": x,
-		"y": y
-	}
-
-}
-
 /**
- * 
- * @param {*} dynObject 
+ * @function
+ * @param {PhSim.DynObject} dynObj 
+ * @param {Object} keyboardControls - Keyboard Controls options 
  */
-
-PhSim.prototype.callObjLinkFunctions = function(dynObject) {
-	for(var i = 0; i < dynObject.objLinkFunctions.length; i++) {
-		dynObject.objLinkFunctions[i]();
-	}
-}
-
-/**
- * 
- * @param {PhSim.DynObject} dynObject 
- * @param {Object} options - The options used for creating a spawned object
- * @param {Vector} options.vector -  The velocity to add to an object when it got spawned.
- * @param 
- */
-
-PhSim.prototype.spawnObject = function(dynObject,options = {}) {
-	var obj = new PhSim.DynObject(dynObject.static);
-	obj.cloned = true;
-	obj.loneParent = dynObject;
-
-	this.addToOverlayer(obj);
-	
-	var eventObj = new PhSim.PhEvent;
-	eventObj.target = dynObject;
-	eventObj.clonedObj = obj;
-
-	this.callEventClass("clone",this,eventObj);
-}
-
-/*** 
-
-Keyboard Controls
-
-***/
 
 PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
@@ -194,7 +60,13 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 }
 
-
+/**
+ * 
+ * Run function on all objects.
+ * 
+ * @function
+ * @param {Function} call 
+ */
 
 PhSim.prototype.forAllObjects = function(call) {
 	
@@ -208,6 +80,12 @@ PhSim.prototype.forAllObjects = function(call) {
 	}
 }
 
+/**
+ * Add object to over layer.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ */
 
 PhSim.prototype.addToOverlayer = function(dynObject) {
 	
@@ -218,6 +96,13 @@ PhSim.prototype.addToOverlayer = function(dynObject) {
 	this.objUniverse.push(dynObject);
 
 }
+
+/**
+ * Check if the object is a dynamic object.
+ * 
+ * @function
+ * @param {PhSimObject} o 
+ */
 
 PhSim.prototype.isNonDyn = function(o) {
 	return o.noDyn || o.permStatic;
@@ -264,6 +149,7 @@ PhSim.prototype.addObject = function(dynObject,options = {}) {
 
 /**
  * Remove dynamic object
+ * 
  * @function
  * @param {PhSim.DynObject}  dynObject - Dynamic Object
  * @returns {PhSim.DynObject} - The removed Dynamic Object
@@ -310,64 +196,4 @@ PhSim.prototype.renderAllCounters = function() {
 	for(var i = 0; i < this.counterArray.length; i++) {
 		this.renderCounterByIndex(i);
 	}
-}
-
-/**
- * Toggle Lock Status of Dynamic Object.
- * @param {PhSim.DynObject} dynObject 
- */
-
-PhSim.prototype.toggleLock = function(dynObject) {
-	dynObject.locked = !dynObject.locked;
-	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
-}
-
-/**
- * Toggle Semi-Lock Status of Dynamic Object.
- * @param {PhSim.DynObject} dynObject 
- */
-
-PhSim.prototype.toggleSemiLock = function(dynObject) {
-	dynObject.locked = !dynObject.locked;
-	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
-}
-
-/**
- * A widget function is a function that used for the WidgetFunction widget.
- * The "this" keyword in the body of function refers to the current instance of
- * PhSim simulation.
- * 
- * @typedef {Function} WFunction
- */
-
-/**
- * Array of widget functions
- * @type {WFunctions[]}
- */
-
-PhSim.prototype.wFunctions = [];
-
-/**
- * Create a widget function and push it to the wFunctions array.
- * @function
- * @param {String|Function} arg - content of function if string, function if function
- * @param {Object} thisRef - 
- * @returns {WFunction}
- */
-
-PhSim.prototype.createWFunction = function(arg,thisRef) {
-
-	if(typeof arg === "string") {
-		var o = new Function(arg).bind(thisRef);
-	}
-
-	else if(typeof arg === "function") {
-		var o = arg.bind(thisRef);
-	}
-
-	else {
-		throw "Expecting \"function\" or \"string\" type";
-	}
-
-    return o;
 }

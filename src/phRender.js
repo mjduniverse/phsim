@@ -1,6 +1,7 @@
 /** 
  * 
  * PhRender constructor
+ * PhRender is the rendering engine for PhSim.
  * 
  * @constructor
  * @param {CanvasRenderingContext2D} ctx - Canvas context
@@ -11,6 +12,7 @@ PhSim.PhRender = function(ctx) {
 
 	/**
 	 * PhRender Context
+	 * @type {CanvasRenderingContext2D}
 	 */
 
 	this.ctx = ctx;
@@ -18,13 +20,17 @@ PhSim.PhRender = function(ctx) {
 
 /**
  * Default Alpha
+ * This the alpha of an object that has no alpha defined.
+ * 
  * @type {Number}
  */
 
 PhSim.PhRender.prototype.defaultAlpha = 1;
 
 /**
- * Default stroke style
+ * Default stroke style.
+ * This is the stroke style of an object that has no stroke style defined.
+ * 
  * @type {String}
  */
 
@@ -32,6 +38,8 @@ PhSim.PhRender.prototype.defaultStrokeStyle = "transparent";
 
 /**
  * Default fill style
+ * This is the default fill style of an object.
+ * 
  * @type {String}
  */
 
@@ -39,9 +47,12 @@ PhSim.PhRender.prototype.defaultFillStyle = "transparent";
 
 /**
  * Setting context
+ * That is, this function sets the `globalAlpha`, `strokeStyle`, `fillStyle` and `lineWidth`
+ * properties of the {@link PhSim.PhRender#ctx} member of the {@link PhSim.PhRender} object
+ * using a {@link PhSimObject} object.
  * 
  * @function
- * @param {Object} object 
+ * @param {PhSimObject} object 
  */
 
 PhSim.PhRender.prototype.setCtx = function(object) {
@@ -82,7 +93,7 @@ PhSim.PhRender.prototype.setCtx = function(object) {
  * Render a {@link Path} as a polygon.
  * 
  * @function
- * @param {Path}} path 
+ * @param {Path} path 
  */
 
 PhSim.PhRender.prototype.static_path = function (path) {

@@ -12,9 +12,13 @@
  *  
  */
 
+const PhSim = require("./core");
+
 PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	var self = this;
+
+	this.status = 0;
 
 	this.firstSlUpdate = false;
 
@@ -130,13 +134,21 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 			
 		var a = this_a.simulation.widgets[C];
 
-		if(a.constraint) {
+		if(a.type === "constraint") {
 
 			var b = {}
 
 			if(a.objectA) {
-				b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);;
-			}
+
+				if(typeof a.objectA.L === "number" && typeof a.objectA.O === "number") {
+					b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);
+				}
+
+				if(a.objectA instanceof PhSim) {
+					b.bodyA = a.objectA;
+				}
+
+ 			}
 
 			if(a.objectB) {
 				b.bodyB = this_a.LO(a.objectB.L,a.objectB.O);
@@ -184,44 +196,36 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	}
 
+	this.status = 1;
+
 	var promise = new Promise(function(resolve,reject){
 
 		if(self.phRender) {
 			self.phRender.spriteImgArray = new PhSim.Sprites.SpriteImgArray(self.staticSprites,function() {
 				resolve();
+				this.status = 2;
 			});
 		}
 
 		else {
 			resolve();
+			this.status = 2;
 		}
 
 	}).then(function() {
 		return new Promise(function(resolve,reject){
 			self.audioArray = new PhSim.Audio.AudioArray(self.staticAudio,function(){
 				resolve();
+				this.status = 3;
 			});
 		})
 	}).then(function(){
-		this_a.intervalLoop = setInterval(this_a.loopFunction.bind(this_a),this_a.delta);
 		this_a.init = true;
 	});
 
-}
+	this.status = 4;
 
-PhSim.prototype.initSim = function(simulationI) {
+	var e = new PhSim.PhDynEvent();
 
-	this.status = 1;
-	var self = this;
-	this.status = 2;
-
-	this.status = 3;
-	var e = new PhSim.PhEvent();
-	self.gotoSimulationIndex(0);
 	self.callEventClass("load",self,e);
-	self.addEventListener("collisionstart",function() {
-		//self.playAudioByIndex(self.simulation.collisionSound);
-	});
-	self.status = 4;
-
 }

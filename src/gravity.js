@@ -1,4 +1,6 @@
-// Newtonian Gravity
+/**
+ * Apply Newtonian gravity field.
+ */
 
 PhSim.prototype.applyGravitationalField = function() {
 	
