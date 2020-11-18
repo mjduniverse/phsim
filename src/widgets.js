@@ -75,3 +75,4 @@ require("./widgets/motion.js");
 require("./widgets/objLink.js");
 require("./widgets/wFunction.js");
 require("./widgets/elevator.js");
+require("./widgets/keyboardControls.js")

@@ -42,10 +42,6 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             });
         }
         
-        if(widget.keyboardControls) {
-            this.addKeyboardControls(dyn_object,widget);
-        }
-    
         if(widget.deleteSelf) {
     
             var ref = null;
