@@ -37,6 +37,6 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 }
 
-PhSim.Widgets.circularConstraint = function() {
+PhSim.Widgets.circularConstraint = function(widget,dyn_object) {
 	this.createCircularConstraint(dyn_object,widget.x,widget.y);
 }
