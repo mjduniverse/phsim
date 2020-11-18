@@ -74,4 +74,3 @@ require("./widgets/lock.js");
 require("./widgets/motion.js");
 require("./widgets/objLink.js");
 require("./widgets/wFunction.js");
-
