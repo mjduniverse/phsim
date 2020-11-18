@@ -41,17 +41,9 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 simpleEventObj: dyn_object
             });
         }
-    
-        if(widget.numVar) {
-            self.numVar[widget.name] === widget.value;
-        }
         
         if(widget.keyboardControls) {
             this.addKeyboardControls(dyn_object,widget);
-        }
-    
-        if(widget.circularConstraint) {
-            this.createCircularConstraint(dyn_object,widget.x,widget.y);
         }
     
         if(widget.setNumVar) {
