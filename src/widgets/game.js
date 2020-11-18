@@ -1,4 +1,4 @@
-PhSim.Widgets.coin = function() {
+PhSim.Widgets.coin = function(widget,dyn_object) {
     var func = function() {
 
         var obj1 = dyn_object;
@@ -19,7 +19,7 @@ PhSim.Widgets.coin = function() {
     self.addEventListener("collisionstart",func());
 }
 
-PhSim.Widgets.widget.hazard = function() {
+PhSim.Widgets.widget.hazard = function(widget,dyn_object) {
 
     var func = function() {
 
@@ -42,7 +42,7 @@ PhSim.Widgets.widget.hazard = function() {
 
 }
 
-PhSim.Widgets.health = function() {
+PhSim.Widgets.health = function(widget,dyn_object) {
 
     var func = function() {
 
@@ -65,7 +65,7 @@ PhSim.Widgets.health = function() {
 
 }
 
-PhSim.Widgets.endGame = function() {
+PhSim.Widgets.endGame = function(widget,dyn_object) {
     var f = this.createMotionFunction("position",dyn_object,widget.vector);
     this.addSimpleEvent(widget.trigger,f,{
         ...widget,
