@@ -4623,11 +4623,19 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 				else {
 					
-					var dynObject = new PhSim.DynObject(o);
+					if(o instanceof PhSim.DynObject) {
+						this.addObject(o,{
+							layer: L
+						});
+					}
 
-					this.addObject(dynObject,{
-						layer: L
-					});
+					else {
+						var dynObject = new PhSim.DynObject(o);
+
+						this.addObject(dynObject,{
+							layer: L
+						});
+					}
 
 				}
 			}
@@ -6344,12 +6352,12 @@ PhSim.Widgets.wFunction = function(widget,dyn_object) {
 /* 45 */
 /***/ (function(module, exports) {
 
-PhSim.Widgets.elevator = function() {
+PhSim.Widgets.elevator = function(widget,dyn_object) {
             
     
     var func = function() {
     
-        var type = widget.type;
+        var bounding = widget.bounding;
 
         var obj = dyn_object;
         var relVec = PhSim.Vector.subtract(widget.pointB,widget.pointA);
@@ -6369,7 +6377,7 @@ PhSim.Widgets.elevator = function() {
         
         var cond_f = function() {}
         
-        if(type === "x-bounded") {
+        if(bounding === "x") {
 
             if(widget.pointA.x < widget.pointB.x) {
                 ax = widget.pointA.x;
@@ -6387,7 +6395,7 @@ PhSim.Widgets.elevator = function() {
         
         }
         
-        if(type === "y-bounded") {
+        if(bounding === "y") {
 
             if(widget.pointA.y < widget.pointB.y) {
                 ay = widget.pointA.y;
