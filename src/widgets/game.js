@@ -1,4 +1,7 @@
 PhSim.Widgets.coin = function(widget,dyn_object) {
+
+    var self = this;
+
     var func = function() {
 
         var obj1 = dyn_object;
@@ -20,6 +23,8 @@ PhSim.Widgets.coin = function(widget,dyn_object) {
 }
 
 PhSim.Widgets.hazard = function(widget,dyn_object) {
+
+    var self = this;
 
     var func = function() {
 
@@ -43,6 +48,8 @@ PhSim.Widgets.hazard = function(widget,dyn_object) {
 }
 
 PhSim.Widgets.health = function(widget,dyn_object) {
+
+    var self = this;
 
     var func = function() {
 

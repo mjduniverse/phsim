@@ -40,6 +40,8 @@ PhSim.prototype.createWFunction = function(arg,thisRef) {
 
 PhSim.Widgets.wFunction = function(widget,dyn_object) {
 
+    var self = this;
+
     var wf = self.createWFunction(widget.function,dyn_object);
 
     var closure = function() {

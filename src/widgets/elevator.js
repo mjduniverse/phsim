@@ -1,5 +1,6 @@
 PhSim.Widgets.elevator = function(widget,dyn_object) {
             
+    var self = this;
     
     var func = function() {
     

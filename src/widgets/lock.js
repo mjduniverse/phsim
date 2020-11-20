@@ -24,6 +24,8 @@ PhSim.prototype.toggleSemiLock = function(dynObject) {
 
 PhSim.Widgets.toggleLock = function(widget,dyn_object) {
 
+    var self = this;
+
     var closure = function() {
 
         var o = dyn_object;
@@ -42,6 +44,8 @@ PhSim.Widgets.toggleLock = function(widget,dyn_object) {
 }
 
 PhSim.Widgets.toggleSemiLock = function(widget,dyn_object) {
+
+    var self = this;
 
     var closure = function() {
 
