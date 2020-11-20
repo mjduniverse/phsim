@@ -102,11 +102,19 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 				else {
 					
-					var dynObject = new PhSim.DynObject(o);
+					if(o instanceof PhSim.DynObject) {
+						this.addObject(o,{
+							layer: L
+						});
+					}
 
-					this.addObject(dynObject,{
-						layer: L
-					});
+					else {
+						var dynObject = new PhSim.DynObject(o);
+
+						this.addObject(dynObject,{
+							layer: L
+						});
+					}
 
 				}
 			}

@@ -19,7 +19,7 @@ PhSim.Widgets.coin = function(widget,dyn_object) {
     self.addEventListener("collisionstart",func());
 }
 
-PhSim.Widgets.widget.hazard = function(widget,dyn_object) {
+PhSim.Widgets.hazard = function(widget,dyn_object) {
 
     var func = function() {
 
