@@ -5854,6 +5854,8 @@ PhSim.Widgets.clone = function(widget,dyn_object) {
 /***/ (function(module, exports) {
 
 PhSim.Widgets.draggable = function(widget,dyn_object) {
+
+    var self = this;
     
     var func = function(e) {
 
@@ -5916,6 +5918,9 @@ PhSim.Widgets.draggable = function(widget,dyn_object) {
 /***/ (function(module, exports) {
 
 PhSim.Widgets.coin = function(widget,dyn_object) {
+
+    var self = this;
+
     var func = function() {
 
         var obj1 = dyn_object;
@@ -5937,6 +5942,8 @@ PhSim.Widgets.coin = function(widget,dyn_object) {
 }
 
 PhSim.Widgets.hazard = function(widget,dyn_object) {
+
+    var self = this;
 
     var func = function() {
 
@@ -5960,6 +5967,8 @@ PhSim.Widgets.hazard = function(widget,dyn_object) {
 }
 
 PhSim.Widgets.health = function(widget,dyn_object) {
+
+    var self = this;
 
     var func = function() {
 
@@ -6020,6 +6029,8 @@ PhSim.prototype.toggleSemiLock = function(dynObject) {
 
 PhSim.Widgets.toggleLock = function(widget,dyn_object) {
 
+    var self = this;
+
     var closure = function() {
 
         var o = dyn_object;
@@ -6038,6 +6049,8 @@ PhSim.Widgets.toggleLock = function(widget,dyn_object) {
 }
 
 PhSim.Widgets.toggleSemiLock = function(widget,dyn_object) {
+
+    var self = this;
 
     var closure = function() {
 
@@ -6256,6 +6269,8 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 
 
 PhSim.Widgets.objLink_a = function(widget,dyn_object) {
+
+    var self = this;
     
     var widgetO = widget;
 
@@ -6329,6 +6344,8 @@ PhSim.prototype.createWFunction = function(arg,thisRef) {
 
 PhSim.Widgets.wFunction = function(widget,dyn_object) {
 
+    var self = this;
+
     var wf = self.createWFunction(widget.function,dyn_object);
 
     var closure = function() {
@@ -6354,6 +6371,7 @@ PhSim.Widgets.wFunction = function(widget,dyn_object) {
 
 PhSim.Widgets.elevator = function(widget,dyn_object) {
             
+    var self = this;
     
     var func = function() {
     
