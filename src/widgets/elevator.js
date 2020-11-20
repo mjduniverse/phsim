@@ -1,4 +1,4 @@
-PhSim.Widgets.elevator = function() {
+PhSim.Widgets.elevator = function(widget,dyn_object) {
             
     
     var func = function() {
