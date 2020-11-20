@@ -1,4 +1,6 @@
 PhSim.Widgets.draggable = function(widget,dyn_object) {
+
+    var self = this;
     
     var func = function(e) {
 

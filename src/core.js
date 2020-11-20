@@ -41,7 +41,7 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 
 	else if(Array.isArray(dynSimOptions)) {
 		this.options = new PhSim.Options();
-		this.options.simulations[0].layers[0] = dynSimOptions;
+		this.options.simulations[0].layers[0].objUniverse = dynSimOptions;
 	}
 
 	// Configure canvas

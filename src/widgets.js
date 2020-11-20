@@ -65,14 +65,14 @@ PhSim.chkWidgetType = function() {
 	
 }
 
-// Motion Widgets
 
-require("./widgets/motion");
-
-// Cloning Widgets
-
-require("./widgets/clone");
-
-// Draggable Object Widget
-
-require("./widgets/draggable");
+require("./widgets/circularConstraint.js");
+require("./widgets/clone.js");
+require("./widgets/draggable.js");
+require("./widgets/game.js");
+require("./widgets/lock.js");
+require("./widgets/motion.js");
+require("./widgets/objLink.js");
+require("./widgets/wFunction.js");
+require("./widgets/elevator.js");
+require("./widgets/keyboardControls.js")
