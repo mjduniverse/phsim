@@ -62,7 +62,7 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 	}
 
 	else {
-		var newContainer = document.createElement("canvas");
+		var newContainer = document.createElement("div");
 		this.connectContainer(newContainer);
 	}
 
@@ -231,12 +231,6 @@ PhSim.prototype.staticAudio = [];
 
 PhSim.prototype.audioPlayers = 0;
 
-/**
- * Array of collision classes
- * @type {PhSim.CollisionClass}
- */
-
-PhSim.prototype.collisionClasses = {};
 
 /**
  * Classes

@@ -26,7 +26,7 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 	this.addEventListener("afterupdate",function(){
 		var newAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x) - relAngle;
-		this.setAngle(dynObject,newAngle);
+		PhSim.Motion.setAngle(dynObject,newAngle);
 	});
 
 
@@ -37,6 +37,6 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 }
 
-PhSim.Widgets.circularConstraint = function(widget,dyn_object) {
+PhSim.Widgets.circularConstraint = function(dyn_object,widget) {
 	this.createCircularConstraint(dyn_object,widget.x,widget.y);
 }

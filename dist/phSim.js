@@ -89,7 +89,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(1);
-module.exports = __webpack_require__(50);
+module.exports = __webpack_require__(51);
 
 
 /***/ }),
@@ -136,19 +136,18 @@ __webpack_require__(7);
 __webpack_require__(8);
 
 __webpack_require__(9);
-
 __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
 __webpack_require__(13);
-__webpack_require__(14);
 
 // Bounding box functions
+
+__webpack_require__(14);
 
 __webpack_require__(15);
 
 __webpack_require__(16);
-
 __webpack_require__(17);
 __webpack_require__(18);
 __webpack_require__(19);
@@ -164,15 +163,14 @@ __webpack_require__(28);
 __webpack_require__(29);
 __webpack_require__(30);
 __webpack_require__(31);
-__webpack_require__(32);
 
+__webpack_require__(32);
 __webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
-__webpack_require__(36);
-__webpack_require__(47);
 __webpack_require__(48);
 __webpack_require__(49);
+__webpack_require__(50);
 
 
 /**
@@ -273,7 +271,7 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 	}
 
 	else {
-		var newContainer = document.createElement("canvas");
+		var newContainer = document.createElement("div");
 		this.connectContainer(newContainer);
 	}
 
@@ -442,12 +440,6 @@ PhSim.prototype.staticAudio = [];
 
 PhSim.prototype.audioPlayers = 0;
 
-/**
- * Array of collision classes
- * @type {PhSim.CollisionClass}
- */
-
-PhSim.prototype.collisionClasses = {};
 
 /**
  * Classes
@@ -2287,57 +2279,6 @@ PhSim.Audio.AudioArray = function(p_audio,onload) {
 /* 9 */
 /***/ (function(module, exports) {
 
-/**
- * @constructor
- * @param {String} name - Collision class name 
- */
-
-PhSim.CollisionClass = function(name) {
-
-	var this_a = this;
-
-	this.name = name;
-
-	this.world = PhSim.Matter.World.create();
-
-	this.engine = PhSim.Matter.Engine.create({
-		world: this_a.world
-	});
-
-}
-
-/**
- * 
- * Add dynamic object to collision class.
- * 
- * @function
- * @param {PhSim.DynObject} dynObject 
- */
-
-PhSim.CollisionClass.prototype.addDynObject = function(dynObject) {
-	dynObject.collisionClasses.push(this);
-	PhSim.Matter.World.add(this.world,dynObject.matter);
-};
-
-/**
- * 
- * Remove object from collision class.
- * 
- * @function
- * @param {PhSim.DynObject} dynObject 
- * @returns {PhSim.DynObject} - The removed DynObject.
- */
-
-PhSim.CollisionClass.prototype.removeDynObject = function(dynObject) {
-	dynObject.collisionClasses.splice(dynObject.collisionClasses.indexOf(this),1);
-	PhSim.Matter.World.remove(this.world,dynObject.matter);
-	return dynObject
-}
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
 /** 
  * Constructor for the minimal requirements for being a {@link Vector}. 
  * @constructor
@@ -2530,7 +2471,7 @@ PhSim.Vector.svgVector = function(x,y) {
 }
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports) {
 
 /**
@@ -2564,7 +2505,7 @@ PhSim.checkObjectType = function (objectTypeStr) {
 }
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /**
@@ -2592,7 +2533,7 @@ PhSim.diagRect = function(x1,y1,x2,y2) {
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports) {
 
 
@@ -2702,7 +2643,7 @@ PhSim.getRectangleCorners = function(rectangle) {
 }
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /**
@@ -2748,7 +2689,7 @@ PhSim.findCentroidOfPath = function(a) {
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -2865,7 +2806,7 @@ PhSim.getDynBoundingBox = function(dynObj) {
 }
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /**
@@ -2956,13 +2897,6 @@ PhSim.DynObject = function(staticObject) {
 
 	this.phSim;
 
-	/**
-	 * Collision Classes array
-	 * @type {PhSim.CollisionClass[]}
-	 */
-	
-	this.collisionClasses = [];
-
 	/** 
 	 * Refernce of DynObj in matter object 
 	 * @type {Object}
@@ -3046,7 +2980,7 @@ PhSim.createMatterObject = function(staticObject) {
   */
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports) {
 
 PhSim.removeClickRectRegion = function(reference) {
@@ -3128,7 +3062,7 @@ PhSim.CollisionReport = function() {
 }
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 /**
@@ -3171,7 +3105,7 @@ PhSim.prototype.getObjectFromLOStr = function(str) {
 }
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 
@@ -3250,7 +3184,7 @@ PhSim.prototype.configRender = function() {
 }
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /**
@@ -3358,10 +3292,12 @@ PhSim.prototype.alert = function(options) {
 }
 
 /***/ }),
-/* 21 */
-/***/ (function(module, exports) {
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
 
 // Set Angle to mouse.
+
+const phSim = __webpack_require__(1);
 
 // Object Connection
 
@@ -3378,9 +3314,9 @@ PhSim.prototype.connectDynObjects = function(parent,child) {
 			"y": parent.matter.position.y - parent.matter.positionPrev.y,
 		}
 
-		self.translate(child,v);
+		PhSim.Motion.translate(child,v);
 
-		self.rotate(child,parent.matter.angle - parent.matter.anglePrev,parent.matter.position);
+		PhSim.Motion.rotate(child,parent.matter.angle - parent.matter.anglePrev,parent.matter.position);
 
 	}
 
@@ -3487,9 +3423,7 @@ PhSim.prototype.addObject = function(dynObject,options = {}) {
 
 PhSim.prototype.removeDynObj = function(dynObject) {
 
-	for(var i = 0; i < dynObject.collisionClasses.length; i++) {
-		dynObject.collisionClasses[i].removeDynObject(dynObject);
-	}
+	PhSim.Matter.Composite.remove(this.matterJSWorld,dynObject.matter);
 
 	this.objUniverse.splice(this.objUniverse.indexOf(dynObject),1);
 
@@ -3529,7 +3463,7 @@ PhSim.prototype.renderAllCounters = function() {
 }
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports) {
 
 
@@ -3602,7 +3536,7 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
 }
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /**
@@ -3852,7 +3786,7 @@ PhSim.prototype.deregisterKeyEvents = function() {
 }
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /**
@@ -3959,7 +3893,7 @@ PhSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
 }
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /**
@@ -4452,7 +4386,7 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports) {
 
 /**
@@ -4469,7 +4403,7 @@ PhSim.prototype.applyGravitationalField = function() {
 				var a1 = PhSim.Vector.scale(PhSim.Vector.subtract(a[j].matter.position,a[i].matter.position),6.67 * Math.pow(10,-11) * a[i].matter.mass * a[j].matter.mass * -1)
 				var b1 = Math.pow(PhSim.Vector.distance(a[j].matter.position,a[i].matter.position),3);
 				var c = PhSim.Vector.divide(a1,b1);
-				this.applyForce(a[j],a[i].matter.position,c);
+				PhSim.Motion.applyForce(a[j],a[i].matter.position,c);
 			}
 		}	
 	}
@@ -4478,7 +4412,7 @@ PhSim.prototype.applyGravitationalField = function() {
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.play = function() {
@@ -4516,7 +4450,7 @@ PhSim.prototype.exit = function() {
 }
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -4536,6 +4470,8 @@ PhSim.prototype.exit = function() {
 const PhSim = __webpack_require__(2);
 
 PhSim.prototype.gotoSimulationIndex = function (i) {
+
+	var optionMap = new Map();  
 
 	var self = this;
 
@@ -4582,22 +4518,11 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	this.staticSprites = [];
 	this.staticAudio = [];
 	this.audioPlayers = 0;
-	this.collisionClasses = {};
 	this.slEventStack = new PhSim.EventStack();
 
 	if(this.simOptions && this.simOptions.world && this.simOptions.world.bg) {
 		this.bgFillStyle = this.simOptions.world.bg;
 	}
-
-	/** 
-
-	var ncc = new PhSim.CollisionClass("__main");
-	ncc.engine = this.matterJSEngine;
-	ncc.world = this.matterJSWorld;
-
-	this.collisionClasses["__main"] = ncc;
-
-	**/
 
 	if(this.options.simulations) {
 	
@@ -4635,6 +4560,8 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 						this.addObject(dynObject,{
 							layer: L
 						});
+
+						optionMap.set(o,dynObject);
 					}
 
 				}
@@ -4669,18 +4596,43 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 			if(a.objectA) {
 
-				if(typeof a.objectA.L === "number" && typeof a.objectA.O === "number") {
-					b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);
+				if(a.objectA instanceof PhSim) {
+					b.bodyA = a.objectA.matter;
 				}
 
-				if(a.objectA instanceof PhSim) {
-					b.bodyA = a.objectA;
+				else {
+
+					if(typeof a.objectA.L === "number" && typeof a.objectA.O === "number") {
+						b.bodyA = this_a.LO(a.objectA.L,a.objectA.O).matter;
+					}
+
+					else {
+						b.bodyA = optionMap.get(a.objectA).matter;
+					}
+
 				}
 
  			}
 
 			if(a.objectB) {
-				b.bodyB = this_a.LO(a.objectB.L,a.objectB.O);
+				b.bodyB = this_a.LO(a.objectB.L,a.objectB.O).matter;
+
+				if(a.objectB instanceof PhSim) {
+					b.bodyB = a.objectB.matter;
+				}
+
+				else {
+
+					if(typeof a.objectB.L === "number" && typeof a.objectB.O === "number") {
+						b.bodyB = this_a.LO(a.objectB.L,a.objectB.O).matter;
+					}
+
+					else {
+						b.bodyB = optionMap.get(a.objectB).matter;
+					}
+
+				}
+
 			}
 
 			if(a.pointA) {
@@ -4760,8 +4712,15 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 }
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports) {
+
+/**
+ * @namespace
+ * Namespace of functions used to move objects in various ways.
+ */
+
+PhSim.Motion = {}
 
 /**
  * 
@@ -4775,7 +4734,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
  *   
  */
 
-PhSim.prototype.applyForce = function(dynObject,position,forceVector) {
+PhSim.Motion.applyForce = function(dynObject,position,forceVector) {
 	if(!dynObject.locked && !dynObject.permStatic) {
 		return PhSim.Matter.Body.applyForce(dynObject.matter,position,forceVector);
 	}
@@ -4792,14 +4751,11 @@ PhSim.prototype.applyForce = function(dynObject,position,forceVector) {
  * @param {Vector} velocityVector 
  */
 
-PhSim.prototype.setVelocity = function(dynObject,velocityVector) {
+PhSim.Motion.setVelocity = function(dynObject,velocityVector) {
 	if(!dynObject.locked) {
 		return PhSim.Matter.Body.setVelocity(dynObject.matter,velocityVector);
 	}
 
-	if(dynObject.noDyn) {
-
-	}
 }
 
 /**
@@ -4813,7 +4769,7 @@ PhSim.prototype.setVelocity = function(dynObject,velocityVector) {
  * @param {Vector} translationVector 
  */
 
-PhSim.prototype.translate = function(o,translationVector) {
+PhSim.Motion.translate = function(o,translationVector) {
 	if(!o.locked) {
 
 		if(o.path) {
@@ -4845,7 +4801,7 @@ PhSim.prototype.translate = function(o,translationVector) {
  * @param {Vector} positionVector 
  */
 
-PhSim.prototype.setPosition = function(dynObject,positionVector) {
+PhSim.Motion.setPosition = function(dynObject,positionVector) {
 	if(!dynObject.locked) {
 
 		if(o.circle || o.regPolygon) {
@@ -4868,7 +4824,7 @@ PhSim.prototype.setPosition = function(dynObject,positionVector) {
  * @param {Vector} point 
  */
 
-PhSim.prototype.rotate = function(dynObject,angle,point) {
+PhSim.Motion.rotate = function(dynObject,angle,point) {
 
 	if(!dynObject.locked) {
 
@@ -4887,7 +4843,7 @@ PhSim.prototype.rotate = function(dynObject,angle,point) {
  * @param {Number} angle 
  */
 
-PhSim.prototype.setAngle = function(dynObject,angle) {
+PhSim.Motion.setAngle = function(dynObject,angle) {
 
 	if(!dynObject.locked) {
 
@@ -4902,7 +4858,7 @@ PhSim.prototype.setAngle = function(dynObject,angle) {
 }
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.assignPhRender = function(phRender) {
@@ -4966,7 +4922,7 @@ PhSim.prototype.setLineWidth = function(dyn_object,lineWidth) {
 }
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.updateDynObj = function(currentObj) {
@@ -5089,7 +5045,7 @@ PhSim.prototype.loopFunction = function() {
 }
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.booleanWPatch = function(o) {
@@ -5109,10 +5065,10 @@ PhSim.prototype.booleanWPatch = function(o) {
  * 
 */
 
-PhSim.prototype.extractWidget = function(widget,dyn_object) {
+PhSim.prototype.extractWidget = function(dyn_object,widget) {
 
     if(PhSim.Widgets[widget.type]) {
-        PhSim.Widgets[widget.type].call(this,widget,dyn_object);
+        PhSim.Widgets[widget.type].call(this,dyn_object,widget);
     }
 	
     var self = this;
@@ -5135,7 +5091,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 simpleEventObj: dyn_object
             });
         }
-        
+
         if(widget.deleteSelf) {
     
             var ref = null;
@@ -5157,67 +5113,9 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 simpleEventObj: dyn_object
             });
         }
-    
-        if(widget.rectText) {
-            dyn_object.rectTextWidget === true;
-        }
-    
+
         if(widget.noRotation) {
             PhSim.Matter.Body.setInertia(dyn_object.matter, Infinity)
-        }
-    
-
-    
-        if(widget.setColor) {
-    
-    
-            var closure = function() {
-                
-                var color = widget.color;
-                var obj = dyn_object;
-    
-                var f = function() {
-                    self.setColor(obj,color);
-                }
-    
-                return f;
-    
-            }
-    
-            var f = this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-    
-        if(widget.setBorderColor) {
-    
-            var closure = function() {
-    
-                var color = widget.color
-                var obj = dyn_object;
-    
-                var f = function() {
-                    self.setBorderColor(obj,color);
-                }
-    
-                return f;
-    
-            }
-    
-            var f = this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-        
-        if(widget.setLineWidth) {
-            var f = this.addSimpleEvent(widget.trigger,function(){
-                self.setLineWidth(dyn_object,widget.color);
-            },{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
         }
         
         if(widget.playAudio) {
@@ -5236,27 +5134,8 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             this.audioPlayers++;
         }
     
-        if(widget.transformCameraByObj) {
-    
-            var self = this;
-    
-            this.addEventListener("afterupdate",function(){
-                var dx = dyn_object.matter.position.x - dyn_object.matter.positionPrev.x;
-                var dy = dyn_object.matter.position.y - dyn_object.matter.positionPrev.y;
-                self.camera.translate(-dx,-dy);
-            },{
-                "slEvent": true
-            });
-    
-        }
-    
         if(widget.transformWithCamera) {
             this.camera.transformingObjects.push(dyn_object)
-        }
-    
-        if(widget.cameraWindow) {
-            self.camera.translate(dyn_object.x,dyn_object.y);
-            self.camera.scale()
         }
 
     }
@@ -5269,14 +5148,14 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
     PhSim.prototype.extractWidgets = function(dyn_object) {
         for(var i = 0; i < dyn_object.widgets.length; i++) {
-            this.extractWidget(dyn_object.widgets[i],dyn_object);
+            this.extractWidget(dyn_object,dyn_object.widgets[i]);
         }
     }
     
     
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /**
@@ -5341,7 +5220,7 @@ PhSim.Camera.prototype.translate = function(dx,dy) {
 	this.dynSim.simCtx.translate(dx,dy);
 
 	for(var i = 0; i < this.transformingObjects.length; i++) {
-		this.dynSim.translate(this.transformingObjects[i],dx,dy);
+		PhSim.Motion.translate(this.transformingObjects[i],dx,dy);
 	}
 }
 
@@ -5372,7 +5251,7 @@ PhSim.prototype.drawLoadingScreen = function() {
 }
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports) {
 
 /**
@@ -5436,6 +5315,19 @@ PhSim.Game = function(phSim,options) {
 	 */
 
 	this.phSim = phSim;
+
+	// Adding arrays to phSim eventstack
+
+	phSim.eventStack["score"] = [];
+
+	phSim.eventStack["hazard"] = [];
+
+	phSim.eventStack["gamewin"] = [];
+
+	phSim.eventStack["levelwin"] = [];
+
+	phSim.eventStack["levelloss"] = [];
+
 }
 
 /**
@@ -5471,6 +5363,9 @@ PhSim.Game.Options = function(goal,life,score) {
 	this.score = score;
 }
 
+PhSim.Game.prototype.defaultGameWinModal = true;
+PhSim.Game.prototype.defaultLevelWinModal = true;
+
 /**
  * Set score
  * @function
@@ -5488,30 +5383,49 @@ PhSim.Game.prototype.setScore = function(c) {
 		this.phSim.pause();
 		this.phSim.enableFilter();
 
+		// Code to execute 
+
 		if(this.phSim.simulationIndex + 1 === this.phSim.options.simulations.length) {
-			var a = self.phSim.alert({
-				msg:"You Win!",
-				closeButtonTxt:"Play again",
-				bgColor:"#333",
-				txtColor:"#fff",
-				w:300,
-				h:100,
-				onok: function() {
-					self.phSim.disableFilter();
-					a.parentNode.removeChild(a);
-					self.phSim.gotoSimulationIndex(0);
-				}
-			});
+
+			if(this.defaultGameWinModal) {
+
+                this.phSim.callEventClass("gamewin",this,{});                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+				var a = self.phSim.alert({
+					msg:"You Win!",
+					closeButtonTxt:"Play again",
+					bgColor:"#333",
+					txtColor:"#fff",
+					w:300,
+					h:100,
+					onok: function() {
+						self.phSim.disableFilter();
+						a.parentNode.removeChild(a);
+						self.phSim.gotoSimulationIndex(0);
+						self.phSim.play();
+					}
+				});
+
+			}
+
 		}
 
+		// If not the final simulation
+
 		else {
+
+			this.phSim.callEventClass("levelwin",this,{}); 
+
 			clearInterval(this.phSim.intervalLoop);
 			this.phSim.disableFilter();
 			this.phSim.gotoSimulationIndex(this.phSim.simulationIndex + 1);
+			self.phSim.play();
 		}
 
 
 	}
+
+	this.phSim.callEventClass("score",this,{}); 
 },
 
 /**
@@ -5568,15 +5482,18 @@ PhSim.Game.prototype.end = function() {
 		h:100,
 		onok: function() {
 			self.phSim.gotoSimulationIndex(self.phSim.simulationIndex);
+			self.phSim.play();
 			self.phSim.disableFilter();
 			a.parentNode.removeChild(a);	
 		}
 	});
 
+	this.phSim.callEventClass("levelloss",this,{}); 
+
 }
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports) {
 
 
@@ -5606,7 +5523,7 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 }
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -5677,6 +5594,7 @@ PhSim.chkWidgetType = function() {
 }
 
 
+__webpack_require__(36);
 __webpack_require__(37);
 __webpack_require__(38);
 __webpack_require__(39);
@@ -5686,10 +5604,11 @@ __webpack_require__(42);
 __webpack_require__(43);
 __webpack_require__(44);
 __webpack_require__(45);
-__webpack_require__(46)
+__webpack_require__(46);
+__webpack_require__(47);
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports) {
 
 /**
@@ -5720,7 +5639,7 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 	this.addEventListener("afterupdate",function(){
 		var newAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x) - relAngle;
-		this.setAngle(dynObject,newAngle);
+		PhSim.Motion.setAngle(dynObject,newAngle);
 	});
 
 
@@ -5731,12 +5650,12 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 }
 
-PhSim.Widgets.circularConstraint = function(widget,dyn_object) {
+PhSim.Widgets.circularConstraint = function(dyn_object,widget) {
 	this.createCircularConstraint(dyn_object,widget.x,widget.y);
 }
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports) {
 
 /**
@@ -5764,7 +5683,7 @@ PhSim.prototype.cloneObject = function(dynObject,options = {}) {
 	this.callEventClass("clone",this,eventObj);
 }
 
-PhSim.Widgets.clone = function(widget,dyn_object) {
+PhSim.Widgets.clone = function(dyn_object,widget) {
 
     var self = this;
     
@@ -5850,10 +5769,10 @@ PhSim.Widgets.clone = function(widget,dyn_object) {
 }
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports) {
 
-PhSim.Widgets.draggable = function(widget,dyn_object) {
+PhSim.Widgets.draggable = function(dyn_object,widget) {
 
     var self = this;
     
@@ -5887,7 +5806,7 @@ PhSim.Widgets.draggable = function(widget,dyn_object) {
 
         var __onbeforeupdate = function() {
             PhSim.Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
-            self.setPosition(dyn_object,mV);
+            PhSim.Motion.setPosition(dyn_object,mV);
         }
 
         var __onmousedown = function(e) {
@@ -5914,34 +5833,47 @@ PhSim.Widgets.draggable = function(widget,dyn_object) {
 }
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports) {
 
-PhSim.Widgets.coin = function(widget,dyn_object) {
+/**
+ * Coin widget. Works if game widget is enabled. If not enabled, it throws an exception.
+ * 
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget - Widget options
+ * @param {Number} widget.value - Value of coin. If undefined, the value of the coin is 1.
+ * @this PhSim
+ */
 
-    var self = this;
+PhSim.Widgets.coin = function(dyn_object,widget) {
 
-    var func = function() {
+        var value = widget.value || 1;
 
-        var obj1 = dyn_object;
+        var self = this;
 
-        var a = function() {
+        var func = function() {
 
-            if(self.inSensorCollision(obj1) && self.lclGame) {
-                self.lclGame.setScore(self.lclGame.score + 1);
-                self.removeEventListener("collisionstart",a);	
+            var obj1 = dyn_object;
+
+            var a = function() {
+
+                if(self.inSensorCollision(obj1) && self.lclGame) {
+                    self.lclGame.setScore(self.lclGame.score + value);
+                    self.removeEventListener("collisionstart",a);	
+                }
+
             }
+
+            return a;
 
         }
 
-        return a;
+        self.addEventListener("collisionstart",func());
 
-    }
 
-    self.addEventListener("collisionstart",func());
 }
 
-PhSim.Widgets.hazard = function(widget,dyn_object) {
+PhSim.Widgets.hazard = function(dyn_object,widget) {
 
     var self = this;
 
@@ -5952,32 +5884,7 @@ PhSim.Widgets.hazard = function(widget,dyn_object) {
         var a = function() {
 
             if(self.inSensorCollision(obj1) && self.lclGame) {
-                self.lclGame.decrementLife(self.lclGame.score + 1);
-                self.removeEventListener("collisionstart",a);	
-            }
-
-        }
-
-        return a;
-
-    }
-
-    self.addEventListener("collisionstart",func());
-
-}
-
-PhSim.Widgets.health = function(widget,dyn_object) {
-
-    var self = this;
-
-    var func = function() {
-
-        var obj1 = dyn_object;
-
-        var a = function() {
-
-            if(self.inSensorCollision(obj1) && self.lclGame) {
-                self.lclGame.incrementLife(self.lclGame.score + 1);
+                self.lclGame.setLife(self.lclGame.life - 1);
                 self.removeEventListener("collisionstart",a);	
             }
 
@@ -5991,7 +5898,32 @@ PhSim.Widgets.health = function(widget,dyn_object) {
 
 }
 
-PhSim.Widgets.endGame = function(widget,dyn_object) {
+PhSim.Widgets.health = function(dyn_object,widget) {
+
+    var self = this;
+
+    var func = function() {
+
+        var obj1 = dyn_object;
+
+        var a = function() {
+
+            if(self.inSensorCollision(obj1) && self.lclGame) {
+                self.lclGame.setLife(self.lclGame.life + 1);
+                self.removeEventListener("collisionstart",a);	
+            }
+
+        }
+
+        return a;
+
+    }
+
+    self.addEventListener("collisionstart",func());
+
+}
+
+PhSim.Widgets.endGame = function(dyn_object,widget) {
     var f = this.createMotionFunction("position",dyn_object,widget.vector);
     this.addSimpleEvent(widget.trigger,f,{
         ...widget,
@@ -6000,7 +5932,7 @@ PhSim.Widgets.endGame = function(widget,dyn_object) {
 }
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports) {
 
 /**
@@ -6027,7 +5959,7 @@ PhSim.prototype.toggleSemiLock = function(dynObject) {
 	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
-PhSim.Widgets.toggleLock = function(widget,dyn_object) {
+PhSim.Widgets.toggleLock = function(dyn_object,widget) {
 
     var self = this;
 
@@ -6048,7 +5980,7 @@ PhSim.Widgets.toggleLock = function(widget,dyn_object) {
     });
 }
 
-PhSim.Widgets.toggleSemiLock = function(widget,dyn_object) {
+PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
 
     var self = this;
 
@@ -6070,7 +6002,7 @@ PhSim.Widgets.toggleSemiLock = function(widget,dyn_object) {
 }
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports) {
 
 
@@ -6093,51 +6025,51 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 	
 	if(mode === "force") {
 		return function() {
-			return self.applyForce(dyn_object,dyn_object.matter.position,motion);
+			return PhSim.Motion.applyForce(dyn_object,dyn_object.matter.position,motion);
 		}
 	}
 
 	if(mode === "velocity") {
 		return function() {
-			return self.setVelocity(dyn_object,motion);
+			return PhSim.Motion.setVelocity(dyn_object,motion);
 		}
 	}
 
 	if(mode === "translate") {
 		return function() {
-			return self.translate(dyn_object,motion);
+			return PhSim.Motion.translate(dyn_object,motion);
 		}
 	}
 
 	if(mode === "position") {
 		return function() {
-			return self.setPosition(dyn_object,motion)
+			return PhSim.Motion.setPosition(dyn_object,motion)
 		}
 	}
 
 	if(mode === "rotation") {
 		return function() {
-			return self.rotate(dyn_object,motion,dyn_object.matter.position);
+			return PhSim.Motion.rotate(dyn_object,motion,dyn_object.matter.position);
 		}
 	}
 
 	if(mode === "circular_constraint_rotation") {
 		return function() {
-			return self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+			return PhSim.Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
 		}
 	}
 
 	if(mode === "setAngle") {
 		return function() {
-			return self.setAngle(dyn_object,motion);
+			return PhSim.Motion.setAngle(dyn_object,motion);
 		}
 	}
 
 	if(mode === "circular_constraint_setAngle") {
 		return function() {
 			var a = Math.atan2(dyn_object.y - dyn_object.circularConstraintVector.y,dyn_object.x - dyn_object.circularConstraintVector.x)
-			self.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
-			self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+			PhSim.Motion.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
+			PhSim.Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
 		}
 	}
 
@@ -6154,7 +6086,7 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
  * @this {PhSim} 
  */
 
-PhSim.Widgets.velocity = function(widget,dynObject) {
+PhSim.Widgets.velocity = function(dynObject,widget) {
     var f = this.createMotionFunction("velocity",dynObject,widget.vector);
     this.addSimpleEvent(widget.trigger,f,{
         ...widget,
@@ -6171,7 +6103,7 @@ PhSim.Widgets.velocity = function(widget,dynObject) {
  * @this {PhSim} 
  */
 
-PhSim.Widgets.translate = function(widget,dynObject) {
+PhSim.Widgets.translate = function(dynObject,widget) {
     var f = this.createMotionFunction("translate",dynObject,widget.vector);
     this.addSimpleEvent(widget.trigger,f,{
         ...widget,
@@ -6188,7 +6120,7 @@ PhSim.Widgets.translate = function(widget,dynObject) {
  * @this {PhSim} 
  */
 
-PhSim.Widgets.position = function(widget,dynObject) {
+PhSim.Widgets.position = function(dynObject,widget) {
     var f = this.createMotionFunction("position",dynObject,widget.vector);
     this.addSimpleEvent(widget.trigger,f,{
         ...widget,
@@ -6205,7 +6137,7 @@ PhSim.Widgets.position = function(widget,dynObject) {
  * @this {PhSim} 
  */
 
-PhSim.Widgets.rotation = function(widget,dynObject) {
+PhSim.Widgets.rotation = function(dynObject,widget) {
 
     if(widget.circularConstraintRotation) {
         var f = this.createMotionFunction("circular_constraint_rotation",dynObject,widget.cycle);
@@ -6221,7 +6153,7 @@ PhSim.Widgets.rotation = function(widget,dynObject) {
     });
 }
 
-PhSim.Widgets.setAngle = function(widget,dynObject) {
+PhSim.Widgets.setAngle = function(dynObject,widget) {
 
     if(widget.circularConstraintRotation) {
         var f = this.createMotionFunction("circular_constraint_setAngle",dynObject,widget.cycle);
@@ -6238,7 +6170,7 @@ PhSim.Widgets.setAngle = function(widget,dynObject) {
 
 }
 
-PhSim.Widgets.force = function(widget,dyn_object) {
+PhSim.Widgets.force = function(dyn_object,widget) {
 
     var f = this.createMotionFunction("force",dyn_object,widget.vector);
 
@@ -6250,7 +6182,7 @@ PhSim.Widgets.force = function(widget,dyn_object) {
 }
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /**
@@ -6268,7 +6200,7 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 }
 
 
-PhSim.Widgets.objLink_a = function(widget,dyn_object) {
+PhSim.Widgets.objLink_a = function(dyn_object,widget) {
 
     var self = this;
     
@@ -6299,7 +6231,7 @@ PhSim.Widgets.objLink_a = function(widget,dyn_object) {
 }
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports) {
 
 /**
@@ -6342,7 +6274,7 @@ PhSim.prototype.createWFunction = function(arg,thisRef) {
     return o;
 }
 
-PhSim.Widgets.wFunction = function(widget,dyn_object) {
+PhSim.Widgets.wFunction = function(dyn_object,widget) {
 
     var self = this;
 
@@ -6366,10 +6298,12 @@ PhSim.Widgets.wFunction = function(widget,dyn_object) {
 }
 
 /***/ }),
-/* 45 */
-/***/ (function(module, exports) {
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
 
-PhSim.Widgets.elevator = function(widget,dyn_object) {
+const phSim = __webpack_require__(1);
+
+PhSim.Widgets.elevator = function(dyn_object,widget) {
             
     var self = this;
     
@@ -6440,7 +6374,7 @@ PhSim.Widgets.elevator = function(widget,dyn_object) {
         var inRange = function() {
 
         if( cond_f() ) {
-        self.translate(obj,PhSim.Vector.scale(u,1));
+        PhSim.Motion.translate(obj,PhSim.Vector.scale(u,1));
                 reversable = true;
         }
           
@@ -6457,7 +6391,7 @@ PhSim.Widgets.elevator = function(widget,dyn_object) {
                 }
 
                 else {
-                    self.translate(obj,PhSim.Vector.scale(u,1));
+                    PhSim.Motion.translate(obj,PhSim.Vector.scale(u,1));
                 }
             
             }
@@ -6475,7 +6409,7 @@ PhSim.Widgets.elevator = function(widget,dyn_object) {
 }
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports) {
 
 /**
@@ -6511,12 +6445,92 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 }
 
-PhSim.Widgets.keyboardControls = function(widget,dyn_object) {
+PhSim.Widgets.keyboardControls = function(dyn_object,widget) {
     this.addKeyboardControls(dyn_object,widget);
 }
 
 /***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+PhSim.Widgets.transformCameraByObj = function(dyn_object) {
+    
+    var self = this;
+
+    this.addEventListener("afterupdate",function(){
+        var dx = dyn_object.matter.position.x - dyn_object.matter.positionPrev.x;
+        var dy = dyn_object.matter.position.y - dyn_object.matter.positionPrev.y;
+        self.camera.translate(-dx,-dy);
+    },{
+        "slEvent": true
+    });
+
+}
+
+/***/ }),
 /* 47 */
+/***/ (function(module, exports) {
+
+PhSim.Widgets.setColor = function(dyn_object,widget) {
+
+    var self = this;
+
+    var closure = function() {
+        
+        var color = widget.color;
+        var obj = dyn_object;
+
+        var f = function() {
+            self.setColor(obj,color);
+        }
+
+        return f;
+
+    }
+
+    var f = this.addSimpleEvent(widget.trigger,closure(),{
+        ...widget,
+        simpleEventObj: dyn_object
+    });
+}
+    
+PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
+
+    var self = this;
+
+    var closure = function() {
+
+        var color = widget.color
+        var obj = dyn_object;
+
+        var f = function() {
+            self.setBorderColor(obj,color);
+        }
+
+        return f;
+
+    }
+
+    var f = this.addSimpleEvent(widget.trigger,closure(),{
+        ...widget,
+        simpleEventObj: dyn_object
+    });
+}
+        
+PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
+
+    var self = this;
+
+    var f = this.addSimpleEvent(widget.trigger,function(){
+        self.setLineWidth(dyn_object,widget.color);
+    },{
+        ...widget,
+        simpleEventObj: dyn_object
+    });
+}
+
+/***/ }),
+/* 48 */
 /***/ (function(module, exports) {
 
 /**
@@ -6550,7 +6564,7 @@ PhSim.calc_skinmesh = function(dynObject) {
 }
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports) {
 
 // Simple Event Reference
@@ -6938,7 +6952,7 @@ PhSim.prototype.removeSimpleEvent = function(refNumber) {
 }
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports) {
 
 /**
@@ -7010,7 +7024,7 @@ PhSim.prototype.processVar = function(str) {
 }
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports) {
 
 // Generated by TypeDefGen module 

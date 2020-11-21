@@ -1,4 +1,6 @@
-PhSim.Widgets.elevator = function(widget,dyn_object) {
+const phSim = require("../phSim");
+
+PhSim.Widgets.elevator = function(dyn_object,widget) {
             
     var self = this;
     
@@ -69,7 +71,7 @@ PhSim.Widgets.elevator = function(widget,dyn_object) {
         var inRange = function() {
 
         if( cond_f() ) {
-        self.translate(obj,PhSim.Vector.scale(u,1));
+        PhSim.Motion.translate(obj,PhSim.Vector.scale(u,1));
                 reversable = true;
         }
           
@@ -86,7 +88,7 @@ PhSim.Widgets.elevator = function(widget,dyn_object) {
                 }
 
                 else {
-                    self.translate(obj,PhSim.Vector.scale(u,1));
+                    PhSim.Motion.translate(obj,PhSim.Vector.scale(u,1));
                 }
             
             }

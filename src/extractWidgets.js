@@ -15,10 +15,10 @@ PhSim.prototype.booleanWPatch = function(o) {
  * 
 */
 
-PhSim.prototype.extractWidget = function(widget,dyn_object) {
+PhSim.prototype.extractWidget = function(dyn_object,widget) {
 
     if(PhSim.Widgets[widget.type]) {
-        PhSim.Widgets[widget.type].call(this,widget,dyn_object);
+        PhSim.Widgets[widget.type].call(this,dyn_object,widget);
     }
 	
     var self = this;
@@ -41,7 +41,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 simpleEventObj: dyn_object
             });
         }
-        
+
         if(widget.deleteSelf) {
     
             var ref = null;
@@ -63,67 +63,9 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
                 simpleEventObj: dyn_object
             });
         }
-    
-        if(widget.rectText) {
-            dyn_object.rectTextWidget === true;
-        }
-    
+
         if(widget.noRotation) {
             PhSim.Matter.Body.setInertia(dyn_object.matter, Infinity)
-        }
-    
-
-    
-        if(widget.setColor) {
-    
-    
-            var closure = function() {
-                
-                var color = widget.color;
-                var obj = dyn_object;
-    
-                var f = function() {
-                    self.setColor(obj,color);
-                }
-    
-                return f;
-    
-            }
-    
-            var f = this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-    
-        if(widget.setBorderColor) {
-    
-            var closure = function() {
-    
-                var color = widget.color
-                var obj = dyn_object;
-    
-                var f = function() {
-                    self.setBorderColor(obj,color);
-                }
-    
-                return f;
-    
-            }
-    
-            var f = this.addSimpleEvent(widget.trigger,closure(),{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
-        }
-        
-        if(widget.setLineWidth) {
-            var f = this.addSimpleEvent(widget.trigger,function(){
-                self.setLineWidth(dyn_object,widget.color);
-            },{
-                ...widget,
-                simpleEventObj: dyn_object
-            });
         }
         
         if(widget.playAudio) {
@@ -142,27 +84,8 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
             this.audioPlayers++;
         }
     
-        if(widget.transformCameraByObj) {
-    
-            var self = this;
-    
-            this.addEventListener("afterupdate",function(){
-                var dx = dyn_object.matter.position.x - dyn_object.matter.positionPrev.x;
-                var dy = dyn_object.matter.position.y - dyn_object.matter.positionPrev.y;
-                self.camera.translate(-dx,-dy);
-            },{
-                "slEvent": true
-            });
-    
-        }
-    
         if(widget.transformWithCamera) {
             this.camera.transformingObjects.push(dyn_object)
-        }
-    
-        if(widget.cameraWindow) {
-            self.camera.translate(dyn_object.x,dyn_object.y);
-            self.camera.scale()
         }
 
     }
@@ -175,7 +98,7 @@ PhSim.prototype.extractWidget = function(widget,dyn_object) {
     
     PhSim.prototype.extractWidgets = function(dyn_object) {
         for(var i = 0; i < dyn_object.widgets.length; i++) {
-            this.extractWidget(dyn_object.widgets[i],dyn_object);
+            this.extractWidget(dyn_object,dyn_object.widgets[i]);
         }
     }
     

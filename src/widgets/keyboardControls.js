@@ -31,6 +31,6 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 }
 
-PhSim.Widgets.keyboardControls = function(widget,dyn_object) {
+PhSim.Widgets.keyboardControls = function(dyn_object,widget) {
     this.addKeyboardControls(dyn_object,widget);
 }

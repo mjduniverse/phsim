@@ -23,7 +23,7 @@ PhSim.prototype.cloneObject = function(dynObject,options = {}) {
 	this.callEventClass("clone",this,eventObj);
 }
 
-PhSim.Widgets.clone = function(widget,dyn_object) {
+PhSim.Widgets.clone = function(dyn_object,widget) {
 
     var self = this;
     

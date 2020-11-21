@@ -1,4 +1,11 @@
 /**
+ * @namespace
+ * Namespace of functions used to move objects in various ways.
+ */
+
+PhSim.Motion = {}
+
+/**
  * 
  * Apply force to a dynamic object.
  * Force is ineffective against locked, semi-locked and permanetly static objects.
@@ -10,7 +17,7 @@
  *   
  */
 
-PhSim.prototype.applyForce = function(dynObject,position,forceVector) {
+PhSim.Motion.applyForce = function(dynObject,position,forceVector) {
 	if(!dynObject.locked && !dynObject.permStatic) {
 		return PhSim.Matter.Body.applyForce(dynObject.matter,position,forceVector);
 	}
@@ -27,14 +34,11 @@ PhSim.prototype.applyForce = function(dynObject,position,forceVector) {
  * @param {Vector} velocityVector 
  */
 
-PhSim.prototype.setVelocity = function(dynObject,velocityVector) {
+PhSim.Motion.setVelocity = function(dynObject,velocityVector) {
 	if(!dynObject.locked) {
 		return PhSim.Matter.Body.setVelocity(dynObject.matter,velocityVector);
 	}
 
-	if(dynObject.noDyn) {
-
-	}
 }
 
 /**
@@ -48,7 +52,7 @@ PhSim.prototype.setVelocity = function(dynObject,velocityVector) {
  * @param {Vector} translationVector 
  */
 
-PhSim.prototype.translate = function(o,translationVector) {
+PhSim.Motion.translate = function(o,translationVector) {
 	if(!o.locked) {
 
 		if(o.path) {
@@ -80,7 +84,7 @@ PhSim.prototype.translate = function(o,translationVector) {
  * @param {Vector} positionVector 
  */
 
-PhSim.prototype.setPosition = function(dynObject,positionVector) {
+PhSim.Motion.setPosition = function(dynObject,positionVector) {
 	if(!dynObject.locked) {
 
 		if(o.circle || o.regPolygon) {
@@ -103,7 +107,7 @@ PhSim.prototype.setPosition = function(dynObject,positionVector) {
  * @param {Vector} point 
  */
 
-PhSim.prototype.rotate = function(dynObject,angle,point) {
+PhSim.Motion.rotate = function(dynObject,angle,point) {
 
 	if(!dynObject.locked) {
 
@@ -122,7 +126,7 @@ PhSim.prototype.rotate = function(dynObject,angle,point) {
  * @param {Number} angle 
  */
 
-PhSim.prototype.setAngle = function(dynObject,angle) {
+PhSim.Motion.setAngle = function(dynObject,angle) {
 
 	if(!dynObject.locked) {
 
