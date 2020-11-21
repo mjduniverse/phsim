@@ -1,0 +1,54 @@
+
+
+<script src="https://cdn.jsdelivr.net/npm/poly-decomp@0.3.0/build/decomp.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/matter-js@0.14.2/build/matter.min.js"></script>
+<script src="../dist/phSim.js"></script>
+
+<script>
+    "use strict"
+
+    var cord = document.createElement("span");
+
+    var m = new PhSim()
+
+    var c = new PhSim.DynObject({
+        circle: true,
+        x: 100,
+        y: 100,
+        radius: 100,
+        cycle: 0,
+        name: "object1",
+        fillStyle: "red",
+        strokeStyle: "black",
+        globalAlpha: 1,
+
+        widgets: [
+            {
+                type: "wFunction",
+
+                function: function(){
+                    cord.innerText = this.x + "," + this.y
+                },
+
+                trigger: "update",
+            }
+        ]
+
+    });
+
+    m.addObject(c);
+
+    var container = m.simContainer;
+
+    m.addEventListener("click",function(){
+        m.toggle();
+    })
+
+    window.addEventListener("load",function(){
+        document.body.appendChild(m.simContainer);
+        document.body.appendChild(cord);
+        m.play()
+    })
+
+
+</script>

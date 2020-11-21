@@ -18,51 +18,51 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 	
 	if(mode === "force") {
 		return function() {
-			return self.applyForce(dyn_object,dyn_object.matter.position,motion);
+			return PhSim.Motion.applyForce(dyn_object,dyn_object.matter.position,motion);
 		}
 	}
 
 	if(mode === "velocity") {
 		return function() {
-			return self.setVelocity(dyn_object,motion);
+			return PhSim.Motion.setVelocity(dyn_object,motion);
 		}
 	}
 
 	if(mode === "translate") {
 		return function() {
-			return self.translate(dyn_object,motion);
+			return PhSim.Motion.translate(dyn_object,motion);
 		}
 	}
 
 	if(mode === "position") {
 		return function() {
-			return self.setPosition(dyn_object,motion)
+			return PhSim.Motion.setPosition(dyn_object,motion)
 		}
 	}
 
 	if(mode === "rotation") {
 		return function() {
-			return self.rotate(dyn_object,motion,dyn_object.matter.position);
+			return PhSim.Motion.rotate(dyn_object,motion,dyn_object.matter.position);
 		}
 	}
 
 	if(mode === "circular_constraint_rotation") {
 		return function() {
-			return self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+			return PhSim.Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
 		}
 	}
 
 	if(mode === "setAngle") {
 		return function() {
-			return self.setAngle(dyn_object,motion);
+			return PhSim.Motion.setAngle(dyn_object,motion);
 		}
 	}
 
 	if(mode === "circular_constraint_setAngle") {
 		return function() {
 			var a = Math.atan2(dyn_object.y - dyn_object.circularConstraintVector.y,dyn_object.x - dyn_object.circularConstraintVector.x)
-			self.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
-			self.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+			PhSim.Motion.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
+			PhSim.Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
 		}
 	}
 
@@ -79,7 +79,7 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
  * @this {PhSim} 
  */
 
-PhSim.Widgets.velocity = function(widget,dynObject) {
+PhSim.Widgets.velocity = function(dynObject,widget) {
     var f = this.createMotionFunction("velocity",dynObject,widget.vector);
     this.addSimpleEvent(widget.trigger,f,{
         ...widget,
@@ -96,7 +96,7 @@ PhSim.Widgets.velocity = function(widget,dynObject) {
  * @this {PhSim} 
  */
 
-PhSim.Widgets.translate = function(widget,dynObject) {
+PhSim.Widgets.translate = function(dynObject,widget) {
     var f = this.createMotionFunction("translate",dynObject,widget.vector);
     this.addSimpleEvent(widget.trigger,f,{
         ...widget,
@@ -113,7 +113,7 @@ PhSim.Widgets.translate = function(widget,dynObject) {
  * @this {PhSim} 
  */
 
-PhSim.Widgets.position = function(widget,dynObject) {
+PhSim.Widgets.position = function(dynObject,widget) {
     var f = this.createMotionFunction("position",dynObject,widget.vector);
     this.addSimpleEvent(widget.trigger,f,{
         ...widget,
@@ -130,7 +130,7 @@ PhSim.Widgets.position = function(widget,dynObject) {
  * @this {PhSim} 
  */
 
-PhSim.Widgets.rotation = function(widget,dynObject) {
+PhSim.Widgets.rotation = function(dynObject,widget) {
 
     if(widget.circularConstraintRotation) {
         var f = this.createMotionFunction("circular_constraint_rotation",dynObject,widget.cycle);
@@ -146,7 +146,7 @@ PhSim.Widgets.rotation = function(widget,dynObject) {
     });
 }
 
-PhSim.Widgets.setAngle = function(widget,dynObject) {
+PhSim.Widgets.setAngle = function(dynObject,widget) {
 
     if(widget.circularConstraintRotation) {
         var f = this.createMotionFunction("circular_constraint_setAngle",dynObject,widget.cycle);
@@ -163,7 +163,7 @@ PhSim.Widgets.setAngle = function(widget,dynObject) {
 
 }
 
-PhSim.Widgets.force = function(widget,dyn_object) {
+PhSim.Widgets.force = function(dyn_object,widget) {
 
     var f = this.createMotionFunction("force",dyn_object,widget.vector);
 

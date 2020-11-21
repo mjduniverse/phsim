@@ -36,8 +36,6 @@ require("./phRender");
 require("./sprites");
 require("./audio");
 
-require("./collisionClass");
-
 require("./tools/vector");
 require("./tools/objectChecker");
 require("./tools/diagRect");

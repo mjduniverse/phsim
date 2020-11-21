@@ -60,7 +60,7 @@ PhSim.Camera.prototype.translate = function(dx,dy) {
 	this.dynSim.simCtx.translate(dx,dy);
 
 	for(var i = 0; i < this.transformingObjects.length; i++) {
-		this.dynSim.translate(this.transformingObjects[i],dx,dy);
+		PhSim.Motion.translate(this.transformingObjects[i],dx,dy);
 	}
 }
 

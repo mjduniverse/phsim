@@ -38,7 +38,7 @@ PhSim.prototype.createWFunction = function(arg,thisRef) {
     return o;
 }
 
-PhSim.Widgets.wFunction = function(widget,dyn_object) {
+PhSim.Widgets.wFunction = function(dyn_object,widget) {
 
     var self = this;
 

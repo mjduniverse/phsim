@@ -59,6 +59,19 @@ PhSim.Game = function(phSim,options) {
 	 */
 
 	this.phSim = phSim;
+
+	// Adding arrays to phSim eventstack
+
+	phSim.eventStack["score"] = [];
+
+	phSim.eventStack["hazard"] = [];
+
+	phSim.eventStack["gamewin"] = [];
+
+	phSim.eventStack["levelwin"] = [];
+
+	phSim.eventStack["levelloss"] = [];
+
 }
 
 /**
@@ -94,6 +107,9 @@ PhSim.Game.Options = function(goal,life,score) {
 	this.score = score;
 }
 
+PhSim.Game.prototype.defaultGameWinModal = true;
+PhSim.Game.prototype.defaultLevelWinModal = true;
+
 /**
  * Set score
  * @function
@@ -111,30 +127,49 @@ PhSim.Game.prototype.setScore = function(c) {
 		this.phSim.pause();
 		this.phSim.enableFilter();
 
+		// Code to execute 
+
 		if(this.phSim.simulationIndex + 1 === this.phSim.options.simulations.length) {
-			var a = self.phSim.alert({
-				msg:"You Win!",
-				closeButtonTxt:"Play again",
-				bgColor:"#333",
-				txtColor:"#fff",
-				w:300,
-				h:100,
-				onok: function() {
-					self.phSim.disableFilter();
-					a.parentNode.removeChild(a);
-					self.phSim.gotoSimulationIndex(0);
-				}
-			});
+
+			if(this.defaultGameWinModal) {
+
+                this.phSim.callEventClass("gamewin",this,{});                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+				var a = self.phSim.alert({
+					msg:"You Win!",
+					closeButtonTxt:"Play again",
+					bgColor:"#333",
+					txtColor:"#fff",
+					w:300,
+					h:100,
+					onok: function() {
+						self.phSim.disableFilter();
+						a.parentNode.removeChild(a);
+						self.phSim.gotoSimulationIndex(0);
+						self.phSim.play();
+					}
+				});
+
+			}
+
 		}
 
+		// If not the final simulation
+
 		else {
+
+			this.phSim.callEventClass("levelwin",this,{}); 
+
 			clearInterval(this.phSim.intervalLoop);
 			this.phSim.disableFilter();
 			this.phSim.gotoSimulationIndex(this.phSim.simulationIndex + 1);
+			self.phSim.play();
 		}
 
 
 	}
+
+	this.phSim.callEventClass("score",this,{}); 
 },
 
 /**
@@ -191,9 +226,12 @@ PhSim.Game.prototype.end = function() {
 		h:100,
 		onok: function() {
 			self.phSim.gotoSimulationIndex(self.phSim.simulationIndex);
+			self.phSim.play();
 			self.phSim.disableFilter();
 			a.parentNode.removeChild(a);	
 		}
 	});
+
+	this.phSim.callEventClass("levelloss",this,{}); 
 
 }

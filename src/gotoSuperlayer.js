@@ -16,6 +16,8 @@ const PhSim = require("./core");
 
 PhSim.prototype.gotoSimulationIndex = function (i) {
 
+	var optionMap = new Map();  
+
 	var self = this;
 
 	this.status = 0;
@@ -61,22 +63,11 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 	this.staticSprites = [];
 	this.staticAudio = [];
 	this.audioPlayers = 0;
-	this.collisionClasses = {};
 	this.slEventStack = new PhSim.EventStack();
 
 	if(this.simOptions && this.simOptions.world && this.simOptions.world.bg) {
 		this.bgFillStyle = this.simOptions.world.bg;
 	}
-
-	/** 
-
-	var ncc = new PhSim.CollisionClass("__main");
-	ncc.engine = this.matterJSEngine;
-	ncc.world = this.matterJSWorld;
-
-	this.collisionClasses["__main"] = ncc;
-
-	**/
 
 	if(this.options.simulations) {
 	
@@ -114,6 +105,8 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 						this.addObject(dynObject,{
 							layer: L
 						});
+
+						optionMap.set(o,dynObject);
 					}
 
 				}
@@ -148,18 +141,43 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 			if(a.objectA) {
 
-				if(typeof a.objectA.L === "number" && typeof a.objectA.O === "number") {
-					b.bodyA = this_a.LO(a.objectA.L,a.objectA.O);
+				if(a.objectA instanceof PhSim) {
+					b.bodyA = a.objectA.matter;
 				}
 
-				if(a.objectA instanceof PhSim) {
-					b.bodyA = a.objectA;
+				else {
+
+					if(typeof a.objectA.L === "number" && typeof a.objectA.O === "number") {
+						b.bodyA = this_a.LO(a.objectA.L,a.objectA.O).matter;
+					}
+
+					else {
+						b.bodyA = optionMap.get(a.objectA).matter;
+					}
+
 				}
 
  			}
 
 			if(a.objectB) {
-				b.bodyB = this_a.LO(a.objectB.L,a.objectB.O);
+				b.bodyB = this_a.LO(a.objectB.L,a.objectB.O).matter;
+
+				if(a.objectB instanceof PhSim) {
+					b.bodyB = a.objectB.matter;
+				}
+
+				else {
+
+					if(typeof a.objectB.L === "number" && typeof a.objectB.O === "number") {
+						b.bodyB = this_a.LO(a.objectB.L,a.objectB.O).matter;
+					}
+
+					else {
+						b.bodyB = optionMap.get(a.objectB).matter;
+					}
+
+				}
+
 			}
 
 			if(a.pointA) {

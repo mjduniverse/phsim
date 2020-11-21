@@ -12,7 +12,7 @@ PhSim.prototype.applyGravitationalField = function() {
 				var a1 = PhSim.Vector.scale(PhSim.Vector.subtract(a[j].matter.position,a[i].matter.position),6.67 * Math.pow(10,-11) * a[i].matter.mass * a[j].matter.mass * -1)
 				var b1 = Math.pow(PhSim.Vector.distance(a[j].matter.position,a[i].matter.position),3);
 				var c = PhSim.Vector.divide(a1,b1);
-				this.applyForce(a[j],a[i].matter.position,c);
+				PhSim.Motion.applyForce(a[j],a[i].matter.position,c);
 			}
 		}	
 	}

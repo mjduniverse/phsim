@@ -1,5 +1,7 @@
 // Set Angle to mouse.
 
+const phSim = require("./phSim");
+
 // Object Connection
 
 PhSim.prototype.connectDynObjects = function(parent,child) {
@@ -15,9 +17,9 @@ PhSim.prototype.connectDynObjects = function(parent,child) {
 			"y": parent.matter.position.y - parent.matter.positionPrev.y,
 		}
 
-		self.translate(child,v);
+		PhSim.Motion.translate(child,v);
 
-		self.rotate(child,parent.matter.angle - parent.matter.anglePrev,parent.matter.position);
+		PhSim.Motion.rotate(child,parent.matter.angle - parent.matter.anglePrev,parent.matter.position);
 
 	}
 
@@ -124,9 +126,7 @@ PhSim.prototype.addObject = function(dynObject,options = {}) {
 
 PhSim.prototype.removeDynObj = function(dynObject) {
 
-	for(var i = 0; i < dynObject.collisionClasses.length; i++) {
-		dynObject.collisionClasses[i].removeDynObject(dynObject);
-	}
+	PhSim.Matter.Composite.remove(this.matterJSWorld,dynObject.matter);
 
 	this.objUniverse.splice(this.objUniverse.indexOf(dynObject),1);
 

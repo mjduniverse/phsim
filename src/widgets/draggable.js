@@ -1,4 +1,4 @@
-PhSim.Widgets.draggable = function(widget,dyn_object) {
+PhSim.Widgets.draggable = function(dyn_object,widget) {
 
     var self = this;
     
@@ -32,7 +32,7 @@ PhSim.Widgets.draggable = function(widget,dyn_object) {
 
         var __onbeforeupdate = function() {
             PhSim.Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
-            self.setPosition(dyn_object,mV);
+            PhSim.Motion.setPosition(dyn_object,mV);
         }
 
         var __onmousedown = function(e) {
