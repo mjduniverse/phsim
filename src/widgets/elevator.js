@@ -101,6 +101,6 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
 
     }
 
-    this.addEventListener("afterupdate",func());
+    this.on("afterupdate",func());
 
 }

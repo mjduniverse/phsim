@@ -467,11 +467,11 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 	report.objectA = dynObjectA;
 	report.objectB = dynObjectB;
 
-	this.addEventListener("beforeupdate",function() {
+	this.on("beforeupdate",function() {
 		report.before = self.collided(dynObjectA,dynObjectB);
 	});
 
-	this.addEventListener("afterupdate",function() {
+	this.on("afterupdate",function() {
 		report.current = self.collided(dynObjectA,dynObjectB);
 		report.difference = report.current - report.before;
 		if(report.difference) {

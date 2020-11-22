@@ -148,7 +148,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 		}
 
-		self.addEventListener("keydown",f,{
+		self.on("keydown",f,{
 			"slEvent": true
 		});
 
@@ -179,7 +179,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			}
 		}
 
-		self.addEventListener("collisionstart",f,{
+		self.on("collisionstart",f,{
 			"slEvent": true
 		});
 
@@ -193,7 +193,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			call();
 		}
 
-		self.addEventListener("beforeupdate",f,{
+		self.on("beforeupdate",f,{
 			slEvent: true
 		});
 
@@ -217,7 +217,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			}
 		}
 
-		self.addEventListener("objclick",f,{
+		self.on("objclick",f,{
 			slEvent: true
 		});
 
@@ -240,7 +240,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			}
 		}
 
-		self.addEventListener("objmousedown",f,{
+		self.on("objmousedown",f,{
 			slEvent: true
 		});
 
@@ -253,7 +253,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			call(e)
 		}
 
-		this.addEventListener("firstslupdate",f);
+		this.on("firstslupdate",f);
 
 	}
 	
@@ -273,7 +273,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			}
 		}
 
-		self.addEventListener("objmouseup",f,{
+		self.on("objmouseup",f,{
 			slEvent: true
 		});
 
@@ -300,7 +300,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			}
 		}
 
-		self.addEventListener("afterslchange",f,{
+		self.on("afterslchange",f,{
 			slEvent: true
 		});
 

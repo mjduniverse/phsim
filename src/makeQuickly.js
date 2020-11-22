@@ -48,10 +48,13 @@ PhSim.loadFromJSON = function(jsonURL,onload) {
 	var x = new XMLHttpRequest();
 	x.open("GET",jsonURL);
 
-	x.addEventListener("load",function(){
+	var f = function(){
 		var o = PhSim.createContainer(JSON.parse(x.responseText));
 		onload(o);
-	})
+		x.removeEventListener("load",f);
+	}
+
+	x.addEventListener("load",f)
 
 	x.send();
 

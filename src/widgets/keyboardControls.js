@@ -25,7 +25,7 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 		
 	}
 
-	this.addEventListener("keydown",f,{
+	this.on("keydown",f,{
 		"slEvent": true
 	}); 
 

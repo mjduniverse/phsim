@@ -88,7 +88,14 @@ PhSim.prototype.alert = function(options) {
 	alertBox.appendChild(alertBoxMsg);
 
 	var closeButton = document.createElement("div");
-	closeButton.addEventListener("click",options.onok);
+
+	var f = function() {
+		options.onok();
+		closeButton.removeEventListener("click",f);
+	}
+
+	closeButton.addEventListener("click",f);
+
 	closeButton.innerText = options.closeButtonTxt;
 	alertBox.appendChild(closeButton);
 

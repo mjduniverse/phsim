@@ -19,7 +19,7 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
     
     var widgetO = widget;
 
-    this.addEventListener("matterJSLoad",function(){
+    this.on("matterJSLoad",function(){
         var eventFuncClosure = function() {
 
             var targetObj = self.LO(widgetO.target.L,widgetO.target.O);

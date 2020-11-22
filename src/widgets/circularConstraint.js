@@ -24,7 +24,7 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 	var relAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x);
 
-	this.addEventListener("afterupdate",function(){
+	this.on("afterupdate",function(){
 		var newAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x) - relAngle;
 		PhSim.Motion.setAngle(dynObject,newAngle);
 	});

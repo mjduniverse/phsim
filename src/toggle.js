@@ -27,7 +27,18 @@ PhSim.prototype.exitSl = function() {
 }
 
 PhSim.prototype.exit = function() {
+
+	// Remove references to avoid memory leak
+
+	delete this.camera.dynSim
+	delete this.phRender.dynSim
+
+	for(var i = 0; i < this.objUniverse.length; i++) {
+		delete this.objUniverse[i].phSim;
+	}
+
 	this.callEventClass("exit",this,new PhSim.PhEvent());
+	this.deregisterCanvasEvents();
 	this.deregisterKeyEvents();
 	this.exitSl();
 }

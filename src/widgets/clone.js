@@ -102,7 +102,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
         }
 
-        this.addEventListener("keydown",getFunction());
+        this.on("keydown",getFunction());
 
     }
 

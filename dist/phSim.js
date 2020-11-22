@@ -2202,9 +2202,12 @@ PhSim.Sprites.SpriteImgArray.prototype.addSprite = function(staticObj,onload = f
 
 			var img = document.createElement("img");
 
-			img.addEventListener("load",function() {
+			var f = function() {
 				onload();
-			});
+				img.removeEventListener("load",f)
+			}
+
+			img.addEventListener("load",f);
 		
 			img.src = staticObj.src;
 		
@@ -2256,15 +2259,18 @@ PhSim.Audio.AudioArray = function(p_audio,onload) {
 
 		var audio = document.createElement("audio");
 
-		audio.addEventListener("canplaythrough",function() {
+		var f = function() {
 			self.loaded_n++;
 
 			if(self.array.length === self.loaded_n) {
 				self.loaded = true;
 				self.onload();
+				audio.removeEventListener("canplaythrough",f);
 			}
 
-		})
+		}
+
+		audio.addEventListener("canplaythrough",f)
 
 		audio.src = p_audio[i].src;
 		audio.loop = p_audio[i].loop
@@ -3158,10 +3164,13 @@ PhSim.loadFromJSON = function(jsonURL,onload) {
 	var x = new XMLHttpRequest();
 	x.open("GET",jsonURL);
 
-	x.addEventListener("load",function(){
+	var f = function(){
 		var o = PhSim.createContainer(JSON.parse(x.responseText));
 		onload(o);
-	})
+		x.removeEventListener("load",f);
+	}
+
+	x.addEventListener("load",f)
 
 	x.send();
 
@@ -3277,7 +3286,14 @@ PhSim.prototype.alert = function(options) {
 	alertBox.appendChild(alertBoxMsg);
 
 	var closeButton = document.createElement("div");
-	closeButton.addEventListener("click",options.onok);
+
+	var f = function() {
+		options.onok();
+		closeButton.removeEventListener("click",f);
+	}
+
+	closeButton.addEventListener("click",f);
+
 	closeButton.innerText = options.closeButtonTxt;
 	alertBox.appendChild(closeButton);
 
@@ -3320,7 +3336,7 @@ PhSim.prototype.connectDynObjects = function(parent,child) {
 
 	}
 
-	this.addEventListener("afterupdate",f)
+	this.on("afterupdate",f)
 
 	return f;
 
@@ -3757,6 +3773,15 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 }
 
+PhSim.prototype.deregisterCanvasEvents = function() {
+	this.simCanvas.removeEventListener("mousedown",this.getEventBridge(this.mousedownListener));
+	this.simCanvas.removeEventListener("click",this.getEventBridge(this.clickListener));
+	this.simCanvas.removeEventListener("mousemove",this.getEventBridge(this.mousemoveListener));
+	this.simCanvas.removeEventListener("mouseup",this.getEventBridge(this.mouseupListener));
+	this.simCanvas.removeEventListener("mouseout",this.getEventBridge(this.mouseoutListener));
+
+}
+
 PhSim.prototype.registerKeyEvents = function() {
 
 	var self = this;
@@ -3802,7 +3827,7 @@ PhSim.prototype.deregisterKeyEvents = function() {
  * 
  */
 
-PhSim.prototype.addEventListener = function(eventStr,call,options = {}) {
+PhSim.prototype.on = function(eventStr,call,options = {}) {
 	
 	
 
@@ -3828,7 +3853,7 @@ PhSim.prototype.addEventListener = function(eventStr,call,options = {}) {
 					this.removeEventListener(eventStr,f)
 				}
 	
-				this.addEventListener(eventStr,f);
+				this.on(eventStr,f);
 
 			}
 		}
@@ -4365,11 +4390,11 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 	report.objectA = dynObjectA;
 	report.objectB = dynObjectB;
 
-	this.addEventListener("beforeupdate",function() {
+	this.on("beforeupdate",function() {
 		report.before = self.collided(dynObjectA,dynObjectB);
 	});
 
-	this.addEventListener("afterupdate",function() {
+	this.on("afterupdate",function() {
 		report.current = self.collided(dynObjectA,dynObjectB);
 		report.difference = report.current - report.before;
 		if(report.difference) {
@@ -4444,7 +4469,18 @@ PhSim.prototype.exitSl = function() {
 }
 
 PhSim.prototype.exit = function() {
+
+	// Remove references to avoid memory leak
+
+	delete this.camera.dynSim
+	delete this.phRender.dynSim
+
+	for(var i = 0; i < this.objUniverse.length; i++) {
+		delete this.objUniverse[i].phSim;
+	}
+
 	this.callEventClass("exit",this,new PhSim.PhEvent());
+	this.deregisterCanvasEvents();
 	this.deregisterKeyEvents();
 	this.exitSl();
 }
@@ -5637,7 +5673,7 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 	var relAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x);
 
-	this.addEventListener("afterupdate",function(){
+	this.on("afterupdate",function(){
 		var newAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x) - relAngle;
 		PhSim.Motion.setAngle(dynObject,newAngle);
 	});
@@ -5762,7 +5798,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
         }
 
-        this.addEventListener("keydown",getFunction());
+        this.on("keydown",getFunction());
 
     }
 
@@ -5815,21 +5851,21 @@ PhSim.Widgets.draggable = function(dyn_object,widget) {
                 delta.x = e.x - dyn_object.matter.position.x;
                 delta.y = e.y - dyn_object.matter.position.y;
 
-                self.addEventListener("mousemove",__onmousemove);
-                self.addEventListener("mouseup",__onmouseup);
-                self.addEventListener("beforeupdate",__onbeforeupdate);
+                self.on("mousemove",__onmousemove);
+                self.on("mouseup",__onmouseup);
+                self.on("beforeupdate",__onbeforeupdate);
 
                 __onmousemove(e);
             }
         }
         
-        self.addEventListener("mouseout",__onmouseup);
+        self.on("mouseout",__onmouseup);
 
         return __onmousedown;
 
     }
 
-    this.addEventListener("mousedown",func());
+    this.on("mousedown",func());
 }
 
 /***/ }),
@@ -5868,7 +5904,7 @@ PhSim.Widgets.coin = function(dyn_object,widget) {
 
         }
 
-        self.addEventListener("collisionstart",func());
+        self.on("collisionstart",func());
 
 
 }
@@ -5894,7 +5930,7 @@ PhSim.Widgets.hazard = function(dyn_object,widget) {
 
     }
 
-    self.addEventListener("collisionstart",func());
+    self.on("collisionstart",func());
 
 }
 
@@ -5919,7 +5955,7 @@ PhSim.Widgets.health = function(dyn_object,widget) {
 
     }
 
-    self.addEventListener("collisionstart",func());
+    self.on("collisionstart",func());
 
 }
 
@@ -6206,7 +6242,7 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
     
     var widgetO = widget;
 
-    this.addEventListener("matterJSLoad",function(){
+    this.on("matterJSLoad",function(){
         var eventFuncClosure = function() {
 
             var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
@@ -6404,7 +6440,7 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
 
     }
 
-    this.addEventListener("afterupdate",func());
+    this.on("afterupdate",func());
 
 }
 
@@ -6439,7 +6475,7 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 		
 	}
 
-	this.addEventListener("keydown",f,{
+	this.on("keydown",f,{
 		"slEvent": true
 	}); 
 
@@ -6457,7 +6493,7 @@ PhSim.Widgets.transformCameraByObj = function(dyn_object) {
     
     var self = this;
 
-    this.addEventListener("afterupdate",function(){
+    this.on("afterupdate",function(){
         var dx = dyn_object.matter.position.x - dyn_object.matter.positionPrev.x;
         var dy = dyn_object.matter.position.y - dyn_object.matter.positionPrev.y;
         self.camera.translate(-dx,-dy);
@@ -6717,7 +6753,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 
 		}
 
-		self.addEventListener("keydown",f,{
+		self.on("keydown",f,{
 			"slEvent": true
 		});
 
@@ -6748,7 +6784,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			}
 		}
 
-		self.addEventListener("collisionstart",f,{
+		self.on("collisionstart",f,{
 			"slEvent": true
 		});
 
@@ -6762,7 +6798,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			call();
 		}
 
-		self.addEventListener("beforeupdate",f,{
+		self.on("beforeupdate",f,{
 			slEvent: true
 		});
 
@@ -6786,7 +6822,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			}
 		}
 
-		self.addEventListener("objclick",f,{
+		self.on("objclick",f,{
 			slEvent: true
 		});
 
@@ -6809,7 +6845,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			}
 		}
 
-		self.addEventListener("objmousedown",f,{
+		self.on("objmousedown",f,{
 			slEvent: true
 		});
 
@@ -6822,7 +6858,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			call(e)
 		}
 
-		this.addEventListener("firstslupdate",f);
+		this.on("firstslupdate",f);
 
 	}
 	
@@ -6842,7 +6878,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			}
 		}
 
-		self.addEventListener("objmouseup",f,{
+		self.on("objmouseup",f,{
 			slEvent: true
 		});
 
@@ -6869,7 +6905,7 @@ PhSim.prototype.addSimpleEvent = function(trigger,call,options) {
 			}
 		}
 
-		self.addEventListener("afterslchange",f,{
+		self.on("afterslchange",f,{
 			slEvent: true
 		});
 
@@ -7041,36 +7077,11 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 */
  
 /**
-* @typedef {Object|Draggable}
-* @property {Boolean} deleteSelf - Boolean for enabling the force widget
-*/
- 
-/**
-* @typedef {Object|Coin}
-* @property {Boolean} deleteSelf - Boolean for enabling the coin widget
-*/
- 
-/**
-* @typedef {Object|Hazard}
-* @property {Boolean} deleteSelf - Boolean for enabling the hazard widget
-*/
- 
-/**
-* @typedef {Object|Health}
-* @property {Boolean} deleteSelf - Boolean for enabling the health widget
-*/
- 
-/**
 * @typedef {Object|Elevator}
-* @property {Boolean} elevator - Boolean for enabling the elevator widget
 * @property {Vector} pointA - First point
 * @property {Vector} pointB - Second point
 */
- 
-/**
-* @typedef {Object|TransformCameraByObject}
-* @property {Boolean} deleteSelf - Boolean for enabling the hazard widget
-*/
+
  
 /**
 * @typedef {Object|TransformWithCamera}
@@ -7139,13 +7150,7 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 * @property {Boolean} numVar - undefined
 */
  
-/**
-* @typedef {simpleEventObjects|SetNumVar}
-* @property {String} name - undefined
-* @property {Number} value - undefined
-* @property {Boolean} SetNumVar - undefined
-*/
- 
+
 /**
 * @typedef {simpleEventObjects|SetColor}
 * @property {String} color - undefined
@@ -7185,31 +7190,12 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 */
  
 /**
-* @typedef {Object|DeleteSelf}
-* @property {Boolean} deleteSelf - Boolean for enabling the coin widget
-*/
- 
-/**
-* @typedef {Object|ToggleLock}
-* @property {Boolean} toggleLock - Boolean for enabling the coin widget
-*/
- 
-/**
 * @typedef {Object|CircularConstraint}
 * @property {Boolean} circularConstraint - Boolean for enabling the circular constraint widget
 * @property {Number} x - Boolean for enabling the circular constraint widget
 * @property {Number} y - Boolean for enabling the circular constraint widget
 */
  
-/**
-* @typedef {Object|DeleteSelf}
-* @property {Boolean} deleteSelf - Boolean for enabling the self-deletion widget
-*/
- 
-/**
-* @typedef {simpleEventOptions|ToggleSemiLock}
-* @property {Boolean} toggleSemiLock - Boolean for enabling the toggle semi-lock widget
-*/
  
 /**
 * @typedef {simpleEventOptions|WFunction}

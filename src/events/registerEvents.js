@@ -216,6 +216,15 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 }
 
+PhSim.prototype.deregisterCanvasEvents = function() {
+	this.simCanvas.removeEventListener("mousedown",this.getEventBridge(this.mousedownListener));
+	this.simCanvas.removeEventListener("click",this.getEventBridge(this.clickListener));
+	this.simCanvas.removeEventListener("mousemove",this.getEventBridge(this.mousemoveListener));
+	this.simCanvas.removeEventListener("mouseup",this.getEventBridge(this.mouseupListener));
+	this.simCanvas.removeEventListener("mouseout",this.getEventBridge(this.mouseoutListener));
+
+}
+
 PhSim.prototype.registerKeyEvents = function() {
 
 	var self = this;
