@@ -214,7 +214,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
             }
 
-            var f = this.addSimpleEvent(a.trigger,closure(),a);
+            var f = this.createWFunction(a.trigger,closure(),a);
 
         }
 

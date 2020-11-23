@@ -15,9 +15,9 @@ PhSim.Widgets.setColor = function(dyn_object,widget) {
 
     }
 
-    var f = this.addSimpleEvent(widget.trigger,closure(),{
+    var f = this.createWFunction(widget.trigger,closure(),{
         ...widget,
-        simpleEventObj: dyn_object
+        wFunctionObj: dyn_object
     });
 }
     
@@ -38,9 +38,9 @@ PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
 
     }
 
-    var f = this.addSimpleEvent(widget.trigger,closure(),{
+    var f = this.createWFunction(widget.trigger,closure(),{
         ...widget,
-        simpleEventObj: dyn_object
+        wFunctionObj: dyn_object
     });
 }
         
@@ -48,10 +48,10 @@ PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
 
     var self = this;
 
-    var f = this.addSimpleEvent(widget.trigger,function(){
+    var f = this.createWFunction(widget.trigger,function(){
         self.setLineWidth(dyn_object,widget.color);
     },{
         ...widget,
-        simpleEventObj: dyn_object
+        wFunctionObj: dyn_object
     });
 }

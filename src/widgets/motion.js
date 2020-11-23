@@ -81,9 +81,9 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 
 PhSim.Widgets.velocity = function(dynObject,widget) {
     var f = this.createMotionFunction("velocity",dynObject,widget.vector);
-    this.addSimpleEvent(widget.trigger,f,{
+    this.createWFunction(widget.trigger,f,{
         ...widget,
-        simpleEventObj: dynObject
+        wFunctionObj: dynObject
     });
 }
 
@@ -98,9 +98,9 @@ PhSim.Widgets.velocity = function(dynObject,widget) {
 
 PhSim.Widgets.translate = function(dynObject,widget) {
     var f = this.createMotionFunction("translate",dynObject,widget.vector);
-    this.addSimpleEvent(widget.trigger,f,{
+    this.createWFunction(widget.trigger,f,{
         ...widget,
-        simpleEventObj: dynObject
+        wFunctionObj: dynObject
     });
 }
 
@@ -115,9 +115,9 @@ PhSim.Widgets.translate = function(dynObject,widget) {
 
 PhSim.Widgets.position = function(dynObject,widget) {
     var f = this.createMotionFunction("position",dynObject,widget.vector);
-    this.addSimpleEvent(widget.trigger,f,{
+    this.createWFunction(widget.trigger,f,{
         ...widget,
-        simpleEventObj: dynObject
+        wFunctionObj: dynObject
     });
 }
 
@@ -140,9 +140,9 @@ PhSim.Widgets.rotation = function(dynObject,widget) {
         var f = this.createMotionFunction("rotation",dynObject,widget.cycle);
     }
     
-    this.addSimpleEvent(widget.trigger,f,{
+    this.createWFunction(widget.trigger,f,{
         ...widget,
-        simpleEventObj: dynObject
+        wFunctionObj: dynObject
     });
 }
 
@@ -156,9 +156,9 @@ PhSim.Widgets.setAngle = function(dynObject,widget) {
         var f = this.createMotionFunction("setAngle",dynObject,widget.cycle);
     }
     
-    this.addSimpleEvent(widget.trigger,f,{
+    this.createWFunction(widget.trigger,f,{
         ...widget,
-        simpleEventObj: dynObject
+        wFunctionObj: dynObject
     });
 
 }
@@ -167,9 +167,9 @@ PhSim.Widgets.force = function(dyn_object,widget) {
 
     var f = this.createMotionFunction("force",dyn_object,widget.vector);
 
-    this.addSimpleEvent(widget.trigger,f,{
+    this.createWFunction(widget.trigger,f,{
         ...widget,
-        simpleEventObj: dyn_object
+        wFunctionObj: dyn_object
     });
     
 }

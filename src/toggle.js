@@ -26,6 +26,12 @@ PhSim.prototype.exitSl = function() {
 	clearInterval(this.intervalLoop);
 }
 
+/**
+ * @function
+ * Completely reset PhSim object. That is, make it as if it is a new one.
+ * 
+ */
+
 PhSim.prototype.exit = function() {
 
 	// Remove references to avoid memory leak
@@ -41,4 +47,8 @@ PhSim.prototype.exit = function() {
 	this.deregisterCanvasEvents();
 	this.deregisterKeyEvents();
 	this.exitSl();
+
+	// Erase all things
+
+	Object.assign(this,new PhSim());
 }

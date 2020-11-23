@@ -128,6 +128,10 @@ PhSim.createMatterObject = function(staticObject) {
 		opts.inverseMass = 1/staticObject.mass;
 	}
 
+	if(typeof staticObject.airFriction === "number") {
+		opts.airFriction = staticObject.airFriction;
+	}
+
 	if(Number.isInteger(staticObject.collisionNum)) {
 		opts.collisionFilter = staticObject.collisionNum;
 	}

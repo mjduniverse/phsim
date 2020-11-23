@@ -35,10 +35,10 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
 
         var options = {
             ...widgetO,
-            simpleEventObj: dyn_object
+            wFunctionObj: dyn_object
         }
 
-        var f = self.addSimpleEvent(widgetO.trigger,eventFuncClosure(),options);
+        var f = self.createWFunction(widgetO.trigger,eventFuncClosure(),options);
     });
 
 }

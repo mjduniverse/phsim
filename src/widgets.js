@@ -78,3 +78,4 @@ require("./widgets/elevator.js");
 require("./widgets/keyboardControls.js");
 require("./widgets/transformCameraByObj");
 require("./widgets/setRenderProperties.js");
+require("./widgets/deleteSelf.js");

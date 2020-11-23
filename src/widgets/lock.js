@@ -37,9 +37,9 @@ PhSim.Widgets.toggleLock = function(dyn_object,widget) {
         return f;
     }
 
-    this.addSimpleEvent(widget.trigger,closure(),{
+    this.createWFunction(widget.trigger,closure(),{
         ...widget,
-        simpleEventObj: dyn_object
+        wFunctionObj: dyn_object
     });
 }
 
@@ -58,8 +58,8 @@ PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
         return f;
     }
 
-    this.addSimpleEvent(widget.trigger,closure(),{
+    this.createWFunction(widget.trigger,closure(),{
         ...widget,
-        simpleEventObj: dyn_object
+        wFunctionObj: dyn_object
     });
 }

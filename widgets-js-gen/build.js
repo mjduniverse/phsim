@@ -4,27 +4,27 @@ const TypeDefGen = require("./typeDefGen");
 
 const widgets = [
 
-    new TypeDefGen.Type("Velocity","simpleEventOptions",[
+    new TypeDefGen.Type("Velocity","wFunctionOptions",[
         new TypeDefGen.Property("Boolean","velocity","Boolean for enabling the velocity widget"),
         new TypeDefGen.Property("Vector","vector","Velocity vector")    
     ]),
 
-    new TypeDefGen.Type("Force","simpleEventOptions",[
+    new TypeDefGen.Type("Force","wFunctionOptions",[
         new TypeDefGen.Property("Boolean","force","Boolean for enabling the force widget"),
         new TypeDefGen.Property("Vector","vector","Force vector")    
     ]),
 
-    new TypeDefGen.Type("Position","simpleEventOptions",[
+    new TypeDefGen.Type("Position","wFunctionOptions",[
         new TypeDefGen.Property("Boolean","position","Boolean for enabling the position widget"),
         new TypeDefGen.Property("Vector","vector","Position vector")    
     ]),
 
-    new TypeDefGen.Type("Translate","simpleEventOptions",[
+    new TypeDefGen.Type("Translate","wFunctionOptions",[
         new TypeDefGen.Property("Boolean","translate","Boolean for enabling the translation widget"),
         new TypeDefGen.Property("Vector","vector","Translation vector")    
     ]),
 
-    new TypeDefGen.Type("DeleteSelf","simpleEventOptions",[
+    new TypeDefGen.Type("DeleteSelf","wFunctionOptions",[
         new TypeDefGen.Property("Boolean","deleteSelf","Boolean for enabling the force widget"),
     ]),
 
@@ -79,13 +79,13 @@ const widgets = [
         new TypeDefGen.Property("Boolean","connection","Right velocity"),
     ]),
 
-    new TypeDefGen.Type("SetAngle","simpleEventOptions",[
+    new TypeDefGen.Type("SetAngle","wFunctionOptions",[
         new TypeDefGen.Property("Number","cycle","Angle"),
         new TypeDefGen.Property("Boolean","circularConstraintRotation","Down velocity"),
         new TypeDefGen.Property("Boolean","rotation","Right velocity"),
     ]),
 
-    new TypeDefGen.Type("Rotation","simpleEventOptions",[
+    new TypeDefGen.Type("Rotation","wFunctionOptions",[
         new TypeDefGen.Property("Number","cycle","Angle"),
         new TypeDefGen.Property("Boolean","circularConstraintRotation","Down velocity"),
         new TypeDefGen.Property("Boolean","rotation","Right velocity"),
@@ -113,33 +113,33 @@ const widgets = [
         new TypeDefGen.Property("Boolean","numVar")
     ]),
 
-    new TypeDefGen.Type("SetNumVar","simpleEventObjects",[
+    new TypeDefGen.Type("SetNumVar","wFunctionObjects",[
         new TypeDefGen.Property("String","name"),
         new TypeDefGen.Property("Number","value"),
         new TypeDefGen.Property("Boolean","SetNumVar")
     ]),
 
-    new TypeDefGen.Type("SetColor","simpleEventObjects",[
+    new TypeDefGen.Type("SetColor","wFunctionObjects",[
         new TypeDefGen.Property("String","color"),
         new TypeDefGen.Property("Boolean","setColor")
     ]),
 
-    new TypeDefGen.Type("SetBorderColor","simpleEventObjects",[
+    new TypeDefGen.Type("SetBorderColor","wFunctionObjects",[
         new TypeDefGen.Property("String","color"),
         new TypeDefGen.Property("Boolean","setBorderColor")
     ]),
 
-    new TypeDefGen.Type("SetLineWidth","simpleEventObjects",[
+    new TypeDefGen.Type("SetLineWidth","wFunctionObjects",[
         new TypeDefGen.Property("Number","lineWidth"),
         new TypeDefGen.Property("Boolean","setLineWidth")
     ]),
 
-    new TypeDefGen.Type("PlayAudio","simpleEventObjects",[
+    new TypeDefGen.Type("PlayAudio","wFunctionObjects",[
         new TypeDefGen.Property("String","src"),
         new TypeDefGen.Property("Boolean","playAudio")
     ]),  
     
-    new TypeDefGen.Type("ObjLink_a","simpleEventObjects",[
+    new TypeDefGen.Type("ObjLink_a","wFunctionObjects",[
         new TypeDefGen.Property("LOAddress","target"),
         new TypeDefGen.Property("Boolean","objLink_a")
     ]),  
@@ -169,11 +169,11 @@ const widgets = [
         new TypeDefGen.Property("Boolean","deleteSelf","Boolean for enabling the self-deletion widget"),
     ]),
 
-    new TypeDefGen.Type("ToggleSemiLock","simpleEventOptions",[
+    new TypeDefGen.Type("ToggleSemiLock","wFunctionOptions",[
         new TypeDefGen.Property("Boolean","toggleSemiLock","Boolean for enabling the toggle semi-lock widget"),
     ]),
 
-    new TypeDefGen.Type("WFunction","simpleEventOptions",[
+    new TypeDefGen.Type("WFunction","wFunctionOptions",[
         new TypeDefGen.Property("Function|String","function","WFunction widget"),
         new TypeDefGen.Property("Boolean","wFunction","Boolean for enabling wFunction widget.")
     ])

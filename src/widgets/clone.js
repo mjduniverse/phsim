@@ -5,14 +5,17 @@
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {Object} options - The options used for creating a spawned object
- * @param {Vector} options.vector -  The velocity to add to an object when it got spawned.
+ * @param {Vector} options.velocity -  The velocity to add to an object when it got spawned.
  * @param 
  */
 
 PhSim.prototype.cloneObject = function(dynObject,options = {}) {
+    
 	var obj = new PhSim.DynObject(dynObject.static);
 	obj.cloned = true;
-	obj.loneParent = dynObject;
+    obj.cloneParent = dynObject;
+    
+    PhSim.Motion.setVelocity(obj,options.velocity);
 
 	this.addToOverlayer(obj);
 	
@@ -26,6 +29,10 @@ PhSim.prototype.cloneObject = function(dynObject,options = {}) {
 PhSim.Widgets.clone = function(dyn_object,widget) {
 
     var self = this;
+
+    var o = {
+        velocity: widget.vector
+    }
     
     // Clone By Time
 
@@ -48,7 +55,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
                     else {
                         if(!self.paused) {
-                            self.cloneObject(dyn_object);
+                            self.cloneObject(dyn_object,o);
                             func.__n++;
                         }
                     }
@@ -63,7 +70,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
                 func = function(e) {
                     if(!self.paused) {
-                        self.cloneObject(dyn_object);
+                        self.cloneObject(dyn_object,o);
                     }
                 }
 
@@ -94,7 +101,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
             var cloneByKeyFunc = function(e) {
                 if(e.key === kc) {
-                    self.cloneObject(dyn_object,vc);
+                    self.cloneObject(dyn_object,o);
                 }
             }
 

@@ -7,7 +7,7 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
  
 
 /**
-* @typedef {simpleEventOptions|DeleteSelf}
+* @typedef {wFunctionOptions|DeleteSelf}
 * @property {Boolean} deleteSelf - Boolean for enabling the force widget
 */
  
@@ -48,14 +48,14 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 */
  
 /**
-* @typedef {simpleEventOptions|SetAngle}
+* @typedef {wFunctionOptions|SetAngle}
 * @property {Number} cycle - Angle
 * @property {Boolean} circularConstraintRotation - Down velocity
 * @property {Boolean} rotation - Right velocity
 */
  
 /**
-* @typedef {simpleEventOptions|Rotation}
+* @typedef {wFunctionOptions|Rotation}
 * @property {Number} cycle - Angle
 * @property {Boolean} circularConstraintRotation - Down velocity
 * @property {Boolean} rotation - Right velocity
@@ -87,31 +87,31 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
  
 
 /**
-* @typedef {simpleEventObjects|SetColor}
+* @typedef {wFunctionObjects|SetColor}
 * @property {String} color - undefined
 * @property {Boolean} setColor - undefined
 */
  
 /**
-* @typedef {simpleEventObjects|SetBorderColor}
+* @typedef {wFunctionObjects|SetBorderColor}
 * @property {String} color - undefined
 * @property {Boolean} setBorderColor - undefined
 */
  
 /**
-* @typedef {simpleEventObjects|SetLineWidth}
+* @typedef {wFunctionObjects|SetLineWidth}
 * @property {Number} lineWidth - undefined
 * @property {Boolean} setLineWidth - undefined
 */
  
 /**
-* @typedef {simpleEventObjects|PlayAudio}
+* @typedef {wFunctionObjects|PlayAudio}
 * @property {String} src - undefined
 * @property {Boolean} playAudio - undefined
 */
  
 /**
-* @typedef {simpleEventObjects|ObjLink_a}
+* @typedef {wFunctionObjects|ObjLink_a}
 * @property {LOAddress} target - undefined
 * @property {Boolean} objLink_a - undefined
 */
@@ -133,7 +133,7 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
  
  
 /**
-* @typedef {simpleEventOptions|WFunction}
+* @typedef {wFunctionOptions|WFunction}
 * @property {Function|String} function - WFunction widget
 * @property {Boolean} wFunction - Boolean for enabling wFunction widget.
 */
