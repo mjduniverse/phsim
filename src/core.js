@@ -183,7 +183,7 @@ PhSim.prototype.paused = true;
 
 
 /**
- * The matter.js world for the __main collision filter
+ * The matter.js world
  * Resets when {@link PhSim#gotoSimulationIndex} is executed.
  * @type {Object}
  */
@@ -191,7 +191,7 @@ PhSim.prototype.paused = true;
 PhSim.prototype.matterJSWorld = null;
 
 /**
- * The matter.js engine for the __main collision filter
+ * The matter.js engine 
  * Resets when {@link PhSim#gotoSimulationIndex} is executed.
  * @type {Object}
  */
