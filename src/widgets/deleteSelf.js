@@ -16,8 +16,7 @@ PhSim.Widgets.deleteSelf = function(dyn_object,widget) {
         return f;
     }
 
-    var ref = this.createWFunction(widget.trigger,closure(),{
-        ...widget,
-        wFunctionObj: dyn_object
-    });
+    var ref = this.createWFunction(dyn_object,closure(),widget);
+
+    
 }

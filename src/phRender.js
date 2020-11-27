@@ -88,6 +88,10 @@ PhSim.PhRender.prototype.setCtx = function(object) {
 	
 }
 
+PhSim.PhRender.prototype.unsetCtx = function() {
+	this.ctx.globalAlpha = 1;
+}
+
 /**
  * 
  * Render a {@link Path} as a polygon.
@@ -178,6 +182,7 @@ PhSim.PhRender.prototype.static_path = function (path) {
 
 	}
 
+	this.unsetCtx();
 	
 }
 
@@ -310,6 +315,8 @@ PhSim.PhRender.prototype.static_circle = function (circle) {
 
 	}
 
+	this.unsetCtx();
+
 }
 
 
@@ -340,7 +347,7 @@ PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 
 	if(rectangle.widgets) {
 		for(var i = 0; i < rectangle.widgets.length; i++) {
-			if(rectangle.widgets[i].rectText) {
+			if(rectangle.widgets[i].type === "rectText") {
 				this.rectText(rectangle.widgets[i],x,y,rectangle.w,rectangle.h,0);
 			}
 		}
@@ -386,13 +393,21 @@ PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
 
 	}
 
+	this.unsetCtx();
+
 }
 
 // Draw text
 
 /**
  * @function
- * @param {*} text 
+ * @param {*} text
+ * @param {String} text.fill - Text Fill Style
+ * @param {Number} text.lineWidth - Text border line width
+ * @param {String} text.borderColor - Text border color
+ * @param {Number} text.size - Text size
+ * @param {String} text.font - Text font
+ * @param {}
  * @param {Number} x 
  * @param {Number} y 
  * @param {Number} w 
@@ -461,6 +476,8 @@ PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
 	
 	this.ctx.stroke();
 
+	this.ctx.globalAlpha = regPolygon.fillAlpha;
+
 	this.ctx.fill();
 
 	if(regPolygon.sprite) {
@@ -524,6 +541,7 @@ PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
 
 	}
 
+	this.unsetCtx();
 
 }
 

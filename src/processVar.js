@@ -6,6 +6,40 @@
 PhSim.prototype.vars = {}
 
 /**
+ * Object containing magic words
+ */
+
+PhSim.prototype.magicWords = {}
+
+PhSim.MagicWords = {
+
+	__test1: function() {
+		return "4";
+	},
+
+	__game__score: function() {
+		return this.lclGame && this.lclGame.score;
+	},
+
+	__game__life: function() {
+		return this.lclGame && this.lclGame.life; 
+	},
+
+	__game__goal: function() {
+		return this.lclGame && this.lclGame.goal;
+	},
+
+	__game__int_life: function() {
+		return this.lclGame && this.lclGame.intLife;
+	},
+
+	__game__int_score: function() {
+		return this.lclGame && this.lclGame.intScore;
+	}
+
+}
+
+/**
  * 
  * Process string by replacing magical words and the values of elements in
  * [PhSim.prototype.vars]{@link|PhSim#vars}.
@@ -28,25 +62,19 @@ PhSim.prototype.vars = {}
 PhSim.prototype.processVar = function(str) {
 
 	var str = str;
-	
-	if(str.search("{__game__score}") !== -1 && this.lclGame) {
-		str = str.replace(/{__game__score}/g,this.lclGame.score);
-	}
 
-	if(str.search("{__game__life}") !== -1 && this.lclGame) {
-		str = str.replace(/{__game__life}/g,this.lclGame.life);
-	}
+	var magicWordKeys = Object.keys(PhSim.MagicWords);
 
-	if(str.search("{__game__goal}") !== -1 && this.lclGame) {
-		str = str.replace(/{__game__goal}/g,this.lclGame.goal);
-	}
+	for(var i = 0; i < magicWordKeys.length; i++) {
 
-	if(str.search("{__game__int_life}") !== -1 && this.lclGame) {
-		str = str.replace(/{__game__int_life}/g,this.lclGame.intLife);
-	}
+		var magicWord = magicWordKeys[i];
+		var mgkWordRegex = new RegExp("{" + magicWord + "}","g");
 
-	if(str.search("{__game__int_score}") !== -1 && this.lclGame) {
-		str = str.replace(/{__game__int_score}/g,this.lclGame.intScore);
+		if(str.search(mgkWordRegex) !== -1) {
+
+			str = str.replace(mgkWordRegex,PhSim.MagicWords[magicWord].call(this));
+		}
+
 	}
 
 	var a = Object.keys(this.vars);

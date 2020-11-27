@@ -161,3 +161,14 @@ PhSim.EventStack = function() {
 
 
 }
+
+PhSim.DynObjectEventStack = function() {
+	
+	this.update = [];
+	
+	this.click = [];
+	this.mousemove = [];
+
+	this.mouseup = [];
+	this.mousedown = [];
+}

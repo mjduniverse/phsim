@@ -1,3 +1,8 @@
+PhSim.prototype.setLock = function(dynObject,value) {
+    dynObject.locked = value;
+	PhSim.Matter.Body.setStatic(dynObject.matter,value);
+}
+
 /**
  * Toggle Lock Status of Dynamic Object.
  * 
@@ -6,8 +11,7 @@
  */
 
 PhSim.prototype.toggleLock = function(dynObject) {
-	dynObject.locked = !dynObject.locked;
-	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
+    this.setLock(dynObject,!dynObject.locked);
 }
 
 /**
@@ -37,10 +41,7 @@ PhSim.Widgets.toggleLock = function(dyn_object,widget) {
         return f;
     }
 
-    this.createWFunction(widget.trigger,closure(),{
-        ...widget,
-        wFunctionObj: dyn_object
-    });
+    this.createWFunction(dyn_object,closure(),widget);
 }
 
 PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
@@ -58,8 +59,5 @@ PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
         return f;
     }
 
-    this.createWFunction(widget.trigger,closure(),{
-        ...widget,
-        wFunctionObj: dyn_object
-    });
+    this.createWFunction(dyn_object,closure(),widget);
 }

@@ -81,10 +81,7 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 
 PhSim.Widgets.velocity = function(dynObject,widget) {
     var f = this.createMotionFunction("velocity",dynObject,widget.vector);
-    this.createWFunction(widget.trigger,f,{
-        ...widget,
-        wFunctionObj: dynObject
-    });
+    this.createWFunction(dynObject,f,widget);
 }
 
 /**
@@ -98,10 +95,7 @@ PhSim.Widgets.velocity = function(dynObject,widget) {
 
 PhSim.Widgets.translate = function(dynObject,widget) {
     var f = this.createMotionFunction("translate",dynObject,widget.vector);
-    this.createWFunction(widget.trigger,f,{
-        ...widget,
-        wFunctionObj: dynObject
-    });
+    this.createWFunction(dynObject,f,widget);
 }
 
 /**
@@ -115,10 +109,7 @@ PhSim.Widgets.translate = function(dynObject,widget) {
 
 PhSim.Widgets.position = function(dynObject,widget) {
     var f = this.createMotionFunction("position",dynObject,widget.vector);
-    this.createWFunction(widget.trigger,f,{
-        ...widget,
-        wFunctionObj: dynObject
-    });
+    this.createWFunction(dynObject,f,widget);
 }
 
 /**
@@ -140,10 +131,7 @@ PhSim.Widgets.rotation = function(dynObject,widget) {
         var f = this.createMotionFunction("rotation",dynObject,widget.cycle);
     }
     
-    this.createWFunction(widget.trigger,f,{
-        ...widget,
-        wFunctionObj: dynObject
-    });
+    this.createWFunction(dynObject,f,widget);
 }
 
 PhSim.Widgets.setAngle = function(dynObject,widget) {
@@ -156,10 +144,7 @@ PhSim.Widgets.setAngle = function(dynObject,widget) {
         var f = this.createMotionFunction("setAngle",dynObject,widget.cycle);
     }
     
-    this.createWFunction(widget.trigger,f,{
-        ...widget,
-        wFunctionObj: dynObject
-    });
+    this.createWFunction(dynObject,f,widget);
 
 }
 
@@ -167,9 +152,6 @@ PhSim.Widgets.force = function(dyn_object,widget) {
 
     var f = this.createMotionFunction("force",dyn_object,widget.vector);
 
-    this.createWFunction(widget.trigger,f,{
-        ...widget,
-        wFunctionObj: dyn_object
-    });
+    this.createWFunction(dynObject,f,widget);
     
 }

@@ -1,6 +1,7 @@
 /**
- * @namespace
  * Namespace of functions used to move objects in various ways.
+ * @namespace
+ * 
  */
 
 PhSim.Motion = {}

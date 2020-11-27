@@ -87,8 +87,5 @@ PhSim.Widgets.health = function(dyn_object,widget) {
 
 PhSim.Widgets.endGame = function(dyn_object,widget) {
     var f = this.createMotionFunction("position",dyn_object,widget.vector);
-    this.createWFunction(widget.trigger,f,{
-        ...widget,
-        wFunctionObj: dyn_object
-    });
+    this.createWFunction(dyn_object,f,widget);
 }

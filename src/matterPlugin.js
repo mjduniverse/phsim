@@ -42,11 +42,11 @@ PhSim.matterPlugin = {
 
             for(var i = 0; i < this.length; i++) {
 
-                var c_classesA = PhSim.getCollisionClasses(this[i].bodyA.plugin.ph);
-                var c_classesB = PhSim.getCollisionClasses(this[i].bodyB.plugin.ph);
+                var c_classesA = PhSim.Query.getCollisionClasses(this[i].bodyA.plugin.ph);
+                var c_classesB = PhSim.Query.getCollisionClasses(this[i].bodyB.plugin.ph);
 
                 if(c_classesA.length > 0 && c_classesB.length > 0) {
-                    if(!PhSim.intersectionExists(c_classesA,c_classesB)) {
+                    if(!PhSim.Query.intersectionExists(c_classesA,c_classesB)) {
 
                         this.splice(this.indexOf(this[i]),1);
 

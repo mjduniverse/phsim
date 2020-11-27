@@ -1,7 +1,7 @@
 PhSim.AnimatedSprite = function(dynObject) {
 
     /**
-     * @type
+     * @type {PhSim.Sprites}
      */
 
     this.frames = [];

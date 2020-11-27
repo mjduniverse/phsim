@@ -16,11 +16,11 @@ const PhSim = require("./core");
 
 PhSim.prototype.gotoSimulationIndex = function (i) {
 
+	this.status = PhSim.statusCodes.INT;
+
 	var optionMap = new Map();  
 
 	var self = this;
-
-	this.status = 0;
 
 	this.firstSlUpdate = false;
 
@@ -222,34 +222,34 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	}
 
-	this.status = 1;
+	this.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
 
 	var promise = new Promise(function(resolve,reject){
 
 		if(self.phRender) {
 			self.phRender.spriteImgArray = new PhSim.Sprites.SpriteImgArray(self.staticSprites,function() {
 				resolve();
-				this.status = 2;
+				self.status = PhSim.statusCodes.LOADED_SPRITES;
 			});
 		}
 
 		else {
 			resolve();
-			this.status = 2;
+			self.status = PhSim.statusCodes.LOADED_SPRITES;
 		}
 
 	}).then(function() {
 		return new Promise(function(resolve,reject){
 			self.audioArray = new PhSim.Audio.AudioArray(self.staticAudio,function(){
 				resolve();
-				this.status = 3;
+				this.status = PhSim.statusCodes.LOADED_AUDIO;
 			});
 		})
 	}).then(function(){
 		this_a.init = true;
 	});
 
-	this.status = 4;
+	this.status = PhSim.statusCodes.LOADED_SIMULATION;
 
 	var e = new PhSim.PhDynEvent();
 

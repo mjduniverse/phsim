@@ -27,33 +27,3 @@ PhSim.prototype.setRadius = function(dynObject,radius) {
 PhSim.prototype.setRectWidthAndHeight = function(dynObject,w,h) {
 
 }
-
-/**
- * 
- * @param {PhSim.DynObject} dyn_object - Dynamic Object
- * @param {String} colorStr - Color
- */
-
-PhSim.prototype.setColor = function(dyn_object,colorStr) {
-	dyn_object.fillStyle = colorStr;
-}
-
-/**
- * 
- * @param {*} dyn_object 
- * @param {*} colorStr 
- */
-
-PhSim.prototype.setBorderColor = function(dyn_object,colorStr) {
-	dyn_object.strokeStyle = colorStr;
-}
-
-/**
- * 
- * @param {*} dyn_object 
- * @param {*} lineWidth 
- */
-
-PhSim.prototype.setLineWidth = function(dyn_object,lineWidth) {
-	dyn_object.lineWidth = lineWidth;
-}

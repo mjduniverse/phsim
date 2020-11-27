@@ -48,7 +48,7 @@ PhSim.flattenComposite = function(composite) {
 
 PhSim.DynObject = function(staticObject) {
 
-	Object.assign(this,staticObject);
+	Object.assign(this,JSON.parse(JSON.stringify(staticObject)));
 
 	this.matter = PhSim.createMatterObject(staticObject);
 
@@ -94,6 +94,62 @@ PhSim.DynObject = function(staticObject) {
 	this.matter.plugin.ph = this;
 
 }
+
+PhSim.DynObject.prototype.eventStack = new PhSim.DynObjectEventStack();
+
+PhSim.DynObject.prototype.on = function(eventStr,call,options = {}) {
+	if(this.eventStack[eventStr]) {
+		this.eventStack[eventStr].push(call);
+	}
+}
+
+
+/**
+ * Set color for dynObject.
+ * This can be done alternatively by setting `dynObject.fillStyle` directly.
+ * 
+ * @param {PhSim.DynObject} dyn_object - Dynamic Object
+ * @param {String} colorStr - Color String
+ */
+
+PhSim.DynObject.setColor = function(dyn_object,colorStr) {
+	dyn_object.fillStyle = colorStr;
+}
+
+/**
+ * 
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {*} colorStr 
+ */
+
+PhSim.DynObject.setBorderColor = function(dyn_object,colorStr) {
+	dyn_object.strokeStyle = colorStr;
+}
+
+/**
+ * 
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {*} lineWidth 
+ */
+
+PhSim.DynObject.setLineWidth = function(dyn_object,lineWidth) {
+	dyn_object.lineWidth = lineWidth;
+}
+
+PhSim.DynObject.setProperty = function(o,key,value) {
+	
+	if(key === "x") {
+		PhSim.Motion.setPosition(value,0);
+	}
+
+	else if(key === "y") {
+		PhSim.Motion.setPosition(0,value)
+	}
+
+	else if(key === "locked") {
+		
+	}
+}	
 
 /**
  * 

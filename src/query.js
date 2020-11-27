@@ -1,4 +1,10 @@
 /**
+ * @namespace
+ */
+
+PhSim.Query = {}
+
+/**
  * 
  * Get the special points of a rectangle
  * 
@@ -6,7 +12,7 @@
  * @param {Object} rectangle 
  */
 
-PhSim.getSpecialRectanglePoints = function(rectangle) {
+PhSim.Query.getSpecialRectanglePoints = function(rectangle) {
 	
 	var o = {
 
@@ -61,7 +67,7 @@ PhSim.prototype.getStatusStr = function() {
  * 
  */
 
-PhSim.getCollisionClasses = function(dynObject) {
+PhSim.Query.getCollisionClasses = function(dynObject) {
 
 	if(dynObject.collisionClass) {
 		var a = dynObject.collisionClass;
@@ -105,7 +111,7 @@ PhSim.prototype.getUniversalObjArray = function() {
  * @param {Widget} widget 
  */
 
-PhSim.chkWidgetType = function(widget) {
+PhSim.Query.chkWidgetType = function(widget) {
 	
 	for(var i = 0; i < PhSim.boolKey_lc.length; i++) {
 		if(widget[PhSim.boolKey_lc[i]]) {
@@ -332,7 +338,7 @@ PhSim.prototype.getCollidingObjects = function(dynObject) {
  * @returns {String[]}
  */
 
-PhSim.getSensorClasses = function(dynObject) {
+PhSim.Query.getSensorClasses = function(dynObject) {
 
 	if(dynObject.sensorClass) {
 		var a = dynObject.sensorClass;
@@ -355,11 +361,11 @@ PhSim.getSensorClasses = function(dynObject) {
  * @returns {Boolean}
  */
 
-PhSim.sameSensorClasses = function(dynObjectA,dynObjectB) {
-	return PhSim.intersectionExists(PhSim.getSensorClasses(dynObjectA),PhSim.getSensorClasses(dynObjectB));
+PhSim.Query.sameSensorClasses = function(dynObjectA,dynObjectB) {
+	return PhSim.Query.intersectionExists(PhSim.Query.getSensorClasses(dynObjectA),PhSim.Query.getSensorClasses(dynObjectB));
 }
 
-PhSim.intersectionExists = function(array1,array2) {
+PhSim.Query.intersectionExists = function(array1,array2) {
 
 	for(var i = 0; i < array1.length; i++) {
 		var a = array2.indexOf(array1[i]);
@@ -390,11 +396,11 @@ PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
 		var dynCol = a[i]
 		var matterCol = dynCol.matter;
 
-		if(matterCol.bodyA.plugin.ph.id === dynObject.id && PhSim.sameSensorClasses(dynObject,dynCol.bodyB)) {
+		if(matterCol.bodyA.plugin.ph.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyB)) {
 			b.push(dynCol.bodyB);
 		}
 
-		if(matterCol.bodyB.plugin.ph.id === dynObject.id && PhSim.sameSensorClasses(dynObject,dynCol.bodyA)) {
+		if(matterCol.bodyB.plugin.ph.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyA)) {
 			b.push(dynCol.bodyA);		
 		}
 
@@ -434,7 +440,7 @@ PhSim.prototype.inSensorCollision = function(dynObject) {
  * @returns {Boolean}
  */
 
-PhSim.isPointInRawRectangle = function(cx,cy,cw,ch,px,py) {
+PhSim.Query.isPointInRawRectangle = function(cx,cy,cw,ch,px,py) {
 	
 	var cond = (cx < px) && (px < cx + cw) && (cy < py) && (py < cy + ch) 
 
