@@ -7,41 +7,16 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
  
 
 /**
-* @typedef {simpleEventOptions|DeleteSelf}
+* @typedef {wFunctionOptions|DeleteSelf}
 * @property {Boolean} deleteSelf - Boolean for enabling the force widget
-*/
- 
-/**
-* @typedef {Object|Draggable}
-* @property {Boolean} deleteSelf - Boolean for enabling the force widget
-*/
- 
-/**
-* @typedef {Object|Coin}
-* @property {Boolean} deleteSelf - Boolean for enabling the coin widget
-*/
- 
-/**
-* @typedef {Object|Hazard}
-* @property {Boolean} deleteSelf - Boolean for enabling the hazard widget
-*/
- 
-/**
-* @typedef {Object|Health}
-* @property {Boolean} deleteSelf - Boolean for enabling the health widget
 */
  
 /**
 * @typedef {Object|Elevator}
-* @property {Boolean} elevator - Boolean for enabling the elevator widget
 * @property {Vector} pointA - First point
 * @property {Vector} pointB - Second point
 */
- 
-/**
-* @typedef {Object|TransformCameraByObject}
-* @property {Boolean} deleteSelf - Boolean for enabling the hazard widget
-*/
+
  
 /**
 * @typedef {Object|TransformWithCamera}
@@ -73,14 +48,14 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 */
  
 /**
-* @typedef {simpleEventOptions|SetAngle}
+* @typedef {wFunctionOptions|SetAngle}
 * @property {Number} cycle - Angle
 * @property {Boolean} circularConstraintRotation - Down velocity
 * @property {Boolean} rotation - Right velocity
 */
  
 /**
-* @typedef {simpleEventOptions|Rotation}
+* @typedef {wFunctionOptions|Rotation}
 * @property {Number} cycle - Angle
 * @property {Boolean} circularConstraintRotation - Down velocity
 * @property {Boolean} rotation - Right velocity
@@ -110,39 +85,33 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 * @property {Boolean} numVar - undefined
 */
  
+
 /**
-* @typedef {simpleEventObjects|SetNumVar}
-* @property {String} name - undefined
-* @property {Number} value - undefined
-* @property {Boolean} SetNumVar - undefined
-*/
- 
-/**
-* @typedef {simpleEventObjects|SetColor}
+* @typedef {wFunctionObjects|SetColor}
 * @property {String} color - undefined
 * @property {Boolean} setColor - undefined
 */
  
 /**
-* @typedef {simpleEventObjects|SetBorderColor}
+* @typedef {wFunctionObjects|SetBorderColor}
 * @property {String} color - undefined
 * @property {Boolean} setBorderColor - undefined
 */
  
 /**
-* @typedef {simpleEventObjects|SetLineWidth}
+* @typedef {wFunctionObjects|SetLineWidth}
 * @property {Number} lineWidth - undefined
 * @property {Boolean} setLineWidth - undefined
 */
  
 /**
-* @typedef {simpleEventObjects|PlayAudio}
+* @typedef {wFunctionObjects|PlayAudio}
 * @property {String} src - undefined
 * @property {Boolean} playAudio - undefined
 */
  
 /**
-* @typedef {simpleEventObjects|ObjLink_a}
+* @typedef {wFunctionObjects|ObjLink_a}
 * @property {LOAddress} target - undefined
 * @property {Boolean} objLink_a - undefined
 */
@@ -156,34 +125,15 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 */
  
 /**
-* @typedef {Object|DeleteSelf}
-* @property {Boolean} deleteSelf - Boolean for enabling the coin widget
-*/
- 
-/**
-* @typedef {Object|ToggleLock}
-* @property {Boolean} toggleLock - Boolean for enabling the coin widget
-*/
- 
-/**
 * @typedef {Object|CircularConstraint}
 * @property {Boolean} circularConstraint - Boolean for enabling the circular constraint widget
 * @property {Number} x - Boolean for enabling the circular constraint widget
 * @property {Number} y - Boolean for enabling the circular constraint widget
 */
  
-/**
-* @typedef {Object|DeleteSelf}
-* @property {Boolean} deleteSelf - Boolean for enabling the self-deletion widget
-*/
  
 /**
-* @typedef {simpleEventOptions|ToggleSemiLock}
-* @property {Boolean} toggleSemiLock - Boolean for enabling the toggle semi-lock widget
-*/
- 
-/**
-* @typedef {simpleEventOptions|WFunction}
+* @typedef {wFunctionOptions|WFunction}
 * @property {Function|String} function - WFunction widget
 * @property {Boolean} wFunction - Boolean for enabling wFunction widget.
 */

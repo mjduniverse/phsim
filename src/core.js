@@ -131,6 +131,61 @@ PhSim.prototype.sl_time = 0;
 PhSim.prototype.simulationIndex = 0;
 
 /**
+ * PhSim status codes for loading simulations.
+ * @readonly
+ * @namespace
+ */
+
+PhSim.statusCodes = {
+
+	/**
+	 * Inital loading status
+	 * @readonly
+	 * @default
+	 * @type {Number}
+	 */
+
+	INT: 0,
+
+	/**
+	 * This status means that the DynObjects have been loaded.
+	 * @readonly
+	 * @default
+	 * @type {Number}
+	 */
+
+	LOADED_DYN_OBJECTS: 1,
+
+	/**
+	 * This status means that the sprites have been loaded, if there are any. 
+	 * If there are no sprites, then this status is set anyway.
+	 * @readonly
+	 * @default
+	 * @type {Number}
+	 */
+
+	LOADED_SPRITES: 2,
+
+	/**
+	 * This status means that the audio has loaded.
+	 * @readonly
+	 * @default
+	 * @type {Number}
+	 */
+
+	LOADED_AUDIO: 3,
+
+	/**
+	 * This status means that the simulation is done configuring.
+	 * @readonly
+	 * @default
+	 * @type {Number}
+	 */
+
+	LOADED_SIMULATION: 4
+}
+
+/**
  * Loading status of the dynamic simulation
  * @type {Number}
  */
@@ -183,7 +238,7 @@ PhSim.prototype.paused = true;
 
 
 /**
- * The matter.js world for the __main collision filter
+ * The matter.js world
  * Resets when {@link PhSim#gotoSimulationIndex} is executed.
  * @type {Object}
  */
@@ -191,7 +246,7 @@ PhSim.prototype.paused = true;
 PhSim.prototype.matterJSWorld = null;
 
 /**
- * The matter.js engine for the __main collision filter
+ * The matter.js engine 
  * Resets when {@link PhSim#gotoSimulationIndex} is executed.
  * @type {Object}
  */

@@ -30,7 +30,7 @@ PhSim.Widgets.coin = function(dyn_object,widget) {
 
         }
 
-        self.addEventListener("collisionstart",func());
+        self.on("collisionstart",func());
 
 
 }
@@ -56,7 +56,7 @@ PhSim.Widgets.hazard = function(dyn_object,widget) {
 
     }
 
-    self.addEventListener("collisionstart",func());
+    self.on("collisionstart",func());
 
 }
 
@@ -81,14 +81,11 @@ PhSim.Widgets.health = function(dyn_object,widget) {
 
     }
 
-    self.addEventListener("collisionstart",func());
+    self.on("collisionstart",func());
 
 }
 
 PhSim.Widgets.endGame = function(dyn_object,widget) {
     var f = this.createMotionFunction("position",dyn_object,widget.vector);
-    this.addSimpleEvent(widget.trigger,f,{
-        ...widget,
-        simpleEventObj: dyn_object
-    });
+    this.createWFunction(dyn_object,f,widget);
 }

@@ -16,6 +16,14 @@ PhSim.Constraints.Static.Constraint = function() {
 	this.type = "constraint";
 }
 
+PhSim.prototype.getWidgetByName = function(nameStr) {
+	for(var i = 0; i < this.objUniverse.length; i++) {
+		this.objUniverse[i].getWidgetByName(nameStr);
+	}
+}
+
+PhSim.prototype.widgets = {};
+
 /**
  * 
  * @callback WidgetExtractionFunction
@@ -55,13 +63,14 @@ PhSim.Widget.defineByBoolean = function(o) {
 }
 
 /**
- * Array of custom widgets.
- * @enum {PhSim.Widget[]}
+ * Widget Namespace.
+ * @namespace
+ * 
  */
 
 PhSim.Widgets = {};
 
-PhSim.chkWidgetType = function() {
+PhSim.Query.chkWidgetType = function() {
 	
 }
 
@@ -78,3 +87,5 @@ require("./widgets/elevator.js");
 require("./widgets/keyboardControls.js");
 require("./widgets/transformCameraByObj");
 require("./widgets/setRenderProperties.js");
+require("./widgets/deleteSelf.js");
+require("./widgets/stack.js");

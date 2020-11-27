@@ -1,5 +1,6 @@
 /** 
- * Constructor for the minimal requirements for being a {@link Vector}. 
+ * Constructor for the minimal requirements for being a {@link Vector}.
+ *  
  * @constructor
  * @param {Number} x 
  * @param {Number} y

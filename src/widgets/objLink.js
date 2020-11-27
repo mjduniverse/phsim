@@ -19,7 +19,7 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
     
     var widgetO = widget;
 
-    this.addEventListener("matterJSLoad",function(){
+    this.on("matterJSLoad",function(){
         var eventFuncClosure = function() {
 
             var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
@@ -35,10 +35,10 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
 
         var options = {
             ...widgetO,
-            simpleEventObj: dyn_object
+            wFunctionObj: dyn_object
         }
 
-        var f = self.addSimpleEvent(widgetO.trigger,eventFuncClosure(),options);
+        var f = self.createWFunction(widgetO.trigger,eventFuncClosure(),options);
     });
 
 }

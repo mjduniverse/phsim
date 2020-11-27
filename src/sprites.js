@@ -112,9 +112,12 @@ PhSim.Sprites.SpriteImgArray.prototype.addSprite = function(staticObj,onload = f
 
 			var img = document.createElement("img");
 
-			img.addEventListener("load",function() {
+			var f = function() {
 				onload();
-			});
+				img.removeEventListener("load",f)
+			}
+
+			img.addEventListener("load",f);
 		
 			img.src = staticObj.src;
 		

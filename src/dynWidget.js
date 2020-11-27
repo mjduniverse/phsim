@@ -23,7 +23,7 @@ PhSim.prototype.connectDynObjects = function(parent,child) {
 
 	}
 
-	this.addEventListener("afterupdate",f)
+	this.on("afterupdate",f)
 
 	return f;
 

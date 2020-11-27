@@ -1,5 +1,3 @@
-const phSim = require("../phSim");
-
 PhSim.Widgets.elevator = function(dyn_object,widget) {
             
     var self = this;
@@ -101,6 +99,6 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
 
     }
 
-    this.addEventListener("afterupdate",func());
+    this.on("afterupdate",func());
 
 }

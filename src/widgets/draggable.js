@@ -41,19 +41,19 @@ PhSim.Widgets.draggable = function(dyn_object,widget) {
                 delta.x = e.x - dyn_object.matter.position.x;
                 delta.y = e.y - dyn_object.matter.position.y;
 
-                self.addEventListener("mousemove",__onmousemove);
-                self.addEventListener("mouseup",__onmouseup);
-                self.addEventListener("beforeupdate",__onbeforeupdate);
+                self.on("mousemove",__onmousemove);
+                self.on("mouseup",__onmouseup);
+                self.on("beforeupdate",__onbeforeupdate);
 
                 __onmousemove(e);
             }
         }
         
-        self.addEventListener("mouseout",__onmouseup);
+        self.on("mouseout",__onmouseup);
 
         return __onmousedown;
 
     }
 
-    this.addEventListener("mousedown",func());
+    this.on("mousedown",func());
 }

@@ -31,15 +31,18 @@ PhSim.Audio.AudioArray = function(p_audio,onload) {
 
 		var audio = document.createElement("audio");
 
-		audio.addEventListener("canplaythrough",function() {
+		var f = function() {
 			self.loaded_n++;
 
 			if(self.array.length === self.loaded_n) {
 				self.loaded = true;
 				self.onload();
+				audio.removeEventListener("canplaythrough",f);
 			}
 
-		})
+		}
+
+		audio.addEventListener("canplaythrough",f)
 
 		audio.src = p_audio[i].src;
 		audio.loop = p_audio[i].loop

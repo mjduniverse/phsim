@@ -11,7 +11,7 @@
  * 
  */
 
-PhSim.prototype.addEventListener = function(eventStr,call,options = {}) {
+PhSim.prototype.on = function(eventStr,call,options = {}) {
 	
 	
 
@@ -37,7 +37,7 @@ PhSim.prototype.addEventListener = function(eventStr,call,options = {}) {
 					this.removeEventListener(eventStr,f)
 				}
 	
-				this.addEventListener(eventStr,f);
+				this.on(eventStr,f);
 
 			}
 		}
