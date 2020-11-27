@@ -1,10 +1,11 @@
 /**
  * Namespace of functions used to move objects in various ways.
+ * @memberof PhSim
  * @namespace
  * 
  */
 
-PhSim.Motion = {}
+var Motion = {}
 
 /**
  * 
@@ -18,7 +19,7 @@ PhSim.Motion = {}
  *   
  */
 
-PhSim.Motion.applyForce = function(dynObject,position,forceVector) {
+Motion.applyForce = function(dynObject,position,forceVector) {
 	if(!dynObject.locked && !dynObject.permStatic) {
 		return PhSim.Matter.Body.applyForce(dynObject.matter,position,forceVector);
 	}
@@ -35,7 +36,7 @@ PhSim.Motion.applyForce = function(dynObject,position,forceVector) {
  * @param {Vector} velocityVector 
  */
 
-PhSim.Motion.setVelocity = function(dynObject,velocityVector) {
+Motion.setVelocity = function(dynObject,velocityVector) {
 	if(!dynObject.locked) {
 		return PhSim.Matter.Body.setVelocity(dynObject.matter,velocityVector);
 	}
@@ -53,7 +54,7 @@ PhSim.Motion.setVelocity = function(dynObject,velocityVector) {
  * @param {Vector} translationVector 
  */
 
-PhSim.Motion.translate = function(o,translationVector) {
+Motion.translate = function(o,translationVector) {
 	if(!o.locked) {
 
 		if(o.path) {
@@ -85,7 +86,7 @@ PhSim.Motion.translate = function(o,translationVector) {
  * @param {Vector} positionVector 
  */
 
-PhSim.Motion.setPosition = function(dynObject,positionVector) {
+Motion.setPosition = function(dynObject,positionVector) {
 	if(!dynObject.locked) {
 
 		if(o.circle || o.regPolygon) {
@@ -108,7 +109,7 @@ PhSim.Motion.setPosition = function(dynObject,positionVector) {
  * @param {Vector} point 
  */
 
-PhSim.Motion.rotate = function(dynObject,angle,point) {
+Motion.rotate = function(dynObject,angle,point) {
 
 	if(!dynObject.locked) {
 
@@ -127,7 +128,7 @@ PhSim.Motion.rotate = function(dynObject,angle,point) {
  * @param {Number} angle 
  */
 
-PhSim.Motion.setAngle = function(dynObject,angle) {
+Motion.setAngle = function(dynObject,angle) {
 
 	if(!dynObject.locked) {
 
@@ -140,3 +141,5 @@ PhSim.Motion.setAngle = function(dynObject,angle) {
 
 	}
 }
+
+module.exports = Motion;

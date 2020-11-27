@@ -2,7 +2,7 @@
   "name": "phsim",
   "version": "0.1.0-alpha",
   "description": "A library that allows one to easily create web simulations. Runs on top of Matter.js.",
-  "main": "/src/phSim.js",
+  "main": "./src/phSim.js",
   "directories": {
     "test": "test"
   },

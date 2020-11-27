@@ -2,12 +2,13 @@
  * Constructor for the minimal requirements for being a {@link Vector}.
  *  
  * @constructor
+ * @memberof PhSim
  * @param {Number} x 
  * @param {Number} y
  * 
  */
 
-PhSim.Vector = function(x,y) {
+var Vector = function(x,y) {
 	
 	/**
 	 * x-coordinate of the vector
@@ -53,8 +54,8 @@ PhSim.Vector = function(x,y) {
  * @returns {Vector} - The sum of the two vectors
  */
 
-PhSim.Vector.add = function(vector1,vector2) {
-	return new PhSim.Vector(vector1.x + vector2.x, vector1.y + vector2.y);
+Vector.add = function(vector1,vector2) {
+	return new Vector(vector1.x + vector2.x, vector1.y + vector2.y);
 }
 
 /**
@@ -67,8 +68,8 @@ PhSim.Vector.add = function(vector1,vector2) {
  * @returns {Vector} - The difference between the two vectors
  */
 
-PhSim.Vector.subtract = function(vector1,vector2) {
-	return new PhSim.Vector(vector1.x - vector2.x, vector1.y - vector2.y);
+Vector.subtract = function(vector1,vector2) {
+	return new Vector(vector1.x - vector2.x, vector1.y - vector2.y);
 }
 
 /**
@@ -82,8 +83,8 @@ PhSim.Vector.subtract = function(vector1,vector2) {
  * 
  */
 
-PhSim.Vector.scale = function(vector,scalar) {
-	return new PhSim.Vector(vector.x * scalar,vector.y * scalar)
+Vector.scale = function(vector,scalar) {
+	return new Vector(vector.x * scalar,vector.y * scalar)
 }
 
 /**
@@ -97,8 +98,8 @@ PhSim.Vector.scale = function(vector,scalar) {
  *  
  */
 
-PhSim.Vector.divide = function(vector,scalar) {
-	return new PhSim.Vector(vector.x * (1/scalar),vector.y * (1/scalar));
+Vector.divide = function(vector,scalar) {
+	return new Vector(vector.x * (1/scalar),vector.y * (1/scalar));
 }
 
 /**
@@ -112,7 +113,7 @@ PhSim.Vector.divide = function(vector,scalar) {
  *  
  */
 
-PhSim.Vector.distance = function(vector1,vector2) {
+Vector.distance = function(vector1,vector2) {
 	
 	var l1 = Math.pow(vector1.x - vector2.x,2);
 	var l2 = Math.pow(vector1.y - vector2.y,2);
@@ -130,7 +131,7 @@ PhSim.Vector.distance = function(vector1,vector2) {
  * @returns {Number} - The length of the vector
  */
 
-PhSim.Vector.getLength = function(vector) {
+Vector.getLength = function(vector) {
 	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
 }
 
@@ -143,8 +144,8 @@ PhSim.Vector.getLength = function(vector) {
  * @returns {Vector} -  The Unit Vector
  */
 
-PhSim.Vector.unitVector = function(vector) {
-	return PhSim.Vector.scale(vector,1/PhSim.Vector.getLength(vector));
+Vector.unitVector = function(vector) {
+	return Vector.scale(vector,1/Vector.getLength(vector));
 }
 
 /**
@@ -160,8 +161,8 @@ PhSim.Vector.unitVector = function(vector) {
  * @returns - The transformed vector 
  */
 
-PhSim.Vector.applyTransformation = function(a11,a12,a21,a22,x,y) {
-	return new PhSim.Vector(a11 * x + a12 * y,a21 * x + a22 * y);
+Vector.applyTransformation = function(a11,a12,a21,a22,x,y) {
+	return new Vector(a11 * x + a12 * y,a21 * x + a22 * y);
 }
 
 /**
@@ -175,8 +176,8 @@ PhSim.Vector.applyTransformation = function(a11,a12,a21,a22,x,y) {
  * @returns {Vector}
  */
 
-PhSim.Vector.rotate = function(x,y,a) {
-	return PhSim.Vector.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
+Vector.rotate = function(x,y,a) {
+	return Vector.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
 }
 
 /**
@@ -186,6 +187,8 @@ PhSim.Vector.rotate = function(x,y,a) {
  * @returns {String} - SVG Vector String 
  */
 
-PhSim.Vector.svgVector = function(x,y) {
+Vector.svgVector = function(x,y) {
 	return x + "," + y;
 }
+
+module.exports = Vector;

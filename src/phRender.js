@@ -4,11 +4,12 @@
  * PhRender is the rendering engine for PhSim.
  * 
  * @constructor
+ * @memberof PhSim
  * @param {CanvasRenderingContext2D} ctx - Canvas context
  * 
  */
 
-PhSim.PhRender = function(ctx) {
+var PhRender = function(ctx) {
 
 	/**
 	 * PhRender Context
@@ -25,7 +26,7 @@ PhSim.PhRender = function(ctx) {
  * @type {Number}
  */
 
-PhSim.PhRender.prototype.defaultAlpha = 1;
+PhRender.prototype.defaultAlpha = 1;
 
 /**
  * Default stroke style.
@@ -34,7 +35,7 @@ PhSim.PhRender.prototype.defaultAlpha = 1;
  * @type {String}
  */
 
-PhSim.PhRender.prototype.defaultStrokeStyle = "transparent";
+PhRender.prototype.defaultStrokeStyle = "transparent";
 
 /**
  * Default fill style
@@ -43,19 +44,19 @@ PhSim.PhRender.prototype.defaultStrokeStyle = "transparent";
  * @type {String}
  */
 
-PhSim.PhRender.prototype.defaultFillStyle = "transparent";
+PhRender.prototype.defaultFillStyle = "transparent";
 
 /**
  * Setting context
  * That is, this function sets the `globalAlpha`, `strokeStyle`, `fillStyle` and `lineWidth`
- * properties of the {@link PhSim.PhRender#ctx} member of the {@link PhSim.PhRender} object
+ * properties of the {@link PhRender#ctx} member of the {@link PhRender} object
  * using a {@link PhSimObject} object.
  * 
  * @function
  * @param {PhSimObject} object 
  */
 
-PhSim.PhRender.prototype.setCtx = function(object) {
+PhRender.prototype.setCtx = function(object) {
 	
 	this.ctx.lineCap = "round";
 
@@ -88,7 +89,7 @@ PhSim.PhRender.prototype.setCtx = function(object) {
 	
 }
 
-PhSim.PhRender.prototype.unsetCtx = function() {
+PhRender.prototype.unsetCtx = function() {
 	this.ctx.globalAlpha = 1;
 }
 
@@ -100,7 +101,7 @@ PhSim.PhRender.prototype.unsetCtx = function() {
  * @param {Path} path 
  */
 
-PhSim.PhRender.prototype.static_path = function (path) {
+PhRender.prototype.static_path = function (path) {
 
 	this.setCtx(path);
 
@@ -188,7 +189,7 @@ PhSim.PhRender.prototype.static_path = function (path) {
 
 /**
  * @function
- * @param {String} url - URL of object loaded in PhSim.PhRender.prototype.spriteImgArray
+ * @param {String} url - URL of object loaded in PhRender.prototype.spriteImgArray
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
  * @param {Number} w - width
@@ -196,7 +197,7 @@ PhSim.PhRender.prototype.static_path = function (path) {
  * @param {Number} a - angle
  */
 
-PhSim.PhRender.prototype.renderSpriteByCenter = function(url,x,y,w,h,a) {
+PhRender.prototype.renderSpriteByCenter = function(url,x,y,w,h,a) {
 
 	var spriteImg = this.spriteImgArray[url];
 
@@ -220,7 +221,7 @@ PhSim.PhRender.prototype.renderSpriteByCenter = function(url,x,y,w,h,a) {
  * @param {Object} constraint 
  */
 
-PhSim.PhRender.prototype.renderConstraint = function (constraint) {
+PhRender.prototype.renderConstraint = function (constraint) {
 
 	var path = SLO(constraint.object.S, constraint.object.L, constraint.object.O);
 
@@ -255,7 +256,7 @@ PhSim.PhRender.prototype.renderConstraint = function (constraint) {
  * @param {PhSim.Options.Circle} circle 
  */
 
-PhSim.PhRender.prototype.static_circle = function (circle) {
+PhRender.prototype.static_circle = function (circle) {
 	
 	this.setCtx(circle);
 
@@ -329,7 +330,7 @@ PhSim.PhRender.prototype.static_circle = function (circle) {
  * @param rectangle.sprite - Sprite Object
  */
 
-PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
+PhRender.prototype.static_rectangle = function(rectangle) {
 
 	var c = PhSim.getRectangleCentroid(rectangle);
 
@@ -415,7 +416,7 @@ PhSim.PhRender.prototype.static_rectangle = function(rectangle) {
  * @param {Number} a 
  */
 
-PhSim.PhRender.prototype.rectText = function(text,x,y,w,h,a) {
+PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 	this.ctx.save();
 	this.ctx.translate(x,y);
 	this.ctx.rotate(a);
@@ -458,7 +459,7 @@ PhSim.PhRender.prototype.rectText = function(text,x,y,w,h,a) {
  * @param {PhSim.Options.RegPolygon} regPolygon 
  */
 
-PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
+PhRender.prototype.static_regPolygon = function(regPolygon) {
 
 	var vertSet = PhSim.getRegPolygonVerts(regPolygon);
 	
@@ -552,7 +553,7 @@ PhSim.PhRender.prototype.static_regPolygon = function(regPolygon) {
  * @param {*} obj 
  */
 
-PhSim.PhRender.prototype.renderStatic = function(obj) {
+PhRender.prototype.renderStatic = function(obj) {
 				
 	if ( obj.path === true )  {
 		this.static_path(obj);
@@ -585,36 +586,11 @@ PhSim.PhRender.prototype.renderStatic = function(obj) {
  * @param {*} layer 
  */
 
-PhSim.PhRender.prototype.renderStaticLayer = function(layer) {
+PhRender.prototype.renderStaticLayer = function(layer) {
 
 	for(var i = 0; i < layer.objUniverse.length; i++) {
 
 			this.renderStatic(layer.objUniverse[i])
-			
-			/*** Drawing Path ***/
-
-			/*
-			
-			if ( layer.objUniverse[i].path === true )  {
-				this.static_path(layer.objUniverse[i]);
-			}
-			
-			if( layer.objUniverse[i].circle === true) {
-				this.static_circle(layer.objUniverse[i]); 
-			}
-
-			if( layer.objUniverse[i].rectangle === true) {
-				this.static_rectangle(layer.objUniverse[i]);
-			}
-
-			if( layer.objUniverse[i].regPolygon === true ) {
-				this.static_regPolygon(layer.objUniverse[i]);
-			}
-
-			*/
-
-
-			//PhSim.PhRender.prototype.renderStaticObject(layer.objUniverse[i]);
 			
 	}	
 }
@@ -624,7 +600,7 @@ PhSim.PhRender.prototype.renderStaticLayer = function(layer) {
  * @param {*} simulation 
  */
 
-PhSim.PhRender.prototype.simulation = function(simulation) {
+PhRender.prototype.simulation = function(simulation) {
 
 	for(var i = 0; i < simulation.layers.length; i++) {
 		if(!simulation.layers[i].hidden) {
@@ -638,7 +614,7 @@ PhSim.PhRender.prototype.simulation = function(simulation) {
  * @param {*} object 
  */
 
-PhSim.PhRender.prototype.dynamicSkeleton = function(object) {
+PhRender.prototype.dynamicSkeleton = function(object) {
 
 	if(object.static.path) {
 		
@@ -672,7 +648,7 @@ PhSim.PhRender.prototype.dynamicSkeleton = function(object) {
  * @param {*} object 
  */
 
-PhSim.PhRender.prototype.dynamicSkeleton_center = function(object) {
+PhRender.prototype.dynamicSkeleton_center = function(object) {
 
 	if(object.static.path) {
 		
@@ -706,7 +682,7 @@ PhSim.PhRender.prototype.dynamicSkeleton_center = function(object) {
  * @param {*} object 
  */
 
-PhSim.PhRender.prototype.drawDynamicSkeleton = function (object) {
+PhRender.prototype.drawDynamicSkeleton = function (object) {
 
 	this.dynamicSkeleton(object);
 	this.ctx.closePath();
@@ -719,7 +695,7 @@ PhSim.PhRender.prototype.drawDynamicSkeleton = function (object) {
  * @param {*} dynObject 
  */
 
-PhSim.PhRender.prototype.dynamicRenderDraw = function (dynObject) {
+PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 
 	this.ctx.lineWidth = dynObject.lineWidth;
 	this.ctx.fillStyle = dynObject.fillStyle;
@@ -818,10 +794,12 @@ PhSim.PhRender.prototype.dynamicRenderDraw = function (dynObject) {
  * @param {*} L 
  */
 
-PhSim.PhRender.prototype.dynamicDrawLayer = function(L) {
+PhRender.prototype.dynamicDrawLayer = function(L) {
 	
 	for(var i = 0; i < sim.simulations[simulationI].layers[L].length; i++) {
 		this.dynamicRenderDraw(L,i);
 	}
 
 }
+
+module.exports = PhRender;

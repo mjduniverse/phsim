@@ -12,8 +12,6 @@
  *  
  */
 
-const PhSim = require("./core");
-
 PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	this.status = PhSim.statusCodes.INT;
