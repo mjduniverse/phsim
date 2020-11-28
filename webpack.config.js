@@ -18,4 +18,8 @@ module.exports = {
         filename: "phSim.js",
         globalObject: 'this',
     },
+
+    externals: {
+        "matter-js": "commonjs matter-js"
+    }
 };
