@@ -3,7 +3,6 @@
  *  
  * @memberof PhSim
  * @constructor
- * @namespace
  * @param {Number} x 
  * @param {Number} y
  * 
