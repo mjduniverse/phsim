@@ -1,5 +1,6 @@
 /**
  * @namespace
+ * @memberof PhSim
  */
 
 PhSim.Query = {}
