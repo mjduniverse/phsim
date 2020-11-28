@@ -341,6 +341,25 @@ PhSim.prototype.bgFillStyle = "white";
 
 PhSim.version = "0.1.0-alpha"
 
+PhSim.prototype.loading = {
+	"bgClr": "black",
+	"txtClr": "White",
+	"txtFace": "arial",
+	"txtAlign": "center",
+	"txt": "Loading...",
+	"yPos": "center",
+	"txtSize": 20
+}
+
+PhSim.prototype.drawLoadingScreen = function() {
+	this.simCtx.fillStyle = this.loading.bgClr;
+	this.simCtx.fillRect(0,0,this.camera.scale,this.simCanvas.height);
+	this.simCtx.fillStyle = this.loading.txtClr;
+	this.simCtx.textAlign = this.loading.txtAlign;
+	this.simCtx.font = this.loading.txtSize + "px " + this.loading.txtFace;
+	this.simCtx.fillText(this.loading.txt,this.simCanvas.width / 2,this.simCanvas.height / 2)
+}
+
 if(typeof window === "object") {
 	window.PhSim = PhSim;
 }
@@ -355,14 +374,14 @@ require("./matterPlugin.js" );
 require("./events/eventStack" );
 
 PhSim.PhRender = require("./phRender");
-
-require("./sprites");
-require("./audio");
-
+PhSim.Sprites = require("./sprites");
+PhSim.Audio = require("./audio");
 PhSim.Vector = require("./tools/vector");
 
 require("./tools/objectChecker");
-require("./tools/diagRect");
+
+PhSim.diagRect = require("./tools/diagRect");
+
 require("./tools/vertex");
 require("./tools/centroid");
 
@@ -370,7 +389,7 @@ require("./tools/centroid");
 
 require("./tools/boundingBox");
 
-require("./dynObject");
+PhSim.DynObject = require("./dynObject");
 
 require("./events/eventObjects");
 require("./lo");
@@ -383,21 +402,22 @@ require("./events/eventListener");
 require("./query");
 require("./gravity");
 require("./toggle");
-require("./gotoSuperlayer");
 
-PhSim.Motion = require("./matterAliases");
+PhSim.prototype.gotoSimulationIndex = require("./gotoSuperlayer");
+PhSim.Motion = require("./motion");
 
 require("./set");
 require("./update");
 require("./extractWidgets");
 
-require("./dynSimCamera");
-
+PhSim.Camera = require("./dynSimCamera");
 PhSim.Game = require("./game");
+PhSim.Gradients = require("./gradient");
 
-require("./gradient");
 require("./widgets");
-require("./calc_skinmesh");
+
+PhSim.prototype.calc_skinmesh = require("./calc_skinmesh");
+
 require("./events/simpleEvent");
 require("./processVar");
 
