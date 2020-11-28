@@ -1,3 +1,4 @@
+const Options = require("./objects");
 const PhSim = require("./phSim");
 
 /**
@@ -158,6 +159,74 @@ DynObject.flattenComposite = function(composite) {
 
 	return a;
 
+}
+
+/**
+ * 
+ * Create path
+ * 
+ * @function
+ * @param {Vector[]} vectorSet 
+ * @param {Path} options 
+ */
+
+DynObject.createPath = function(vectorSet,options) {
+	var o = new Options.Path(vectorSet);
+	Object.assign(o,options);
+	return new DynObject(o);
+}
+
+/**
+ * Create circle
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of center
+ * @param {Number} y - y-coordinate of center
+ * @param {Number} r - radius
+ * @param {Circle} options - options
+ * @returns {PhSim.DynObject}
+ */
+
+DynObject.createCircle = function(x,y,r,options = {}) {
+	var o = new Options.Circle(x,y,r);
+	Object.assign(o,options);
+	return new DynObject(o);
+}
+
+/**
+ * 
+ * Create rectangle
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of upper left corner 
+ * @param {Number} y - y-coordinate of upper left corner 
+ * @param {Number} w - Width
+ * @param {Number} h - Height
+ * @param {Rectangle} options 
+ * @returns {PhSim.DynObject} - The rectangle
+ */
+
+DynObject.createRectangle = function(x,y,w,h,options = {}) {
+	var o = new Options.Rectangle(x,y,w,h);
+	Object.assign(o,options);
+}
+
+/**
+ * Create regular polgyon.
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of center
+ * @param {Number} y - y-coordinate of center
+ * @param {Number} r - radius
+ * @param {Number} n - number of sides
+ * @param {RegPolygon} options - options
+ * @returns {PhSim.DynObject}
+ */
+
+DynObject.createRegPolygon = function(x,y,r,n,options = {}) {
+	var o = new Options.RegPolygon(x,y,r,n);
+	Object.assign(o,options);
+	return new DynObject(o);
 }
 
 /**
