@@ -78,7 +78,39 @@ PhSim.Query.chkWidgetType = function() {
 require("./widgets/circularConstraint.js");
 require("./widgets/clone.js");
 require("./widgets/draggable.js");
-require("./widgets/game.js");
+
+
+const Game = require("./game");
+
+/**
+ * 
+ * @function
+ * 
+ */
+
+PhSim.Widgets.coin = Game.Widgets.coin;
+
+/**
+ * 
+ * @function
+ */
+
+PhSim.Widgets.hazard = Game.Widgets.hazard;
+
+/**
+ * 
+ * @function
+ */
+
+PhSim.Widgets.health = Game.Widgets.health;
+
+/**
+ * 
+ * @function
+ */
+
+PhSim.Widgets.endGame = Game.Widgets.endGame;
+
 require("./widgets/lock.js");
 require("./widgets/motion.js");
 require("./widgets/objLink.js");
@@ -89,3 +121,41 @@ require("./widgets/transformCameraByObj");
 require("./widgets/setRenderProperties.js");
 require("./widgets/deleteSelf.js");
 require("./widgets/stack.js");
+
+/**
+ * PlayAudio Widget
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget
+ * @this PhSim
+ */
+
+PhSim.Widgets.playAudio = function(dyn_object,widget) {
+
+    var self = this;
+
+    var i = this.audioPlayers;
+    
+    this.staticAudio.push(widget);
+
+    var f = function() {
+        self.playAudioByIndex(i);
+    }
+
+    var r = this.createWFunction(dyn_object,f,widget);
+
+    this.audioPlayers++;
+}
+
+/**
+ * Make object not rotate
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {*} widget 
+ */
+    
+PhSim.Widgets.noRotation = function(dyn_object) {
+    PhSim.Matter.Body.setInertia(dyn_object.matter, Infinity)
+}

@@ -7,14 +7,13 @@
  * When PhSim.prototype.gotoSimulationIndex is used, it resets 
  * @param {Number} i
  * @this PhSim
+ * @memberof PhSim
  * @function
  * 
  *  
  */
 
-const PhSim = require("./core");
-
-PhSim.prototype.gotoSimulationIndex = function (i) {
+var gotoSimulationIndex = function (i) {
 
 	this.status = PhSim.statusCodes.INT;
 
@@ -255,3 +254,5 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 
 	self.callEventClass("load",self,e);
 }
+
+module.exports = gotoSimulationIndex;

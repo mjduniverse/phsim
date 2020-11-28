@@ -1,3 +1,5 @@
+const PhSim = require("./phSim");
+
 PhSim.prototype.play = function() {
 	this.paused = false;
 	this.intervalLoop = setInterval(this.loopFunction.bind(this),this.delta);

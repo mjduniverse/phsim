@@ -1,3 +1,5 @@
+const PhSim = require("./phSim");
+
 PhSim.prototype.assignPhRender = function(phRender) {
 
 	/** PhRender object */
@@ -21,9 +23,5 @@ PhSim.prototype.setRadius = function(dynObject,radius) {
 	if(dynObject.regPolygon || dynObject.circle) {
 		PhSim.Matter.Body.scale(dynObject.object, ratio, ratio);
 	}
-
-}
-
-PhSim.prototype.setRectWidthAndHeight = function(dynObject,w,h) {
 
 }

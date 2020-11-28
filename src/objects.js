@@ -1,12 +1,13 @@
 
 /**
  * Objects module
-   @namespace
+ * @namespace
  * @constructor
+ * @memberof PhSim
  * 
  */
 
-PhSim.Options = function() {
+var Options = function() {
 
 	/**
 	 * PhSim version
@@ -40,10 +41,10 @@ PhSim.Options = function() {
  * 
  * @typedef {PhSim.Vector|Circle|Rectangle|RegPolygon} Vector
  * 
- * In PhSim, a vector is any object with the properties "x" and "y" 
+ * In PhSim, a vector is any object with the properties `x` and `y` 
  * such that both are of the Number type.
  * 
- * In a {@link Circle}, the x and y coordinates refer to the center of the circle and the
+ * In a {@link Circle}, the `x` and `y` coordinates refer to the center of the circle and the
  * same goes for the {@link RegPolygon|Regular Polygon}. In a {@link Rectangle}, it refers to the upper left
  * corner of the rectangle.
  * 
@@ -58,7 +59,7 @@ PhSim.Options = function() {
  * @param {Number} y1 - y coordinate of the second point
  */
 
-PhSim.Options.GradientLimits = function(x0,y0,x1,y1) {
+Options.GradientLimits = function(x0,y0,x1,y1) {
 
 	/**
 	 * Start vector
@@ -81,7 +82,7 @@ PhSim.Options.GradientLimits = function(x0,y0,x1,y1) {
  * @param {String} color - String denoting the color of the stop
  */
 
-PhSim.Options.GradientStop = function(pos,color) {
+Options.GradientStop = function(pos,color) {
 	
 	/**
 	 * Gradient Color
@@ -99,7 +100,7 @@ PhSim.Options.GradientStop = function(pos,color) {
 }
 
 
-PhSim.Options.Gradient = function() {
+Options.Gradient = function() {
 
 	/**
 	 * Gradient Stops
@@ -137,7 +138,7 @@ PhSim.Options.Gradient = function() {
 	};
 }
 
-PhSim.Options.lclGradient = function() {
+Options.lclGradient = function() {
 	this.src = null;
 	this.limits = new PhSim.Options.GradientLimits(x0,y0,x1,y1);
 	this.type = "linear";
@@ -149,7 +150,7 @@ PhSim.Options.lclGradient = function() {
  * @param {PhSim.Vector[]} verts -  Vertcies
  */
 
-PhSim.Options.Path = function(verts) {
+Options.Path = function(verts) {
 
 	/**
 	 * Array of vectors defining a path or a polygon
@@ -184,15 +185,15 @@ PhSim.Options.Path = function(verts) {
 /**
  * 
  * A path is defined by vertices. They can be used as a regular polygon.
- * Any object that contains an array of vectors and has the boolean property "path" set to true is reconized as a path.
+ * Any object that contains an array of vectors and has the boolean property ``path`` set to ``true`` is reconized as a path.
  * Paths can be used to define any polygon in general.
  * 
- * In PhSim, a path is any object obj such that the following is true:
+ * In PhSim, a path is any object `obj` such that the following is true:
  * 
- * Array.isArray(obj) === true
- * obj.path === true
+ * `Array.isArray(obj) === true`
+ * `obj.path === true`
  * 
- * If a path is used as a polygon, it must have at least three vectors in the verts property. 
+ * If a path is used as a polygon, it must have at least three vectors in the `verts` property. 
  * 
  * @typedef {PhSim.Options.Path} Path
  * 
@@ -204,7 +205,7 @@ PhSim.Options.Path = function(verts) {
  * @constructor
  */
 
-PhSim.Options.Circle = function(x = null,y = null,r = null) {
+Options.Circle = function(x = null,y = null,r = null) {
 
 	/**
 	 * Boolean indicating a circle
@@ -245,12 +246,12 @@ PhSim.Options.Circle = function(x = null,y = null,r = null) {
 /** 
  * A circle is a set all points equidistant from some point known as the center.
  * 
- * In PhSim, a circle is any object obj such that the following are all true:
- * obj.circle === true;
- * typeof obj.x === number;
- * typeof obj.y === number;
- * typeof obj.radius === number;
- * typeof obj.cycle === number || obj.cycle;
+ * In PhSim, a circle is any object `obj` such that the following are all true:
+ * `obj.circle === true`;
+ * `typeof obj.x === number`;
+ * `typeof obj.y === number`;
+ * `typeof obj.radius === number`;
+ * `typeof obj.cycle === number || obj.cycle`;
  * 
  * @typedef {PhSim.Options.Circle} Circle
  */
@@ -258,9 +259,9 @@ PhSim.Options.Circle = function(x = null,y = null,r = null) {
 /**
  * A regular polygon is a polygon that has all of its sides equal in length.
  * 
- * In PhSim, a regular polgon is any object obj such that the following are true:
+ * In PhSim, a regular polgon is any object `obj` such that the following are true:
  * 
- * this.regPolygon === true
+ * `this.regPolygon === true`
  * 
  * 
  * @constructor
@@ -270,7 +271,7 @@ PhSim.Options.Circle = function(x = null,y = null,r = null) {
  * @param {Number} n - sides of the regular polygon
  */
 
-PhSim.Options.RegPolygon = function(x,y,r,n) {
+Options.RegPolygon = function(x,y,r,n) {
 
 	/**
 	 * Boolean for indicating a regular polygon
@@ -327,7 +328,7 @@ PhSim.Options.RegPolygon = function(x,y,r,n) {
  * 
  */
 
-PhSim.Options.Rectangle = function(x,y,w,h) {
+Options.Rectangle = function(x,y,w,h) {
 
 	/**
 	 * Boolean for indicating a rectangle
@@ -394,7 +395,7 @@ PhSim.Options.Rectangle = function(x,y,w,h) {
  * Composite Object 
  */
 
-PhSim.Options.Composite = function() {
+Options.Composite = function() {
 	this.composite = true;
 	this.name = "Untitled";
 }
@@ -408,7 +409,7 @@ PhSim.Options.Composite = function() {
  * 
  */
 
-PhSim.Options.SimBox = function(w,h) {
+Options.SimBox = function(w,h) {
 	
 	/**
 	 * Simulation Width
@@ -432,7 +433,7 @@ PhSim.Options.SimBox = function(w,h) {
  *
  */
 
-PhSim.Options.Camera = function(x,y,scale) {
+Options.Camera = function(x,y,scale) {
 
 	/**
 	 * x-coordinate vector of camera
@@ -460,7 +461,7 @@ PhSim.Options.Camera = function(x,y,scale) {
  * @constructor
  */
 
-PhSim.Options.Layer = function() {
+Options.Layer = function() {
 
 	/**
 	 * The array of objects
@@ -484,7 +485,7 @@ PhSim.Options.Layer = function() {
  * @constructor
  */
 
-PhSim.Options.Simulation = function() {
+Options.Simulation = function() {
 
 	/**
 	 * Array of layers
@@ -511,7 +512,7 @@ PhSim.Options.Simulation = function() {
 	this.widgets = [];
 }
 
-PhSim.Options.LO = function(L,O) {
+Options.LO = function(L,O) {
 
 }
 
@@ -525,7 +526,7 @@ PhSim.Options.LO = function(L,O) {
  * 
  */
 
-PhSim.Options.SLO = function(S,L,O) {
+Options.SLO = function(S,L,O) {
 
 }
 
@@ -544,3 +545,7 @@ PhSim.Options.SLO = function(S,L,O) {
  * @external {MatterBody}
  * @see {@link https://brm.io/matter-js/docs/classes/Body.html|MatterBody} 
  */
+
+
+
+module.exports = Options;

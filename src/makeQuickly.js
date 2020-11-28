@@ -1,4 +1,6 @@
 
+const PhSim = require("./phSim");
+
 /**
  * @function
  * @param {Object} sim 

@@ -1,10 +1,14 @@
-/*** Sprites ***/
+/**
+ * Sprites namespace
+ * @namespace
+ * @memberof PhSim
+ */
 
-PhSim.Sprites = {
+var Sprites = {
     Calc: {}
 }
 
-PhSim.Sprites.Sprite = function() {
+Sprites.Sprite = function() {
 	this.src = null;
 	this.w = null;
 	this.h = null;
@@ -15,7 +19,7 @@ PhSim.Sprites.Sprite = function() {
 	this.object = null;
 }
 
-PhSim.Sprites.renderSprite = function(ctx,sprite) {
+Sprites.renderSprite = function(ctx,sprite) {
 	var localElm = document.createElement("img");
 	localElm.src = sprite.src;
 	if(sprite.spec === true) {
@@ -27,16 +31,16 @@ PhSim.Sprites.renderSprite = function(ctx,sprite) {
 	}
 }
 
-PhSim.Sprites.renderGlobalSprites = function(ctx,simulation) {
+Sprites.renderGlobalSprites = function(ctx,simulation) {
 
 	for(i = 0; i < simulation.sprites.length; i++) {
-		PhSim.Sprites.renderSprite(ctx,simulation.sprites[i]);
+		Sprites.renderSprite(ctx,simulation.sprites[i]);
 	}
 
 }
 
 
-PhSim.Sprites.circularSpriteRenderCanvas = function(ctx,canvas,angle) {
+Sprites.circularSpriteRenderCanvas = function(ctx,canvas,angle) {
 
 	var localElm = document.createElement("canvas");
 	var localCtx = localElm.getContext("2d");
@@ -54,11 +58,11 @@ PhSim.Sprites.circularSpriteRenderCanvas = function(ctx,canvas,angle) {
 /**
  * 
  * @constructor
- * @param {PhSim.Sprites.Sprite[]} sprites 
+ * @param {Sprites.Sprite[]} sprites 
  * @param {Function} onload 
  */
 
-PhSim.Sprites.SpriteImgArray = function(sprites,onload = function() {}) {
+Sprites.SpriteImgArray = function(sprites,onload = function() {}) {
 	
 	// Force load if sprites list is empty
 
@@ -92,11 +96,11 @@ PhSim.Sprites.SpriteImgArray = function(sprites,onload = function() {}) {
  * 
  * Add sprite to the Sprite Image Array.
  * 
- * @param {PhSim.Sprites.Sprite|PhSim.Sprite.Sprite[]} staticObj - This could be a sprite or an array of sprites
+ * @param {Sprites.Sprite|PhSim.Sprite.Sprite[]} staticObj - This could be a sprite or an array of sprites
  * @param {Function} [onload] - a function that is executed when the image loads.
  */
 
-PhSim.Sprites.SpriteImgArray.prototype.addSprite = function(staticObj,onload = function() {} ) {
+Sprites.SpriteImgArray.prototype.addSprite = function(staticObj,onload = function() {} ) {
 	
 	var self = this;
 	
@@ -131,3 +135,5 @@ PhSim.Sprites.SpriteImgArray.prototype.addSprite = function(staticObj,onload = f
 	}
 
 }
+
+module.exports = Sprites;

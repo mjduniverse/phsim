@@ -1,56 +1,20 @@
-/**
- * 
- * @function
- * @param {PhSimObject} composite - The composite to be flattened.
- * @returns {PhSimObject[]} - The array of objects found in the composites. 
- */
-
-PhSim.flattenComposite = function(composite) {
-
-	var a = [];
-
-	/**
-	 * 
-	 * @param {*} composite
-	 * @inner
-	 */
-	
-	var __f = function(composite) {
-
-		for(var i = 0; i < composite.parts.length; i++) {
-
-			if(composite.parts[i].composite) {
-				PhSim.flattenComposite(composite.parts[i].composite);
-			}
-
-			else {
-				a.push(composite.parts[i]);
-			}
-
-		}
-
-	}
-
-	__f(composite);
-
-	return a;
-
-}
+const PhSim = require("./phSim");
 
 /**
  * 
  * Create Dynamic Object from static object
  * @constructor
+ * @memberof PhSim
  * @param {PhSimObject} staticObject - Static Object
  * @augments StaticObject
  * 
  */
 
-PhSim.DynObject = function(staticObject) {
+var DynObject = function(staticObject) {
 
 	Object.assign(this,JSON.parse(JSON.stringify(staticObject)));
 
-	this.matter = PhSim.createMatterObject(staticObject);
+	this.matter = PhSim.DynObject.createMatterObject(staticObject);
 
 	if(staticObject.path === true) {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
@@ -59,7 +23,7 @@ PhSim.DynObject = function(staticObject) {
 	this.firstCycle = staticObject.cycle;
 
 	if(staticObject.composite === true) {
-		this.flattenedParts = PhSim.flattenComposite();
+		this.flattenedParts = DynObject.flattenComposite();
 	}
 
 	
@@ -95,9 +59,15 @@ PhSim.DynObject = function(staticObject) {
 
 }
 
-PhSim.DynObject.prototype.eventStack = new PhSim.DynObjectEventStack();
+DynObject.prototype.eventStack = {
+	update: [],
+	click: [],
+	mousemove: [],
+	mouseup:[],
+	mousedown: []
+}
 
-PhSim.DynObject.prototype.on = function(eventStr,call,options = {}) {
+DynObject.prototype.on = function(eventStr,call,options = {}) {
 	if(this.eventStack[eventStr]) {
 		this.eventStack[eventStr].push(call);
 	}
@@ -112,7 +82,7 @@ PhSim.DynObject.prototype.on = function(eventStr,call,options = {}) {
  * @param {String} colorStr - Color String
  */
 
-PhSim.DynObject.setColor = function(dyn_object,colorStr) {
+DynObject.setColor = function(dyn_object,colorStr) {
 	dyn_object.fillStyle = colorStr;
 }
 
@@ -122,7 +92,7 @@ PhSim.DynObject.setColor = function(dyn_object,colorStr) {
  * @param {*} colorStr 
  */
 
-PhSim.DynObject.setBorderColor = function(dyn_object,colorStr) {
+DynObject.setBorderColor = function(dyn_object,colorStr) {
 	dyn_object.strokeStyle = colorStr;
 }
 
@@ -132,11 +102,11 @@ PhSim.DynObject.setBorderColor = function(dyn_object,colorStr) {
  * @param {*} lineWidth 
  */
 
-PhSim.DynObject.setLineWidth = function(dyn_object,lineWidth) {
+DynObject.setLineWidth = function(dyn_object,lineWidth) {
 	dyn_object.lineWidth = lineWidth;
 }
 
-PhSim.DynObject.setProperty = function(o,key,value) {
+DynObject.setProperty = function(o,key,value) {
 	
 	if(key === "x") {
 		PhSim.Motion.setPosition(value,0);
@@ -149,7 +119,46 @@ PhSim.DynObject.setProperty = function(o,key,value) {
 	else if(key === "locked") {
 		
 	}
-}	
+}
+
+/**
+ * 
+ * @function
+ * @param {PhSimObject} composite - The composite to be flattened.
+ * @returns {PhSimObject[]} - The array of objects found in the composites. 
+ */
+
+DynObject.flattenComposite = function(composite) {
+
+	var a = [];
+
+	/**
+	 * 
+	 * @param {*} composite
+	 * @inner
+	 */
+	
+	var __f = function(composite) {
+
+		for(var i = 0; i < composite.parts.length; i++) {
+
+			if(composite.parts[i].composite) {
+				DynObject.flattenComposite(composite.parts[i].composite);
+			}
+
+			else {
+				a.push(composite.parts[i]);
+			}
+
+		}
+
+	}
+
+	__f(composite);
+
+	return a;
+
+}
 
 /**
  * 
@@ -160,7 +169,7 @@ PhSim.DynObject.setProperty = function(o,key,value) {
  * @returns {MatterBody} 
  */
 
-PhSim.createMatterObject = function(staticObject) {
+DynObject.createMatterObject = function(staticObject) {
 
 	var opts = staticObject;
 
@@ -227,3 +236,5 @@ PhSim.createMatterObject = function(staticObject) {
   * A PhSimObject array is an array of PhSimObject objects
   * @typedef {PhSimObject[]} PhSimObjectArr
   */
+
+module.exports = DynObject;

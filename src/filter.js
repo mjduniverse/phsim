@@ -1,3 +1,5 @@
+const PhSim = require("./phSim");
+
 /**
  * Config filter
  * @param {HTMLElement} container 

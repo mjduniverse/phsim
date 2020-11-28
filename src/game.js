@@ -3,11 +3,12 @@
  * PhSim game constructor.
  * 
  * @constructor
+ * @memberof PhSim
  * @param {PhSim} phSim 
  * @param {PhSim.Game.Options} options 
  */
 
-PhSim.Game = function(phSim,options) {
+var Game = function(phSim,options) {
 
 	/**
      * Inital Life
@@ -82,7 +83,7 @@ PhSim.Game = function(phSim,options) {
  * @param {Number} score 
  */
 
-PhSim.Game.Options = function(goal,life,score) {
+Game.Options = function(goal,life,score) {
 
 	/**
      * Game Goal
@@ -107,8 +108,8 @@ PhSim.Game.Options = function(goal,life,score) {
 	this.score = score;
 }
 
-PhSim.Game.prototype.defaultGameWinModal = true;
-PhSim.Game.prototype.defaultLevelWinModal = true;
+Game.prototype.defaultGameWinModal = true;
+Game.prototype.defaultLevelWinModal = true;
 
 /**
  * Set score
@@ -116,7 +117,7 @@ PhSim.Game.prototype.defaultLevelWinModal = true;
  * @param {Number} c - Score
  */
 
-PhSim.Game.prototype.setScore = function(c) {
+Game.prototype.setScore = function(c) {
 
     var self = this;
 
@@ -178,7 +179,7 @@ PhSim.Game.prototype.setScore = function(c) {
  * @param {Number} c - Life value
  */
 
-PhSim.Game.prototype.setLife = function(c) {
+Game.prototype.setLife = function(c) {
 	this.life = c;
 
 	if(this.life === 0) {
@@ -191,7 +192,7 @@ PhSim.Game.prototype.setLife = function(c) {
  * @function
  */
 
-PhSim.Game.prototype.incrementLife = function() {
+Game.prototype.incrementLife = function() {
 	this.setLife(this.life + 1);
 }
 
@@ -200,7 +201,7 @@ PhSim.Game.prototype.incrementLife = function() {
  * @function
  */
 
-PhSim.Game.prototype.decrementLife = function() {
+Game.prototype.decrementLife = function() {
 	this.setLife(this.life - 1);
 }
 
@@ -209,7 +210,7 @@ PhSim.Game.prototype.decrementLife = function() {
  * @function
  */
 
-PhSim.Game.prototype.end = function() {
+Game.prototype.end = function() {
 
 	this.phSim.pause();
 	this.phSim.enableFilter();
@@ -235,3 +236,101 @@ PhSim.Game.prototype.end = function() {
 	this.phSim.callEventClass("levelloss",this,{}); 
 
 }
+
+Game.Widgets = {
+
+}
+
+/**
+ * Coin widget. Works if game widget is enabled. If not enabled, it throws an exception.
+ * 
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget - Widget options
+ * @param {Number} widget.value - Value of coin. If undefined, the value of the coin is 1.
+ * @this PhSim
+ */
+
+Game.Widgets.coin = function(dyn_object,widget) {
+
+	var value = widget.value || 1;
+
+	var self = this;
+
+	var func = function() {
+
+		var obj1 = dyn_object;
+
+		var a = function() {
+
+			if(self.inSensorCollision(obj1) && self.lclGame) {
+				self.lclGame.setScore(self.lclGame.score + value);
+				self.removeEventListener("collisionstart",a);	
+			}
+
+		}
+
+		return a;
+
+	}
+
+	self.on("collisionstart",func());
+
+
+}
+
+Game.Widgets.hazard = function(dyn_object,widget) {
+
+var self = this;
+
+var func = function() {
+
+	var obj1 = dyn_object;
+
+	var a = function() {
+
+		if(self.inSensorCollision(obj1) && self.lclGame) {
+			self.lclGame.setLife(self.lclGame.life - 1);
+			self.removeEventListener("collisionstart",a);	
+		}
+
+	}
+
+	return a;
+
+}
+
+self.on("collisionstart",func());
+
+}
+
+Game.Widgets.health = function(dyn_object,widget) {
+
+var self = this;
+
+var func = function() {
+
+	var obj1 = dyn_object;
+
+	var a = function() {
+
+		if(self.inSensorCollision(obj1) && self.lclGame) {
+			self.lclGame.setLife(self.lclGame.life + 1);
+			self.removeEventListener("collisionstart",a);	
+		}
+
+	}
+
+	return a;
+
+}
+
+self.on("collisionstart",func());
+
+}
+
+Game.Widgets.endGame = function(dyn_object,widget) {
+	var f = this.createMotionFunction("position",dyn_object,widget.vector);
+	this.createWFunction(dyn_object,f,widget);
+}
+
+module.exports = Game;

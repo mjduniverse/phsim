@@ -89,7 +89,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(1);
-module.exports = __webpack_require__(53);
+module.exports = __webpack_require__(52);
 
 
 /***/ }),
@@ -125,88 +125,6 @@ module.exports = __webpack_require__(53);
   * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-
-module.exports = __webpack_require__(2);
-
-__webpack_require__(3 );
-__webpack_require__(4 );
-__webpack_require__(5 );
-__webpack_require__(6);
-__webpack_require__(7);
-__webpack_require__(8);
-
-__webpack_require__(9);
-
-__webpack_require__(10);
-__webpack_require__(11);
-__webpack_require__(12);
-__webpack_require__(13);
-
-// Bounding box functions
-
-__webpack_require__(14);
-
-__webpack_require__(15);
-
-__webpack_require__(16);
-__webpack_require__(17);
-__webpack_require__(18);
-__webpack_require__(19);
-__webpack_require__(20);
-__webpack_require__(21);
-__webpack_require__(22);
-__webpack_require__(23);
-__webpack_require__(24);
-__webpack_require__(25);
-__webpack_require__(26);
-__webpack_require__(27);
-__webpack_require__(28);
-__webpack_require__(29);
-__webpack_require__(30);
-__webpack_require__(31);
-
-__webpack_require__(32);
-__webpack_require__(33);
-__webpack_require__(34);
-__webpack_require__(35);
-__webpack_require__(50);
-__webpack_require__(51);
-__webpack_require__(52);
-
-
-/**
- * Global event stack
- * @type {PhSim.EventStack}
- */
-
-PhSim.prototype.eventStack = new PhSim.EventStack();
-
-
-/**
- * Event stack for simulation specfic events
- * @type {PhSim.EventStack}
- */
-
-PhSim.prototype.slEventStack = new PhSim.EventStack();
-
- 
-
-/**
- * Structure giving more human-readable meaning to PhSim status.
- * @type {String[]}
- */
-
-PhSim.statusStruct = {
-	0: "Unloaded",
-	1: "Initalized",
-	2: "Loaded Images",
-	3: "Loaded Audio",
-	4: "Loaded Simulation"
-}
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
 
 /**
  * 
@@ -530,19 +448,96 @@ if(true) {
     module.exports = PhSim;
 }
 
+PhSim.Options = __webpack_require__(2 );
+
+__webpack_require__(3 );
+__webpack_require__(4 );
+__webpack_require__(5);
+__webpack_require__(6);
+__webpack_require__(7);
+
+__webpack_require__(8);
+
+__webpack_require__(9);
+__webpack_require__(10);
+__webpack_require__(11);
+__webpack_require__(12);
+
+// Bounding box functions
+
+__webpack_require__(13);
+
+__webpack_require__(14);
+
+__webpack_require__(15);
+__webpack_require__(16);
+__webpack_require__(17);
+__webpack_require__(18);
+__webpack_require__(19);
+__webpack_require__(20);
+__webpack_require__(21);
+__webpack_require__(22);
+__webpack_require__(23);
+__webpack_require__(24);
+__webpack_require__(25);
+__webpack_require__(26);
+__webpack_require__(27);
+__webpack_require__(28);
+__webpack_require__(29);
+__webpack_require__(30);
+
+__webpack_require__(31);
+__webpack_require__(32);
+__webpack_require__(33);
+__webpack_require__(34);
+__webpack_require__(49);
+__webpack_require__(50);
+__webpack_require__(51);
+
+
+/**
+ * Global event stack
+ * @type {PhSim.EventStack}
+ */
+
+PhSim.prototype.eventStack = new PhSim.EventStack();
+
+
+/**
+ * Event stack for simulation specfic events
+ * @type {PhSim.EventStack}
+ */
+
+PhSim.prototype.slEventStack = new PhSim.EventStack();
+
+ 
+
+/**
+ * Structure giving more human-readable meaning to PhSim status.
+ * @type {String[]}
+ */
+
+PhSim.statusStruct = {
+	0: "Unloaded",
+	1: "Initalized",
+	2: "Loaded Images",
+	3: "Loaded Audio",
+	4: "Loaded Simulation"
+}
+
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports) {
 
 
 /**
  * Objects module
-   @namespace
+ * @namespace
  * @constructor
  * 
  */
 
-PhSim.Options = function() {
+var Options = module.exports = function() {
 
 	/**
 	 * PhSim version
@@ -594,7 +589,7 @@ PhSim.Options = function() {
  * @param {Number} y1 - y coordinate of the second point
  */
 
-PhSim.Options.GradientLimits = function(x0,y0,x1,y1) {
+Options.GradientLimits = function(x0,y0,x1,y1) {
 
 	/**
 	 * Start vector
@@ -617,7 +612,7 @@ PhSim.Options.GradientLimits = function(x0,y0,x1,y1) {
  * @param {String} color - String denoting the color of the stop
  */
 
-PhSim.Options.GradientStop = function(pos,color) {
+Options.GradientStop = function(pos,color) {
 	
 	/**
 	 * Gradient Color
@@ -635,7 +630,7 @@ PhSim.Options.GradientStop = function(pos,color) {
 }
 
 
-PhSim.Options.Gradient = function() {
+Options.Gradient = function() {
 
 	/**
 	 * Gradient Stops
@@ -673,7 +668,7 @@ PhSim.Options.Gradient = function() {
 	};
 }
 
-PhSim.Options.lclGradient = function() {
+Options.lclGradient = function() {
 	this.src = null;
 	this.limits = new PhSim.Options.GradientLimits(x0,y0,x1,y1);
 	this.type = "linear";
@@ -685,7 +680,7 @@ PhSim.Options.lclGradient = function() {
  * @param {PhSim.Vector[]} verts -  Vertcies
  */
 
-PhSim.Options.Path = function(verts) {
+Options.Path = function(verts) {
 
 	/**
 	 * Array of vectors defining a path or a polygon
@@ -740,7 +735,7 @@ PhSim.Options.Path = function(verts) {
  * @constructor
  */
 
-PhSim.Options.Circle = function(x = null,y = null,r = null) {
+Options.Circle = function(x = null,y = null,r = null) {
 
 	/**
 	 * Boolean indicating a circle
@@ -806,7 +801,7 @@ PhSim.Options.Circle = function(x = null,y = null,r = null) {
  * @param {Number} n - sides of the regular polygon
  */
 
-PhSim.Options.RegPolygon = function(x,y,r,n) {
+Options.RegPolygon = function(x,y,r,n) {
 
 	/**
 	 * Boolean for indicating a regular polygon
@@ -863,7 +858,7 @@ PhSim.Options.RegPolygon = function(x,y,r,n) {
  * 
  */
 
-PhSim.Options.Rectangle = function(x,y,w,h) {
+Options.Rectangle = function(x,y,w,h) {
 
 	/**
 	 * Boolean for indicating a rectangle
@@ -930,7 +925,7 @@ PhSim.Options.Rectangle = function(x,y,w,h) {
  * Composite Object 
  */
 
-PhSim.Options.Composite = function() {
+Options.Composite = function() {
 	this.composite = true;
 	this.name = "Untitled";
 }
@@ -944,7 +939,7 @@ PhSim.Options.Composite = function() {
  * 
  */
 
-PhSim.Options.SimBox = function(w,h) {
+Options.SimBox = function(w,h) {
 	
 	/**
 	 * Simulation Width
@@ -968,7 +963,7 @@ PhSim.Options.SimBox = function(w,h) {
  *
  */
 
-PhSim.Options.Camera = function(x,y,scale) {
+Options.Camera = function(x,y,scale) {
 
 	/**
 	 * x-coordinate vector of camera
@@ -996,7 +991,7 @@ PhSim.Options.Camera = function(x,y,scale) {
  * @constructor
  */
 
-PhSim.Options.Layer = function() {
+Options.Layer = function() {
 
 	/**
 	 * The array of objects
@@ -1020,7 +1015,7 @@ PhSim.Options.Layer = function() {
  * @constructor
  */
 
-PhSim.Options.Simulation = function() {
+Options.Simulation = function() {
 
 	/**
 	 * Array of layers
@@ -1047,7 +1042,7 @@ PhSim.Options.Simulation = function() {
 	this.widgets = [];
 }
 
-PhSim.Options.LO = function(L,O) {
+Options.LO = function(L,O) {
 
 }
 
@@ -1061,7 +1056,7 @@ PhSim.Options.LO = function(L,O) {
  * 
  */
 
-PhSim.Options.SLO = function(S,L,O) {
+Options.SLO = function(S,L,O) {
 
 }
 
@@ -1083,7 +1078,7 @@ PhSim.Options.SLO = function(S,L,O) {
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 /**
@@ -1158,7 +1153,7 @@ Matter.Plugin.register(PhSim.matterPlugin);
 Matter.use(PhSim.matterPlugin);
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports) {
 
 /**
@@ -1337,7 +1332,7 @@ PhSim.DynObjectEventStack = function() {
 }
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /** 
@@ -2170,7 +2165,7 @@ PhSim.PhRender.prototype.dynamicDrawLayer = function(L) {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /*** Sprites ***/
@@ -2308,7 +2303,7 @@ PhSim.Sprites.SpriteImgArray.prototype.addSprite = function(staticObj,onload = f
 }
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /**
@@ -2367,7 +2362,7 @@ PhSim.Audio.AudioArray = function(p_audio,onload) {
 }
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports) {
 
 /** 
@@ -2563,7 +2558,7 @@ PhSim.Vector.svgVector = function(x,y) {
 }
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports) {
 
 /**
@@ -2597,7 +2592,7 @@ PhSim.checkObjectType = function (objectTypeStr) {
 }
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports) {
 
 /**
@@ -2625,7 +2620,7 @@ PhSim.diagRect = function(x1,y1,x2,y2) {
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 
@@ -2735,7 +2730,7 @@ PhSim.getRectangleCorners = function(rectangle) {
 }
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /**
@@ -2781,7 +2776,7 @@ PhSim.findCentroidOfPath = function(a) {
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /**
@@ -2898,7 +2893,7 @@ PhSim.getDynBoundingBox = function(dynObj) {
 }
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -3132,7 +3127,7 @@ PhSim.createMatterObject = function(staticObject) {
   */
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
 PhSim.removeClickRectRegion = function(reference) {
@@ -3214,7 +3209,7 @@ PhSim.CollisionReport = function() {
 }
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /**
@@ -3257,7 +3252,7 @@ PhSim.prototype.getObjectFromLOStr = function(str) {
 }
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 
@@ -3339,7 +3334,7 @@ PhSim.prototype.configRender = function() {
 }
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /**
@@ -3454,7 +3449,7 @@ PhSim.prototype.alert = function(options) {
 }
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Set Angle to mouse.
@@ -3625,7 +3620,7 @@ PhSim.prototype.renderAllCounters = function() {
 }
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports) {
 
 
@@ -3698,7 +3693,7 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
 }
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports) {
 
 /**
@@ -3957,7 +3952,7 @@ PhSim.prototype.deregisterKeyEvents = function() {
 }
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /**
@@ -4064,7 +4059,7 @@ PhSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
 }
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /**
@@ -4563,7 +4558,7 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /**
@@ -4589,7 +4584,7 @@ PhSim.prototype.applyGravitationalField = function() {
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.play = function() {
@@ -4648,8 +4643,8 @@ PhSim.prototype.exit = function() {
 }
 
 /***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 26 */
+/***/ (function(module, exports) {
 
 /**
  * Go to simulation in the composite simulation
@@ -4664,8 +4659,6 @@ PhSim.prototype.exit = function() {
  * 
  *  
  */
-
-const PhSim = __webpack_require__(2);
 
 PhSim.prototype.gotoSimulationIndex = function (i) {
 
@@ -4910,7 +4903,7 @@ PhSim.prototype.gotoSimulationIndex = function (i) {
 }
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /**
@@ -5057,7 +5050,7 @@ PhSim.Motion.setAngle = function(dynObject,angle) {
 }
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.assignPhRender = function(phRender) {
@@ -5091,7 +5084,7 @@ PhSim.prototype.setRectWidthAndHeight = function(dynObject,w,h) {
 }
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.updateDynObj = function(currentObj) {
@@ -5214,7 +5207,7 @@ PhSim.prototype.loopFunction = function() {
 }
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports) {
 
 /** 
@@ -5279,46 +5272,10 @@ PhSim.prototype.extractWidget = function(dyn_object,widget) {
         }
     }
 
-/**
- * PlayAudio Widget
- * 
- * @function
- * @param {PhSim.DynObject} dyn_object 
- * @param {Object} widget
- * @this PhSim
- */
 
-PhSim.Widgets.playAudio = function(dyn_object,widget) {
-
-    var self = this;
-
-    var i = this.audioPlayers;
-    
-    this.staticAudio.push(widget);
-
-    var f = function() {
-        self.playAudioByIndex(i);
-    }
-
-    var r = this.createWFunction(dyn_object,f,widget);
-
-    this.audioPlayers++;
-}
-
-/**
- * Make object not rotate
- * 
- * @function
- * @param {PhSim.DynObject} dyn_object 
- * @param {*} widget 
- */
-    
-PhSim.Widgets.noRotation = function(dyn_object) {
-    PhSim.Matter.Body.setInertia(dyn_object.matter, Infinity)
-}
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /**
@@ -5414,7 +5371,7 @@ PhSim.prototype.drawLoadingScreen = function() {
 }
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /**
@@ -5656,7 +5613,7 @@ PhSim.Game.prototype.end = function() {
 }
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports) {
 
 
@@ -5686,7 +5643,7 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 }
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -5766,6 +5723,7 @@ PhSim.Query.chkWidgetType = function() {
 }
 
 
+__webpack_require__(35);
 __webpack_require__(36);
 __webpack_require__(37);
 __webpack_require__(38);
@@ -5779,10 +5737,47 @@ __webpack_require__(45);
 __webpack_require__(46);
 __webpack_require__(47);
 __webpack_require__(48);
-__webpack_require__(49);
+
+/**
+ * PlayAudio Widget
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget
+ * @this PhSim
+ */
+
+PhSim.Widgets.playAudio = function(dyn_object,widget) {
+
+    var self = this;
+
+    var i = this.audioPlayers;
+    
+    this.staticAudio.push(widget);
+
+    var f = function() {
+        self.playAudioByIndex(i);
+    }
+
+    var r = this.createWFunction(dyn_object,f,widget);
+
+    this.audioPlayers++;
+}
+
+/**
+ * Make object not rotate
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {*} widget 
+ */
+    
+PhSim.Widgets.noRotation = function(dyn_object) {
+    PhSim.Matter.Body.setInertia(dyn_object.matter, Infinity)
+}
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /**
@@ -5829,7 +5824,7 @@ PhSim.Widgets.circularConstraint = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports) {
 
 /**
@@ -5950,7 +5945,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports) {
 
 PhSim.Widgets.draggable = function(dyn_object,widget) {
@@ -6014,7 +6009,7 @@ PhSim.Widgets.draggable = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports) {
 
 /**
@@ -6110,7 +6105,7 @@ PhSim.Widgets.endGame = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports) {
 
 PhSim.prototype.setLock = function(dynObject,value) {
@@ -6178,7 +6173,7 @@ PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports) {
 
 
@@ -6340,7 +6335,7 @@ PhSim.Widgets.force = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports) {
 
 /**
@@ -6389,7 +6384,7 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /**
@@ -6880,7 +6875,7 @@ PhSim.Widgets.wFunction = function(dyn_object,widget) {
 PhSim.prototype.wFunctions = {}
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports) {
 
 PhSim.Widgets.elevator = function(dyn_object,widget) {
@@ -6989,7 +6984,7 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports) {
 
 /**
@@ -7030,7 +7025,7 @@ PhSim.Widgets.keyboardControls = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports) {
 
 PhSim.Widgets.transformCameraByObj = function(dyn_object) {
@@ -7048,7 +7043,7 @@ PhSim.Widgets.transformCameraByObj = function(dyn_object) {
 }
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports) {
 
 PhSim.Widgets.setColor = function(dyn_object,widget) {
@@ -7103,7 +7098,7 @@ PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports) {
 
 PhSim.Widgets.deleteSelf = function(dyn_object,widget) {
@@ -7130,7 +7125,7 @@ PhSim.Widgets.deleteSelf = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports) {
 
 /**
@@ -7182,7 +7177,7 @@ PhSim.Widgets.stack = function(o,w) {
 }
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports) {
 
 /**
@@ -7216,13 +7211,13 @@ PhSim.calc_skinmesh = function(dynObject) {
 }
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports) {
 
 /**
@@ -7322,7 +7317,7 @@ PhSim.prototype.processVar = function(str) {
 }
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports) {
 
 // Generated by TypeDefGen module 

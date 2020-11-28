@@ -1,10 +1,11 @@
 
 /**
  * Gradient Namespace
+ * @memberof PhSim
  * @namespace
  */
 
-PhSim.Gradients = {}
+var Gradients = {}
 
 /**
  * @function
@@ -12,7 +13,7 @@ PhSim.Gradients = {}
  * @param {PhSim.Options.Gradient} jsObject 
  */
 
-PhSim.Gradients.extractGradient = function(ctx,jsObject) {
+Gradients.extractGradient = function(ctx,jsObject) {
 
 	var gradient = ctx.createLinearGradient(jsObject.limits.start.x,jsObject.limits.start.y,jsObject.limits.end.x,jsObject.limits.end.y);
 
@@ -23,3 +24,5 @@ PhSim.Gradients.extractGradient = function(ctx,jsObject) {
 	return gradient;
 
 }
+
+module.exports = Gradients;

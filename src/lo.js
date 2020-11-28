@@ -1,3 +1,5 @@
+const PhSim = require("./phSim");
+
 /**
  * @function
  * @param {Number} L 
