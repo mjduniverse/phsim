@@ -41,10 +41,10 @@ var Options = function() {
  * 
  * @typedef {PhSim.Vector|Circle|Rectangle|RegPolygon} Vector
  * 
- * In PhSim, a vector is any object with the properties "x" and "y" 
+ * In PhSim, a vector is any object with the properties `x` and `y` 
  * such that both are of the Number type.
  * 
- * In a {@link Circle}, the x and y coordinates refer to the center of the circle and the
+ * In a {@link Circle}, the `x` and `y` coordinates refer to the center of the circle and the
  * same goes for the {@link RegPolygon|Regular Polygon}. In a {@link Rectangle}, it refers to the upper left
  * corner of the rectangle.
  * 
@@ -185,15 +185,15 @@ Options.Path = function(verts) {
 /**
  * 
  * A path is defined by vertices. They can be used as a regular polygon.
- * Any object that contains an array of vectors and has the boolean property "path" set to true is reconized as a path.
+ * Any object that contains an array of vectors and has the boolean property ``path`` set to ``true`` is reconized as a path.
  * Paths can be used to define any polygon in general.
  * 
- * In PhSim, a path is any object obj such that the following is true:
+ * In PhSim, a path is any object `obj` such that the following is true:
  * 
- * Array.isArray(obj) === true
- * obj.path === true
+ * `Array.isArray(obj) === true`
+ * `obj.path === true`
  * 
- * If a path is used as a polygon, it must have at least three vectors in the verts property. 
+ * If a path is used as a polygon, it must have at least three vectors in the `verts` property. 
  * 
  * @typedef {PhSim.Options.Path} Path
  * 
@@ -246,12 +246,12 @@ Options.Circle = function(x = null,y = null,r = null) {
 /** 
  * A circle is a set all points equidistant from some point known as the center.
  * 
- * In PhSim, a circle is any object obj such that the following are all true:
- * obj.circle === true;
- * typeof obj.x === number;
- * typeof obj.y === number;
- * typeof obj.radius === number;
- * typeof obj.cycle === number || obj.cycle;
+ * In PhSim, a circle is any object `obj` such that the following are all true:
+ * `obj.circle === true`;
+ * `typeof obj.x === number`;
+ * `typeof obj.y === number`;
+ * `typeof obj.radius === number`;
+ * `typeof obj.cycle === number || obj.cycle`;
  * 
  * @typedef {PhSim.Options.Circle} Circle
  */
@@ -259,9 +259,9 @@ Options.Circle = function(x = null,y = null,r = null) {
 /**
  * A regular polygon is a polygon that has all of its sides equal in length.
  * 
- * In PhSim, a regular polgon is any object obj such that the following are true:
+ * In PhSim, a regular polgon is any object `obj` such that the following are true:
  * 
- * this.regPolygon === true
+ * `this.regPolygon === true`
  * 
  * 
  * @constructor
