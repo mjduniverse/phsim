@@ -1,3 +1,5 @@
+var PhSim = require("../phSim");
+
 /**
  * 
  * The event stack is an object that is used to store event listeners.
@@ -160,15 +162,4 @@ PhSim.EventStack = function() {
 	this.objmouseup = [];
 
 
-}
-
-PhSim.DynObjectEventStack = function() {
-	
-	this.update = [];
-	
-	this.click = [];
-	this.mousemove = [];
-
-	this.mouseup = [];
-	this.mousedown = [];
 }

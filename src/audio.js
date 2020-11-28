@@ -1,8 +1,9 @@
 /**
  * @namespace
+ * @memberof PhSim
  */
 
-PhSim.Audio = {}
+var Audio = {}
 
 /**
  * @constructor
@@ -10,7 +11,7 @@ PhSim.Audio = {}
  * @param {Function} onload 
  */
 
-PhSim.Audio.AudioArray = function(p_audio,onload) {
+Audio.AudioArray = function(p_audio,onload) {
 
 	// force load function if audio list is empty
 	
@@ -52,3 +53,5 @@ PhSim.Audio.AudioArray = function(p_audio,onload) {
 	}
 
 }
+
+module.exports = Audio;

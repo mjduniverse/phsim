@@ -3,6 +3,7 @@
  * Get Rectangle by diagonal with points (x1,y1) and (x2,y2);
  * 
  * @function
+ * @memberof PhSim
  * 
  * @param {Number} x1
  * @param {Number} y1
@@ -12,7 +13,7 @@
  * 
  */
 
-PhSim.diagRect = function(x1,y1,x2,y2) {
+var diagRect = function(x1,y1,x2,y2) {
 
 	var w = x2 - x1;
 	var h = y2 - y1;
@@ -20,3 +21,5 @@ PhSim.diagRect = function(x1,y1,x2,y2) {
     return new PhSim.Options.Rectangle(x1,y1,w,h);
     
  }
+
+module.exports = diagRect;

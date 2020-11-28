@@ -1,6 +1,6 @@
 // Set Angle to mouse.
 
-const phSim = require("./phSim");
+const PhSim = require("./phSim");
 
 // Object Connection
 

@@ -1,3 +1,4 @@
+const PhSim = require("./phSim");
 
 /**
  * Play audio in

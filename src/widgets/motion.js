@@ -1,4 +1,6 @@
+const Motion = require("../motion");
 
+Motion
 /** 
  * 
  * Generate a function to put some dynamic object in motion, given some mode and vector or scalar.
@@ -18,51 +20,51 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 	
 	if(mode === "force") {
 		return function() {
-			return PhSim.Motion.applyForce(dyn_object,dyn_object.matter.position,motion);
+			return Motion.applyForce(dyn_object,dyn_object.matter.position,motion);
 		}
 	}
 
 	if(mode === "velocity") {
 		return function() {
-			return PhSim.Motion.setVelocity(dyn_object,motion);
+			return Motion.setVelocity(dyn_object,motion);
 		}
 	}
 
 	if(mode === "translate") {
 		return function() {
-			return PhSim.Motion.translate(dyn_object,motion);
+			return Motion.translate(dyn_object,motion);
 		}
 	}
 
 	if(mode === "position") {
 		return function() {
-			return PhSim.Motion.setPosition(dyn_object,motion)
+			return Motion.setPosition(dyn_object,motion)
 		}
 	}
 
 	if(mode === "rotation") {
 		return function() {
-			return PhSim.Motion.rotate(dyn_object,motion,dyn_object.matter.position);
+			return Motion.rotate(dyn_object,motion,dyn_object.matter.position);
 		}
 	}
 
 	if(mode === "circular_constraint_rotation") {
 		return function() {
-			return PhSim.Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+			return Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
 		}
 	}
 
 	if(mode === "setAngle") {
 		return function() {
-			return PhSim.Motion.setAngle(dyn_object,motion);
+			return Motion.setAngle(dyn_object,motion);
 		}
 	}
 
 	if(mode === "circular_constraint_setAngle") {
 		return function() {
 			var a = Math.atan2(dyn_object.y - dyn_object.circularConstraintVector.y,dyn_object.x - dyn_object.circularConstraintVector.x)
-			PhSim.Motion.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
-			PhSim.Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+			Motion.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
+			Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
 		}
 	}
 

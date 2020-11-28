@@ -1,3 +1,5 @@
+const PhSim = require("./phSim");
+
 /**
  * Object containing variables that can be read by widgets such as
  * the {@link|RectText} widget. 

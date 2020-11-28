@@ -1,3 +1,5 @@
+const PhSim = require("./phSim");
+
 /**
  * Apply Newtonian gravity field.
  */

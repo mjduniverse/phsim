@@ -3,10 +3,11 @@
  * Calculate DynObject skinmesh
  * 
  * @function
+ * @memberof PhSim
  * @param {PhSim.DynObject} dynObject 
  */
 
-PhSim.calc_skinmesh = function(dynObject) {
+var calc_skinmesh = function(dynObject) {
 
 	/** Vector defining transformation */
 	
@@ -27,3 +28,5 @@ PhSim.calc_skinmesh = function(dynObject) {
 	dynObject.verts = dynObject.skinmesh;
 
 }
+
+module.exports = calc_skinmesh;

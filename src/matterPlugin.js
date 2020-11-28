@@ -1,3 +1,11 @@
+const PhSim = require("./phSim");
+
+if(typeof Matter === "undefined") {
+    var Matter = require("matter-js");
+}
+
+//var Matter = Matter || require("matter-js");
+
 /**
  * Object that registers PhSim as a Matter.js plugin.
  * @namespace
