@@ -44,16 +44,16 @@ PhSim.MagicWords = {
 /**
  * 
  * Process string by replacing magical words and the values of elements in
- * [PhSim.prototype.vars]{@link|PhSim#vars}.
+ * {@link PhSim#vars|PhSim.prototype.vars}.
  * 
  * Some of the magic words are the following:
  * 
- * {__game__score} - The game score
- * {__game__life} -  The game life
- * {__game__goal} - The game goal
- * {__game__int_life} - The inital life value for the game
+ * `{__game__score}` - The game score
+ * `{__game__life}` -  The game life
+ * `{__game__goal}` - The game goal
+ * `{__game__int_life}` - The inital life value for the game
  * 
- * The expression ${key} is replaced by the value of PhSim.prototype.vars[key].
+ * The expression `${key}` is replaced by the value of `{@link PhSim#vars |PhSim.prototype.vars[key]}`.
  * 
  * @function
  * @param {String} str 
