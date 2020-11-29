@@ -46,7 +46,7 @@ PhSim.prototype.createWFunction = function(arg,thisRef) {
  * 
  * @param {wFunctionTrigger} trigger 
  * @param {*} ref - Reference
- * @param {} call - The function wrapper that is executed 
+ * @param {Function} call - The function wrapper that is executed 
  */
 
 PhSim.WFunctionRef = function(options,ref,call) {
@@ -184,7 +184,11 @@ PhSim.prototype.wFunctionRefs = [];
  * @function
  * 
  * @param {wFunctionTrigger} trigger - The type of SimpleEvent.
- * @param {WFunctionBody} wFunctionBody - The JavaScript function to be wrapped.
+ * 
+ * @param {WFunctionBody|Number} wFunctionBody - The JavaScript function to be wrapped. 
+ * If `wFunctionBody` is an integer `i`, the function body is deterimined by the 
+ * `{@link PhSim#options.wFunctions}[i]`
+ * 
  * @param {wFunctionOptions} options -  [The Simple Event Options Object]{@link wFunctionOptions}.
  * @returns {PhSim.WFunctionRef} - A reference to the simple event.
  * @this {PhSim}
@@ -194,6 +198,10 @@ PhSim.prototype.wFunctionRefs = [];
 PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 	var self = this;
+
+	if(typeof wFunctionBody === "number") {
+		wFunctionBody = this.options.wFunctions[wFunctionBody];
+	}
 
     var call = function(e) {
         return wFunctionBody.apply(thisRef,e);
