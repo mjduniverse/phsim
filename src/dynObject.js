@@ -40,9 +40,8 @@ var DynObject = function(staticObject) {
 	 * @type {String}
 	 * */
 
-	this.id = PhSim.nextId;
-
-	PhSim.nextId = (Number.parseInt(PhSim.nextId,36) + 1).toString(36);
+	this.id = DynObject.nextId;
+	DynObject.nextId = (Number.parseInt(PhSim.nextId,36) + 1).toString(36);
 	
 	/**
 	 * Reference to parent simulation
@@ -88,7 +87,7 @@ DynObject.setColor = function(dyn_object,colorStr) {
 }
 
 /**
- * 
+ * Set border color.
  * @param {PhSim.DynObject} dyn_object 
  * @param {*} colorStr 
  */
@@ -227,6 +226,10 @@ DynObject.createRegPolygon = function(x,y,r,n,options = {}) {
 	var o = new Options.RegPolygon(x,y,r,n);
 	Object.assign(o,options);
 	return new DynObject(o);
+}
+
+DynObject.setRadius = function(dynObject,radius) {
+
 }
 
 /**
