@@ -401,13 +401,13 @@ require("./events/registerEvents");
 require("./events/eventListener");
 require("./query");
 require("./gravity");
-require("./toggle");
+require("./loop/toggle");
 
-PhSim.prototype.gotoSimulationIndex = require("./gotoSuperlayer");
+PhSim.prototype.gotoSimulationIndex = require("./loop/gotoSuperlayer");
 PhSim.Motion = require("./motion");
 
 require("./set");
-require("./update");
+require("./loop/update");
 require("./extractWidgets");
 
 PhSim.Camera = require("./dynSimCamera");
