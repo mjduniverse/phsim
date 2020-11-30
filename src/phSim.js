@@ -395,7 +395,7 @@ require("./events/eventObjects");
 require("./lo");
 require("./makeQuickly");
 require("./filter");
-require("./dynWidget");
+require("./widgets]/dynWidget");
 require("./audioToggle");
 require("./events/registerEvents");
 require("./events/eventListener");
@@ -408,7 +408,7 @@ PhSim.Motion = require("./motion");
 
 require("./set");
 require("./loop/update");
-require("./extractWidgets");
+require("./widgets/extractWidgets");
 
 PhSim.Camera = require("./dynSimCamera");
 PhSim.Game = require("./game");
