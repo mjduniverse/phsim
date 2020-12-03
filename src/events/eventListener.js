@@ -11,6 +11,8 @@
  * 
  */
 
+const PhSim = require("../phSim");
+
 PhSim.prototype.on = function(eventStr,call,options = {}) {
 	
 	
@@ -74,12 +76,12 @@ PhSim.prototype.removeEventListener = function(eventStr,call) {
 
 /**
  * @function
- * @param {String} eventStr 
- * @param {Object} thisArg 
- * @param {Object} eventArg 
+ * @param {PhSim.PhEvent} event - Event Object
  */
 
-PhSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
+PhSim.prototype.callEventClass = function(event) {
+
+	var eventStr = event.type;
 	
 	if(this.eventStack[eventStr]) {
 		for(var i = 0; i < this.eventStack[eventStr].length; i++) {
