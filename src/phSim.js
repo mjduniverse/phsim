@@ -395,7 +395,7 @@ require("./events/eventObjects");
 require("./lo");
 require("./makeQuickly");
 require("./filter");
-require("./widgets]/dynWidget");
+require("./widgets/dynWidget");
 require("./audioToggle");
 require("./events/registerEvents");
 require("./events/eventListener");
@@ -416,7 +416,7 @@ PhSim.Gradients = require("./gradient");
 
 require("./widgets");
 
-PhSim.prototype.calc_skinmesh = require("./calc_skinmesh");
+PhSim.calc_skinmesh = require("./calc_skinmesh");
 
 require("./events/simpleEvent");
 require("./processVar");
