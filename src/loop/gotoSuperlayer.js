@@ -23,7 +23,7 @@ var gotoSimulationIndex = function (i) {
 
 	this.firstSlUpdate = false;
 
-	var event = new PhSim.PhEvent();
+	var event = new PhSim.PhEvent("slchange");
 
 	event.type = "slchange";
 

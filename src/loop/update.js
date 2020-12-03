@@ -1,5 +1,15 @@
 const PhSim = require("../phSim");
 
+/**
+ * 
+ * Update a dynamic object.
+ * 
+ * @function
+ * @param {PhSimObject} currentObj - Object to be updated
+ * @fires PhSim.PhEvent
+ * 
+ */
+
 PhSim.prototype.updateDynObj = function(currentObj) {
 
 
@@ -42,8 +52,7 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 
 	}
 
-	var event = new PhSim.PhEvent();
-	event.type = "objupdate";
+	var event = new PhSim.PhEvent("objupdate");
 	event.target = currentObj;
 
 	this.callEventClass("objupdate",this,event);
