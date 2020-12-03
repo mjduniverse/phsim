@@ -542,10 +542,8 @@ Options.SLO = function(S,L,O) {
 
 /**
  * Matter.js body
- * @external {MatterBody}
+ * @external MatterBody
  * @see {@link https://brm.io/matter-js/docs/classes/Body.html|MatterBody} 
  */
-
-
 
 module.exports = Options;
