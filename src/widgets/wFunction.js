@@ -453,15 +453,15 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 PhSim.prototype.disableWFunction = function(o) {
 	
 	if(o.options.trigger === "key") {
-		this.removeEventListener("keydown",o.ref);
+		this.off("keydown",o.ref);
 	}
 
 	else if(o.options.trigger === "sensor") {
-		this.removeEventListener("collisionstart",o.ref);
+		this.off("collisionstart",o.ref);
 	}
 
 	else if(o.options.trigger === "update") {
-		this.removeEventListener("beforeupdate",o.ref);
+		this.off("beforeupdate",o.ref);
 	}
 
 	else if(o.options.trigger === "time") {
