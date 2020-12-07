@@ -555,23 +555,23 @@ PhRender.prototype.static_regPolygon = function(regPolygon) {
 
 PhRender.prototype.renderStatic = function(obj) {
 				
-	if ( obj.path === true )  {
+	if (obj.shape === "polygon")  {
 		this.static_path(obj);
 	}
 	
-	if( obj.circle === true) {
+	if( obj.shape === "circle") {
 		this.static_circle(obj); 
 	}
 
-	if( obj.rectangle === true) {
+	if( obj.shape === "rectangle") {
 		this.static_rectangle(obj);
 	}
 
-	if( obj.regPolygon === true ) {
+	if( obj.shape === "regPolygon") {
 		this.static_regPolygon(obj);
 	}
 
-	if( obj.composite === true) {
+	if( obj.shape === "composite") {
 		for(var i = 0; i < obj.parts.length; i++) {
 			this.renderStatic(obj.parts[i]);
 		}
@@ -616,7 +616,7 @@ PhRender.prototype.simulation = function(simulation) {
 
 PhRender.prototype.dynamicSkeleton = function(object) {
 
-	if(object.static.path) {
+	if(object.static.shape === "polygon") {
 		
 		this.ctx.beginPath();
 
@@ -650,7 +650,7 @@ PhRender.prototype.dynamicSkeleton = function(object) {
 
 PhRender.prototype.dynamicSkeleton_center = function(object) {
 
-	if(object.static.path) {
+	if(object.static.shape === "polygon") {
 		
 		this.ctx.beginPath();
 
@@ -702,7 +702,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 	this.ctx.strokeStyle = dynObject.strokeStyle;
 
 	
-	if(dynObject.path) {
+	if(dynObject.shape === "polygon") {
 		
 		this.drawDynamicSkeleton(dynObject);
 		
@@ -769,19 +769,19 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 		
 	}
 
-	if(dynObject.circle) {
+	if(dynObject.shape === "circle") {
 		this.static_circle(dynObject);	
 	}
 	
-	if(dynObject.regPolygon) {
+	if(dynObject.shape === "regPolygon") {
 		this.static_regPolygon(dynObject);		
 	}
 
-	if(dynObject.rectangle) {
+	if(dynObject.shape === "rectangle") {
 		this.static_rectangle(dynObject);		
 	}
 
-	if(dynObject.composite) {
+	if(dynObject.shape === "composite") {
 		for(var i = 1; i < dynObject.parts.length; i++) {
 			this.dynamicRenderDraw(dynObject.parts[i]);
 		}

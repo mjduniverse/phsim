@@ -21,11 +21,11 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 	
 	else {
 
-		if(currentObj.circle || currentObj.regPolygon || currentObj.rectangle) {
+		if(currentObj.shape === "circle" || currentObj.shape === "regPolygon" || currentObj.shape === "rectangle") {
 			currentObj.cycle = currentObj.firstCycle + currentObj.matter.angle;
 		}
 	
-		if(currentObj.rectangle) {
+		if(currentObj.shape === "rectangle") {
 			
 			var v = {
 				"x": currentObj.matter.position.x - currentObj.matter.positionPrev.x,
@@ -37,12 +37,12 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 	
 		}
 	
-		if(currentObj.circle || currentObj.regPolygon) {
+		if(currentObj.shape === "circle" || currentObj.shape === "regPolygon") {
 			currentObj.x = currentObj.matter.position.x;
 			currentObj.y = currentObj.matter.position.y;
 		}
 	
-		if(currentObj.path) {
+		if(currentObj.shape === "polygon") {
 			PhSim.calc_skinmesh(currentObj);
 		}
 

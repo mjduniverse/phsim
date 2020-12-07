@@ -57,14 +57,14 @@ Motion.setVelocity = function(dynObject,velocityVector) {
 Motion.translate = function(o,translationVector) {
 	if(!o.locked) {
 
-		if(o.path) {
+		if(o.shape === "polygon") {
 			for(var i = 0; i < o.verts.length; i++) {
 				o.verts[i].x = o.verts[i].x + translationVector.x;
 				o.verts[i].y = o.verts[i].y + translationVector.y;
 			}
 		}
 
-		if(o.circle || o.rectangle || o.regPolygon) {
+		if(o.shape === "circle" || o.shape === "rectangle" || o.shape === "regPolygon") {
 				o.x = o.x + translationVector.x;
 				o.y = o.y + translationVector.y;
 		}
@@ -89,12 +89,12 @@ Motion.translate = function(o,translationVector) {
 Motion.setPosition = function(dynObject,positionVector) {
 	if(!dynObject.locked) {
 
-		if(o.circle || o.regPolygon) {
+		if(o.type === "circle" || o.type === "regPolygon") {
 				o.x = positionVector.x;
 				o.y = positionVector.y;
 		}
 
-		if(o.rectangle) {
+		if(o.shape === "rectangle") {
 
 		}
 

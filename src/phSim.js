@@ -263,8 +263,6 @@ PhSim.prototype.paused = true;
   * 
   */
 
- PhSim.nextId = "0";
-
 
 /**
  * The matter.js world

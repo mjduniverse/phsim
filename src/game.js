@@ -263,7 +263,7 @@ Game.Widgets.coin = function(dyn_object,widget) {
 		var a = function() {
 
 			if(self.inSensorCollision(obj1) && self.lclGame) {
-				self.lclGame.setScore(self.lclGame.score + value);
+				self.lclGame.setScore(self.lclGame.score + 1);
 				self.off("collisionstart",a);	
 			}
 
@@ -290,7 +290,7 @@ var func = function() {
 
 		if(self.inSensorCollision(obj1) && self.lclGame) {
 			self.lclGame.setLife(self.lclGame.life - 1);
-			self.off("collisionstart",a);	
+			self.off("collisionstart",a);
 		}
 
 	}

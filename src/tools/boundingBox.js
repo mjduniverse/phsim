@@ -57,19 +57,19 @@ PhSim.getVertBoundingBox = function(verts) {
 
 PhSim.getStaticBoundingBox = function(object) {
 	
-	if(object.path) {
+	if(object.shape === "polygon") {
 		return PhSim.getVertBoundingBox(object.verts);
 	}
 
-	if(object.regPolygon) {
+	if(object.shape === "regPolygon") {
 		return PhSim.getVertBoundingBox(PhSim.getRegPolygonVerts(object));
 	}
 
-	if(object.rectangle) {
+	if(object.shape === "rectangle") {
 		return PhSim.getVertBoundingBox(PhSim.getRectangleVertArray(object,true));
 	}
 
-	if(object.circle) {
+	if(object.shape === "circle") {
 
 		var ax = object.x - object.radius;
 		var ay = object.y - object.radius;

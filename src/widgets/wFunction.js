@@ -243,10 +243,11 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	else if(options.trigger === "sensor" || options.trigger === "sensor_global") {
 
 		var self = this;
+		var f;
 
 		if(thisRef instanceof PhSim.DynObject) {
 			
-			var f = function(e) {
+			f = function(e) {
 
 				var m = self.inSensorCollision(thisRef)
 	
@@ -258,7 +259,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		}
 
 		else {
-			var f = function(e) {
+			f = function(e) {
 				call(e);
 			}
 		}

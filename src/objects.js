@@ -150,7 +150,7 @@ Options.lclGradient = function() {
  * @param {PhSim.Vector[]} verts -  Vertcies
  */
 
-Options.Path = function(verts) {
+Options.Polygon = function(verts) {
 
 	/**
 	 * Array of vectors defining a path or a polygon
@@ -179,7 +179,7 @@ Options.Path = function(verts) {
 	 * @type {Boolean}
 	 */
 
-	this.path = true;
+	this.shape = "polygon";
 }
 
 /**
@@ -191,11 +191,11 @@ Options.Path = function(verts) {
  * In PhSim, a path is any object `obj` such that the following is true:
  * 
  * `Array.isArray(obj) === true`
- * `obj.path === true`
+ * `obj.shape === "polygon"`
  * 
  * If a path is used as a polygon, it must have at least three vectors in the `verts` property. 
  * 
- * @typedef {PhSim.Options.Path} Path
+ * @typedef {PhSim.Options.Polygon} Polygon
  * 
  */
  
@@ -212,7 +212,7 @@ Options.Circle = function(x = null,y = null,r = null) {
 	 * @type {Boolean}
 	 */
 
-	this.circle = true,
+	this.shape = "circle";
 
 	/**
 	 * x-coordinate of the center
@@ -247,7 +247,7 @@ Options.Circle = function(x = null,y = null,r = null) {
  * A circle is a set all points equidistant from some point known as the center.
  * 
  * In PhSim, a circle is any object `obj` such that the following are all true:
- * `obj.circle === true`;
+ * `obj.shape === "circle"`;
  * `typeof obj.x === number`;
  * `typeof obj.y === number`;
  * `typeof obj.radius === number`;
@@ -261,7 +261,7 @@ Options.Circle = function(x = null,y = null,r = null) {
  * 
  * In PhSim, a regular polgon is any object `obj` such that the following are true:
  * 
- * `this.regPolygon === true`
+ * `this.shape === "regPolygon"`
  * 
  * 
  * @constructor
@@ -278,7 +278,7 @@ Options.RegPolygon = function(x,y,r,n) {
 	 * @type {Boolean}
 	 */
 
-	this.regPolygon =  true;
+	this.shape = "regPolygon";
 
 	/**
 	 * x-coordinate of the center of the regular polygon
@@ -335,7 +335,7 @@ Options.Rectangle = function(x,y,w,h) {
 	 * @type {Boolean}
 	 */
 
-	this.rectangle = true;
+	this.shape = "rectangle";
 
 	/**
 	 * x-coordinate of the upper left corner of the rectangle
@@ -377,7 +377,7 @@ Options.Rectangle = function(x,y,w,h) {
  * 
  * Static Object Type
  * 
- * @typedef {PhSim.Options.Rectangle | PhSim.Options.Circle | PhSim.Options.RegPolygon | PhSim.Options.Path} StaticObject
+ * @typedef {PhSim.Options.Rectangle | PhSim.Options.Circle | PhSim.Options.RegPolygon | PhSim.Options.Polygon} StaticObject
  * @property {Number} [mass] - The mass of the object.
  * @property {Number} [density] - The density of the object
  * @property {Boolean} [locked] - A boolean deterimining the lock status of the object
@@ -396,7 +396,7 @@ Options.Rectangle = function(x,y,w,h) {
  */
 
 Options.Composite = function() {
-	this.composite = true;
+	this.shape = "composite";
 	this.name = "Untitled";
 }
 
