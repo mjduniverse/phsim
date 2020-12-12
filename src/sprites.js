@@ -57,12 +57,14 @@ Sprites.circularSpriteRenderCanvas = function(ctx,canvas,angle) {
 
 /**
  * 
+ * The sprite image array is an interface that is used for 
+ * 
  * @constructor
  * @param {Sprites.Sprite[]} sprites 
  * @param {Function} onload 
  */
 
-Sprites.SpriteImgArray = function(sprites,onload = function() {}) {
+Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 	
 	// Force load if sprites list is empty
 
@@ -70,7 +72,20 @@ Sprites.SpriteImgArray = function(sprites,onload = function() {}) {
 	this.loaded_n = 0;
 	this.loaded = false;
 	this.onload = onload;
-	this.length = 0;
+
+	/**
+	 * 
+	 * Length of interface
+	 * 
+	 * @property {Number}
+	 * @name length
+	 * 
+	 */
+
+	Object.defineProperty(this,"length",{
+		value: 0,
+		enumerable: false
+	});
 
 	var self = this;
 
@@ -96,11 +111,13 @@ Sprites.SpriteImgArray = function(sprites,onload = function() {}) {
  * 
  * Add sprite to the Sprite Image Array.
  * 
+ * @function
+ * @this Sprites.spriteImgObj
  * @param {Sprites.Sprite|PhSim.Sprite.Sprite[]} staticObj - This could be a sprite or an array of sprites
  * @param {Function} [onload] - a function that is executed when the image loads.
  */
 
-Sprites.SpriteImgArray.prototype.addSprite = function(staticObj,onload = function() {} ) {
+Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function() {} ) {
 	
 	var self = this;
 	

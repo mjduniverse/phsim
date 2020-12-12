@@ -1,3 +1,5 @@
+const PhSim = require("../phSim");
+
 /**
  * 
  * Used to add events to a PhSim simulation
@@ -10,8 +12,6 @@
  * @param {boolean} [options.slEvent] - If true, the event will be removed when the simulation changes
  * 
  */
-
-const PhSim = require("../phSim");
 
 PhSim.prototype.on = function(eventStr,call,options = {}) {
 	

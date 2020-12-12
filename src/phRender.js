@@ -120,7 +120,7 @@ PhRender.prototype.static_path = function (path) {
 
 	if(path.sprite) {
 
-		var img = this.spriteImgArray[path.sprite.src];
+		var img = this.spriteImgObj[path.sprite.src];
 
 		var centroid = findCentroidOfPath(path);
 
@@ -189,7 +189,7 @@ PhRender.prototype.static_path = function (path) {
 
 /**
  * @function
- * @param {String} url - URL of object loaded in PhRender.prototype.spriteImgArray
+ * @param {String} url - URL of object loaded in PhRender.prototype.spriteImgObj
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
  * @param {Number} w - width
@@ -199,7 +199,7 @@ PhRender.prototype.static_path = function (path) {
 
 PhRender.prototype.renderSpriteByCenter = function(url,x,y,w,h,a) {
 
-	var spriteImg = this.spriteImgArray[url];
+	var spriteImg = this.spriteImgObj[url];
 
 	this.ctx.save();
 	this.ctx.translate(x,y)
@@ -280,7 +280,7 @@ PhRender.prototype.static_circle = function (circle) {
 
 	if(circle.sprite) {
 
-		var img = this.spriteImgArray[circle.sprite.src];
+		var img = this.spriteImgObj[circle.sprite.src];
 
 		this.ctx.imageSmoothingEnabled = circle.sprite.smooth;
 
@@ -360,7 +360,7 @@ PhRender.prototype.static_rectangle = function(rectangle) {
 
 	if(rectangle.sprite) {
 
-		var img = this.spriteImgArray[rectangle.sprite.src];
+		var img = this.spriteImgObj[rectangle.sprite.src];
 
 		this.ctx.imageSmoothingEnabled = rectangle.sprite.smooth;
 
@@ -483,7 +483,7 @@ PhRender.prototype.static_regPolygon = function(regPolygon) {
 
 	if(regPolygon.sprite) {
 
-		var img = this.spriteImgArray[regPolygon.sprite.src];
+		var img = this.spriteImgObj[regPolygon.sprite.src];
 
 		this.ctx.imageSmoothingEnabled = regPolygon.sprite.smooth;
 
@@ -710,7 +710,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 
 		if(dynObject.sprite) {
 
-			var img = this.spriteImgArray[dynObject.sprite.src];
+			var img = this.spriteImgObj[dynObject.sprite.src];
 
 			this.ctx.imageSmoothingEnabled = dynObject.sprite.smooth;
 

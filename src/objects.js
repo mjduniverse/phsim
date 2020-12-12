@@ -7,6 +7,8 @@
  * 
  */
 
+const PhSim = require("./phSim");
+
 var Options = function() {
 
 	/**
@@ -470,8 +472,6 @@ Options.Layer = function() {
 
 	this.objUniverse = [];
 
-	this.objUniverse[0]
-
 	/**
 	 * The name of the layer
 	 * @type {String}
@@ -479,6 +479,12 @@ Options.Layer = function() {
 
 	this.name = null;
 }
+
+/**
+ * @typedef {Object} Layer
+ * @property {PhSimObjects[]} objUniverse - The array of objects.
+ * @property {String} name - The name of the layer
+ */
 
 /** 
  * simulation Object 
@@ -512,8 +518,23 @@ Options.Simulation = function() {
 	this.widgets = [];
 }
 
-Options.LO = function(L,O) {
+/**
+ * 
+ * @typedef {Object} Simulation
+ * @property {Layer[]} layers - An array of layers
+ * @property {Object} world - World Object
+ * @property {Boolean} simulation - Boolean indicating a simulation
+ * @property {Widget} widgets - Array of array options
+ */
 
+/**
+ * 
+ * @param {Simulation} L 
+ * @param {*} O 
+ */
+
+Options.LO = function(L,O) {
+	L.layers[0].objUniverse
 }
 
 /**

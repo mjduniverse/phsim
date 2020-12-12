@@ -73,6 +73,14 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 		this.options.simulations[0].layers[0].objUniverse = dynSimOptions;
 	}
 
+	/**
+	 * Array of simulations to be loaded.
+	 * 
+	 * @type {PhSim.Options.Simulation[]}
+	 */
+
+	this.simulations = PhSim.Query.deepClone(this.options.simulations);
+
 	// Configure canvas
 
 	if(dynSimOptions.canvas) {
@@ -109,19 +117,56 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 		this.gotoSimulationIndex(0);
 	}
 
-} 
+}
+
+/**
+ * Connect an HTML canvas to the PhSim simulation object.
+ * 
+ * @function
+ * @param {HTMLCanvasElement} canvas 
+ */
 
 PhSim.prototype.connectCanvas = function(canvas) {
+
+	/**
+	 * Simulation canvas
+	 * @type {HTMLCanvasElement}
+	 */
+
 	this.simCanvas = canvas;
+
+	/**
+	 * Simulation context for the canvas
+	 * @type {CanvasRenderingContext2D}
+	 */
+
 	this.simCtx = canvas.getContext("2d");
+
+	
 	this.simCanvas.width = this.options.box.w || this.options.box.width;
 	this.simCanvas.height = this.options.box.h || this.options.box.height;
 	this.registerCanvasEvents();
 	this.configRender(this.simCtx);
 }
 
+/**
+ * Connect a container for the PhSim simulation object. The PhSim canvas is supposed to be 
+ * the only child element of the container.
+ * 
+ * When set, the container has the simulation canvas appened as a child.
+ * 
+ * @function
+ * @param {HTMLElement} c - Container
+ */
+
 PhSim.prototype.connectContainer = function(c) {
 	
+	/**
+	 * The simulation container.
+	 * This is is supposed to be the wrapping element of the {@link PhSim#simCanvas|PhSim canvas}.
+	 * @type {HTMLElement}
+	 */
+
 	this.simContainer = c;
 
 	c.appendChild(this.simCanvas);
@@ -418,6 +463,8 @@ PhSim.calc_skinmesh = require("./calc_skinmesh");
 
 require("./events/simpleEvent");
 require("./processVar");
+
+PhSim.ObjLoops = require("./objLoops");
 
 
 /**

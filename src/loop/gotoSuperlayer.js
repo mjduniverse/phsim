@@ -226,7 +226,7 @@ var gotoSimulationIndex = function (i) {
 	var promise = new Promise(function(resolve,reject){
 
 		if(self.phRender) {
-			self.phRender.spriteImgArray = new PhSim.Sprites.SpriteImgArray(self.staticSprites,function() {
+			self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(self.staticSprites,function() {
 				resolve();
 				self.status = PhSim.statusCodes.LOADED_SPRITES;
 			});

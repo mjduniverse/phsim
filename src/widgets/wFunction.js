@@ -216,7 +216,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		if(options.key) {
 		
 			var f = function(e) {
-				if(options.key === e.key) {
+				if( e.key.match( new RegExp("^" + options.key + "$","i") ) ) {
 					call(e);
 				}
 			};
@@ -288,8 +288,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 	else if(options.trigger === "objclick" || options.trigger === "objclick_global") {
 
+		var f;
+
 		if(thisRef instanceof PhSim.DynObject) {
-			var f = function(e) {
+			f = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
 					call(e);
 				}
@@ -297,7 +299,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		}
 
 		else {
-			var f = function(e) {
+			f = function(e) {
 				call(e);
 			}
 		}
