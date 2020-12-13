@@ -224,7 +224,7 @@ var gotoSimulationIndex = function (i) {
 
 	this.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
 
-	return new Promise(function(resolve,reject){
+	var p = new Promise(function(resolve,reject){
 
 		if(self.phRender && self.staticSprites.length) {
 			self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(self.staticSprites,function() {
@@ -243,27 +243,29 @@ var gotoSimulationIndex = function (i) {
 
 			if(self.staticAudio.length) {
 				self.audioArray = new PhSim.Audio.AudioArray(self.staticAudio,function(){
+					self.status = PhSim.statusCodes.LOADED_AUDIO;
 					resolve();
-					this.status = PhSim.statusCodes.LOADED_AUDIO;
 				});
 			}
 
 			else {
-				this.status = PhSim.statusCodes.LOADED_AUDIO;
+				self.status = PhSim.statusCodes.LOADED_AUDIO;
 				resolve();
 			}
 
-		})
+		});
 	}).then(function(){
 		this_a.init = true;
 
-		this.status = PhSim.statusCodes.LOADED_SIMULATION;
+		self.status = PhSim.statusCodes.LOADED_SIMULATION;
 
 		var e = new PhSim.PhDynEvent();
 	
 		self.callEventClass("load",self,e);
 
 	});
+
+	return p;
 
 }
 
