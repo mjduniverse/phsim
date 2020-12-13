@@ -72,20 +72,8 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 	this.loaded_n = 0;
 	this.loaded = false;
 	this.onload = onload;
-
-	/**
-	 * 
-	 * Length of interface
-	 * 
-	 * @property {Number}
-	 * @name length
-	 * 
-	 */
-
-	Object.defineProperty(this,"length",{
-		value: 0,
-		enumerable: false
-	});
+	this.length = 0;
+	this.urls = [];
 
 	var self = this;
 
@@ -144,6 +132,7 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 		
 			this.static[staticObj.src] = staticObj;
 			this[staticObj.src] = img;
+			this.urls.push(staticObj.src);
 		
 			this.length++;
 
