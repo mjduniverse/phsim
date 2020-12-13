@@ -8,6 +8,7 @@
  * @param {Number} i
  * @this PhSim
  * @memberof PhSim
+ * @returns {Promise} - A promise that is fulfiled if the loading is successful.
  * @function
  * 
  *  
