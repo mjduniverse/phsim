@@ -162,14 +162,7 @@ Options.Polygon = function(verts) {
 	this.verts;
 
 	if(Array.isArray(verts)) {
-
 		this.verts = verts;
-
-		for(var i = 0; i < verts.length; i++) {
-			var old = verts[i];
-			verts[i] = new PhSim.Vector(verts[i].x,verts[i].y);
-			Object.assign(verts[i],old);
-		}
 	}
 
 	else {
