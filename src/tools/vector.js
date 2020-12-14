@@ -51,11 +51,30 @@ var Vector = function(x,y) {
  * @function
  * @param {Vector} vector1 - The first vector
  * @param {Vector} vector2 - The second vector
- * @returns {Vector} - The sum of the two vectors
+ * 
+ * @param {Boolean} [newObj = true] - Boolean that determines the return value. 
+ * If true, then it returns a new Vector object `vector` such that 
+ * `vector.x === vector1.x + vector2.x` and `vector.x === vector1.y + vector2.y`
+ * 
+ * If false, then `vector2.x` is added to `vector1.x`, `vector2.y` is added to `vector1.y`
+ * and then `vector1` is returned.
+ * 
+ * @returns {Vector} - The sum of the two vectors. New object if `newObj` is true. Returns
+ * `vector1` otherwise. 
  */
 
-Vector.add = function(vector1,vector2) {
-	return new Vector(vector1.x + vector2.x, vector1.y + vector2.y);
+Vector.add = function(vector1,vector2,newObj = true) {
+	
+	if(newObj) {
+		return new Vector(vector1.x + vector2.x, vector1.y + vector2.y);
+	}
+
+	else {
+		vector1.x = vector1.x + vector2.x;
+		vector1.y = vector1.y + vector2.y;
+		return vector1;
+	}
+
 }
 
 /**
@@ -65,11 +84,29 @@ Vector.add = function(vector1,vector2) {
  * @function
  * @param {Vector} vector1 
  * @param {Vector} vector2 
- * @returns {Vector} - The difference between the two vectors
+ * 
+ * * @param {Boolean} [newObj = true] - Boolean that determines the return value. 
+ * If true, then it returns a new Vector object `vector` such that 
+ * `vector.x === vector1.x - vector2.x` and `vector.x === vector1.y - vector2.y`
+ * 
+ * If false, then `vector2.x` is subtracted from `vector1.x`, `vector2.y` is subtracted 
+ * from `vector1.y` and then `vector1` is returned.
+ * 
+ * @returns {Vector} - The difference between the two vectors. New object if `newObj` is true. Returns
+ * `vector1` otherwise. 
  */
 
-Vector.subtract = function(vector1,vector2) {
-	return new Vector(vector1.x - vector2.x, vector1.y - vector2.y);
+Vector.subtract = function(vector1,vector2,newObj = true) {
+
+	if(newObj) {
+		return new Vector(vector1.x - vector2.x, vector1.y - vector2.y);	}
+
+	else {
+		vector1.x = vector1.x - vector2.x;
+		vector1.y = vector1.y - vector2.y;
+		return vector1;
+	}
+
 }
 
 /**
