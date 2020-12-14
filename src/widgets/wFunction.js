@@ -203,6 +203,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		wFunctionBody = this.options.wFunctions[wFunctionBody];
 	}
 
+	if(typeof wFunctionBody === "string") {
+		wFunctionBody = new Function("e",options.function)
+	}
+
     var call = function(e) {
         return wFunctionBody.apply(thisRef,e);
 	}
@@ -245,7 +249,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		var self = this;
 		var f;
 
-		if(thisRef instanceof PhSim.DynObject) {
+		if(options.trigger === "sensor") {
 			
 			f = function(e) {
 
@@ -290,7 +294,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		var f;
 
-		if(thisRef instanceof PhSim.DynObject) {
+		if(options.trigger === "objclick") {
 			f = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
 					call(e);
@@ -313,13 +317,14 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 	else if(options.trigger === "objmousedown" || options.trigger === "objmousedown_global") {
 
-		if(thisRef instanceof PhSim.DynObject) {
+		if(options.trigger === "objmousedown") {
 			var f = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
 					call(e);
 				}
 			}
 		}
+
 
 		else {
 			var f = function(e) {
@@ -346,7 +351,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	
 	else if(options.trigger === "objmouseup" || options.trigger === "objmouseup_global") {
 
-		if(thisRef instanceof PhSim.DynObject) {
+		if(options.trigger === "objmouseup") {
 			var f = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
 					call(e);
