@@ -101,7 +101,7 @@ PhRender.prototype.unsetCtx = function() {
  * @param {Path} path 
  */
 
-PhRender.prototype.static_path = function (path) {
+PhRender.prototype.static_polygon = function (path) {
 
 	this.setCtx(path);
 
@@ -556,7 +556,7 @@ PhRender.prototype.static_regPolygon = function(regPolygon) {
 PhRender.prototype.renderStatic = function(obj) {
 				
 	if (obj.shape === "polygon")  {
-		this.static_path(obj);
+		this.static_polygon(obj);
 	}
 	
 	if( obj.shape === "circle") {
