@@ -194,28 +194,14 @@ var gotoSimulationIndex = function (i) {
 
 		}
 
-		if(a.connection) {
+		if(a.type === "connection") {
 
 			this_a.connectDynObjects(this_a.dynTree[a.objectA.L][a.objectA.O],this_a.dynTree[a.objectB.L][a.objectB.O]);
 
 		}
 
-		if(a.wFunction) {
-
-            var wf = self.createWFunction(a.function,this_a);
-
-            var closure = function() {
-
-                var f = function(){
-                    wf();
-                };
-
-                return f;
-
-            }
-
-            var f = this.createWFunction(a.trigger,closure(),a);
-
+		if(a.type === "wFunction") {
+            self.createWFunction(self,a.function,a);
         }
 
 
