@@ -101,7 +101,7 @@ PhRender.prototype.unsetCtx = function() {
  * @param {Path} path 
  */
 
-PhRender.prototype.static_polygon = function (path) {
+PhRender.prototype.renderPolygon = function (path) {
 
 	this.setCtx(path);
 
@@ -256,7 +256,7 @@ PhRender.prototype.renderConstraint = function (constraint) {
  * @param {PhSim.Static.Circle} circle 
  */
 
-PhRender.prototype.static_circle = function (circle) {
+PhRender.prototype.renderCircle = function (circle) {
 	
 	this.setCtx(circle);
 
@@ -330,7 +330,7 @@ PhRender.prototype.static_circle = function (circle) {
  * @param rectangle.sprite - Sprite Object
  */
 
-PhRender.prototype.static_rectangle = function(rectangle) {
+PhRender.prototype.renderRectangle = function(rectangle) {
 
 	var c = PhSim.getRectangleCentroid(rectangle);
 
@@ -459,7 +459,7 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
  * @param {PhSim.Static.RegPolygon} regPolygon 
  */
 
-PhRender.prototype.static_regPolygon = function(regPolygon) {
+PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 	var vertSet = PhSim.getRegPolygonVerts(regPolygon);
 	
@@ -556,19 +556,19 @@ PhRender.prototype.static_regPolygon = function(regPolygon) {
 PhRender.prototype.renderStatic = function(obj) {
 				
 	if (obj.shape === "polygon")  {
-		this.static_polygon(obj);
+		this.renderPolygon(obj);
 	}
 	
 	if( obj.shape === "circle") {
-		this.static_circle(obj); 
+		this.renderCircle(obj); 
 	}
 
 	if( obj.shape === "rectangle") {
-		this.static_rectangle(obj);
+		this.renderRectangle(obj);
 	}
 
 	if( obj.shape === "regPolygon") {
-		this.static_regPolygon(obj);
+		this.renderRegPolygon(obj);
 	}
 
 	if( obj.shape === "composite") {
@@ -770,15 +770,15 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 	}
 
 	if(dynObject.shape === "circle") {
-		this.static_circle(dynObject);	
+		this.renderCircle(dynObject);	
 	}
 	
 	if(dynObject.shape === "regPolygon") {
-		this.static_regPolygon(dynObject);		
+		this.renderRegPolygon(dynObject);		
 	}
 
 	if(dynObject.shape === "rectangle") {
-		this.static_rectangle(dynObject);		
+		this.renderRectangle(dynObject);		
 	}
 
 	if(dynObject.shape === "composite") {
