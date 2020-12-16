@@ -1,15 +1,20 @@
 
 /**
- * Objects module
+ * A static object is an object that is not simulated by the PhSim simulation.
+ * The PhSim.Static namespace is used for storing Static Objects or constructors for 
+ * parts of static objects.
+ * 
+ * A static simulation is an object that 
  * @namespace
  * @constructor
  * @memberof PhSim
+ * 
  * 
  */
 
 const PhSim = require("./phSim");
 
-var Options = function() {
+var Static = function() {
 
 	/**
 	 * PhSim version
