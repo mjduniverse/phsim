@@ -15,7 +15,7 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 
 	// Loop must start at index 1 because the first element in the array is a reference to the parent object itself.
 
-	if(currentObj.noDyn || currentObj.permStatic) {
+	if(currentObj.noDyn || currentObj.static) {
 		this.phRender.renderStatic(currentObj);	
 	}
 	

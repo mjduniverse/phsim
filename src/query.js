@@ -134,7 +134,7 @@ PhSim.Query.chkWidgetType = function(widget) {
 
 PhSim.prototype.getStatic = function(dynObject) {
 	
-	if(dynObject.permStatic || dynObject.permStatic) {
+	if(dynObject.static || dynObject.static) {
 		return null;
 	}
 

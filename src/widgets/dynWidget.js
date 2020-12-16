@@ -58,7 +58,7 @@ PhSim.prototype.forAllObjects = function(call) {
 
 PhSim.prototype.addToOverlayer = function(dynObject) {
 	
-	if(!dynObject.permStatic) {
+	if(!dynObject.static) {
 		PhSim.Matter.World.add(this.matterJSWorld, dynObject.matter);
 	}
 
@@ -74,7 +74,7 @@ PhSim.prototype.addToOverlayer = function(dynObject) {
  */
 
 PhSim.prototype.isNonDyn = function(o) {
-	return o.noDyn || o.permStatic;
+	return o.noDyn || o.static || o.static;
 }
 
 /**
