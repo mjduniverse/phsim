@@ -121,6 +121,10 @@ DynObject.setProperty = function(o,key,value) {
 	}
 }
 
+DynObject.setRegPolygonSideNumber = function(dyn_object,sides) {
+
+}
+
 /**
  * 
  * @function
@@ -170,7 +174,7 @@ DynObject.flattenComposite = function(composite) {
  */
 
 DynObject.createPath = function(vectorSet,options) {
-	var o = new Options.Polygon(vectorSet);
+	var o = new Static.Polygon(vectorSet);
 	Object.assign(o,options);
 	return new DynObject(o);
 }
@@ -187,7 +191,7 @@ DynObject.createPath = function(vectorSet,options) {
  */
 
 DynObject.createCircle = function(x,y,r,options = {}) {
-	var o = new Options.Circle(x,y,r);
+	var o = new Static.Circle(x,y,r);
 	Object.assign(o,options);
 	return new DynObject(o);
 }
@@ -206,7 +210,7 @@ DynObject.createCircle = function(x,y,r,options = {}) {
  */
 
 DynObject.createRectangle = function(x,y,w,h,options = {}) {
-	var o = new Options.Rectangle(x,y,w,h);
+	var o = new Static.Rectangle(x,y,w,h);
 	Object.assign(o,options);
 }
 
@@ -223,7 +227,7 @@ DynObject.createRectangle = function(x,y,w,h,options = {}) {
  */
 
 DynObject.createRegPolygon = function(x,y,r,n,options = {}) {
-	var o = new Options.RegPolygon(x,y,r,n);
+	var o = new Static.RegPolygon(x,y,r,n);
 	Object.assign(o,options);
 	return new DynObject(o);
 }

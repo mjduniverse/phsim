@@ -31,7 +31,7 @@ var Options = function() {
 
 	/** PhSim Box Settings */
 
-	this.box = new PhSim.Options.Rectangle(0,0,800,600);
+	this.box = new PhSim.Static.Rectangle(0,0,800,600);
 
 	/** PhSim Camera */
 
@@ -152,7 +152,7 @@ Options.lclGradient = function() {
  * @param {PhSim.Vector[]} verts -  Vertcies
  */
 
-Options.Polygon = function(verts) {
+Static.Polygon = function(verts) {
 
 	/**
 	 * Array of vectors defining a path or a polygon
@@ -190,7 +190,7 @@ Options.Polygon = function(verts) {
  * 
  * If a path is used as a polygon, it must have at least three vectors in the `verts` property. 
  * 
- * @typedef {PhSim.Options.Polygon} Polygon
+ * @typedef {PhSim.Static.Polygon} Polygon
  * 
  */
  
@@ -200,7 +200,7 @@ Options.Polygon = function(verts) {
  * @constructor
  */
 
-Options.Circle = function(x = null,y = null,r = null) {
+Static.Circle = function(x = null,y = null,r = null) {
 
 	/**
 	 * Boolean indicating a circle
@@ -248,7 +248,7 @@ Options.Circle = function(x = null,y = null,r = null) {
  * `typeof obj.radius === number`;
  * `typeof obj.cycle === number || obj.cycle`;
  * 
- * @typedef {PhSim.Options.Circle} Circle
+ * @typedef {PhSim.Static.Circle} Circle
  */
 
 /**
@@ -266,7 +266,7 @@ Options.Circle = function(x = null,y = null,r = null) {
  * @param {Number} n - sides of the regular polygon
  */
 
-Options.RegPolygon = function(x,y,r,n) {
+Static.RegPolygon = function(x,y,r,n) {
 
 	/**
 	 * Boolean for indicating a regular polygon
@@ -323,7 +323,7 @@ Options.RegPolygon = function(x,y,r,n) {
  * 
  */
 
-Options.Rectangle = function(x,y,w,h) {
+Static.Rectangle = function(x,y,w,h) {
 
 	/**
 	 * Boolean for indicating a rectangle
@@ -372,7 +372,7 @@ Options.Rectangle = function(x,y,w,h) {
  * 
  * Static Object Type
  * 
- * @typedef {PhSim.Options.Rectangle | PhSim.Options.Circle | PhSim.Options.RegPolygon | PhSim.Options.Polygon} StaticObject
+ * @typedef {PhSim.Static.Rectangle | PhSim.Static.Circle | PhSim.Static.RegPolygon | PhSim.Static.Polygon} StaticObject
  * @property {Number} [mass] - The mass of the object.
  * @property {Number} [density] - The density of the object
  * @property {Boolean} [locked] - A boolean deterimining the lock status of the object

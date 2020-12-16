@@ -253,7 +253,7 @@ PhRender.prototype.renderConstraint = function (constraint) {
  * Render circle
  * 
  * @function
- * @param {PhSim.Options.Circle} circle 
+ * @param {PhSim.Static.Circle} circle 
  */
 
 PhRender.prototype.static_circle = function (circle) {
@@ -326,7 +326,7 @@ PhRender.prototype.static_circle = function (circle) {
  * Render rectangle
  * 
  * @function
- * @param {PhSim.Options.Rectangle} rectangle - Rectangle object
+ * @param {PhSim.Static.Rectangle} rectangle - Rectangle object
  * @param rectangle.sprite - Sprite Object
  */
 
@@ -456,7 +456,7 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 
 /**
  * @function
- * @param {PhSim.Options.RegPolygon} regPolygon 
+ * @param {PhSim.Static.RegPolygon} regPolygon 
  */
 
 PhRender.prototype.static_regPolygon = function(regPolygon) {
