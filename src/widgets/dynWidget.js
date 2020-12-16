@@ -1,5 +1,6 @@
 // Set Angle to mouse.
 
+const DynObject = require("../dynObject");
 const PhSim = require("../phSim");
 
 // Object Connection
@@ -56,13 +57,13 @@ PhSim.prototype.forAllObjects = function(call) {
  * @param {PhSim.DynObject} dynObject 
  */
 
-PhSim.prototype.addToOverlayer = function(dynObject) {
+PhSim.prototype.addToOverlayer = function(o) {
 	
-	if(!dynObject.noDyn) {
-		PhSim.Matter.World.add(this.matterJSWorld, dynObject.matter);
+	if(o instanceof DynObject) {
+		PhSim.Matter.World.add(this.matterJSWorld, o.matter);
 	}
 
-	this.objUniverse.push(dynObject);
+	this.objUniverse.push(o);
 
 }
 
@@ -93,7 +94,7 @@ PhSim.prototype.addObject = function(o,options = {}) {
 	if(typeof options.layer === "number") {
 		this.dynTree[options.layer].push(o);
 
-		if(!this.isNonDyn(o)) {
+		if(o instanceof DynObject) {
 			o.layerBranch = this.dynTree[options.layer];
 		}
 
@@ -101,7 +102,7 @@ PhSim.prototype.addObject = function(o,options = {}) {
 
 	this.objUniverse.push(o);
 
-	if(!this.isNonDyn(o)) {
+	if(o instanceof DynObject) {
 
 		o.phSim = this;
 
