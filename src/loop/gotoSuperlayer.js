@@ -83,7 +83,7 @@ var gotoSimulationIndex = function (i) {
 					this.staticSprites.push(o.sprite);	
 				}
 				
-				if(o.static) {
+				if(o.noDyn) {
 
 					this.addObject(o,{
 						layer: L

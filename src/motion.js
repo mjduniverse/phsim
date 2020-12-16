@@ -22,7 +22,7 @@ var Motion = {}
  */
 
 Motion.applyForce = function(dynObject,position,forceVector) {
-	if(!dynObject.locked && !dynObject.static) {
+	if(!dynObject.locked && !dynObject.noDyn) {
 		return PhSim.Matter.Body.applyForce(dynObject.matter,position,forceVector);
 	}
 }

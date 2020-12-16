@@ -1174,7 +1174,7 @@ var Motion = {}
  */
 
 Motion.applyForce = function(dynObject,position,forceVector) {
-	if(!dynObject.locked && !dynObject.static) {
+	if(!dynObject.locked && !dynObject.noDyn) {
 		return PhSim.Matter.Body.applyForce(dynObject.matter,position,forceVector);
 	}
 }
@@ -4242,7 +4242,7 @@ PhSim.prototype.forAllObjects = function(call) {
 
 PhSim.prototype.addToOverlayer = function(dynObject) {
 	
-	if(!dynObject.static) {
+	if(!dynObject.noDyn) {
 		PhSim.Matter.World.add(this.matterJSWorld, dynObject.matter);
 	}
 
@@ -4258,7 +4258,7 @@ PhSim.prototype.addToOverlayer = function(dynObject) {
  */
 
 PhSim.prototype.isNonDyn = function(o) {
-	return o.noDyn || o.static || o.static;
+	return o.noDyn;
 }
 
 /**
@@ -5593,7 +5593,7 @@ var gotoSimulationIndex = function (i) {
 					this.staticSprites.push(o.sprite);	
 				}
 				
-				if(o.static) {
+				if(o.noDyn) {
 
 					this.addObject(o,{
 						layer: L
@@ -5820,7 +5820,7 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 
 	// Loop must start at index 1 because the first element in the array is a reference to the parent object itself.
 
-	if(currentObj.static) {
+	if(currentObj.noDyn) {
 		this.phRender.renderStatic(currentObj);	
 	}
 	

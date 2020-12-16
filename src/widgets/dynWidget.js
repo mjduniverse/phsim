@@ -58,7 +58,7 @@ PhSim.prototype.forAllObjects = function(call) {
 
 PhSim.prototype.addToOverlayer = function(dynObject) {
 	
-	if(!dynObject.static) {
+	if(!dynObject.noDyn) {
 		PhSim.Matter.World.add(this.matterJSWorld, dynObject.matter);
 	}
 
@@ -74,7 +74,7 @@ PhSim.prototype.addToOverlayer = function(dynObject) {
  */
 
 PhSim.prototype.isNonDyn = function(o) {
-	return o.noDyn || o.static || o.static;
+	return o.noDyn;
 }
 
 /**
@@ -82,38 +82,38 @@ PhSim.prototype.isNonDyn = function(o) {
  * Add Object to PhSim simulation
  * 
  * @function
- * @param {PhSim.DynObject} dynObject 
+ * @param {PhSimObject} o 
  * @param {Object} options
  * @param {Number} options.layer 
  * @returns {PhSim.DynObject} - The added dynObject. 
  */
 
-PhSim.prototype.addObject = function(dynObject,options = {}) {
+PhSim.prototype.addObject = function(o,options = {}) {
 
 	if(typeof options.layer === "number") {
-		this.dynTree[options.layer].push(dynObject);
+		this.dynTree[options.layer].push(o);
 
-		if(!this.isNonDyn(dynObject)) {
-			dynObject.layerBranch = this.dynTree[options.layer];
+		if(!this.isNonDyn(o)) {
+			o.layerBranch = this.dynTree[options.layer];
 		}
 
 	}
 
-	this.objUniverse.push(dynObject);
+	this.objUniverse.push(o);
 
-	if(!this.isNonDyn(dynObject)) {
+	if(!this.isNonDyn(o)) {
 
-		dynObject.phSim = this;
+		o.phSim = this;
 
-		PhSim.Matter.World.add(this.matterJSWorld,dynObject.matter);
+		PhSim.Matter.World.add(this.matterJSWorld,o.matter);
 
-		if(dynObject.static.widgets) {
-			this.extractWidgets(dynObject);
+		if(o.static.widgets) {
+			this.extractWidgets(o);
 		}
 
 	}
 
-	return dynObject;
+	return o;
 }
 
 /**
