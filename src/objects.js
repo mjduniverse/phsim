@@ -565,4 +565,4 @@ Static.SLO = function(S,L,O) {
  * @see {@link https://brm.io/matter-js/docs/classes/Body.html|MatterBody} 
  */
 
-module.exports = Options;
+module.exports = Static;

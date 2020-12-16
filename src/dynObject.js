@@ -1,4 +1,3 @@
-const Options = require("./objects");
 const PhSim = require("./phSim");
 
 /**

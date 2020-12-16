@@ -1,5 +1,3 @@
-const Options = require("./objects");
-
 /**
  * A new simulation object that will replace the 
  * @param {*} options
