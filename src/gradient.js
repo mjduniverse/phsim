@@ -10,7 +10,7 @@ var Gradients = {}
 /**
  * @function
  * @param {CanvasRenderingContext2D} ctx 
- * @param {PhSim.Options.Gradient} jsObject 
+ * @param {PhSim.Static.Gradient} jsObject 
  */
 
 Gradients.extractGradient = function(ctx,jsObject) {

@@ -20,12 +20,12 @@ var Options = function() {
 
 	/** 
 	 * PhSim Static simulation Array 
-	 * @type {PhSim.Options.Simulation[]}
+	 * @type {PhSim.Static.Simulation[]}
 	 */
 
 	this.simulations = [];
 	
-	this.simulations.push(new PhSim.Options.Simulation());
+	this.simulations.push(new PhSim.Static.Simulation());
 	this.simulations[0].layers[0].name = "Untitled Layer"
 	this.simulations[0].name = "Untitled simulation";
 
@@ -35,7 +35,7 @@ var Options = function() {
 
 	/** PhSim Camera */
 
-	this.camera = new PhSim.Options.Camera(0,0,1);
+	this.camera = new PhSim.Static.Camera(0,0,1);
 
 }
 
@@ -61,7 +61,7 @@ var Options = function() {
  * @param {Number} y1 - y coordinate of the second point
  */
 
-Options.GradientLimits = function(x0,y0,x1,y1) {
+Static.GradientLimits = function(x0,y0,x1,y1) {
 
 	/**
 	 * Start vector
@@ -84,7 +84,7 @@ Options.GradientLimits = function(x0,y0,x1,y1) {
  * @param {String} color - String denoting the color of the stop
  */
 
-Options.GradientStop = function(pos,color) {
+Static.GradientStop = function(pos,color) {
 	
 	/**
 	 * Gradient Color
@@ -102,11 +102,11 @@ Options.GradientStop = function(pos,color) {
 }
 
 
-Options.Gradient = function() {
+Static.Gradient = function() {
 
 	/**
 	 * Gradient Stops
-	 * @type {PhSim.Options.GradientStop[]}
+	 * @type {PhSim.Static.GradientStop[]}
 	 */
 
 	this.stops = [];
@@ -140,9 +140,9 @@ Options.Gradient = function() {
 	};
 }
 
-Options.lclGradient = function() {
+Static.lclGradient = function() {
 	this.src = null;
-	this.limits = new PhSim.Options.GradientLimits(x0,y0,x1,y1);
+	this.limits = new PhSim.Static.GradientLimits(x0,y0,x1,y1);
 	this.type = "linear";
 }
 
@@ -390,7 +390,7 @@ Static.Rectangle = function(x,y,w,h) {
  * Composite Object 
  */
 
-Options.Composite = function() {
+Static.Composite = function() {
 	this.shape = "composite";
 	this.name = "Untitled";
 }
@@ -404,7 +404,7 @@ Options.Composite = function() {
  * 
  */
 
-Options.SimBox = function(w,h) {
+Static.SimBox = function(w,h) {
 	
 	/**
 	 * Simulation Width
@@ -428,7 +428,7 @@ Options.SimBox = function(w,h) {
  *
  */
 
-Options.Camera = function(x,y,scale) {
+Static.Camera = function(x,y,scale) {
 
 	/**
 	 * x-coordinate vector of camera
@@ -456,7 +456,7 @@ Options.Camera = function(x,y,scale) {
  * @constructor
  */
 
-Options.Layer = function() {
+Static.Layer = function() {
 
 	/**
 	 * The array of objects
@@ -484,16 +484,16 @@ Options.Layer = function() {
  * @constructor
  */
 
-Options.Simulation = function() {
+Static.Simulation = function() {
 
 	/**
 	 * Array of layers
-	 * @type {PhSim.Options.Layer[]}
+	 * @type {PhSim.Static.Layer[]}
 	 */
 
 	this.layers = [];
 
-	this.layers.push(new PhSim.Options.Layer())
+	this.layers.push(new PhSim.Static.Layer())
 	this.world = {
 		grav: 1,
 		bg: "white",
@@ -526,7 +526,7 @@ Options.Simulation = function() {
  * @param {*} O 
  */
 
-Options.LO = function(L,O) {
+Static.LO = function(L,O) {
 	L.layers[0].objUniverse
 }
 
@@ -540,7 +540,7 @@ Options.LO = function(L,O) {
  * 
  */
 
-Options.SLO = function(S,L,O) {
+Static.SLO = function(S,L,O) {
 
 }
 

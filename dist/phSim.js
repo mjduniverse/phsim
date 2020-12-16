@@ -126,7 +126,7 @@
  * 
  * If an array is chosen, then it is used to create
  * 
- * @typedef {PhSim.Options|PhSim.Options.Simulation|StaticObject[]} DynSimOptions
+ * @typedef {PhSim.Static|PhSim.Static.Simulation|StaticObject[]} DynSimOptions
  * @property {HTMLCanvas} canvas - Simulation canvas
  * @property {Number} initSimIndex - The inital simulation index. If undefined, the simulation index is 0.
  * @property {HTMLElement} container - The container 
@@ -141,7 +141,7 @@
  * 
  */
 
-function PhSim(dynSimOptions = new PhSim.Options()) {
+function PhSim(dynSimOptions = new PhSim.Static()) {
 
 	/**
 	 * The static simulation object
@@ -155,19 +155,19 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 	}
 
 	else if(Array.isArray(dynSimOptions.layers)) {
-		this.options = new PhSim.Options();
+		this.options = new PhSim.Static();
 		this.options.simulations[0] = dynSimOptions;
 	}
 
 	else if(Array.isArray(dynSimOptions)) {
-		this.options = new PhSim.Options();
+		this.options = new PhSim.Static();
 		this.options.simulations[0].layers[0].objUniverse = dynSimOptions;
 	}
 
 	/**
 	 * Array of simulations to be loaded.
 	 * 
-	 * @type {PhSim.Options.Simulation[]}
+	 * @type {PhSim.Static.Simulation[]}
 	 */
 
 	this.simulations = PhSim.Query.deepClone(this.options.simulations);
@@ -502,7 +502,7 @@ if(true) {
     module.exports = PhSim;
 }
 
-PhSim.Options = __webpack_require__(1 );
+PhSim.Static = __webpack_require__(1 );
 
 __webpack_require__(7 );
 __webpack_require__(8 );
@@ -614,12 +614,12 @@ var Options = function() {
 
 	/** 
 	 * PhSim Static simulation Array 
-	 * @type {PhSim.Options.Simulation[]}
+	 * @type {PhSim.Static.Simulation[]}
 	 */
 
 	this.simulations = [];
 	
-	this.simulations.push(new PhSim.Options.Simulation());
+	this.simulations.push(new PhSim.Static.Simulation());
 	this.simulations[0].layers[0].name = "Untitled Layer"
 	this.simulations[0].name = "Untitled simulation";
 
@@ -629,7 +629,7 @@ var Options = function() {
 
 	/** PhSim Camera */
 
-	this.camera = new PhSim.Options.Camera(0,0,1);
+	this.camera = new PhSim.Static.Camera(0,0,1);
 
 }
 
@@ -700,7 +700,7 @@ Options.Gradient = function() {
 
 	/**
 	 * Gradient Stops
-	 * @type {PhSim.Options.GradientStop[]}
+	 * @type {PhSim.Static.GradientStop[]}
 	 */
 
 	this.stops = [];
@@ -736,7 +736,7 @@ Options.Gradient = function() {
 
 Options.lclGradient = function() {
 	this.src = null;
-	this.limits = new PhSim.Options.GradientLimits(x0,y0,x1,y1);
+	this.limits = new PhSim.Static.GradientLimits(x0,y0,x1,y1);
 	this.type = "linear";
 }
 
@@ -1082,12 +1082,12 @@ Options.Simulation = function() {
 
 	/**
 	 * Array of layers
-	 * @type {PhSim.Options.Layer[]}
+	 * @type {PhSim.Static.Layer[]}
 	 */
 
 	this.layers = [];
 
-	this.layers.push(new PhSim.Options.Layer())
+	this.layers.push(new PhSim.Static.Layer())
 	this.world = {
 		grav: 1,
 		bg: "white",
@@ -1997,7 +1997,7 @@ Game.prototype.setScore = function(c) {
 
 		// Code to execute 
 
-		if(this.phSim.simulationIndex + 1 === this.phSim.options.simulations.length) {
+		if(this.phSim.simulationIndex + 1 === this.PhSim.Static.simulations.length) {
 
 			if(this.defaultGameWinModal) {
 
@@ -6089,7 +6089,7 @@ var Gradients = {}
 /**
  * @function
  * @param {CanvasRenderingContext2D} ctx 
- * @param {PhSim.Options.Gradient} jsObject 
+ * @param {PhSim.Static.Gradient} jsObject 
  */
 
 Gradients.extractGradient = function(ctx,jsObject) {

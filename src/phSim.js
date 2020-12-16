@@ -35,7 +35,7 @@
  * 
  * If an array is chosen, then it is used to create
  * 
- * @typedef {PhSim.Options|PhSim.Options.Simulation|StaticObject[]} DynSimOptions
+ * @typedef {PhSim.Static|PhSim.Static.Simulation|StaticObject[]} DynSimOptions
  * @property {HTMLCanvas} canvas - Simulation canvas
  * @property {Number} initSimIndex - The inital simulation index. If undefined, the simulation index is 0.
  * @property {HTMLElement} container - The container 
@@ -50,7 +50,7 @@
  * 
  */
 
-function PhSim(dynSimOptions = new PhSim.Options()) {
+function PhSim(dynSimOptions = new PhSim.Static()) {
 
 	/**
 	 * The static simulation object
@@ -64,19 +64,19 @@ function PhSim(dynSimOptions = new PhSim.Options()) {
 	}
 
 	else if(Array.isArray(dynSimOptions.layers)) {
-		this.options = new PhSim.Options();
+		this.options = new PhSim.Static();
 		this.options.simulations[0] = dynSimOptions;
 	}
 
 	else if(Array.isArray(dynSimOptions)) {
-		this.options = new PhSim.Options();
+		this.options = new PhSim.Static();
 		this.options.simulations[0].layers[0].objUniverse = dynSimOptions;
 	}
 
 	/**
 	 * Array of simulations to be loaded.
 	 * 
-	 * @type {PhSim.Options.Simulation[]}
+	 * @type {PhSim.Static.Simulation[]}
 	 */
 
 	this.simulations = PhSim.Query.deepClone(this.options.simulations);
@@ -411,7 +411,7 @@ if(typeof module === "object") {
     module.exports = PhSim;
 }
 
-PhSim.Options = require("./objects" );
+PhSim.Static = require("./objects" );
 
 require("./matterPlugin.js" );
 require("./events/eventStack" );
