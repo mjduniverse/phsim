@@ -5,6 +5,8 @@
  * 
  */
 
+const DynObject = require("./dynObject");
+
 var Motion = {}
 
 /**
@@ -20,7 +22,7 @@ var Motion = {}
  */
 
 Motion.applyForce = function(dynObject,position,forceVector) {
-	if(!dynObject.locked && !dynObject.permStatic) {
+	if(!dynObject.locked && !dynObject.noDyn) {
 		return PhSim.Matter.Body.applyForce(dynObject.matter,position,forceVector);
 	}
 }
@@ -29,7 +31,7 @@ Motion.applyForce = function(dynObject,position,forceVector) {
 /**
  * 
  * Apply velocity to a dynamic object.
- * Velocity is ineffective against locked, semi-locked objects.
+ * Velocity does not effect locked, semi-locked objects or static objects.
  * 
  * @function
  * @param {PhSim.DynObject} dynObject 
@@ -46,8 +48,8 @@ Motion.setVelocity = function(dynObject,velocityVector) {
 /**
  * 
  * Apply a transformation to a dynamic object.
- * Transformation is ineffective against locked objects.
- * However, it moves semi-locked objects and permanetly static objects.
+ * Transformation does not move locked objects.
+ * However, it moves semi-locked objects and static objects.
  * 
  * @function
  * @param {PhSimObject} o 
@@ -57,19 +59,19 @@ Motion.setVelocity = function(dynObject,velocityVector) {
 Motion.translate = function(o,translationVector) {
 	if(!o.locked) {
 
-		if(o.path) {
+		if(o.shape === "polygon") {
 			for(var i = 0; i < o.verts.length; i++) {
 				o.verts[i].x = o.verts[i].x + translationVector.x;
 				o.verts[i].y = o.verts[i].y + translationVector.y;
 			}
 		}
 
-		if(o.circle || o.rectangle || o.regPolygon) {
+		if(o.shape === "circle" || o.shape === "rectangle" || o.shape === "regPolygon") {
 				o.x = o.x + translationVector.x;
 				o.y = o.y + translationVector.y;
 		}
 
-		if(!o.noDyn) {
+		if(o instanceof DynObject) {
 			return PhSim.Matter.Body.translate(o.matter,translationVector);
 		}
 
@@ -89,12 +91,12 @@ Motion.translate = function(o,translationVector) {
 Motion.setPosition = function(dynObject,positionVector) {
 	if(!dynObject.locked) {
 
-		if(o.circle || o.regPolygon) {
+		if(o.type === "circle" || o.type === "regPolygon") {
 				o.x = positionVector.x;
 				o.y = positionVector.y;
 		}
 
-		if(o.rectangle) {
+		if(o.shape === "rectangle") {
 
 		}
 

@@ -1,3 +1,6 @@
+const DynObject = require("./dynObject");
+const Vector = require("./tools/vector");
+
 /**
  * @namespace
  * @memberof PhSim
@@ -131,7 +134,7 @@ PhSim.Query.chkWidgetType = function(widget) {
 
 PhSim.prototype.getStatic = function(dynObject) {
 	
-	if(dynObject.permStatic || dynObject.permStatic) {
+	if(dynObject.static || dynObject.static) {
 		return null;
 	}
 
@@ -197,6 +200,96 @@ PhSim.prototype.isInCollision = function(dynObject) {
 }
 
 /**
+ * See if point is contained in shape defined by vertices set.
+ * @function
+ * @param {Vector[]} a - Set of vertices
+ * @param {Vector} v - The vertex to be checked.
+ * @return {Boolean} - Returns true if `v` is contained in the shape defined by `a` and false if otherwise.
+ */
+
+PhSim.Query.pointInVerts = function(a,v) {
+
+	var canvas = document.createElement("canvas");
+	var ctx = canvas.getContext("2d");
+
+	ctx.beginPath();
+	ctx.moveTo(a[0].x,a[0].y);
+
+	for(var i = 0; i < a.length; i++) {
+		ctx.lineTo(a[i].x,a[i].y);
+	}
+
+	ctx.closePath();
+	var p = ctx.isPointInPath(v.x,v.y);
+	ctx.stroke();
+
+
+	return p;
+
+
+}
+
+/**
+ * 
+ * See if point is in vertices border
+ * 
+ * @function
+ * @param {Vector[]} a - Vertices to check
+ * @param {Vector} v - Point to check.
+ * @param {Number} width - Width of vertices border
+ * @returns {Boolean} - Returns `true` if `v` is in the border of the 
+ * polygon defined by `a` and false otherwise.
+ */
+
+PhSim.Query.pointInVertsBorder = function(a,v,width) {
+
+	if(width) {
+		var canvas = document.createElement("canvas");
+		var ctx = canvas.getContext("2d");
+		ctx.lineWidth = width;
+		ctx.beginPath();
+		ctx.lineTo(a[0].x,a[0].y);
+
+		for(var i = 0; i < a.length; i++) {
+			ctx.moveTo(a[i].x,a[i].y);
+		}
+
+		ctx.closePath();
+		var p = ctx.isPointInPath(v.x,v.y);
+		ctx.stroke();
+
+
+		return p;		
+	}
+
+	else {
+		return false;
+	}
+
+}
+
+/**
+ * Deep clone a JavaScript object.
+ * @param {Object} o 
+ */
+
+PhSim.Query.deepClone = function(o) {
+	return JSON.parse(JSON.stringify(o));
+}
+
+/**
+ * @function
+ * @param {*} o 
+ * @param {*} x 
+ * @param {*} y 
+ */
+
+PhSim.Query.pointInRectangle = function(o,x,y) {
+	var a = PhSim.getRectangleVertArray(o);
+	return PhSim.Query.pointInVerts(a,new Vector(x,y));
+}
+
+/**
  * 
  * Check if a point (x,y) is in a dynamic object
  * 
@@ -207,15 +300,38 @@ PhSim.prototype.isInCollision = function(dynObject) {
  * @returns {Boolean}
  */
 
-PhSim.prototype.pointInObject = function(dynObject,x,y) {
+PhSim.Query.pointInObject = function(o,x,y) {
 
-	var c = document.createElement("canvas");
+	if(o.shape === "rectangle") {
+		return PhSim.Query.pointInRectangle(o,x,y);
+	}
+
+	else if(o.shape === "circle") {
+
+		var d = Vector.distance(o,new Vector(x,y));
+		
+		if(d < o.radius) {
+			return true;
+		}
+
+		else {
+			return false;
+		}
+
+	}  
 	
-	var l = c.getContext("2d");
-	var m = new PhSim.PhRender(l);
-	m.dynamicSkeleton(dynObject);
-	var t = l.isPointInPath(x,y);
-	return t;
+	else if(o.shape === "regPolygon") {
+		var a = PhSim.getRegPolygonVerts(o);
+		return PhSim.Query.pointInVerts(a,new Vector(x,y));
+	}
+
+	else if(o.shape === "polygon") {
+		return PhSim.Query.pointInVerts(o.verts,new Vector(x,y));
+	}
+}
+
+PhSim.prototype.pointInObject = function(o,x,y) {
+	return PhSim.Query.pointInObject(o,x,y)
 }
 
 /**

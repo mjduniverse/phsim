@@ -6,10 +6,10 @@ PhSim.removeClickRectRegion = function(reference) {
  * @constructor
  */
 
-PhSim.PhEvent = function () {
+PhSim.PhEvent = function(type) {
 	this.target = null;
 	this.timestamp = null;
-	this.type = null;
+	this.type = type;
 }
 
 /**

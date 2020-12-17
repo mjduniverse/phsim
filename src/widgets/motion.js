@@ -1,6 +1,5 @@
 const Motion = require("../motion");
 
-Motion
 /** 
  * 
  * Generate a function to put some dynamic object in motion, given some mode and vector or scalar.
@@ -9,7 +8,7 @@ Motion
  * @param {"setAngle"|"force"|"velocity"|"translate"|"position"|"rotation"|"circular_constraint_rotation"} mode - The possible modes are "force","velocity","translate"
  * @param {dyn_object} dyn_object - The dynamic object to put in motion.
  * @param {Vector|Number} motion - The vector or scalar that defines the motion.
- * @returns {Function} - The method to 
+ * @returns {Function} - A function that makes an object undergo some motion.
  * 
  * 
 */
@@ -74,10 +73,12 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 
 /**
  * 
- * Velocity widget
+ * The `velocity` widget makes dynamic objects go at a certain velocity.
  * 
+ * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {Widget} widget
+ * @param {WFunctionOptions} widget
+ * @param {Vector} widget.vector - Velocity vector
  * @this {PhSim} 
  */
 
@@ -88,10 +89,12 @@ PhSim.Widgets.velocity = function(dynObject,widget) {
 
 /**
  * 
- * Translatation widget
+ * The `translate` widget moves objects.
  * 
- * @param {PhSim.DynObject} dynObject 
- * @param {Widget} widget
+ * @function
+ * @param {PhSim.DynObject} dynObject - Dynamic Object to be translated.
+ * @param {WFunctionOptions} widget - Widget options.
+ * @param {Vector} widget.vector - Translation vector
  * @this {PhSim} 
  */
 
@@ -102,10 +105,11 @@ PhSim.Widgets.translate = function(dynObject,widget) {
 
 /**
  * 
- * Position widget
+ * The `position` widget sets the position of an object.
  * 
- * @param {PhSim.DynObject} dynObject 
- * @param {Widget} widget
+ * @function
+ * @param {PhSim.DynObject} dynObject - Dynamic object that will have its position changed.
+ * @param {WFunctionOptions} widget - Widget options.
  * @this {PhSim} 
  */
 
@@ -116,10 +120,11 @@ PhSim.Widgets.position = function(dynObject,widget) {
 
 /**
  * 
- * Rotation widget
+ * The `rotation` widget rotates an object. 
  * 
+ * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {Widget} widget
+ * @param {WFunctionOptions} widget
  * @this {PhSim} 
  */
 
@@ -136,6 +141,14 @@ PhSim.Widgets.rotation = function(dynObject,widget) {
     this.createWFunction(dynObject,f,widget);
 }
 
+/**
+ * The `setAngle` widget makes a widget change angle.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject - Dynamic Object
+ * @param {WFunctionOptions} widget 
+ */
+
 PhSim.Widgets.setAngle = function(dynObject,widget) {
 
     if(widget.circularConstraintRotation) {
@@ -149,6 +162,14 @@ PhSim.Widgets.setAngle = function(dynObject,widget) {
     this.createWFunction(dynObject,f,widget);
 
 }
+
+/**
+ * The `force` widget exerts a force on an object
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {WFunctionOptions} widget 
+ */
 
 PhSim.Widgets.force = function(dyn_object,widget) {
 

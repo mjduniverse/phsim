@@ -16,13 +16,13 @@ var DynObject = function(staticObject) {
 
 	this.matter = PhSim.DynObject.createMatterObject(staticObject);
 
-	if(staticObject.path === true) {
+	if(staticObject.shape === "polygon") {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
 	}
 
 	this.firstCycle = staticObject.cycle;
 
-	if(staticObject.composite === true) {
+	if(staticObject.shape === "composite") {
 		this.flattenedParts = DynObject.flattenComposite();
 	}
 
@@ -39,9 +39,8 @@ var DynObject = function(staticObject) {
 	 * @type {String}
 	 * */
 
-	this.id = PhSim.nextId;
-
-	PhSim.nextId = (Number.parseInt(PhSim.nextId,36) + 1).toString(36);
+	this.id = DynObject.nextId;
+	DynObject.nextId++;
 	
 	/**
 	 * Reference to parent simulation
@@ -87,7 +86,7 @@ DynObject.setColor = function(dyn_object,colorStr) {
 }
 
 /**
- * 
+ * Set border color.
  * @param {PhSim.DynObject} dyn_object 
  * @param {*} colorStr 
  */
@@ -121,6 +120,10 @@ DynObject.setProperty = function(o,key,value) {
 	}
 }
 
+DynObject.setRegPolygonSideNumber = function(dyn_object,sides) {
+
+}
+
 /**
  * 
  * @function
@@ -142,8 +145,8 @@ DynObject.flattenComposite = function(composite) {
 
 		for(var i = 0; i < composite.parts.length; i++) {
 
-			if(composite.parts[i].composite) {
-				DynObject.flattenComposite(composite.parts[i].composite);
+			if(composite.parts[i].shape === "composite") {
+				DynObject.flattenComposite(composite.parts[i].shape === "composite");
 			}
 
 			else {
@@ -157,6 +160,78 @@ DynObject.flattenComposite = function(composite) {
 	__f(composite);
 
 	return a;
+
+}
+
+/**
+ * 
+ * Create path
+ * 
+ * @function
+ * @param {Vector[]} vectorSet 
+ * @param {Path} options 
+ */
+
+DynObject.createPath = function(vectorSet,options) {
+	var o = new Static.Polygon(vectorSet);
+	Object.assign(o,options);
+	return new DynObject(o);
+}
+
+/**
+ * Create circle
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of center
+ * @param {Number} y - y-coordinate of center
+ * @param {Number} r - radius
+ * @param {Circle} options - options
+ * @returns {PhSim.DynObject}
+ */
+
+DynObject.createCircle = function(x,y,r,options = {}) {
+	var o = new Static.Circle(x,y,r);
+	Object.assign(o,options);
+	return new DynObject(o);
+}
+
+/**
+ * 
+ * Create rectangle
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of upper left corner 
+ * @param {Number} y - y-coordinate of upper left corner 
+ * @param {Number} w - Width
+ * @param {Number} h - Height
+ * @param {Rectangle} options 
+ * @returns {PhSim.DynObject} - The rectangle
+ */
+
+DynObject.createRectangle = function(x,y,w,h,options = {}) {
+	var o = new Static.Rectangle(x,y,w,h);
+	Object.assign(o,options);
+}
+
+/**
+ * Create regular polgyon.
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of center
+ * @param {Number} y - y-coordinate of center
+ * @param {Number} r - radius
+ * @param {Number} n - number of sides
+ * @param {RegPolygon} options - options
+ * @returns {PhSim.DynObject}
+ */
+
+DynObject.createRegPolygon = function(x,y,r,n,options = {}) {
+	var o = new Static.RegPolygon(x,y,r,n);
+	Object.assign(o,options);
+	return new DynObject(o);
+}
+
+DynObject.setRadius = function(dynObject,radius) {
 
 }
 
@@ -202,28 +277,30 @@ DynObject.createMatterObject = function(staticObject) {
 	}
 
 
-	if(staticObject.path === true) {
+	if(staticObject.shape === "polygon") {
 		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(staticObject.verts).x, PhSim.Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
 	}
 
 	
-	else if(staticObject.circle === true) {
+	else if(staticObject.shape === "circle") {
 		return PhSim.Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
 	}
 
 
-	else if(staticObject.rectangle === true) {
+	else if(staticObject.shape === "rectangle") {
 		var set = PhSim.getRectangleVertArray(staticObject);
 		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(set).x, PhSim.Matter.Vertices.centre(set).y, set, opts); 
 	}
 
-	else if(staticObject.regPolygon === true) {
+	else if(staticObject.shape === "regPolygon") {
 		var set = PhSim.getRegPolygonVerts(staticObject);
 		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(set).x, PhSim.Matter.Vertices.centre(set).y, set, opts); 
 	}
 
 
 }
+
+DynObject.nextId = 0;
 
 /**
  * A PhSimObject is either a static object or a dynamic object.

@@ -83,30 +83,26 @@ require("./widgets/draggable.js");
 const Game = require("./game");
 
 /**
- * 
- * @function
- * 
+ * @borrows PhSim.Game.Widgets.coin as PhSim.Widgets.coin
  */
 
 PhSim.Widgets.coin = Game.Widgets.coin;
 
 /**
- * 
- * @function
+ * @borrows PhSim.Game.Widgets.hazard as PhSim.Widgets.hazard
  */
 
 PhSim.Widgets.hazard = Game.Widgets.hazard;
 
 /**
- * 
- * @function
+ * @borrows PhSim.Game.Widgets.health as PhSim.Widgets.health
  */
+
 
 PhSim.Widgets.health = Game.Widgets.health;
 
 /**
- * 
- * @function
+ * @borrows PhSim.Game.Widgets.endGame as PhSim.Widgets.endGame
  */
 
 PhSim.Widgets.endGame = Game.Widgets.endGame;

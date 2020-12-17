@@ -1,13 +1,18 @@
 const PhSim = require("./phSim");
 
-if(typeof Matter === "undefined") {
-    var Matter = require("matter-js");
-}
+/**
+ * Reference to patched matter.js library.
+ * @namespace
+ * @memberof PhSim
+ * @see {@link https://brm.io/matter-js/docs/}
+ * 
+ */
 
-//var Matter = Matter || require("matter-js");
+PhSim.Matter = {};
 
 /**
  * Object that registers PhSim as a Matter.js plugin.
+ * The modified matter.js object is stored in {@link PhSim.Matter}
  * @namespace
  * 
  */
@@ -29,6 +34,19 @@ PhSim.matterPlugin = {
         matter.after('Detector.collisions',function(){
             PhSim.matterPlugin.Detector.collisions.call(this,arguments);
         });
+
+    },
+
+    /**
+     * Matter namespace for matter.js bodies.
+     * @namespace
+     */
+
+    Body: {
+
+        create: function(options) {
+
+        } 
 
     },
 

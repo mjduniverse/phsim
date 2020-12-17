@@ -1,13 +1,20 @@
+const PhSim = require("./phSim");
 
 /**
- * Objects module
+ * A static object is an object that is not simulated by the PhSim simulation.
+ * The PhSim.Static namespace is used for storing Static Objects or constructors for 
+ * parts of static objects.
+ * 
+ * A static simulation is an object that 
  * @namespace
  * @constructor
  * @memberof PhSim
  * 
+ * 
  */
 
-var Options = function() {
+
+var Static = function() {
 
 	/**
 	 * PhSim version
@@ -18,22 +25,22 @@ var Options = function() {
 
 	/** 
 	 * PhSim Static simulation Array 
-	 * @type {PhSim.Options.Simulation[]}
+	 * @type {PhSim.Static.Simulation[]}
 	 */
 
 	this.simulations = [];
 	
-	this.simulations.push(new PhSim.Options.Simulation());
+	this.simulations.push(new PhSim.Static.Simulation());
 	this.simulations[0].layers[0].name = "Untitled Layer"
 	this.simulations[0].name = "Untitled simulation";
 
 	/** PhSim Box Settings */
 
-	this.box = new PhSim.Options.Rectangle(0,0,800,600);
+	this.box = new PhSim.Static.Rectangle(0,0,800,600);
 
 	/** PhSim Camera */
 
-	this.camera = new PhSim.Options.Camera(0,0,1);
+	this.camera = new PhSim.Static.Camera(0,0,1);
 
 }
 
@@ -59,7 +66,7 @@ var Options = function() {
  * @param {Number} y1 - y coordinate of the second point
  */
 
-Options.GradientLimits = function(x0,y0,x1,y1) {
+Static.GradientLimits = function(x0,y0,x1,y1) {
 
 	/**
 	 * Start vector
@@ -82,7 +89,7 @@ Options.GradientLimits = function(x0,y0,x1,y1) {
  * @param {String} color - String denoting the color of the stop
  */
 
-Options.GradientStop = function(pos,color) {
+Static.GradientStop = function(pos,color) {
 	
 	/**
 	 * Gradient Color
@@ -99,12 +106,16 @@ Options.GradientStop = function(pos,color) {
 	this.pos = pos;
 }
 
+/**
+ * Static gradient object constructor
+ * @constructor
+ */
 
-Options.Gradient = function() {
+Static.Gradient = function() {
 
 	/**
 	 * Gradient Stops
-	 * @type {PhSim.Options.GradientStop[]}
+	 * @type {PhSim.Static.GradientStop[]}
 	 */
 
 	this.stops = [];
@@ -138,9 +149,9 @@ Options.Gradient = function() {
 	};
 }
 
-Options.lclGradient = function() {
+Static.lclGradient = function() {
 	this.src = null;
-	this.limits = new PhSim.Options.GradientLimits(x0,y0,x1,y1);
+	this.limits = new PhSim.Static.GradientLimits(x0,y0,x1,y1);
 	this.type = "linear";
 }
 
@@ -150,7 +161,7 @@ Options.lclGradient = function() {
  * @param {PhSim.Vector[]} verts -  Vertcies
  */
 
-Options.Path = function(verts) {
+Static.Polygon = function(verts) {
 
 	/**
 	 * Array of vectors defining a path or a polygon
@@ -160,14 +171,7 @@ Options.Path = function(verts) {
 	this.verts;
 
 	if(Array.isArray(verts)) {
-
 		this.verts = verts;
-
-		for(var i = 0; i < verts.length; i++) {
-			var old = verts[i];
-			verts[i] = new PhSim.Vector(verts[i].x,verts[i].y);
-			Object.assign(verts[i],old);
-		}
 	}
 
 	else {
@@ -179,7 +183,7 @@ Options.Path = function(verts) {
 	 * @type {Boolean}
 	 */
 
-	this.path = true;
+	this.shape = "polygon";
 }
 
 /**
@@ -191,11 +195,11 @@ Options.Path = function(verts) {
  * In PhSim, a path is any object `obj` such that the following is true:
  * 
  * `Array.isArray(obj) === true`
- * `obj.path === true`
+ * `obj.shape === "polygon"`
  * 
  * If a path is used as a polygon, it must have at least three vectors in the `verts` property. 
  * 
- * @typedef {PhSim.Options.Path} Path
+ * @typedef {PhSim.Static.Polygon} Polygon
  * 
  */
  
@@ -205,14 +209,14 @@ Options.Path = function(verts) {
  * @constructor
  */
 
-Options.Circle = function(x = null,y = null,r = null) {
+Static.Circle = function(x = null,y = null,r = null) {
 
 	/**
 	 * Boolean indicating a circle
 	 * @type {Boolean}
 	 */
 
-	this.circle = true,
+	this.shape = "circle";
 
 	/**
 	 * x-coordinate of the center
@@ -247,13 +251,13 @@ Options.Circle = function(x = null,y = null,r = null) {
  * A circle is a set all points equidistant from some point known as the center.
  * 
  * In PhSim, a circle is any object `obj` such that the following are all true:
- * `obj.circle === true`;
+ * `obj.shape === "circle"`;
  * `typeof obj.x === number`;
  * `typeof obj.y === number`;
  * `typeof obj.radius === number`;
  * `typeof obj.cycle === number || obj.cycle`;
  * 
- * @typedef {PhSim.Options.Circle} Circle
+ * @typedef {PhSim.Static.Circle} Circle
  */
 
 /**
@@ -261,7 +265,7 @@ Options.Circle = function(x = null,y = null,r = null) {
  * 
  * In PhSim, a regular polgon is any object `obj` such that the following are true:
  * 
- * `this.regPolygon === true`
+ * `this.shape === "regPolygon"`
  * 
  * 
  * @constructor
@@ -271,14 +275,14 @@ Options.Circle = function(x = null,y = null,r = null) {
  * @param {Number} n - sides of the regular polygon
  */
 
-Options.RegPolygon = function(x,y,r,n) {
+Static.RegPolygon = function(x,y,r,n) {
 
 	/**
 	 * Boolean for indicating a regular polygon
 	 * @type {Boolean}
 	 */
 
-	this.regPolygon =  true;
+	this.shape = "regPolygon";
 
 	/**
 	 * x-coordinate of the center of the regular polygon
@@ -328,14 +332,14 @@ Options.RegPolygon = function(x,y,r,n) {
  * 
  */
 
-Options.Rectangle = function(x,y,w,h) {
+Static.Rectangle = function(x,y,w,h) {
 
 	/**
 	 * Boolean for indicating a rectangle
 	 * @type {Boolean}
 	 */
 
-	this.rectangle = true;
+	this.shape = "rectangle";
 
 	/**
 	 * x-coordinate of the upper left corner of the rectangle
@@ -377,7 +381,7 @@ Options.Rectangle = function(x,y,w,h) {
  * 
  * Static Object Type
  * 
- * @typedef {PhSim.Options.Rectangle | PhSim.Options.Circle | PhSim.Options.RegPolygon | PhSim.Options.Path} StaticObject
+ * @typedef {PhSim.Static.Rectangle | PhSim.Static.Circle | PhSim.Static.RegPolygon | PhSim.Static.Polygon} StaticObject
  * @property {Number} [mass] - The mass of the object.
  * @property {Number} [density] - The density of the object
  * @property {Boolean} [locked] - A boolean deterimining the lock status of the object
@@ -395,12 +399,12 @@ Options.Rectangle = function(x,y,w,h) {
  * Composite Object 
  */
 
-Options.Composite = function() {
-	this.composite = true;
+Static.Composite = function() {
+	this.shape = "composite";
 	this.name = "Untitled";
 }
 
-/***
+/**
  * Simulation Box Object 
  * 
  * @constructor
@@ -409,7 +413,7 @@ Options.Composite = function() {
  * 
  */
 
-Options.SimBox = function(w,h) {
+Static.SimBox = function(w,h) {
 	
 	/**
 	 * Simulation Width
@@ -433,7 +437,7 @@ Options.SimBox = function(w,h) {
  *
  */
 
-Options.Camera = function(x,y,scale) {
+Static.Camera = function(x,y,scale) {
 
 	/**
 	 * x-coordinate vector of camera
@@ -461,7 +465,7 @@ Options.Camera = function(x,y,scale) {
  * @constructor
  */
 
-Options.Layer = function() {
+Static.Layer = function() {
 
 	/**
 	 * The array of objects
@@ -469,8 +473,6 @@ Options.Layer = function() {
 	 */
 
 	this.objUniverse = [];
-
-	this.objUniverse[0]
 
 	/**
 	 * The name of the layer
@@ -480,21 +482,27 @@ Options.Layer = function() {
 	this.name = null;
 }
 
+/**
+ * @typedef {Object} Layer
+ * @property {PhSimObjects[]} objUniverse - The array of objects.
+ * @property {String} name - The name of the layer
+ */
+
 /** 
  * simulation Object 
  * @constructor
  */
 
-Options.Simulation = function() {
+Static.Simulation = function() {
 
 	/**
 	 * Array of layers
-	 * @type {PhSim.Options.Layer[]}
+	 * @type {PhSim.Static.Layer[]}
 	 */
 
 	this.layers = [];
 
-	this.layers.push(new PhSim.Options.Layer())
+	this.layers.push(new PhSim.Static.Layer())
 	this.world = {
 		grav: 1,
 		bg: "white",
@@ -512,8 +520,23 @@ Options.Simulation = function() {
 	this.widgets = [];
 }
 
-Options.LO = function(L,O) {
+/**
+ * 
+ * @typedef {Object} Simulation
+ * @property {Layer[]} layers - An array of layers
+ * @property {Object} world - World Object
+ * @property {Boolean} simulation - Boolean indicating a simulation
+ * @property {Widget} widgets - Array of array options
+ */
 
+/**
+ * 
+ * @param {Simulation} L 
+ * @param {*} O 
+ */
+
+Static.LO = function(L,O) {
+	L.layers[0].objUniverse
 }
 
 /**
@@ -526,7 +549,7 @@ Options.LO = function(L,O) {
  * 
  */
 
-Options.SLO = function(S,L,O) {
+Static.SLO = function(S,L,O) {
 
 }
 
@@ -542,10 +565,8 @@ Options.SLO = function(S,L,O) {
 
 /**
  * Matter.js body
- * @external {MatterBody}
+ * @external MatterBody
  * @see {@link https://brm.io/matter-js/docs/classes/Body.html|MatterBody} 
  */
 
-
-
-module.exports = Options;
+module.exports = Static;

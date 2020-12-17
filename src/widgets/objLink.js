@@ -12,6 +12,16 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 	}
 }
 
+/**
+ * 
+ * The `objLink_a` widget executes all functions in the {@link PhSim.DynObject#objLinkFunctions}
+ * array of `widget.target`. 
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object - Reciever Object
+ * @param {WFunctionOptions} widget - Widget options
+ * @param {LOAddress|PhSim.DynObject} widget.target -  Target object
+ */
 
 PhSim.Widgets.objLink_a = function(dyn_object,widget) {
 
@@ -22,7 +32,11 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
     this.on("matterJSLoad",function(){
         var eventFuncClosure = function() {
 
-            var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
+            if(widget.target instanceof PhSim)
+
+            if(typeof widget.target.L === "number" && typeof widget.target.O === "number") {
+                var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
+            }
 
             var eventFunc = function(){
                 self.callObjLinkFunctions(targetObj);

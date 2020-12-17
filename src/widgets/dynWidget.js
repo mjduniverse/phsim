@@ -1,6 +1,7 @@
 // Set Angle to mouse.
 
-const PhSim = require("./phSim");
+const DynObject = require("../dynObject");
+const PhSim = require("../phSim");
 
 // Object Connection
 
@@ -56,13 +57,13 @@ PhSim.prototype.forAllObjects = function(call) {
  * @param {PhSim.DynObject} dynObject 
  */
 
-PhSim.prototype.addToOverlayer = function(dynObject) {
+PhSim.prototype.addToOverlayer = function(o) {
 	
-	if(!dynObject.permStatic) {
-		PhSim.Matter.World.add(this.matterJSWorld, dynObject.matter);
+	if(o instanceof DynObject) {
+		PhSim.Matter.World.add(this.matterJSWorld, o.matter);
 	}
 
-	this.objUniverse.push(dynObject);
+	this.objUniverse.push(o);
 
 }
 
@@ -74,7 +75,7 @@ PhSim.prototype.addToOverlayer = function(dynObject) {
  */
 
 PhSim.prototype.isNonDyn = function(o) {
-	return o.noDyn || o.permStatic;
+	return o.noDyn;
 }
 
 /**
@@ -82,38 +83,38 @@ PhSim.prototype.isNonDyn = function(o) {
  * Add Object to PhSim simulation
  * 
  * @function
- * @param {PhSim.DynObject} dynObject 
+ * @param {PhSimObject} o 
  * @param {Object} options
  * @param {Number} options.layer 
  * @returns {PhSim.DynObject} - The added dynObject. 
  */
 
-PhSim.prototype.addObject = function(dynObject,options = {}) {
+PhSim.prototype.addObject = function(o,options = {}) {
 
 	if(typeof options.layer === "number") {
-		this.dynTree[options.layer].push(dynObject);
+		this.dynTree[options.layer].push(o);
 
-		if(!this.isNonDyn(dynObject)) {
-			dynObject.layerBranch = this.dynTree[options.layer];
+		if(o instanceof DynObject) {
+			o.layerBranch = this.dynTree[options.layer];
 		}
 
 	}
 
-	this.objUniverse.push(dynObject);
+	this.objUniverse.push(o);
 
-	if(!this.isNonDyn(dynObject)) {
+	if(o instanceof DynObject) {
 
-		dynObject.phSim = this;
+		o.phSim = this;
 
-		PhSim.Matter.World.add(this.matterJSWorld,dynObject.matter);
+		PhSim.Matter.World.add(this.matterJSWorld,o.matter);
 
-		if(dynObject.static.widgets) {
-			this.extractWidgets(dynObject);
+		if(o.static.widgets) {
+			this.extractWidgets(o);
 		}
 
 	}
 
-	return dynObject;
+	return o;
 }
 
 /**

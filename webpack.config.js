@@ -5,7 +5,7 @@ module.exports = {
         "./src/phSim.js",
         "./widgets-js-gen/widgetTypes.js"
     ],
-    mode: "none",
+    mode: "production",
     node: false,
     optimization: {
         minimize: false,

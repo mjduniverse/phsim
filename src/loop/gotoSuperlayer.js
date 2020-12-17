@@ -8,6 +8,7 @@
  * @param {Number} i
  * @this PhSim
  * @memberof PhSim
+ * @returns {Promise} - A promise that is fulfiled if the loading is successful.
  * @function
  * 
  *  
@@ -23,7 +24,7 @@ var gotoSimulationIndex = function (i) {
 
 	this.firstSlUpdate = false;
 
-	var event = new PhSim.PhEvent();
+	var event = new PhSim.PhEvent("slchange");
 
 	event.type = "slchange";
 
@@ -82,7 +83,7 @@ var gotoSimulationIndex = function (i) {
 					this.staticSprites.push(o.sprite);	
 				}
 				
-				if(o.noDyn || o.permStatic) {
+				if(o.noDyn) {
 
 					this.addObject(o,{
 						layer: L
@@ -193,28 +194,14 @@ var gotoSimulationIndex = function (i) {
 
 		}
 
-		if(a.connection) {
+		if(a.type === "connection") {
 
 			this_a.connectDynObjects(this_a.dynTree[a.objectA.L][a.objectA.O],this_a.dynTree[a.objectB.L][a.objectB.O]);
 
 		}
 
-		if(a.wFunction) {
-
-            var wf = self.createWFunction(a.function,this_a);
-
-            var closure = function() {
-
-                var f = function(){
-                    wf();
-                };
-
-                return f;
-
-            }
-
-            var f = this.createWFunction(a.trigger,closure(),a);
-
+		if(a.type === "wFunction") {
+            self.createWFunction(self,a.function,a);
         }
 
 
@@ -223,10 +210,10 @@ var gotoSimulationIndex = function (i) {
 
 	this.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
 
-	var promise = new Promise(function(resolve,reject){
+	var p = new Promise(function(resolve,reject){
 
-		if(self.phRender) {
-			self.phRender.spriteImgArray = new PhSim.Sprites.SpriteImgArray(self.staticSprites,function() {
+		if(self.phRender && self.staticSprites.length) {
+			self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(self.staticSprites,function() {
 				resolve();
 				self.status = PhSim.statusCodes.LOADED_SPRITES;
 			});
@@ -239,20 +226,33 @@ var gotoSimulationIndex = function (i) {
 
 	}).then(function() {
 		return new Promise(function(resolve,reject){
-			self.audioArray = new PhSim.Audio.AudioArray(self.staticAudio,function(){
+
+			if(self.staticAudio.length) {
+				self.audioArray = new PhSim.Audio.AudioArray(self.staticAudio,function(){
+					self.status = PhSim.statusCodes.LOADED_AUDIO;
+					resolve();
+				});
+			}
+
+			else {
+				self.status = PhSim.statusCodes.LOADED_AUDIO;
 				resolve();
-				this.status = PhSim.statusCodes.LOADED_AUDIO;
-			});
-		})
+			}
+
+		});
 	}).then(function(){
 		this_a.init = true;
+
+		self.status = PhSim.statusCodes.LOADED_SIMULATION;
+
+		var e = new PhSim.PhDynEvent();
+	
+		self.callEventClass("load",self,e);
+
 	});
 
-	this.status = PhSim.statusCodes.LOADED_SIMULATION;
+	return p;
 
-	var e = new PhSim.PhDynEvent();
-
-	self.callEventClass("load",self,e);
 }
 
 module.exports = gotoSimulationIndex;

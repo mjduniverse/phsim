@@ -1,3 +1,5 @@
+const PhSim = require("../phSim");
+
 /**
  * 
  * Used to add events to a PhSim simulation
@@ -33,8 +35,8 @@ PhSim.prototype.on = function(eventStr,call,options = {}) {
 			if(options.once) {
 	
 				var f = function(e) {
-					this.removeEventListener(eventStr,call)
-					this.removeEventListener(eventStr,f)
+					this.off(eventStr,call)
+					this.off(eventStr,f)
 				}
 	
 				this.on(eventStr,f);
@@ -58,7 +60,7 @@ PhSim.prototype.on = function(eventStr,call,options = {}) {
  */
 
 
-PhSim.prototype.removeEventListener = function(eventStr,call) {
+PhSim.prototype.off = function(eventStr,call) {
 	
 	if(this.eventStack[eventStr] && this.eventStack[eventStr].includes(call)) {
 		var callIndex = this.eventStack[eventStr].indexOf(call);
@@ -74,13 +76,11 @@ PhSim.prototype.removeEventListener = function(eventStr,call) {
 
 /**
  * @function
- * @param {String} eventStr 
- * @param {Object} thisArg 
- * @param {Object} eventArg 
+ * @param {PhSim.PhEvent} event - Event Object
  */
 
 PhSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
-	
+
 	if(this.eventStack[eventStr]) {
 		for(var i = 0; i < this.eventStack[eventStr].length; i++) {
 			var func = this.eventStack[eventStr][i]

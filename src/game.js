@@ -108,7 +108,20 @@ Game.Options = function(goal,life,score) {
 	this.score = score;
 }
 
+/**
+ * Enable default modal for game wins
+ * @default true
+ * @type {Boolean}
+ */
+
 Game.prototype.defaultGameWinModal = true;
+
+/**
+ * Enable default modal for level wins
+ * @default true
+ * @type {Boolean}
+ */
+
 Game.prototype.defaultLevelWinModal = true;
 
 /**
@@ -130,7 +143,7 @@ Game.prototype.setScore = function(c) {
 
 		// Code to execute 
 
-		if(this.phSim.simulationIndex + 1 === this.phSim.options.simulations.length) {
+		if(this.phSim.simulationIndex + 1 === this.PhSim.Static.simulations.length) {
 
 			if(this.defaultGameWinModal) {
 
@@ -237,6 +250,11 @@ Game.prototype.end = function() {
 
 }
 
+/**
+ * Namespace for game widgets
+ * 
+ */
+
 Game.Widgets = {
 
 }
@@ -263,8 +281,8 @@ Game.Widgets.coin = function(dyn_object,widget) {
 		var a = function() {
 
 			if(self.inSensorCollision(obj1) && self.lclGame) {
-				self.lclGame.setScore(self.lclGame.score + value);
-				self.removeEventListener("collisionstart",a);	
+				self.lclGame.setScore(self.lclGame.score + 1);
+				self.off("collisionstart",a);	
 			}
 
 		}
@@ -290,7 +308,7 @@ var func = function() {
 
 		if(self.inSensorCollision(obj1) && self.lclGame) {
 			self.lclGame.setLife(self.lclGame.life - 1);
-			self.removeEventListener("collisionstart",a);	
+			self.off("collisionstart",a);
 		}
 
 	}
@@ -315,7 +333,7 @@ var func = function() {
 
 		if(self.inSensorCollision(obj1) && self.lclGame) {
 			self.lclGame.setLife(self.lclGame.life + 1);
-			self.removeEventListener("collisionstart",a);	
+			self.off("collisionstart",a);	
 		}
 
 	}

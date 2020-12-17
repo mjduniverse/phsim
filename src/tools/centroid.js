@@ -3,7 +3,7 @@
  * Get centroid of a rectangle
  * 
  * @function
- * @param {PhSim.Options.Rectangle} rectangle
+ * @param {PhSim.Static.Rectangle} rectangle
  * @returns {Vector}
  *  
  */

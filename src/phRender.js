@@ -95,13 +95,13 @@ PhRender.prototype.unsetCtx = function() {
 
 /**
  * 
- * Render a {@link Path} as a polygon.
+ * Render a a {@link polygon}.
  * 
  * @function
  * @param {Path} path 
  */
 
-PhRender.prototype.static_path = function (path) {
+PhRender.prototype.renderPolygon = function (path) {
 
 	this.setCtx(path);
 
@@ -120,7 +120,7 @@ PhRender.prototype.static_path = function (path) {
 
 	if(path.sprite) {
 
-		var img = this.spriteImgArray[path.sprite.src];
+		var img = this.spriteImgObj[path.sprite.src];
 
 		var centroid = findCentroidOfPath(path);
 
@@ -188,8 +188,11 @@ PhRender.prototype.static_path = function (path) {
 }
 
 /**
+ * 
+ * Render sprite by center
+ * 
  * @function
- * @param {String} url - URL of object loaded in PhRender.prototype.spriteImgArray
+ * @param {String} url - URL of object loaded in PhRender.prototype.spriteImgObj
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
  * @param {Number} w - width
@@ -199,7 +202,7 @@ PhRender.prototype.static_path = function (path) {
 
 PhRender.prototype.renderSpriteByCenter = function(url,x,y,w,h,a) {
 
-	var spriteImg = this.spriteImgArray[url];
+	var spriteImg = this.spriteImgObj[url];
 
 	this.ctx.save();
 	this.ctx.translate(x,y)
@@ -253,10 +256,10 @@ PhRender.prototype.renderConstraint = function (constraint) {
  * Render circle
  * 
  * @function
- * @param {PhSim.Options.Circle} circle 
+ * @param {PhSim.Static.Circle} circle 
  */
 
-PhRender.prototype.static_circle = function (circle) {
+PhRender.prototype.renderCircle = function (circle) {
 	
 	this.setCtx(circle);
 
@@ -280,7 +283,7 @@ PhRender.prototype.static_circle = function (circle) {
 
 	if(circle.sprite) {
 
-		var img = this.spriteImgArray[circle.sprite.src];
+		var img = this.spriteImgObj[circle.sprite.src];
 
 		this.ctx.imageSmoothingEnabled = circle.sprite.smooth;
 
@@ -326,11 +329,11 @@ PhRender.prototype.static_circle = function (circle) {
  * Render rectangle
  * 
  * @function
- * @param {PhSim.Options.Rectangle} rectangle - Rectangle object
+ * @param {PhSim.Static.Rectangle} rectangle - Rectangle object
  * @param rectangle.sprite - Sprite Object
  */
 
-PhRender.prototype.static_rectangle = function(rectangle) {
+PhRender.prototype.renderRectangle = function(rectangle) {
 
 	var c = PhSim.getRectangleCentroid(rectangle);
 
@@ -360,7 +363,7 @@ PhRender.prototype.static_rectangle = function(rectangle) {
 
 	if(rectangle.sprite) {
 
-		var img = this.spriteImgArray[rectangle.sprite.src];
+		var img = this.spriteImgObj[rectangle.sprite.src];
 
 		this.ctx.imageSmoothingEnabled = rectangle.sprite.smooth;
 
@@ -456,10 +459,10 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 
 /**
  * @function
- * @param {PhSim.Options.RegPolygon} regPolygon 
+ * @param {PhSim.Static.RegPolygon} regPolygon 
  */
 
-PhRender.prototype.static_regPolygon = function(regPolygon) {
+PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 	var vertSet = PhSim.getRegPolygonVerts(regPolygon);
 	
@@ -483,7 +486,7 @@ PhRender.prototype.static_regPolygon = function(regPolygon) {
 
 	if(regPolygon.sprite) {
 
-		var img = this.spriteImgArray[regPolygon.sprite.src];
+		var img = this.spriteImgObj[regPolygon.sprite.src];
 
 		this.ctx.imageSmoothingEnabled = regPolygon.sprite.smooth;
 
@@ -550,28 +553,28 @@ PhRender.prototype.static_regPolygon = function(regPolygon) {
 
 /**
  * @function
- * @param {*} obj 
+ * @param {PhSimObject} obj 
  */
 
 PhRender.prototype.renderStatic = function(obj) {
 				
-	if ( obj.path === true )  {
-		this.static_path(obj);
+	if (obj.shape === "polygon")  {
+		this.renderPolygon(obj);
 	}
 	
-	if( obj.circle === true) {
-		this.static_circle(obj); 
+	if( obj.shape === "circle") {
+		this.renderCircle(obj); 
 	}
 
-	if( obj.rectangle === true) {
-		this.static_rectangle(obj);
+	if( obj.shape === "rectangle") {
+		this.renderRectangle(obj);
 	}
 
-	if( obj.regPolygon === true ) {
-		this.static_regPolygon(obj);
+	if( obj.shape === "regPolygon") {
+		this.renderRegPolygon(obj);
 	}
 
-	if( obj.composite === true) {
+	if( obj.shape === "composite") {
 		for(var i = 0; i < obj.parts.length; i++) {
 			this.renderStatic(obj.parts[i]);
 		}
@@ -616,7 +619,7 @@ PhRender.prototype.simulation = function(simulation) {
 
 PhRender.prototype.dynamicSkeleton = function(object) {
 
-	if(object.static.path) {
+	if(object.static.shape === "polygon") {
 		
 		this.ctx.beginPath();
 
@@ -650,7 +653,7 @@ PhRender.prototype.dynamicSkeleton = function(object) {
 
 PhRender.prototype.dynamicSkeleton_center = function(object) {
 
-	if(object.static.path) {
+	if(object.static.shape === "polygon") {
 		
 		this.ctx.beginPath();
 
@@ -702,7 +705,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 	this.ctx.strokeStyle = dynObject.strokeStyle;
 
 	
-	if(dynObject.path) {
+	if(dynObject.shape === "polygon") {
 		
 		this.drawDynamicSkeleton(dynObject);
 		
@@ -710,7 +713,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 
 		if(dynObject.sprite) {
 
-			var img = this.spriteImgArray[dynObject.sprite.src];
+			var img = this.spriteImgObj[dynObject.sprite.src];
 
 			this.ctx.imageSmoothingEnabled = dynObject.sprite.smooth;
 
@@ -769,19 +772,19 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 		
 	}
 
-	if(dynObject.circle) {
-		this.static_circle(dynObject);	
+	if(dynObject.shape === "circle") {
+		this.renderCircle(dynObject);	
 	}
 	
-	if(dynObject.regPolygon) {
-		this.static_regPolygon(dynObject);		
+	if(dynObject.shape === "regPolygon") {
+		this.renderRegPolygon(dynObject);		
 	}
 
-	if(dynObject.rectangle) {
-		this.static_rectangle(dynObject);		
+	if(dynObject.shape === "rectangle") {
+		this.renderRectangle(dynObject);		
 	}
 
-	if(dynObject.composite) {
+	if(dynObject.shape === "composite") {
 		for(var i = 1; i < dynObject.parts.length; i++) {
 			this.dynamicRenderDraw(dynObject.parts[i]);
 		}

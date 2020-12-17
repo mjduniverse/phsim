@@ -1,21 +1,31 @@
-const PhSim = require("./phSim");
+const PhSim = require("../phSim");
+
+/**
+ * 
+ * Update a dynamic object.
+ * 
+ * @function
+ * @param {PhSimObject} currentObj - Object to be updated
+ * @fires PhSim.PhEvent
+ * 
+ */
 
 PhSim.prototype.updateDynObj = function(currentObj) {
 
 
 	// Loop must start at index 1 because the first element in the array is a reference to the parent object itself.
 
-	if(currentObj.noDyn || currentObj.permStatic) {
+	if(currentObj.noDyn) {
 		this.phRender.renderStatic(currentObj);	
 	}
 	
 	else {
 
-		if(currentObj.circle || currentObj.regPolygon || currentObj.rectangle) {
+		if(currentObj.shape === "circle" || currentObj.shape === "regPolygon" || currentObj.shape === "rectangle") {
 			currentObj.cycle = currentObj.firstCycle + currentObj.matter.angle;
 		}
 	
-		if(currentObj.rectangle) {
+		if(currentObj.shape === "rectangle") {
 			
 			var v = {
 				"x": currentObj.matter.position.x - currentObj.matter.positionPrev.x,
@@ -27,12 +37,12 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 	
 		}
 	
-		if(currentObj.circle || currentObj.regPolygon) {
+		if(currentObj.shape === "circle" || currentObj.shape === "regPolygon") {
 			currentObj.x = currentObj.matter.position.x;
 			currentObj.y = currentObj.matter.position.y;
 		}
 	
-		if(currentObj.path) {
+		if(currentObj.shape === "polygon") {
 			PhSim.calc_skinmesh(currentObj);
 		}
 
@@ -42,8 +52,7 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 
 	}
 
-	var event = new PhSim.PhEvent();
-	event.type = "objupdate";
+	var event = new PhSim.PhEvent("objupdate");
 	event.target = currentObj;
 
 	this.callEventClass("objupdate",this,event);

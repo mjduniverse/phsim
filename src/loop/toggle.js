@@ -1,4 +1,4 @@
-const PhSim = require("./phSim");
+const PhSim = require("../phSim");
 
 PhSim.prototype.play = function() {
 	this.paused = false;
@@ -23,7 +23,7 @@ PhSim.prototype.toggle = function() {
 }
 
 PhSim.prototype.exitSl = function() {
-	this.callEventClass("beforeslchange",this,new PhSim.PhEvent());
+	this.callEventClass("beforeslchange",this,new PhSim.PhEvent("beforeslchange"));
 	this.paused = false;
 	clearInterval(this.intervalLoop);
 }
@@ -45,7 +45,7 @@ PhSim.prototype.exit = function() {
 		delete this.objUniverse[i].phSim;
 	}
 
-	this.callEventClass("exit",this,new PhSim.PhEvent());
+	this.callEventClass("exit",this,new PhSim.PhEvent("exit"));
 	this.deregisterCanvasEvents();
 	this.deregisterKeyEvents();
 	this.exitSl();

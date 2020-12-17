@@ -1,3 +1,11 @@
+/**
+ * The `draggable` widget makes {@link PhSim.DynObject} objects draggable.
+ * 
+ * @param {PhSim.DynObject} dyn_object 
+ * @this PhSim
+ * @param {*} widget 
+ */
+
 PhSim.Widgets.draggable = function(dyn_object,widget) {
 
     var self = this;
@@ -25,9 +33,9 @@ PhSim.Widgets.draggable = function(dyn_object,widget) {
         }
 
         var __onmouseup = function() {
-            self.removeEventListener("mousemove",__onmousemove);
-            self.removeEventListener("mouseup",__onmouseup);
-            self.removeEventListener("beforeupdate",__onbeforeupdate);
+            self.off("mousemove",__onmousemove);
+            self.off("mouseup",__onmouseup);
+            self.off("beforeupdate",__onbeforeupdate);
         }
 
         var __onbeforeupdate = function() {
