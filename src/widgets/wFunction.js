@@ -493,7 +493,7 @@ PhSim.prototype.disableWFunction = function(o) {
  */
 
 PhSim.Widgets.wFunction = function(dyn_object,widget) {
-	this.createWFunction(dyn_object,wf,widget);
+	this.createWFunction(dyn_object,widget.function,widget);
 }
 
 PhSim.prototype.wFunctions = {}
