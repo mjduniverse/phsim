@@ -447,6 +447,14 @@ PhSim.prototype.loading = {
 	"txtSize": 20
 }
 
+/**
+ * The `drawLoadingScreen` function draws the loading screen for a simulation change.
+ * The behaviour of the loading screen can be customized by modifing the properties of
+ * {@link PhSim#loading}.
+ * 
+ * @function
+ */
+
 PhSim.prototype.drawLoadingScreen = function() {
 	this.simCtx.fillStyle = this.loading.bgClr;
 	this.simCtx.fillRect(0,0,this.camera.scale,this.simCanvas.height);
