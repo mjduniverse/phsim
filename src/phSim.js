@@ -390,13 +390,60 @@ PhSim.prototype.bgFillStyle = "white";
 
 PhSim.version = "0.1.0-alpha"
 
+/**
+ * Loading screen properties
+ * @type {Object}
+ */
+
 PhSim.prototype.loading = {
+
+	/**
+	 * Loading Background color
+	 * @type {String}
+	 */
+
 	"bgClr": "black",
+
+	/**
+	 * Loading text color
+	 * @type {String}
+	 */
+
 	"txtClr": "White",
+
+	/**
+	 * Loading font face
+	 * @type {String}
+	 */
+
 	"txtFace": "arial",
+
+	/**
+	 * Loading text align
+	 * @type {String}
+	 */
+
 	"txtAlign": "center",
+
+	/**
+	 * Loading text
+	 * @type {String}
+	 */
+
 	"txt": "Loading...",
+
+	/**
+	 * y-position
+	 * @type {String}
+	 */
+
 	"yPos": "center",
+
+	/**
+	 * Text size
+	 * @type {Number}
+	 */
+
 	"txtSize": 20
 }
 
