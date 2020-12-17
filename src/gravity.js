@@ -2,6 +2,7 @@ const PhSim = require("./phSim");
 
 /**
  * Apply Newtonian gravity field.
+ * @function
  */
 
 PhSim.prototype.applyGravitationalField = function() {

@@ -95,7 +95,7 @@ PhRender.prototype.unsetCtx = function() {
 
 /**
  * 
- * Render a {@link Path} as a polygon.
+ * Render a a {@link polygon}.
  * 
  * @function
  * @param {Path} path 
@@ -188,6 +188,9 @@ PhRender.prototype.renderPolygon = function (path) {
 }
 
 /**
+ * 
+ * Render sprite by center
+ * 
  * @function
  * @param {String} url - URL of object loaded in PhRender.prototype.spriteImgObj
  * @param {Number} x - x-coordinate
@@ -550,7 +553,7 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 /**
  * @function
- * @param {*} obj 
+ * @param {PhSimObject} obj 
  */
 
 PhRender.prototype.renderStatic = function(obj) {

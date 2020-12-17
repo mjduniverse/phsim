@@ -108,7 +108,20 @@ Game.Options = function(goal,life,score) {
 	this.score = score;
 }
 
+/**
+ * Enable default modal for game wins
+ * @default true
+ * @type {Boolean}
+ */
+
 Game.prototype.defaultGameWinModal = true;
+
+/**
+ * Enable default modal for level wins
+ * @default true
+ * @type {Boolean}
+ */
+
 Game.prototype.defaultLevelWinModal = true;
 
 /**
@@ -236,6 +249,11 @@ Game.prototype.end = function() {
 	this.phSim.callEventClass("levelloss",this,{}); 
 
 }
+
+/**
+ * Namespace for game widgets
+ * 
+ */
 
 Game.Widgets = {
 

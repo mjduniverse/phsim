@@ -1412,7 +1412,20 @@ Game.Options = function(goal,life,score) {
 	this.score = score;
 }
 
+/**
+ * Enable default modal for game wins
+ * @default true
+ * @type {Boolean}
+ */
+
 Game.prototype.defaultGameWinModal = true;
+
+/**
+ * Enable default modal for level wins
+ * @default true
+ * @type {Boolean}
+ */
+
 Game.prototype.defaultLevelWinModal = true;
 
 /**
@@ -1541,6 +1554,11 @@ Game.prototype.end = function() {
 
 }
 
+/**
+ * Namespace for game widgets
+ * 
+ */
+
 Game.Widgets = {
 
 }
@@ -1651,6 +1669,7 @@ module.exports = __webpack_require__(52);
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const PhSim = __webpack_require__(0);
 
 /**
  * A static object is an object that is not simulated by the PhSim simulation.
@@ -1665,7 +1684,6 @@ module.exports = __webpack_require__(52);
  * 
  */
 
-const PhSim = __webpack_require__(0);
 
 var Static = function() {
 
@@ -1759,6 +1777,10 @@ Static.GradientStop = function(pos,color) {
 	this.pos = pos;
 }
 
+/**
+ * Static gradient object constructor
+ * @constructor
+ */
 
 Static.Gradient = function() {
 
@@ -2053,7 +2075,7 @@ Static.Composite = function() {
 	this.name = "Untitled";
 }
 
-/***
+/**
  * Simulation Box Object 
  * 
  * @constructor
@@ -2592,7 +2614,7 @@ PhRender.prototype.unsetCtx = function() {
 
 /**
  * 
- * Render a {@link Path} as a polygon.
+ * Render a a {@link polygon}.
  * 
  * @function
  * @param {Path} path 
@@ -2685,6 +2707,9 @@ PhRender.prototype.renderPolygon = function (path) {
 }
 
 /**
+ * 
+ * Render sprite by center
+ * 
  * @function
  * @param {String} url - URL of object loaded in PhRender.prototype.spriteImgObj
  * @param {Number} x - x-coordinate
@@ -3047,7 +3072,7 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 /**
  * @function
- * @param {*} obj 
+ * @param {PhSimObject} obj 
  */
 
 PhRender.prototype.renderStatic = function(obj) {
@@ -3949,8 +3974,8 @@ PhSim.prototype.L = function(L) {
 
 /**
  * @function
- * @param {*} L 
- * @param {*} O 
+ * @param {Number} L 
+ * @param {Number} O 
  */
 
 PhSim.prototype.LO = function(L,O) {
@@ -3962,14 +3987,15 @@ PhSim.prototype.LO = function(L,O) {
  * of an object in the DynTree.'
  * 
  * The form of the LOStr is:
- * <layer_index>,<object_index>
+ * `<layer_index>,<object_index>`
  * 
  * @typedef {String} LOStr
  */
 
 /**
  * @function
- * @param {LOStr} str 
+ * @param {LOStr} str
+ * @returns {PhSimObject} 
  */
 
 PhSim.prototype.getObjectFromLOStr = function(str) {
@@ -4069,6 +4095,7 @@ const PhSim = __webpack_require__(0);
 
 /**
  * Config filter
+ * @function
  * @param {HTMLElement} container 
  */
 
@@ -5424,6 +5451,7 @@ const PhSim = __webpack_require__(0);
 
 /**
  * Apply Newtonian gravity field.
+ * @function
  */
 
 PhSim.prototype.applyGravitationalField = function() {
@@ -5773,6 +5801,11 @@ module.exports = gotoSimulationIndex;
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
+
+/**
+ * Assign PhRender to PhSim simulation
+ * @param {PhSim.PhRender} phRender 
+ */
 
 PhSim.prototype.assignPhRender = function(phRender) {
 
@@ -6205,30 +6238,26 @@ __webpack_require__(37);
 const Game = __webpack_require__(4);
 
 /**
- * 
- * @function
- * 
+ * @borrows PhSim.Game.Widgets.coin as PhSim.Widgets.coin
  */
 
 PhSim.Widgets.coin = Game.Widgets.coin;
 
 /**
- * 
- * @function
+ * @borrows PhSim.Game.Widgets.hazard as PhSim.Widgets.hazard
  */
 
 PhSim.Widgets.hazard = Game.Widgets.hazard;
 
 /**
- * 
- * @function
+ * @borrows PhSim.Game.Widgets.health as PhSim.Widgets.health
  */
+
 
 PhSim.Widgets.health = Game.Widgets.health;
 
 /**
- * 
- * @function
+ * @borrows PhSim.Game.Widgets.endGame as PhSim.Widgets.endGame
  */
 
 PhSim.Widgets.endGame = Game.Widgets.endGame;
@@ -7928,6 +7957,7 @@ var ObjLoops = {}
 
 /**
  * Execute function on all members of a PhSim simulation or PhSim options.
+ * @function
  * @param {PhSim|PhSimOptions} sim 
  * @param {Function} method 
  */
@@ -7956,8 +7986,9 @@ ObjLoops.global = function(sim,method) {
 
 /**
  * Execute function on all members of a simulation object.
- * @param {*} simulation 
- * @param {*} method 
+ * @function
+ * @param {Object} simulation 
+ * @param {Function} method 
  */
 
 ObjLoops.simulation = function(simulation,method) {
@@ -7969,7 +8000,10 @@ ObjLoops.simulation = function(simulation,method) {
 }
 
 /**
- * Execute function on all members of an 
+ * Execute function on all members of an layer
+ * @function
+ * @param {Object} layer
+ * @param {Function} method
  */
 
 ObjLoops.layer = function(layer,method) {

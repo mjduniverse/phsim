@@ -1,3 +1,4 @@
+const PhSim = require("./phSim");
 
 /**
  * A static object is an object that is not simulated by the PhSim simulation.
@@ -12,7 +13,6 @@
  * 
  */
 
-const PhSim = require("./phSim");
 
 var Static = function() {
 
@@ -106,6 +106,10 @@ Static.GradientStop = function(pos,color) {
 	this.pos = pos;
 }
 
+/**
+ * Static gradient object constructor
+ * @constructor
+ */
 
 Static.Gradient = function() {
 
@@ -400,7 +404,7 @@ Static.Composite = function() {
 	this.name = "Untitled";
 }
 
-/***
+/**
  * Simulation Box Object 
  * 
  * @constructor

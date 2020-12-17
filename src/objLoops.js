@@ -7,6 +7,7 @@ var ObjLoops = {}
 
 /**
  * Execute function on all members of a PhSim simulation or PhSim options.
+ * @function
  * @param {PhSim|PhSimOptions} sim 
  * @param {Function} method 
  */
@@ -35,8 +36,9 @@ ObjLoops.global = function(sim,method) {
 
 /**
  * Execute function on all members of a simulation object.
- * @param {*} simulation 
- * @param {*} method 
+ * @function
+ * @param {Object} simulation 
+ * @param {Function} method 
  */
 
 ObjLoops.simulation = function(simulation,method) {
@@ -48,7 +50,10 @@ ObjLoops.simulation = function(simulation,method) {
 }
 
 /**
- * Execute function on all members of an 
+ * Execute function on all members of an layer
+ * @function
+ * @param {Object} layer
+ * @param {Function} method
  */
 
 ObjLoops.layer = function(layer,method) {

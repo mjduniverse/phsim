@@ -11,8 +11,8 @@ PhSim.prototype.L = function(L) {
 
 /**
  * @function
- * @param {*} L 
- * @param {*} O 
+ * @param {Number} L 
+ * @param {Number} O 
  */
 
 PhSim.prototype.LO = function(L,O) {
@@ -24,14 +24,15 @@ PhSim.prototype.LO = function(L,O) {
  * of an object in the DynTree.'
  * 
  * The form of the LOStr is:
- * <layer_index>,<object_index>
+ * `<layer_index>,<object_index>`
  * 
  * @typedef {String} LOStr
  */
 
 /**
  * @function
- * @param {LOStr} str 
+ * @param {LOStr} str
+ * @returns {PhSimObject} 
  */
 
 PhSim.prototype.getObjectFromLOStr = function(str) {

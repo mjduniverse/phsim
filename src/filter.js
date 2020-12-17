@@ -2,6 +2,7 @@ const PhSim = require("./phSim");
 
 /**
  * Config filter
+ * @function
  * @param {HTMLElement} container 
  */
 

@@ -1,5 +1,10 @@
 const PhSim = require("./phSim");
 
+/**
+ * Assign PhRender to PhSim simulation
+ * @param {PhSim.PhRender} phRender 
+ */
+
 PhSim.prototype.assignPhRender = function(phRender) {
 
 	/** PhRender object */
