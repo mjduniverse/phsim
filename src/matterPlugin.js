@@ -105,8 +105,3 @@ PhSim.matterPlugin = {
     }
 
 }
-
-// Register Plugin
-
-Matter.Plugin.register(PhSim.matterPlugin);
-Matter.use(PhSim.matterPlugin);

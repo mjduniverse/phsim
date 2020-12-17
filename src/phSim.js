@@ -117,6 +117,12 @@ function PhSim(dynSimOptions = new PhSim.Static()) {
 		this.gotoSimulationIndex(0);
 	}
 
+
+	// Register Plugin
+
+	Matter.Plugin.register(PhSim.matterPlugin);
+	Matter.use(PhSim.matterPlugin);
+
 }
 
 /**
