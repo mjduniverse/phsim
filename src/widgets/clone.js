@@ -26,6 +26,16 @@ PhSim.prototype.cloneObject = function(dynObject,options = {}) {
 	this.callEventClass("clone",this,eventObj);
 }
 
+/**
+ * 
+ * The `clone` widget is a widget that makes copies of an object and inserts them into
+ * the simulation.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {WFunctionOptions} widget - Options.
+ */
+
 PhSim.Widgets.clone = function(dyn_object,widget) {
 
     var self = this;

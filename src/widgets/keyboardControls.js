@@ -1,7 +1,16 @@
 /**
+ * 
+ * The `keyboardControls` widget is a widget that makes an object go at a certain velocity
+ * if the arrow keys are pressed.
+ * 
  * @function
  * @param {PhSim.DynObject} dynObj 
- * @param {Object} keyboardControls - Keyboard Controls options 
+ * @param {Object} keyboardControls - Keyboard Controls options
+ * 
+ * @param {Number} keyboardControls.right - Velocity in the right direction if the right key is pressed.
+ * @param {NUmber} keyboardControls.up - Velocity in the up direction if the up key is pressed.
+ * @param {Number} keyboardControls.left - Velocity in the left direction if the left key is pressed.
+ * @param {Number} keyboardControls.down - Velocity in the down direction if the down key is pressed.
  */
 
 PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {

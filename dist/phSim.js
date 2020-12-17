@@ -4184,6 +4184,7 @@ PhSim.prototype.alert = function(options) {
 
 // Set Angle to mouse.
 
+const DynObject = __webpack_require__(1);
 const PhSim = __webpack_require__(0);
 
 // Object Connection
@@ -4240,13 +4241,13 @@ PhSim.prototype.forAllObjects = function(call) {
  * @param {PhSim.DynObject} dynObject 
  */
 
-PhSim.prototype.addToOverlayer = function(dynObject) {
+PhSim.prototype.addToOverlayer = function(o) {
 	
-	if(!dynObject.noDyn) {
-		PhSim.Matter.World.add(this.matterJSWorld, dynObject.matter);
+	if(o instanceof DynObject) {
+		PhSim.Matter.World.add(this.matterJSWorld, o.matter);
 	}
 
-	this.objUniverse.push(dynObject);
+	this.objUniverse.push(o);
 
 }
 
@@ -4266,38 +4267,38 @@ PhSim.prototype.isNonDyn = function(o) {
  * Add Object to PhSim simulation
  * 
  * @function
- * @param {PhSim.DynObject} dynObject 
+ * @param {PhSimObject} o 
  * @param {Object} options
  * @param {Number} options.layer 
  * @returns {PhSim.DynObject} - The added dynObject. 
  */
 
-PhSim.prototype.addObject = function(dynObject,options = {}) {
+PhSim.prototype.addObject = function(o,options = {}) {
 
 	if(typeof options.layer === "number") {
-		this.dynTree[options.layer].push(dynObject);
+		this.dynTree[options.layer].push(o);
 
-		if(!this.isNonDyn(dynObject)) {
-			dynObject.layerBranch = this.dynTree[options.layer];
+		if(o instanceof DynObject) {
+			o.layerBranch = this.dynTree[options.layer];
 		}
 
 	}
 
-	this.objUniverse.push(dynObject);
+	this.objUniverse.push(o);
 
-	if(!this.isNonDyn(dynObject)) {
+	if(o instanceof DynObject) {
 
-		dynObject.phSim = this;
+		o.phSim = this;
 
-		PhSim.Matter.World.add(this.matterJSWorld,dynObject.matter);
+		PhSim.Matter.World.add(this.matterJSWorld,o.matter);
 
-		if(dynObject.static.widgets) {
-			this.extractWidgets(dynObject);
+		if(o.static.widgets) {
+			this.extractWidgets(o);
 		}
 
 	}
 
-	return dynObject;
+	return o;
 }
 
 /**
@@ -6324,6 +6325,23 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 }
 
+/**
+ * 
+ * The `circularConstraint` widget creates circular constraints.
+ * 
+ * A circular constraint is a special kind of constraint that is made up of an 
+ * object `dyn_object` and a point `(x,y)` in space.
+ * 
+ * The object rotates around the centroid of `dyn_object` as it rotates around the
+ * point `(x,y)`.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget - Circular Constraint options
+ * @param {Number} widget.x - x-coordinate of the other end of the constraint
+ * @param {Number} widget.y - y-coordinate of the other end of the constraint 
+ */
+
 PhSim.Widgets.circularConstraint = function(dyn_object,widget) {
 	this.createCircularConstraint(dyn_object,widget.x,widget.y);
 }
@@ -6359,6 +6377,16 @@ PhSim.prototype.cloneObject = function(dynObject,options = {}) {
 
 	this.callEventClass("clone",this,eventObj);
 }
+
+/**
+ * 
+ * The `clone` widget is a widget that makes copies of an object and inserts them into
+ * the simulation.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {WFunctionOptions} widget - Options.
+ */
 
 PhSim.Widgets.clone = function(dyn_object,widget) {
 
@@ -6453,6 +6481,14 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 /* 37 */
 /***/ (function(module, exports) {
 
+/**
+ * The `draggable` widget makes {@link PhSim.DynObject} objects draggable.
+ * 
+ * @param {PhSim.DynObject} dyn_object 
+ * @this PhSim
+ * @param {*} widget 
+ */
+
 PhSim.Widgets.draggable = function(dyn_object,widget) {
 
     var self = this;
@@ -6517,6 +6553,13 @@ PhSim.Widgets.draggable = function(dyn_object,widget) {
 /* 38 */
 /***/ (function(module, exports) {
 
+/**
+ * Set lock of the Dynamic Object
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Boolean} value - If  `true`, lock. Otherwise, unlock.
+ */
+
 PhSim.prototype.setLock = function(dynObject,value) {
     dynObject.locked = value;
 	PhSim.Matter.Body.setStatic(dynObject.matter,value);
@@ -6545,6 +6588,16 @@ PhSim.prototype.toggleSemiLock = function(dynObject) {
 	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
+/**
+ * The `toggleLock` widget toggles the lock status of the Dynamic Object.
+ * If locked, the object is unlocked.
+ * If unlocked, the object is locked.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {WFunctionOptions} widget - Configuration
+ */
+
 PhSim.Widgets.toggleLock = function(dyn_object,widget) {
 
     var self = this;
@@ -6562,6 +6615,16 @@ PhSim.Widgets.toggleLock = function(dyn_object,widget) {
 
     this.createWFunction(dyn_object,closure(),widget);
 }
+
+/**
+ * The `toggleSemiLock` widget toggles the semi-lock status of the Dynamic Object.
+ * If semi-locked, the object is semi-unlocked.
+ * If semi-unlocked, the object is semi-locked.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {WFunctionOptions} widget - Configuration
+ */
 
 PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
 
@@ -6587,7 +6650,6 @@ PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
 
 const Motion = __webpack_require__(3);
 
-Motion
 /** 
  * 
  * Generate a function to put some dynamic object in motion, given some mode and vector or scalar.
@@ -6596,7 +6658,7 @@ Motion
  * @param {"setAngle"|"force"|"velocity"|"translate"|"position"|"rotation"|"circular_constraint_rotation"} mode - The possible modes are "force","velocity","translate"
  * @param {dyn_object} dyn_object - The dynamic object to put in motion.
  * @param {Vector|Number} motion - The vector or scalar that defines the motion.
- * @returns {Function} - The method to 
+ * @returns {Function} - A function that makes an object undergo some motion.
  * 
  * 
 */
@@ -6661,10 +6723,12 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 
 /**
  * 
- * Velocity widget
+ * The `velocity` widget makes dynamic objects go at a certain velocity.
  * 
+ * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {Widget} widget
+ * @param {WFunctionOptions} widget
+ * @param {Vector} widget.vector - Velocity vector
  * @this {PhSim} 
  */
 
@@ -6675,10 +6739,12 @@ PhSim.Widgets.velocity = function(dynObject,widget) {
 
 /**
  * 
- * Translatation widget
+ * The `translate` widget moves objects.
  * 
- * @param {PhSim.DynObject} dynObject 
- * @param {Widget} widget
+ * @function
+ * @param {PhSim.DynObject} dynObject - Dynamic Object to be translated.
+ * @param {WFunctionOptions} widget - Widget options.
+ * @param {Vector} widget.vector - Translation vector
  * @this {PhSim} 
  */
 
@@ -6689,10 +6755,11 @@ PhSim.Widgets.translate = function(dynObject,widget) {
 
 /**
  * 
- * Position widget
+ * The `position` widget sets the position of an object.
  * 
- * @param {PhSim.DynObject} dynObject 
- * @param {Widget} widget
+ * @function
+ * @param {PhSim.DynObject} dynObject - Dynamic object that will have its position changed.
+ * @param {WFunctionOptions} widget - Widget options.
  * @this {PhSim} 
  */
 
@@ -6703,10 +6770,11 @@ PhSim.Widgets.position = function(dynObject,widget) {
 
 /**
  * 
- * Rotation widget
+ * The `rotation` widget rotates an object. 
  * 
+ * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {Widget} widget
+ * @param {WFunctionOptions} widget
  * @this {PhSim} 
  */
 
@@ -6723,6 +6791,14 @@ PhSim.Widgets.rotation = function(dynObject,widget) {
     this.createWFunction(dynObject,f,widget);
 }
 
+/**
+ * The `setAngle` widget makes a widget change angle.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject - Dynamic Object
+ * @param {WFunctionOptions} widget 
+ */
+
 PhSim.Widgets.setAngle = function(dynObject,widget) {
 
     if(widget.circularConstraintRotation) {
@@ -6736,6 +6812,14 @@ PhSim.Widgets.setAngle = function(dynObject,widget) {
     this.createWFunction(dynObject,f,widget);
 
 }
+
+/**
+ * The `force` widget exerts a force on an object
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {WFunctionOptions} widget 
+ */
 
 PhSim.Widgets.force = function(dyn_object,widget) {
 
@@ -6763,6 +6847,16 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 	}
 }
 
+/**
+ * 
+ * The `objLink_a` widget executes all functions in the {@link PhSim.DynObject#objLinkFunctions}
+ * array of `widget.target`. 
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object - Reciever Object
+ * @param {WFunctionOptions} widget - Widget options
+ * @param {LOAddress|PhSim.DynObject} widget.target -  Target object
+ */
 
 PhSim.Widgets.objLink_a = function(dyn_object,widget) {
 
@@ -6773,7 +6867,11 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
     this.on("matterJSLoad",function(){
         var eventFuncClosure = function() {
 
-            var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
+            if(widget.target instanceof PhSim)
+
+            if(typeof widget.target.L === "number" && typeof widget.target.O === "number") {
+                var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
+            }
 
             var eventFunc = function(){
                 self.callObjLinkFunctions(targetObj);
@@ -6853,7 +6951,7 @@ PhSim.WFunctionRef = function(options,ref,call) {
 
 	/**
 	 * Options used to create simple event
-	 * @type {wFunctionOptions}
+	 * @type {WFunctionOptions}
 	 */
 
 	this.options = options;
@@ -6953,21 +7051,22 @@ PhSim.prototype.wFunctionRefs = [];
  * objlinkTriggerString|afterslchangeTriggerString|timeTriggerString} wFunctionTrigger
  *
  * 
- * The simple event trigger string is a string defining {@link wFunctionOptions.trigger}
+ * The simple event trigger string is a string defining {@link WFunctionOptions.trigger}
  */
 
 /** 
  * Properties for a simple event.
+ * The simple event options is an Object that is used for the {@link PhSim#createWFunction} function.
+ * They are also used to configure various types of widgets. Especially widgets that utilize
+ * wFunctions.
  * 
- *
- * @typedef {Object} wFunctionOptions
- * @property {@external https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key|KeyboardEvent.key} [key] - The event.key value for triggering a simple event.
+ * @typedef {Object} WFunctionOptions
+ * @property {KeyBoard} [key] - The event.key value for triggering a simple event.
  * @property {Number} [time] - The time interval between a repeated event or a delay time for timeouts.
  * @property {Number} [maxN] - The maximum number of times a repeated SimpleEvent can be executed.
  * @property {PhSim.DynObject} [wFunctionObj] - An object being affected by the wFunction.
  * @property {String} [name] - The name of the wFunction
  * 
- * The simple event options is an Object that is used for the {@link PhSim#createWFunction} function.
  */
 
  /**
@@ -6989,7 +7088,7 @@ PhSim.prototype.wFunctionRefs = [];
  * If `wFunctionBody` is an integer `i`, the function body is deterimined by the 
  * `{@link PhSim#options.wFunctions}[i]`
  * 
- * @param {wFunctionOptions} options -  [The Simple Event Options Object]{@link wFunctionOptions}.
+ * @param {WFunctionOptions} options -  [The Simple Event Options Object]{@link WFunctionOptions}.
  * @returns {PhSim.WFunctionRef} - A reference to the simple event.
  * @this {PhSim}
  * 
@@ -7282,21 +7381,17 @@ PhSim.prototype.disableWFunction = function(o) {
 
 }
 
+/**
+ * 
+ * 
+ * 
+ * @function
+ * @param {*} dyn_object 
+ * @param {*} widget 
+ */
+
 PhSim.Widgets.wFunction = function(dyn_object,widget) {
-
-	var self = this;
-	var wf;
-
-    if(typeof widget.function === "string") {
-		var wf = new Function(widget.function);
-    }
-    
-    else {
-        var wf = widget.function;
-    }
-
-    var f = this.createWFunction(dyn_object,wf,widget);
-
+	this.createWFunction(dyn_object,wf,widget);
 }
 
 PhSim.prototype.wFunctions = {}
@@ -7304,6 +7399,25 @@ PhSim.prototype.wFunctions = {}
 /***/ }),
 /* 42 */
 /***/ (function(module, exports) {
+
+/**
+ * 
+ * The `elevator` widget makes objects go back and forth within some range.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget - Options
+ * @param {Vector} widget.pointA - First point of the elevator
+ * @param {Vector} widget.pointB - Second point of the elevator
+ * @param {"x"|"y"} widget.bounding - Rules for deteriming the range of the elevator. 
+ * 
+ * If `widget.bounding` is equal to `"x"`, then the elevator switches direction if the
+ * `x` value of the position of `dyn_object` is equal to `widget.pointA.x` or `widget.pointB.x`.
+ * 
+ * If `widget.bounding` is equal to `"y"`, then the elevator switches direction if the
+ * `y` value of the position of `dyn_object` is equal to `widget.pointA.y` or `widget.pointB.y`.
+ * 
+ */
 
 PhSim.Widgets.elevator = function(dyn_object,widget) {
             
@@ -7415,9 +7529,18 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
 /***/ (function(module, exports) {
 
 /**
+ * 
+ * The `keyboardControls` widget is a widget that makes an object go at a certain velocity
+ * if the arrow keys are pressed.
+ * 
  * @function
  * @param {PhSim.DynObject} dynObj 
- * @param {Object} keyboardControls - Keyboard Controls options 
+ * @param {Object} keyboardControls - Keyboard Controls options
+ * 
+ * @param {Number} keyboardControls.right - Velocity in the right direction if the right key is pressed.
+ * @param {NUmber} keyboardControls.up - Velocity in the up direction if the up key is pressed.
+ * @param {Number} keyboardControls.left - Velocity in the left direction if the left key is pressed.
+ * @param {Number} keyboardControls.down - Velocity in the down direction if the down key is pressed.
  */
 
 PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
@@ -7455,6 +7578,16 @@ PhSim.Widgets.keyboardControls = function(dyn_object,widget) {
 /* 44 */
 /***/ (function(module, exports) {
 
+/**
+ * 
+ * The `transformCameraByObj` widget transforms the camera by an object.
+ * 
+ * @function
+ * @this PhSim
+ * @param {PhSim.DynObject} dyn_object - Object that will transform object.
+ */
+
+
 PhSim.Widgets.transformCameraByObj = function(dyn_object) {
     
     var self = this;
@@ -7472,6 +7605,17 @@ PhSim.Widgets.transformCameraByObj = function(dyn_object) {
 /***/ }),
 /* 45 */
 /***/ (function(module, exports) {
+
+/**
+ * 
+ * The `setColor` widget changes the color of an object.
+ * It utlizies the {@link PhSim.DynObject.setColor} function.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object - Dynamic Object that will have it's color changed.
+ * @param {WFunctionOptions} widget - Widget Options
+ * @param {String} widget.color - The new color of the object.
+ */
 
 PhSim.Widgets.setColor = function(dyn_object,widget) {
 
@@ -7492,6 +7636,16 @@ PhSim.Widgets.setColor = function(dyn_object,widget) {
 
     var f = this.createWFunction(dyn_object,closure(),widget);
 }
+
+/**
+ * 
+ * The `setBorderColor` widget sets the border color of an object.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {WFunctionOptions} widget - Widget properties.
+ * @param {String} widget.color - The new color of the object border
+ */
     
 PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
 
@@ -7512,13 +7666,25 @@ PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
 
     var f = this.createWFunction(dyn_object,closure(),widget);
 }
+
+/**
+ * 
+ * The `setLineWidth` widget sets the line width of an object.
+ * 
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object - The object to be affected.
+ * @param {WFunctionOptions} widget - Widget options
+ * @param {Number} widget.width - New line width
+ * 
+ */
         
 PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
 
     var self = this;
 
     var f = function(){
-        PhSim.DynObject.setLineWidth(dyn_object,widget.color);
+        PhSim.DynObject.setLineWidth(dyn_object,widget.width);
     }
 
     var f = this.createWFunction(dyn_object,f,widget);
@@ -7527,6 +7693,15 @@ PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
 /***/ }),
 /* 46 */
 /***/ (function(module, exports) {
+
+/**
+ * 
+ * The deleteSelf widget makes an object delete itself from the simulation.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object - The Dynamic Object to be configured.
+ * @param {WFunctionOptions} widget - Configuration options
+ */
 
 PhSim.Widgets.deleteSelf = function(dyn_object,widget) {
 
@@ -7818,7 +7993,7 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
  
 
 /**
-* @typedef {wFunctionOptions|DeleteSelf}
+* @typedef {WFunctionOptions|DeleteSelf}
 * @property {Boolean} deleteSelf - Boolean for enabling the force widget
 */
  
@@ -7859,14 +8034,14 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 */
  
 /**
-* @typedef {wFunctionOptions|SetAngle}
+* @typedef {WFunctionOptions|SetAngle}
 * @property {Number} cycle - Angle
 * @property {Boolean} circularConstraintRotation - Down velocity
 * @property {Boolean} rotation - Right velocity
 */
  
 /**
-* @typedef {wFunctionOptions|Rotation}
+* @typedef {WFunctionOptions|Rotation}
 * @property {Number} cycle - Angle
 * @property {Boolean} circularConstraintRotation - Down velocity
 * @property {Boolean} rotation - Right velocity
@@ -7944,7 +8119,7 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
  
  
 /**
-* @typedef {wFunctionOptions|WFunction}
+* @typedef {WFunctionOptions|WFunction}
 * @property {Function|String} function - WFunction widget
 * @property {Boolean} wFunction - Boolean for enabling wFunction widget.
 */

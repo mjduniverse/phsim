@@ -89,7 +89,7 @@ TypeDefGen.generateWidgetDoc = function(typeDefDoc) {
  */
 
 /**
- * @typedef {wFunctionOptions} Clone
+ * @typedef {WFunctionOptions} Clone
  * @property {Vector} - Vector for initial velocity
  * @property {Boolean} copyWidgets
  * @property {Boolean} timeCloner
@@ -97,7 +97,7 @@ TypeDefGen.generateWidgetDoc = function(typeDefDoc) {
  */
 
 /**
- * @typedef {wFunctionOptions} InputBox
+ * @typedef {WFunctionOptions} InputBox
  * @property {String} text
  * @property {String} buttonTxt
  * @property {String} name

@@ -1,3 +1,13 @@
+/**
+ * 
+ * The `transformCameraByObj` widget transforms the camera by an object.
+ * 
+ * @function
+ * @this PhSim
+ * @param {PhSim.DynObject} dyn_object - Object that will transform object.
+ */
+
+
 PhSim.Widgets.transformCameraByObj = function(dyn_object) {
     
     var self = this;

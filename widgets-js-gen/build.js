@@ -4,27 +4,27 @@ const TypeDefGen = require("./typeDefGen");
 
 const widgets = [
 
-    new TypeDefGen.Type("Velocity","wFunctionOptions",[
+    new TypeDefGen.Type("Velocity","WFunctionOptions",[
         new TypeDefGen.Property("Boolean","velocity","Boolean for enabling the velocity widget"),
         new TypeDefGen.Property("Vector","vector","Velocity vector")    
     ]),
 
-    new TypeDefGen.Type("Force","wFunctionOptions",[
+    new TypeDefGen.Type("Force","WFunctionOptions",[
         new TypeDefGen.Property("Boolean","force","Boolean for enabling the force widget"),
         new TypeDefGen.Property("Vector","vector","Force vector")    
     ]),
 
-    new TypeDefGen.Type("Position","wFunctionOptions",[
+    new TypeDefGen.Type("Position","WFunctionOptions",[
         new TypeDefGen.Property("Boolean","position","Boolean for enabling the position widget"),
         new TypeDefGen.Property("Vector","vector","Position vector")    
     ]),
 
-    new TypeDefGen.Type("Translate","wFunctionOptions",[
+    new TypeDefGen.Type("Translate","WFunctionOptions",[
         new TypeDefGen.Property("Boolean","translate","Boolean for enabling the translation widget"),
         new TypeDefGen.Property("Vector","vector","Translation vector")    
     ]),
 
-    new TypeDefGen.Type("DeleteSelf","wFunctionOptions",[
+    new TypeDefGen.Type("DeleteSelf","WFunctionOptions",[
         new TypeDefGen.Property("Boolean","deleteSelf","Boolean for enabling the force widget"),
     ]),
 
@@ -79,13 +79,13 @@ const widgets = [
         new TypeDefGen.Property("Boolean","connection","Right velocity"),
     ]),
 
-    new TypeDefGen.Type("SetAngle","wFunctionOptions",[
+    new TypeDefGen.Type("SetAngle","WFunctionOptions",[
         new TypeDefGen.Property("Number","cycle","Angle"),
         new TypeDefGen.Property("Boolean","circularConstraintRotation","Down velocity"),
         new TypeDefGen.Property("Boolean","rotation","Right velocity"),
     ]),
 
-    new TypeDefGen.Type("Rotation","wFunctionOptions",[
+    new TypeDefGen.Type("Rotation","WFunctionOptions",[
         new TypeDefGen.Property("Number","cycle","Angle"),
         new TypeDefGen.Property("Boolean","circularConstraintRotation","Down velocity"),
         new TypeDefGen.Property("Boolean","rotation","Right velocity"),
@@ -169,11 +169,11 @@ const widgets = [
         new TypeDefGen.Property("Boolean","deleteSelf","Boolean for enabling the self-deletion widget"),
     ]),
 
-    new TypeDefGen.Type("ToggleSemiLock","wFunctionOptions",[
+    new TypeDefGen.Type("ToggleSemiLock","WFunctionOptions",[
         new TypeDefGen.Property("Boolean","toggleSemiLock","Boolean for enabling the toggle semi-lock widget"),
     ]),
 
-    new TypeDefGen.Type("WFunction","wFunctionOptions",[
+    new TypeDefGen.Type("WFunction","WFunctionOptions",[
         new TypeDefGen.Property("Function|String","function","WFunction widget"),
         new TypeDefGen.Property("Boolean","wFunction","Boolean for enabling wFunction widget.")
     ])

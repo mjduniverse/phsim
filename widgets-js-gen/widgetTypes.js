@@ -7,7 +7,7 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
  
 
 /**
-* @typedef {wFunctionOptions|DeleteSelf}
+* @typedef {WFunctionOptions|DeleteSelf}
 * @property {Boolean} deleteSelf - Boolean for enabling the force widget
 */
  
@@ -48,14 +48,14 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
 */
  
 /**
-* @typedef {wFunctionOptions|SetAngle}
+* @typedef {WFunctionOptions|SetAngle}
 * @property {Number} cycle - Angle
 * @property {Boolean} circularConstraintRotation - Down velocity
 * @property {Boolean} rotation - Right velocity
 */
  
 /**
-* @typedef {wFunctionOptions|Rotation}
+* @typedef {WFunctionOptions|Rotation}
 * @property {Number} cycle - Angle
 * @property {Boolean} circularConstraintRotation - Down velocity
 * @property {Boolean} rotation - Right velocity
@@ -133,7 +133,7 @@ PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","drag
  
  
 /**
-* @typedef {wFunctionOptions|WFunction}
+* @typedef {WFunctionOptions|WFunction}
 * @property {Function|String} function - WFunction widget
 * @property {Boolean} wFunction - Boolean for enabling wFunction widget.
 */

@@ -1,3 +1,11 @@
+/**
+ * The `draggable` widget makes {@link PhSim.DynObject} objects draggable.
+ * 
+ * @param {PhSim.DynObject} dyn_object 
+ * @this PhSim
+ * @param {*} widget 
+ */
+
 PhSim.Widgets.draggable = function(dyn_object,widget) {
 
     var self = this;

@@ -1,3 +1,10 @@
+/**
+ * Set lock of the Dynamic Object
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Boolean} value - If  `true`, lock. Otherwise, unlock.
+ */
+
 PhSim.prototype.setLock = function(dynObject,value) {
     dynObject.locked = value;
 	PhSim.Matter.Body.setStatic(dynObject.matter,value);
@@ -26,6 +33,16 @@ PhSim.prototype.toggleSemiLock = function(dynObject) {
 	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
+/**
+ * The `toggleLock` widget toggles the lock status of the Dynamic Object.
+ * If locked, the object is unlocked.
+ * If unlocked, the object is locked.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {WFunctionOptions} widget - Configuration
+ */
+
 PhSim.Widgets.toggleLock = function(dyn_object,widget) {
 
     var self = this;
@@ -43,6 +60,16 @@ PhSim.Widgets.toggleLock = function(dyn_object,widget) {
 
     this.createWFunction(dyn_object,closure(),widget);
 }
+
+/**
+ * The `toggleSemiLock` widget toggles the semi-lock status of the Dynamic Object.
+ * If semi-locked, the object is semi-unlocked.
+ * If semi-unlocked, the object is semi-locked.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {WFunctionOptions} widget - Configuration
+ */
 
 PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
 

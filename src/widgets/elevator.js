@@ -1,3 +1,22 @@
+/**
+ * 
+ * The `elevator` widget makes objects go back and forth within some range.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget - Options
+ * @param {Vector} widget.pointA - First point of the elevator
+ * @param {Vector} widget.pointB - Second point of the elevator
+ * @param {"x"|"y"} widget.bounding - Rules for deteriming the range of the elevator. 
+ * 
+ * If `widget.bounding` is equal to `"x"`, then the elevator switches direction if the
+ * `x` value of the position of `dyn_object` is equal to `widget.pointA.x` or `widget.pointB.x`.
+ * 
+ * If `widget.bounding` is equal to `"y"`, then the elevator switches direction if the
+ * `y` value of the position of `dyn_object` is equal to `widget.pointA.y` or `widget.pointB.y`.
+ * 
+ */
+
 PhSim.Widgets.elevator = function(dyn_object,widget) {
             
     var self = this;
