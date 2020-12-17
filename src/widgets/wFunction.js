@@ -53,7 +53,7 @@ PhSim.WFunctionRef = function(options,ref,call) {
 
 	/**
 	 * Options used to create simple event
-	 * @type {wFunctionOptions}
+	 * @type {WFunctionOptions}
 	 */
 
 	this.options = options;
@@ -153,21 +153,22 @@ PhSim.prototype.wFunctionRefs = [];
  * objlinkTriggerString|afterslchangeTriggerString|timeTriggerString} wFunctionTrigger
  *
  * 
- * The simple event trigger string is a string defining {@link wFunctionOptions.trigger}
+ * The simple event trigger string is a string defining {@link WFunctionOptions.trigger}
  */
 
 /** 
  * Properties for a simple event.
+ * The simple event options is an Object that is used for the {@link PhSim#createWFunction} function.
+ * They are also used to configure various types of widgets. Especially widgets that utilize
+ * wFunctions.
  * 
- *
- * @typedef {Object} wFunctionOptions
- * @property {@external https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key|KeyboardEvent.key} [key] - The event.key value for triggering a simple event.
+ * @typedef {Object} WFunctionOptions
+ * @property {KeyBoard} [key] - The event.key value for triggering a simple event.
  * @property {Number} [time] - The time interval between a repeated event or a delay time for timeouts.
  * @property {Number} [maxN] - The maximum number of times a repeated SimpleEvent can be executed.
  * @property {PhSim.DynObject} [wFunctionObj] - An object being affected by the wFunction.
  * @property {String} [name] - The name of the wFunction
  * 
- * The simple event options is an Object that is used for the {@link PhSim#createWFunction} function.
  */
 
  /**
@@ -189,7 +190,7 @@ PhSim.prototype.wFunctionRefs = [];
  * If `wFunctionBody` is an integer `i`, the function body is deterimined by the 
  * `{@link PhSim#options.wFunctions}[i]`
  * 
- * @param {wFunctionOptions} options -  [The Simple Event Options Object]{@link wFunctionOptions}.
+ * @param {WFunctionOptions} options -  [The Simple Event Options Object]{@link WFunctionOptions}.
  * @returns {PhSim.WFunctionRef} - A reference to the simple event.
  * @this {PhSim}
  * 
@@ -482,21 +483,17 @@ PhSim.prototype.disableWFunction = function(o) {
 
 }
 
+/**
+ * 
+ * The `wFunction` widget is used to create wFunctions.
+ * 
+ * @function
+ * @param {PhSim.DynObject]} dyn_object 
+ * @param {WFunctionOptions} widget 
+ */
+
 PhSim.Widgets.wFunction = function(dyn_object,widget) {
-
-	var self = this;
-	var wf;
-
-    if(typeof widget.function === "string") {
-		var wf = new Function(widget.function);
-    }
-    
-    else {
-        var wf = widget.function;
-    }
-
-    var f = this.createWFunction(dyn_object,wf,widget);
-
+	this.createWFunction(dyn_object,wf,widget);
 }
 
 PhSim.prototype.wFunctions = {}

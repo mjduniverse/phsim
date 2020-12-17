@@ -7383,11 +7383,11 @@ PhSim.prototype.disableWFunction = function(o) {
 
 /**
  * 
- * 
+ * The `wFunction` widget is used to create wFunctions.
  * 
  * @function
- * @param {*} dyn_object 
- * @param {*} widget 
+ * @param {PhSim.DynObject]} dyn_object 
+ * @param {WFunctionOptions} widget 
  */
 
 PhSim.Widgets.wFunction = function(dyn_object,widget) {
