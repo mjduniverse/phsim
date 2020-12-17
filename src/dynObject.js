@@ -246,7 +246,7 @@ DynObject.setRadius = function(dynObject,radius) {
 
 DynObject.createMatterObject = function(staticObject) {
 
-	var opts = staticObject;
+	var opts = {}
 
 	opts.label = staticObject.name || "Untitled Object";
 

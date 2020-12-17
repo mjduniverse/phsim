@@ -68,8 +68,24 @@ PhSim.matterPlugin = {
 
             for(var i = 0; i < this.length; i++) {
 
-                var c_classesA = PhSim.Query.getCollisionClasses(this[i].bodyA.plugin.ph);
-                var c_classesB = PhSim.Query.getCollisionClasses(this[i].bodyB.plugin.ph);
+                var bodyA = this[i].bodyA;
+                var bodyB = this[i].bodyB;
+
+                if(bodyA.parent === bodyA) {
+                    var c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.ph);
+                }
+                
+                else {
+                    var c_classesA = PhSim.Query.getCollisionClasses(bodyA.parent.plugin.ph);
+                }
+
+                if(bodyB.parent === bodyB) {
+                    var c_classesB = PhSim.Query.getCollisionClasses(bodyB.plugin.ph);
+                }
+
+                else {
+                    var c_classesB = PhSim.Query.getCollisionClasses(bodyB.parent.plugin.ph);                    
+                }
 
                 if(c_classesA.length > 0 && c_classesB.length > 0) {
                     if(!PhSim.Query.intersectionExists(c_classesA,c_classesB)) {
