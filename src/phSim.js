@@ -399,6 +399,8 @@ PhSim.prototype.loading = {
 
 	/**
 	 * Loading Background color
+	 * 
+	 * @property
 	 * @type {String}
 	 */
 
@@ -406,6 +408,8 @@ PhSim.prototype.loading = {
 
 	/**
 	 * Loading text color
+	 * 
+	 * @property
 	 * @type {String}
 	 */
 
@@ -413,6 +417,8 @@ PhSim.prototype.loading = {
 
 	/**
 	 * Loading font face
+	 * 
+	 * @property
 	 * @type {String}
 	 */
 
@@ -420,6 +426,8 @@ PhSim.prototype.loading = {
 
 	/**
 	 * Loading text align
+	 * 
+	 * @property
 	 * @type {String}
 	 */
 
@@ -427,6 +435,8 @@ PhSim.prototype.loading = {
 
 	/**
 	 * Loading text
+	 * 
+	 * @property
 	 * @type {String}
 	 */
 
@@ -434,6 +444,8 @@ PhSim.prototype.loading = {
 
 	/**
 	 * y-position
+	 * 
+	 * @property
 	 * @type {String}
 	 */
 
@@ -441,6 +453,8 @@ PhSim.prototype.loading = {
 
 	/**
 	 * Text size
+	 * 
+	 * @property
 	 * @type {Number}
 	 */
 
