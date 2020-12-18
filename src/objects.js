@@ -526,7 +526,7 @@ Static.Simulation = function() {
  * @property {Layer[]} layers - An array of layers
  * @property {Object} world - World Object
  * @property {Boolean} simulation - Boolean indicating a simulation
- * @property {Widget} widgets - Array of array options
+ * @property {WidgetOptions} widgets - Array of array options
  */
 
 /**

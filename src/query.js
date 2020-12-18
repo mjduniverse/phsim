@@ -112,7 +112,7 @@ PhSim.prototype.getUniversalObjArray = function() {
 
 /**
  * Check widget type and return the widget type
- * @param {Widget} widget 
+ * @param {WidgetOptions} widget 
  */
 
 PhSim.Query.chkWidgetType = function(widget) {
@@ -598,7 +598,7 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 		report.current = self.collided(dynObjectA,dynObjectB);
 		report.difference = report.current - report.before;
 		if(report.difference) {
-			var eventObj = new PhSim.PhDynEvent();
+			var eventObj = new PhSim.Events.PhDynEvent();
 			eventObj.report = report;
 			eventObj.difference = report.difference;
 			self.callEventClass("collisionchange",self,eventObj);

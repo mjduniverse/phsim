@@ -71,7 +71,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	self.dispatchMouseDown = function(e) {
 
-		var eventObj = new PhSim.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -85,7 +85,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	
 					/**
 					 * @event objmousedown
-					 * @type {PhSim.PhMouseEvent}
+					 * @type {PhSim.Events.PhMouseEvent}
 					 */
 	
 	
@@ -99,7 +99,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("mousedown",self.pressMouseDown);
 
 	self.dispatchClick = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -119,7 +119,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("click",self.dispatchClick);
 
 	self.dispatchMouseMove = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -192,7 +192,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("mousemove",self.dispatchMouseMove);
 
 	self.dispatchMouseUp = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -211,7 +211,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("mouseup",self.getEventBridge(self.dispatchMouseUp));
 
 	self.dispatchMouseOut = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -242,7 +242,7 @@ PhSim.prototype.registerKeyEvents = function() {
 	self.windowObj = self.windowObj || window;
 
 	self.keydownBridge = function(e) {
-		var eventObj = new PhSim.PhKeyEvent();
+		var eventObj = new PhSim.Events.PhKeyEvent();
 		eventObj.domEvent = e;
 		eventObj.key = e.key;
 		eventObj.code = e.code;

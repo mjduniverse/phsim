@@ -1,18 +1,32 @@
+const PhSim = import("../phSim");
+
+/**
+ * @file File for dealing with wFunctions.
+ * @module widgets/wFunction.js
+ * @author Mjduniverse
+ * 
+ */
+
 /**
  * A widget function is a function that used for the `WidgetFunction` widget.
  * The "this" keyword in the body of function usually refers to the current instance of
  * PhSim simulation or references an instance of {@link PhSim.DynObject}.
  * 
- * @typedef {Function} WFunction
+ * To learn more, see the {@tutorial Widget Functions}
  * 
+ * @module wFunction
+ * @typedef {Function} WFunction
  * @property {Function} _options - Options used to create WFunction
  * @property {Function|Number} _ref
  * @property {String} _name - WFunction name
  * @property {Function} _bodyFunction - Body Function
+ * 
+ * 
  */
 
 /**
  * Array of widget functions
+ * @memberof PhSim
  * @type {WFunctions[]}
  */
 
@@ -21,58 +35,11 @@ PhSim.prototype.wFunctions = [];
 /**
  * Create a widget function and push it to the wFunctions array.
  * @function
+ * @memberof PhSim
  * @param {String|Function} arg - content of function if string, function if function
  * @param {Object} thisRef - 
  * @returns {WFunction}
  */
-
- /**
-
-PhSim.prototype.createWFunction = function(arg,thisRef) {
-
-	if(typeof arg === "string") {
-		var o = new Function(arg).bind(thisRef);
-	}
-
-	else if(typeof arg === "function") {
-		var o = arg.bind(thisRef);
-	}
-
-	else {
-		throw "Expecting \"function\" or \"string\" type";
-	}
-
-    return o;
-}
-
-**/
-
-
-PhSim.WFunction = function(options,ref,call) {
-
-	/**
-	 * Options used to create simple event
-	 * @type {WFunctionOptions}
-	 */
-
-	this.options = options;
-
-	/**
-	 * Reference to wrapped function
-	 * @type {Function|Number}
-	 */
-
-	this.ref = ref;
-	
-	/**
-	 * Reference to main wFunction 
-	 * @type {WFunctionBody}
-	 */
-
-	this.call = call;
-	
-
-}
 
 // Simple Event Reference Array
 
@@ -135,7 +102,8 @@ PhSim.prototype.wFunctionRefs = [];
  * is linked to another object by the objlink widget.
  */
 
-/** @typedef {"afterslchange"} afterslchangeTriggerString
+/**
+ *  @typedef {"afterslchange"} afterslchangeTriggerString
  * 
  * The "afterslchange" trigger means that the simple event will execute after the 
  * superlayer changes.
@@ -179,11 +147,11 @@ PhSim.prototype.wFunctionRefs = [];
   */
 
 /**
- *
- * The WFunction is a fundemental part of many PhSim widgets. 
- * It is a function wrapped by another function that
+ * Function used to generate {@link WFunction|WFunctions.}
+ * To learn more, see the {@tutorial Widget Functions} tutorial.
  * 
  * @function
+ * @memberof PhSim
  * 
  * @param {wFunctionTrigger} trigger - The type of SimpleEvent.
  * 
@@ -192,7 +160,7 @@ PhSim.prototype.wFunctionRefs = [];
  * `{@link PhSim#options.wFunctions}[i]`
  * 
  * @param {WFunctionOptions} options -  [The Simple Event Options Object]{@link WFunctionOptions}.
- * @returns {WFunction} - A reference to the simple event.
+ * @returns {WFunction} - The wFunction.
  * @this {PhSim}
  * 
  */
@@ -495,6 +463,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
  * 
  * Disable wFunction
  * 
+ * @memberof PhSim
  * @function
  * @param {WFunction} o - Reference created by {@link PhSim#createWFunction}.
  * 
@@ -528,6 +497,7 @@ PhSim.prototype.disableWFunction = function(o) {
  * 
  * The `wFunction` widget is used to create wFunctions.
  * 
+ * @memberof PhSim
  * @function
  * @param {PhSim.DynObject} dyn_object 
  * @param {WFunctionOptions} widget 

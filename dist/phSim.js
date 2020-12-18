@@ -405,7 +405,7 @@ PhSim.prototype.paused = true;
 /**
   * 
   * @callback PhSimEventCall
-  * @param {PhSim.PhEvent} phEvent
+  * @param {PhSim.Events.PhEvent} phEvent
   * 
   */
 
@@ -2227,7 +2227,7 @@ Static.Simulation = function() {
  * @property {Layer[]} layers - An array of layers
  * @property {Object} world - World Object
  * @property {Boolean} simulation - Boolean indicating a simulation
- * @property {Widget} widgets - Array of array options
+ * @property {WidgetOptions} widgets - Array of array options
  */
 
 /**
@@ -2755,7 +2755,7 @@ PhRender.prototype.renderPolygon = function (path) {
 
 			this.ctx.clip();
 
-			var box = PhSim.getStaticBoundingBox(path);
+			var box = PhSim.BoundingBox.fromShape(path);
 
 			var h = img.height * (box.w/img.width);
 
@@ -2893,7 +2893,7 @@ PhRender.prototype.renderCircle = function (circle) {
 			this.ctx.rotate(circle.cycle);
 			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
 			this.ctx.clip();
-			var box = PhSim.getStaticBoundingBox(circle);
+			var box = PhSim.BoundingBox.fromShape(circle);
 
 			var h = img.height * (box.w/img.width);
 
@@ -3119,7 +3119,7 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 			this.ctx.translate(regPolygon.x,regPolygon.y);
 			this.ctx.rotate(regPolygon.cycle);
 
-			var box = PhSim.getStaticBoundingBox(regPolygon);
+			var box = PhSim.BoundingBox.fromShape(regPolygon);
 
 			var h = img.height * (box.w/img.width);
 
@@ -3338,7 +3338,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 	
 				this.ctx.clip();
 	
-				var box = PhSim.getStaticBoundingBox(dynObject);
+				var box = PhSim.BoundingBox.fromShape(dynObject);
 	
 				var h = img.height * (box.w/img.width);
 	
@@ -3888,7 +3888,7 @@ PhSim.getVertBoundingBox = function(verts) {
  * @returns {Object} 
  */
 
-PhSim.getStaticBoundingBox = function(object) {
+PhSim.BoundingBox.fromShape = function(object) {
 	
 	if(object.shape === "polygon") {
 		return PhSim.getVertBoundingBox(object.verts);
@@ -3956,7 +3956,7 @@ PhSim.removeClickRectRegion = function(reference) {
  * @constructor
  */
 
-PhSim.PhEvent = function(type) {
+PhSim.Events.PhEvent = function(type) {
 	this.target = null;
 	this.timestamp = null;
 	this.type = type;
@@ -3966,49 +3966,49 @@ PhSim.PhEvent = function(type) {
  * @constructor
  */
 
-PhSim.PhDynEvent = function() {
-	PhSim.PhEvent.call(this);
+PhSim.Events.PhDynEvent = function() {
+	PhSim.Events.PhEvent.call(this);
 	this.layer = null;
 	this.simulation = null;
 	this.object = null;
 }
 
-PhSim.PhDynEvent.prototype = Object.create(PhSim.PhEvent.prototype);
+PhSim.Events.PhDynEvent.prototype = Object.create(PhSim.Events.PhEvent.prototype);
 
 /**
  * @constructor
  */
 
 
-PhSim.PhKeyEvent = function() {
-	PhSim.PhDynEvent.call(this);
+PhSim.Events.PhKeyEvent = function() {
+	PhSim.Events.PhDynEvent.call(this);
 	this.key = null;
 	this.domEvent = null;
 }
 
-PhSim.PhKeyEvent.prototype = Object.create(PhSim.PhDynEvent.prototype);
+PhSim.Events.PhKeyEvent.prototype = Object.create(PhSim.Events.PhDynEvent.prototype);
 
 /**
  * @constructor
  */
 
 
-PhSim.PhMouseEvent = function() {
-	PhSim.PhDynEvent.call(this);
+PhSim.Events.PhMouseEvent = function() {
+	PhSim.Events.PhDynEvent.call(this);
 	this.x = null;
 	this.y = null;
 	this.domEvent = null;
 	this.dynArr = null;
 }
 
-PhSim.PhMouseEvent.prototype = Object.create(PhSim.PhDynEvent.prototype);
+PhSim.Events.PhMouseEvent.prototype = Object.create(PhSim.Events.PhDynEvent.prototype);
 
 /**
  * @constructor
  */
 
 
-PhSim.phSimCollision = function() {
+PhSim.Events.PhSimCollision = function() {
 	this.bodyA = null;
 	this.bodyB = null;
 	this.matter = null;
@@ -4597,7 +4597,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	self.dispatchMouseDown = function(e) {
 
-		var eventObj = new PhSim.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -4611,7 +4611,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	
 					/**
 					 * @event objmousedown
-					 * @type {PhSim.PhMouseEvent}
+					 * @type {PhSim.Events.PhMouseEvent}
 					 */
 	
 	
@@ -4625,7 +4625,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("mousedown",self.pressMouseDown);
 
 	self.dispatchClick = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -4645,7 +4645,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("click",self.dispatchClick);
 
 	self.dispatchMouseMove = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -4718,7 +4718,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("mousemove",self.dispatchMouseMove);
 
 	self.dispatchMouseUp = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -4737,7 +4737,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("mouseup",self.getEventBridge(self.dispatchMouseUp));
 
 	self.dispatchMouseOut = function(e) {
-		var eventObj = new PhSim.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -4768,7 +4768,7 @@ PhSim.prototype.registerKeyEvents = function() {
 	self.windowObj = self.windowObj || window;
 
 	self.keydownBridge = function(e) {
-		var eventObj = new PhSim.PhKeyEvent();
+		var eventObj = new PhSim.Events.PhKeyEvent();
 		eventObj.domEvent = e;
 		eventObj.key = e.key;
 		eventObj.code = e.code;
@@ -4871,7 +4871,7 @@ PhSim.prototype.off = function(eventStr,call) {
 
 /**
  * @function
- * @param {PhSim.PhEvent} event - Event Object
+ * @param {PhSim.Events.PhEvent} event - Event Object
  */
 
 PhSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
@@ -5014,7 +5014,7 @@ PhSim.prototype.getUniversalObjArray = function() {
 
 /**
  * Check widget type and return the widget type
- * @param {Widget} widget 
+ * @param {WidgetOptions} widget 
  */
 
 PhSim.Query.chkWidgetType = function(widget) {
@@ -5500,7 +5500,7 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 		report.current = self.collided(dynObjectA,dynObjectB);
 		report.difference = report.current - report.before;
 		if(report.difference) {
-			var eventObj = new PhSim.PhDynEvent();
+			var eventObj = new PhSim.Events.PhDynEvent();
 			eventObj.report = report;
 			eventObj.difference = report.difference;
 			self.callEventClass("collisionchange",self,eventObj);
@@ -5570,7 +5570,7 @@ PhSim.prototype.toggle = function() {
 }
 
 PhSim.prototype.exitSl = function() {
-	this.callEventClass("beforeslchange",this,new PhSim.PhEvent("beforeslchange"));
+	this.callEventClass("beforeslchange",this,new PhSim.Events.PhEvent("beforeslchange"));
 	this.paused = false;
 	clearInterval(this.intervalLoop);
 }
@@ -5592,7 +5592,7 @@ PhSim.prototype.exit = function() {
 		delete this.objUniverse[i].phSim;
 	}
 
-	this.callEventClass("exit",this,new PhSim.PhEvent("exit"));
+	this.callEventClass("exit",this,new PhSim.Events.PhEvent("exit"));
 	this.deregisterCanvasEvents();
 	this.deregisterKeyEvents();
 	this.exitSl();
@@ -5632,7 +5632,7 @@ var gotoSimulationIndex = function (i) {
 
 	this.firstSlUpdate = false;
 
-	var event = new PhSim.PhEvent("slchange");
+	var event = new PhSim.Events.PhEvent("slchange");
 
 	event.type = "slchange";
 
@@ -5720,7 +5720,7 @@ var gotoSimulationIndex = function (i) {
 				}
 			}
 
-			var a = new PhSim.PhDynEvent();
+			var a = new PhSim.Events.PhDynEvent();
 			this_a.callEventClass("matterJSLoad",this_a,a);
 
 		}
@@ -5729,7 +5729,7 @@ var gotoSimulationIndex = function (i) {
 
 	PhSim.Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
 		
-		var a = new PhSim.PhDynEvent();
+		var a = new PhSim.Events.PhDynEvent();
 		a.matterEvent = event;
 		this_a.callEventClass("collisionstart",this_a,a);
 
@@ -5853,7 +5853,7 @@ var gotoSimulationIndex = function (i) {
 
 		self.status = PhSim.statusCodes.LOADED_SIMULATION;
 
-		var e = new PhSim.PhDynEvent();
+		var e = new PhSim.Events.PhDynEvent();
 	
 		self.callEventClass("load",self,e);
 
@@ -5914,7 +5914,7 @@ const PhSim = __webpack_require__(0);
  * 
  * @function
  * @param {PhSimObject} currentObj - Object to be updated
- * @fires PhSim.PhEvent
+ * @fires PhSim.Events.PhEvent
  * 
  */
 
@@ -5960,7 +5960,7 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 
 	}
 
-	var event = new PhSim.PhEvent("objupdate");
+	var event = new PhSim.Events.PhEvent("objupdate");
 	event.target = currentObj;
 
 	this.callEventClass("objupdate",this,event);
@@ -5971,7 +5971,7 @@ PhSim.prototype.loopFunction = function() {
 
 	if(this.paused === false) {
 
-		var beforeUpdateEvent = new PhSim.PhDynEvent()
+		var beforeUpdateEvent = new PhSim.Events.PhDynEvent()
 
 		beforeUpdateEvent.simulation = this.simulation;
 
@@ -6011,7 +6011,7 @@ PhSim.prototype.loopFunction = function() {
 	
 		this.applyGravitationalField()
 
-		var afterUpdateEvent = new PhSim.PhDynEvent()
+		var afterUpdateEvent = new PhSim.Events.PhDynEvent()
 
 		afterUpdateEvent.simulation = this.simulation;
 
@@ -6049,7 +6049,7 @@ const PhSim = __webpack_require__(0);
  * well-formed PhSim object and then translate it into JavaScript.
  * 
  * @function
- * @param {Widget} widget - The Widget
+ * @param {WidgetOptions} widget - The Widget
  * @param {PhSim.DynObject} dyn_object The individual Dynamic Object
  * @returns undefined
  * 
@@ -6469,7 +6469,7 @@ PhSim.prototype.cloneObject = function(dynObject,options = {}) {
 
 	this.addToOverlayer(obj);
 	
-	var eventObj = new PhSim.PhEvent("clone");
+	var eventObj = new PhSim.Events.PhEvent("clone");
 	eventObj.target = dynObject;
 	eventObj.clonedObj = obj;
 

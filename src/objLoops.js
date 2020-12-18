@@ -1,9 +1,11 @@
+const PhSim = import("./phSim");
+
 /**
  * @namespace
  * @memberof PhSim
  */
 
-var ObjLoops = {}
+const ObjLoops = {}
 
 /**
  * Execute function on all members of a PhSim simulation or PhSim options.

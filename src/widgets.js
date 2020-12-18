@@ -24,27 +24,6 @@ PhSim.prototype.getWidgetByName = function(nameStr) {
 
 PhSim.prototype.widgets = {};
 
-/**
- * 
- * @callback WidgetExtractionFunction
- * @param {Object} options
- * @param {PhSim.DynObject} dyn_object
- * @this {PhSim}
- * 
- * A WidgetExtractionFunction is a function that is run when the widget is extracted.
- * In such a function, the "this" keyword refers the PhSim simulation.
- */
-
-/**
- * @constructor
- * @param {String} name 
- * @param {WidgetExtractionFunction} onExtraction 
- */
-
-PhSim.Widget = function(name,onExtraction) {
-	this.name = name;
-	this.onExtraction = onExtraction;
-}
 
 /**
  * 
@@ -61,6 +40,15 @@ PhSim.Widget.defineByBoolean = function(o) {
 
 	
 }
+
+PhSim.Widget.WidgetOptions = function(type) {
+	this.type = type;
+}
+
+/**
+ * @typedef {WFunctionOptions|Object} WidgetOptions
+ * @property {String} type - Name of widget. 
+ */
 
 /**
  * Widget Namespace.

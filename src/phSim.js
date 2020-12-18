@@ -314,7 +314,7 @@ PhSim.prototype.paused = true;
 /**
   * 
   * @callback PhSimEventCall
-  * @param {PhSim.PhEvent} phEvent
+  * @param {PhSim.Events.PhEvent} phEvent
   * 
   */
 
@@ -444,15 +444,12 @@ if(typeof module === "object") {
 PhSim.Static = require("./objects" );
 
 require("./matterPlugin.js" );
-require("./events/eventStack" );
 
+PhSim.EventStack = equire("./events/eventStack" );
 PhSim.PhRender = require("./phRender");
 PhSim.Sprites = require("./sprites");
 PhSim.Audio = require("./audio");
 PhSim.Vector = require("./tools/vector");
-
-require("./tools/objectChecker");
-
 PhSim.diagRect = require("./tools/diagRect");
 
 require("./tools/vertex");
@@ -460,11 +457,10 @@ require("./tools/centroid");
 
 // Bounding box functions
 
-require("./tools/boundingBox");
-
+PhSim.BoundingBox = require("./tools/boundingBox");
 PhSim.DynObject = require("./dynObject");
+PhSim.Events = require("./events/eventObjects");
 
-require("./events/eventObjects");
 require("./lo");
 require("./makeQuickly");
 require("./filter");

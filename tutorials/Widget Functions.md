@@ -2,6 +2,9 @@ Widget Functions (`wFunctions`) are an important part of PhSim. They are used to
 
 ## Creating wFunctions
 
+WFunctions are created using the {@link PhSim#createWFunction} method. 
+
+
 Take following code for example:
 
 ```

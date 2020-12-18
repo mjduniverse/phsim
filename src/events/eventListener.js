@@ -76,7 +76,7 @@ PhSim.prototype.off = function(eventStr,call) {
 
 /**
  * @function
- * @param {PhSim.PhEvent} event - Event Object
+ * @param {PhSim.Events.PhEvent} event - Event Object
  */
 
 PhSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
