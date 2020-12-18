@@ -1,3 +1,4 @@
+const EventStack = require("./events/eventStack");
 const PhSim = require("./phSim");
 
 /**
@@ -51,26 +52,14 @@ var DynObject = function(staticObject) {
 
 	/** 
 	 * Refernce of DynObj in matter object 
-	 * @type {Object}
+	 * @type {PhSim.MatterPluginObj}
 	 * */
 
-	this.matter.plugin.ph = this;
+	this.matter.plugin.phsim = new PhSim.MatterPluginObj(this);
 
 }
 
-DynObject.prototype.eventStack = {
-	update: [],
-	click: [],
-	mousemove: [],
-	mouseup:[],
-	mousedown: []
-}
-
-DynObject.prototype.on = function(eventStr,call,options = {}) {
-	if(this.eventStack[eventStr]) {
-		this.eventStack[eventStr].push(call);
-	}
-}
+DynObject.prototype.eventStack = new EventStack();
 
 
 /**
@@ -288,12 +277,12 @@ DynObject.createMatterObject = function(staticObject) {
 
 
 	else if(staticObject.shape === "rectangle") {
-		var set = PhSim.getRectangleVertArray(staticObject);
+		var set = PhSim.Vertices.rectangle(staticObject);
 		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(set).x, PhSim.Matter.Vertices.centre(set).y, set, opts); 
 	}
 
 	else if(staticObject.shape === "regPolygon") {
-		var set = PhSim.getRegPolygonVerts(staticObject);
+		var set = PhSim.Vertices.regPolygon(staticObject);
 		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(set).x, PhSim.Matter.Vertices.centre(set).y, set, opts); 
 	}
 

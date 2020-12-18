@@ -335,7 +335,7 @@ PhRender.prototype.renderCircle = function (circle) {
 
 PhRender.prototype.renderRectangle = function(rectangle) {
 
-	var c = PhSim.getRectangleCentroid(rectangle);
+	var c = PhSim.Centroid.rectangle(rectangle);
 
 	var x = -rectangle.w * 0.5;
 	var y = -rectangle.h * 0.5;
@@ -464,7 +464,7 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 
 PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
-	var vertSet = PhSim.getRegPolygonVerts(regPolygon);
+	var vertSet = PhSim.Vertices.regPolygon(regPolygon);
 	
 	this.setCtx(regPolygon);
 

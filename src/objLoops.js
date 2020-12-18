@@ -1,4 +1,4 @@
-const PhSim = import("./phSim");
+const PhSim = require("./phSim");
 
 /**
  * @namespace

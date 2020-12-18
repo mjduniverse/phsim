@@ -25,6 +25,8 @@ PhSim.prototype.getWidgetByName = function(nameStr) {
 PhSim.prototype.widgets = {};
 
 
+PhSim.Widget = {}
+
 /**
  * 
  * @param {PhSimObject} o 

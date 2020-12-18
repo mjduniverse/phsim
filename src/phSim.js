@@ -52,14 +52,14 @@
 
 function PhSim(dynSimOptions = new PhSim.Static()) {
 
-	// Register Plugin
-
-	if(!dynSimOptions.noRegistration) {
-		PhSim.registerAsMatterPlugin();
+	if(!typeof Matter === "object") {
+		throw "PhSim requires matter.js."
 	}
 
+	// Register Plugin
+
 	if(!dynSimOptions.noUse) {
-		PhSim.useAsMatterPlugin();
+	    Matter.use(PhSim.matterPlugin);
 	}
 
 	/**
@@ -445,15 +445,15 @@ PhSim.Static = require("./objects" );
 
 require("./matterPlugin.js" );
 
-PhSim.EventStack = equire("./events/eventStack" );
+PhSim.EventStack = require("./events/eventStack" );
 PhSim.PhRender = require("./phRender");
 PhSim.Sprites = require("./sprites");
 PhSim.Audio = require("./audio");
 PhSim.Vector = require("./tools/vector");
 PhSim.diagRect = require("./tools/diagRect");
+PhSim.Vertices = require("./tools/vertex");
 
-require("./tools/vertex");
-require("./tools/centroid");
+PhSim.Centroid = require("./tools/centroid");
 
 // Bounding box functions
 

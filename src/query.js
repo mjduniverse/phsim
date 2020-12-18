@@ -285,7 +285,7 @@ PhSim.Query.deepClone = function(o) {
  */
 
 PhSim.Query.pointInRectangle = function(o,x,y) {
-	var a = PhSim.getRectangleVertArray(o);
+	var a = PhSim.Vertices.rectangle(o);
 	return PhSim.Query.pointInVerts(a,new Vector(x,y));
 }
 
@@ -321,7 +321,7 @@ PhSim.Query.pointInObject = function(o,x,y) {
 	}  
 	
 	else if(o.shape === "regPolygon") {
-		var a = PhSim.getRegPolygonVerts(o);
+		var a = PhSim.Vertices.regPolygon(o);
 		return PhSim.Query.pointInVerts(a,new Vector(x,y));
 	}
 
@@ -399,11 +399,11 @@ PhSim.prototype.getCollisionList = function(dynObject) {
 
 		var a = this.matterJSEngine.pairs.list[i];
 
-		if(a.bodyA.plugin.ph.id === dynObject.id || a.bodyB.plugin.ph.id === dynObject.id) {
+		if(a.bodyA.plugin.phsim.dynObject.id === dynObject.id || a.bodyB.plugin.phsim.dynObject.id === dynObject.id) {
 			
 			var o = new PhSim.phSimCollision();
-			o.bodyA = a.bodyA.plugin.ph;
-			o.bodyB = a.bodyB.plugin.ph;
+			o.bodyA = a.bodyA.plugin.phsim.dynObject;
+			o.bodyB = a.bodyB.plugin.phsim.dynObject;
 			o.matter = a;
 			z.push(o);
 
@@ -513,11 +513,11 @@ PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
 		var dynCol = a[i]
 		var matterCol = dynCol.matter;
 
-		if(matterCol.bodyA.plugin.ph.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyB)) {
+		if(matterCol.bodyA.plugin.phsim.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyB)) {
 			b.push(dynCol.bodyB);
 		}
 
-		if(matterCol.bodyB.plugin.ph.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyA)) {
+		if(matterCol.bodyB.plugin.phsim.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyA)) {
 			b.push(dynCol.bodyA);		
 		}
 

@@ -1,4 +1,4 @@
-const PhSim = import("../phSim");
+const PhSim = require("../phSim");
 
 /**
  * @file File for dealing with wFunctions.

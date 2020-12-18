@@ -51,18 +51,18 @@ const BoundingBox = function(verts) {
  * @returns {PhSim.BoundingBox} 
  */
 
-PhSim.BoundingBox.fromShape = function(object) {
+BoundingBox.fromShape = function(object) {
 	
 	if(object.shape === "polygon") {
 		return new BoundingBox(object.verts);
 	}
 
 	if(object.shape === "regPolygon") {
-		return new BoundingBox(PhSim.getRegPolygonVerts(object));
+		return new BoundingBox(PhSim.Vertices.regPolygon(object));
 	}
 
 	if(object.shape === "rectangle") {
-		return new BoundingBox(PhSim.getRectangleVertArray(object,true));
+		return new BoundingBox(PhSim.Vertices.rectangle(object,true));
 	}
 
 	if(object.shape === "circle") {
@@ -80,7 +80,7 @@ PhSim.BoundingBox.fromShape = function(object) {
 		var a = [];
 
 		for(var i = 0; i < object.objUniverse.length; i++) {
-			a.push( PhSim.getRectangleVertArray( this.getStaticBoundingBox(object.objUniverse[i]) ) );
+			a.push( PhSim.Vertices.rectangle( this.getStaticBoundingBox(object.objUniverse[i]) ) );
 		}
 
 		a = a.flat(Infinity);

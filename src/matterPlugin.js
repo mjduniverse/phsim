@@ -1,4 +1,9 @@
+const DynObject = require("./dynObject");
 const PhSim = require("./phSim");
+
+PhSim.MatterPluginObj = function(dynObject) {
+    this.dynObject = dynObject
+}
 
 /**
  * Reference to patched matter.js library.
@@ -9,6 +14,68 @@ const PhSim = require("./phSim");
  */
 
 PhSim.Matter = {};
+
+/**
+ * The `matter-skinmesh` plugin for matter.js.
+ * @author Mjduniverse
+ * @namespace
+ */
+
+const MatterSkinmesh = {
+
+    name: "matter-skinmesh",
+
+    version: "0.1.0",
+
+
+    install: function(matter) {
+        
+        matter.before("Bodies.fromVertices",function(x, y, vertexSets, options, flagInternal, removeCollinear, minimumArea){
+            MatterSkinmesh.Bodies.fromVertices.apply(this,arguments);
+        });
+    },
+
+    Bodies: {
+
+        /**
+         * @function
+         * @param {*} x 
+         * @param {*} y 
+         * @param {Array[]} vertexSets 
+         * @param {*} options 
+         * @param {*} flagInternal 
+         * @param {*} removeCollinear 
+         * @param {*} minimumArea 
+         */
+
+        fromVertices: function(x, y, vertexSets, options, flagInternal, removeCollinear, minimumArea) {
+            
+            if(!Array.isArray(vertexSets[0])) {
+                vertexSets = [vertexSets];
+            }
+
+            // Array holding matter skinmeshes.
+
+            var matterSkinmesh = [];
+
+            for(var i = 0; i < vertexSets.length; i++) {
+
+                // A single matter skinmesh
+
+                var a = [];
+
+                for(var j = 0; j < vertexSets[i].length; i++) {
+                    
+                }
+            }
+            
+        }
+    }
+
+
+}
+
+
 
 /**
  * Object that registers PhSim as a Matter.js plugin.
@@ -35,6 +102,10 @@ PhSim.matterPlugin = {
             PhSim.matterPlugin.Detector.collisions.call(this,arguments);
         });
 
+        //matter.after('Body.create',function(){
+          //  PhSim.matterPlugin.Body(body)
+        //})
+
     },
 
     /**
@@ -44,9 +115,32 @@ PhSim.matterPlugin = {
 
     Body: {
 
-        create: function(options) {
+        /**
+         *  
+         * @param {Object'} body 
+         */
 
-        } 
+        //init: function(body) {
+          //  body.plugin.phsim = body.plugin.phsim || new DynObject({
+
+            //});
+        //}
+
+    },
+
+    Bodies: {
+
+        circle: function() {
+
+        },
+
+        rectangle: function() {
+
+        },
+
+        fromVertices: function() {
+
+        },
 
     },
 
@@ -72,19 +166,19 @@ PhSim.matterPlugin = {
                 var bodyB = this[i].bodyB;
 
                 if(bodyA.parent === bodyA) {
-                    var c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.ph);
+                    var c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.phsim.dynObject);
                 }
                 
                 else {
-                    var c_classesA = PhSim.Query.getCollisionClasses(bodyA.parent.plugin.ph);
+                    var c_classesA = PhSim.Query.getCollisionClasses(bodyA.parent.plugin.phsim.dynObject);
                 }
 
                 if(bodyB.parent === bodyB) {
-                    var c_classesB = PhSim.Query.getCollisionClasses(bodyB.plugin.ph);
+                    var c_classesB = PhSim.Query.getCollisionClasses(bodyB.plugin.phsim.dynObject);
                 }
 
                 else {
-                    var c_classesB = PhSim.Query.getCollisionClasses(bodyB.parent.plugin.ph);                    
+                    var c_classesB = PhSim.Query.getCollisionClasses(bodyB.parent.plugin.phsim.dynObject);                    
                 }
 
                 if(c_classesA.length > 0 && c_classesB.length > 0) {
@@ -106,30 +200,4 @@ PhSim.matterPlugin = {
 
 }
 
-/**
- * Register as Matter plugin
- * @function
- */
-
-PhSim.registerAsMatterPlugin = function() {
-    return Matter.Plugin.register(PhSim.matterPlugin); 
-}
-
-/**
- * Use as matter plugin
- * @function
- */
-
-PhSim.useAsMatterPlugin = function() {
-   return Matter.use(PhSim.matterPlugin); 
-}
-
-/**
- * @function
- * Execute {@link PhSim.registerAsMatterPlugin} and {@link PhSim.useAsMatterPlugin}
- */
-
-PhSim.activateMatterPlugin = function() {
-    PhSim.registerAsMatterPlugin();
-    PhSim.useAsMatterPlugin();
-}
+Matter.Plugin.register(PhSim.matterPlugin); 
