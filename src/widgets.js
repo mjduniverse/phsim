@@ -143,5 +143,5 @@ PhSim.Widgets.playAudio = function(dyn_object,widget) {
  */
     
 PhSim.Widgets.noRotation = function(dyn_object) {
-    PhSim.Matter.Body.setInertia(dyn_object.matter, Infinity)
+    Matter.Body.setInertia(dyn_object.matter, Infinity)
 }

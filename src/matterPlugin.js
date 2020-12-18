@@ -1,19 +1,9 @@
 const DynObject = require("./dynObject");
 const PhSim = require("./phSim");
 
-PhSim.MatterPluginObj = function(dynObject) {
+MatterPluginObj = function(dynObject) {
     this.dynObject = dynObject
 }
-
-/**
- * Reference to patched matter.js library.
- * @namespace
- * @memberof PhSim
- * @see {@link https://brm.io/matter-js/docs/}
- * 
- */
-
-PhSim.Matter = {};
 
 /**
  * The `matter-skinmesh` plugin for matter.js.
@@ -79,7 +69,7 @@ const MatterSkinmesh = {
 
 /**
  * Object that registers PhSim as a Matter.js plugin.
- * The modified matter.js object is stored in {@link PhSim.Matter}
+ * The modified matter.js object is stored in {@link Matter}
  * @namespace
  * 
  */
@@ -96,7 +86,6 @@ PhSim.matterPlugin = {
      */
 
     install: function(matter) {
-        PhSim.Matter = matter;
 
         matter.after('Detector.collisions',function(){
             PhSim.matterPlugin.Detector.collisions.call(this,arguments);

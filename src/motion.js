@@ -23,7 +23,7 @@ var Motion = {}
 
 Motion.applyForce = function(dynObject,position,forceVector) {
 	if(!dynObject.locked && !dynObject.noDyn) {
-		return PhSim.Matter.Body.applyForce(dynObject.matter,position,forceVector);
+		return Matter.Body.applyForce(dynObject.matter,position,forceVector);
 	}
 }
 
@@ -40,7 +40,7 @@ Motion.applyForce = function(dynObject,position,forceVector) {
 
 Motion.setVelocity = function(dynObject,velocityVector) {
 	if(!dynObject.locked) {
-		return PhSim.Matter.Body.setVelocity(dynObject.matter,velocityVector);
+		return Matter.Body.setVelocity(dynObject.matter,velocityVector);
 	}
 
 }
@@ -72,7 +72,7 @@ Motion.translate = function(o,translationVector) {
 		}
 
 		if(o instanceof DynObject) {
-			return PhSim.Matter.Body.translate(o.matter,translationVector);
+			return Matter.Body.translate(o.matter,translationVector);
 		}
 
 	}
@@ -100,7 +100,7 @@ Motion.setPosition = function(dynObject,positionVector) {
 
 		}
 
-		PhSim.Matter.Body.setPosition(dynObject.matter,positionVector);
+		Matter.Body.setPosition(dynObject.matter,positionVector);
 	}
 }
 
@@ -116,10 +116,10 @@ Motion.rotate = function(dynObject,angle,point) {
 	if(!dynObject.locked) {
 
 		if(dynObject.skinmesh) {
-			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
+			Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
 		}
 
-		return PhSim.Matter.Body.rotate(dynObject.matter, angle, point)
+		return Matter.Body.rotate(dynObject.matter, angle, point)
 
 	}
 }
@@ -135,11 +135,11 @@ Motion.setAngle = function(dynObject,angle) {
 	if(!dynObject.locked) {
 
 		if(dynObject.skinmesh) {
-			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
-			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
+			Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
+			Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
 		}
 
-		return PhSim.Matter.Body.setAngle(dynObject.matter,angle);
+		return Matter.Body.setAngle(dynObject.matter,angle);
 
 	}
 }

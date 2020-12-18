@@ -672,10 +672,10 @@ var DynObject = function(staticObject) {
 
 	/** 
 	 * Refernce of DynObj in matter object 
-	 * @type {PhSim.MatterPluginObj}
+	 * @type {MatterPluginObj}
 	 * */
 
-	this.matter.plugin.phsim = new PhSim.MatterPluginObj(this);
+	this.matter.plugin.phsim = new MatterPluginObj(this);
 
 }
 
@@ -887,23 +887,23 @@ DynObject.createMatterObject = function(staticObject) {
 
 
 	if(staticObject.shape === "polygon") {
-		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(staticObject.verts).x, PhSim.Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
 	}
 
 	
 	else if(staticObject.shape === "circle") {
-		return PhSim.Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
+		return Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
 	}
 
 
 	else if(staticObject.shape === "rectangle") {
 		var set = PhSim.Vertices.rectangle(staticObject);
-		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(set).x, PhSim.Matter.Vertices.centre(set).y, set, opts); 
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 
 	else if(staticObject.shape === "regPolygon") {
 		var set = PhSim.Vertices.regPolygon(staticObject);
-		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(set).x, PhSim.Matter.Vertices.centre(set).y, set, opts); 
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 
 
@@ -1938,7 +1938,7 @@ var Motion = {}
 
 Motion.applyForce = function(dynObject,position,forceVector) {
 	if(!dynObject.locked && !dynObject.noDyn) {
-		return PhSim.Matter.Body.applyForce(dynObject.matter,position,forceVector);
+		return Matter.Body.applyForce(dynObject.matter,position,forceVector);
 	}
 }
 
@@ -1955,7 +1955,7 @@ Motion.applyForce = function(dynObject,position,forceVector) {
 
 Motion.setVelocity = function(dynObject,velocityVector) {
 	if(!dynObject.locked) {
-		return PhSim.Matter.Body.setVelocity(dynObject.matter,velocityVector);
+		return Matter.Body.setVelocity(dynObject.matter,velocityVector);
 	}
 
 }
@@ -1987,7 +1987,7 @@ Motion.translate = function(o,translationVector) {
 		}
 
 		if(o instanceof DynObject) {
-			return PhSim.Matter.Body.translate(o.matter,translationVector);
+			return Matter.Body.translate(o.matter,translationVector);
 		}
 
 	}
@@ -2015,7 +2015,7 @@ Motion.setPosition = function(dynObject,positionVector) {
 
 		}
 
-		PhSim.Matter.Body.setPosition(dynObject.matter,positionVector);
+		Matter.Body.setPosition(dynObject.matter,positionVector);
 	}
 }
 
@@ -2031,10 +2031,10 @@ Motion.rotate = function(dynObject,angle,point) {
 	if(!dynObject.locked) {
 
 		if(dynObject.skinmesh) {
-			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
+			Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
 		}
 
-		return PhSim.Matter.Body.rotate(dynObject.matter, angle, point)
+		return Matter.Body.rotate(dynObject.matter, angle, point)
 
 	}
 }
@@ -2050,11 +2050,11 @@ Motion.setAngle = function(dynObject,angle) {
 	if(!dynObject.locked) {
 
 		if(dynObject.skinmesh) {
-			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
-			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
+			Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
+			Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
 		}
 
-		return PhSim.Matter.Body.setAngle(dynObject.matter,angle);
+		return Matter.Body.setAngle(dynObject.matter,angle);
 
 	}
 }
@@ -2435,7 +2435,7 @@ module.exports = __webpack_require__(51);
 const DynObject = __webpack_require__(1);
 const PhSim = __webpack_require__(0);
 
-PhSim.MatterPluginObj = function(dynObject) {
+MatterPluginObj = function(dynObject) {
     this.dynObject = dynObject
 }
 
@@ -2447,7 +2447,7 @@ PhSim.MatterPluginObj = function(dynObject) {
  * 
  */
 
-PhSim.Matter = {};
+Matter = {};
 
 /**
  * The `matter-skinmesh` plugin for matter.js.
@@ -2513,7 +2513,7 @@ const MatterSkinmesh = {
 
 /**
  * Object that registers PhSim as a Matter.js plugin.
- * The modified matter.js object is stored in {@link PhSim.Matter}
+ * The modified matter.js object is stored in {@link Matter}
  * @namespace
  * 
  */
@@ -2530,7 +2530,7 @@ PhSim.matterPlugin = {
      */
 
     install: function(matter) {
-        PhSim.Matter = matter;
+        Matter = matter;
 
         matter.after('Detector.collisions',function(){
             PhSim.matterPlugin.Detector.collisions.call(this,arguments);
@@ -3764,7 +3764,7 @@ Vertices.rectangle = function(rectangle) {
 	
 	];
 
-	PhSim.Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
+	Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
 
 
 	return a;
@@ -4283,7 +4283,7 @@ const PhSim = __webpack_require__(0);
 
 PhSim.prototype.connectDynObjects = function(parent,child) {
 
-	PhSim.Matter.Body.setStatic(child,true);
+	Matter.Body.setStatic(child,true);
 
 	var self = this;
 	
@@ -4336,7 +4336,7 @@ PhSim.prototype.forAllObjects = function(call) {
 PhSim.prototype.addToOverlayer = function(o) {
 	
 	if(o instanceof DynObject) {
-		PhSim.Matter.World.add(this.matterJSWorld, o.matter);
+		Matter.World.add(this.matterJSWorld, o.matter);
 	}
 
 	this.objUniverse.push(o);
@@ -4382,7 +4382,7 @@ PhSim.prototype.addObject = function(o,options = {}) {
 
 		o.phSim = this;
 
-		PhSim.Matter.World.add(this.matterJSWorld,o.matter);
+		Matter.World.add(this.matterJSWorld,o.matter);
 
 		if(o.static.widgets) {
 			this.extractWidgets(o);
@@ -4403,7 +4403,7 @@ PhSim.prototype.addObject = function(o,options = {}) {
 
 PhSim.prototype.removeDynObj = function(dynObject) {
 
-	PhSim.Matter.Composite.remove(this.matterJSWorld,dynObject.matter);
+	Matter.Composite.remove(this.matterJSWorld,dynObject.matter);
 
 	this.objUniverse.splice(this.objUniverse.indexOf(dynObject),1);
 
@@ -5070,7 +5070,7 @@ PhSim.prototype.getObjectByName = function(str) {
  */
 
 PhSim.prototype.collided = function(dynObjectA,dynObjectB) {
-	return PhSim.Matter.SAT.collides(dynObjectA.matter,dynObjectB.matter).collided;
+	return Matter.SAT.collides(dynObjectA.matter,dynObjectB.matter).collided;
 }
 
 /**
@@ -5656,9 +5656,9 @@ var gotoSimulationIndex = function (i) {
 
 	var this_a = this;
 
-	this.matterJSWorld = PhSim.Matter.World.create();
+	this.matterJSWorld = Matter.World.create();
 
-	this.matterJSEngine = PhSim.Matter.Engine.create({
+	this.matterJSEngine = Matter.Engine.create({
 		world: this_a.matterJSWorld
 	});
 
@@ -5723,7 +5723,7 @@ var gotoSimulationIndex = function (i) {
 
 	}
 
-	PhSim.Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
+	Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
 		
 		var a = new PhSim.Events.PhDynEvent();
 		a.matterEvent = event;
@@ -5792,9 +5792,9 @@ var gotoSimulationIndex = function (i) {
 				b.pointB = a.pointB;
 			}
 
-			var c = PhSim.Matter.Constraint.create(b);
+			var c = Matter.Constraint.create(b);
 
-			PhSim.Matter.World.add(this.matterJSWorld,c)
+			Matter.World.add(this.matterJSWorld,c)
 
 		}
 
@@ -5893,7 +5893,7 @@ PhSim.prototype.setRadius = function(dynObject,radius) {
 	var ratio = radius / dynObject.radius;
 
 	if(dynObject.shape === "regPolygon" || dynObject.shape === "circle") {
-		PhSim.Matter.Body.scale(dynObject.object, ratio, ratio);
+		Matter.Body.scale(dynObject.object, ratio, ratio);
 	}
 
 }
@@ -5986,7 +5986,7 @@ PhSim.prototype.loopFunction = function() {
 		}
 
 
-		PhSim.Matter.Engine.update(this.matterJSEngine,this.delta);
+		Matter.Engine.update(this.matterJSEngine,this.delta);
 
 		if(this.simCtx) {
 
@@ -6363,7 +6363,7 @@ PhSim.Widgets.playAudio = function(dyn_object,widget) {
  */
     
 PhSim.Widgets.noRotation = function(dyn_object) {
-    PhSim.Matter.Body.setInertia(dyn_object.matter, Infinity)
+    Matter.Body.setInertia(dyn_object.matter, Infinity)
 }
 
 /***/ }),
@@ -6381,7 +6381,7 @@ PhSim.Widgets.noRotation = function(dyn_object) {
 
 PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 	
-	var c = PhSim.Matter.Constraint.create({
+	var c = Matter.Constraint.create({
 		
 		"bodyA": dynObject.matter,
 		
@@ -6392,7 +6392,7 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 	});
 
-	PhSim.Matter.World.add(this.matterJSWorld,c)
+	Matter.World.add(this.matterJSWorld,c)
 
 	var relAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x);
 
@@ -6606,7 +6606,7 @@ PhSim.Widgets.draggable = function(dyn_object,widget) {
         }
 
         var __onbeforeupdate = function() {
-            PhSim.Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
+            Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
             PhSim.Motion.setPosition(dyn_object,mV);
         }
 
@@ -6646,7 +6646,7 @@ PhSim.Widgets.draggable = function(dyn_object,widget) {
 
 PhSim.prototype.setLock = function(dynObject,value) {
     dynObject.locked = value;
-	PhSim.Matter.Body.setStatic(dynObject.matter,value);
+	Matter.Body.setStatic(dynObject.matter,value);
 }
 
 /**
@@ -6669,7 +6669,7 @@ PhSim.prototype.toggleLock = function(dynObject) {
 
 PhSim.prototype.toggleSemiLock = function(dynObject) {
 	dynObject.locked = !dynObject.locked;
-	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
+	Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
 /**
@@ -7578,7 +7578,7 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
         
         // Set body static
         
-        PhSim.Matter.Body.setStatic(dyn_object.matter,true);
+        Matter.Body.setStatic(dyn_object.matter,true);
         
         // Event function
 
@@ -7642,19 +7642,19 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 	var f = function(event) {
 		if(event.code == "ArrowRight") {
-			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: keyboardControls.right, y: 0});
+			Matter.Body.setVelocity(dynObj.matter, {x: keyboardControls.right, y: 0});
 		}
 		
 		if(event.code == "ArrowUp") {
-			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: 0, y: -keyboardControls.up});
+			Matter.Body.setVelocity(dynObj.matter, {x: 0, y: -keyboardControls.up});
 		}
 		
 		if(event.code == "ArrowLeft") {
-			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: -keyboardControls.left, y: 0});
+			Matter.Body.setVelocity(dynObj.matter, {x: -keyboardControls.left, y: 0});
 		}
 		
 		if(event.code == "ArrowDown") {
-			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: 0, y: keyboardControls.down});
+			Matter.Body.setVelocity(dynObj.matter, {x: 0, y: keyboardControls.down});
 		}
 		
 	}
@@ -7891,9 +7891,9 @@ var calc_skinmesh = function(dynObject) {
 
 	var transformAngle = dynObject.matter.angle - dynObject.matter.anglePrev 
 
-	PhSim.Matter.Vertices.translate(dynObject.skinmesh,PhSim.Matter.Vertices.centre(dynObject.skinmesh),-1);
-	PhSim.Matter.Vertices.rotate(dynObject.skinmesh,transformAngle,{x: 0, y: 0});
-	PhSim.Matter.Vertices.translate(dynObject.skinmesh,dynObject.matter.position,1);
+	Matter.Vertices.translate(dynObject.skinmesh,Matter.Vertices.centre(dynObject.skinmesh),-1);
+	Matter.Vertices.rotate(dynObject.skinmesh,transformAngle,{x: 0, y: 0});
+	Matter.Vertices.translate(dynObject.skinmesh,dynObject.matter.position,1);
 
 	dynObject.verts = dynObject.skinmesh;
 	dynObject.verts = dynObject.skinmesh;

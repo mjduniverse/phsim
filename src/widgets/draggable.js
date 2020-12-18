@@ -39,7 +39,7 @@ PhSim.Widgets.draggable = function(dyn_object,widget) {
         }
 
         var __onbeforeupdate = function() {
-            PhSim.Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
+            Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
             PhSim.Motion.setPosition(dyn_object,mV);
         }
 

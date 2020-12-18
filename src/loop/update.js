@@ -82,7 +82,7 @@ PhSim.prototype.loopFunction = function() {
 		}
 
 
-		PhSim.Matter.Engine.update(this.matterJSEngine,this.delta);
+		Matter.Engine.update(this.matterJSEngine,this.delta);
 
 		if(this.simCtx) {
 

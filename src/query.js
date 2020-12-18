@@ -172,7 +172,7 @@ PhSim.prototype.getObjectByName = function(str) {
  */
 
 PhSim.prototype.collided = function(dynObjectA,dynObjectB) {
-	return PhSim.Matter.SAT.collides(dynObjectA.matter,dynObjectB.matter).collided;
+	return Matter.SAT.collides(dynObjectA.matter,dynObjectB.matter).collided;
 }
 
 /**

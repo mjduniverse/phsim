@@ -17,19 +17,19 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 	var f = function(event) {
 		if(event.code == "ArrowRight") {
-			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: keyboardControls.right, y: 0});
+			Matter.Body.setVelocity(dynObj.matter, {x: keyboardControls.right, y: 0});
 		}
 		
 		if(event.code == "ArrowUp") {
-			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: 0, y: -keyboardControls.up});
+			Matter.Body.setVelocity(dynObj.matter, {x: 0, y: -keyboardControls.up});
 		}
 		
 		if(event.code == "ArrowLeft") {
-			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: -keyboardControls.left, y: 0});
+			Matter.Body.setVelocity(dynObj.matter, {x: -keyboardControls.left, y: 0});
 		}
 		
 		if(event.code == "ArrowDown") {
-			PhSim.Matter.Body.setVelocity(dynObj.matter, {x: 0, y: keyboardControls.down});
+			Matter.Body.setVelocity(dynObj.matter, {x: 0, y: keyboardControls.down});
 		}
 		
 	}

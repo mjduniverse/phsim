@@ -52,9 +52,9 @@ var gotoSimulationIndex = function (i) {
 
 	var this_a = this;
 
-	this.matterJSWorld = PhSim.Matter.World.create();
+	this.matterJSWorld = Matter.World.create();
 
-	this.matterJSEngine = PhSim.Matter.Engine.create({
+	this.matterJSEngine = Matter.Engine.create({
 		world: this_a.matterJSWorld
 	});
 
@@ -119,7 +119,7 @@ var gotoSimulationIndex = function (i) {
 
 	}
 
-	PhSim.Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
+	Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
 		
 		var a = new PhSim.Events.PhDynEvent();
 		a.matterEvent = event;
@@ -188,9 +188,9 @@ var gotoSimulationIndex = function (i) {
 				b.pointB = a.pointB;
 			}
 
-			var c = PhSim.Matter.Constraint.create(b);
+			var c = Matter.Constraint.create(b);
 
-			PhSim.Matter.World.add(this.matterJSWorld,c)
+			Matter.World.add(this.matterJSWorld,c)
 
 		}
 

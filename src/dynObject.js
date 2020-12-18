@@ -52,10 +52,10 @@ var DynObject = function(staticObject) {
 
 	/** 
 	 * Refernce of DynObj in matter object 
-	 * @type {PhSim.MatterPluginObj}
+	 * @type {MatterPluginObj}
 	 * */
 
-	this.matter.plugin.phsim = new PhSim.MatterPluginObj(this);
+	this.matter.plugin.phsim = new MatterPluginObj(this);
 
 }
 
@@ -267,23 +267,23 @@ DynObject.createMatterObject = function(staticObject) {
 
 
 	if(staticObject.shape === "polygon") {
-		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(staticObject.verts).x, PhSim.Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
 	}
 
 	
 	else if(staticObject.shape === "circle") {
-		return PhSim.Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
+		return Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
 	}
 
 
 	else if(staticObject.shape === "rectangle") {
 		var set = PhSim.Vertices.rectangle(staticObject);
-		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(set).x, PhSim.Matter.Vertices.centre(set).y, set, opts); 
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 
 	else if(staticObject.shape === "regPolygon") {
 		var set = PhSim.Vertices.regPolygon(staticObject);
-		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(set).x, PhSim.Matter.Vertices.centre(set).y, set, opts); 
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 
 

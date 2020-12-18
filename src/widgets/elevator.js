@@ -81,7 +81,7 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
         
         // Set body static
         
-        PhSim.Matter.Body.setStatic(dyn_object.matter,true);
+        Matter.Body.setStatic(dyn_object.matter,true);
         
         // Event function
 

@@ -66,7 +66,7 @@ Vertices.rectangle = function(rectangle) {
 	
 	];
 
-	PhSim.Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
+	Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
 
 
 	return a;
