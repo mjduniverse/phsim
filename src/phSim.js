@@ -393,72 +393,23 @@ PhSim.version = "0.1.0-alpha"
 /**
  * Loading screen properties
  * @type {Object}
+ * @property {String} [bgColor = "black"] - Background Color
+ * @property {String} [txtColor = "white"] - Text Color
+ * @property {String} [txtFace = "arial"] - Text Face
+ * @property {String} [txtAlign = "center"] - Text align
+ * @property {String} [txt = "Loading..."] - Loading text
+ * @property {String} [yPos = "center"] - y-position
+ * @property {Number} [txtSize = 20] -  Text size
  */
 
 PhSim.prototype.loading = {
-
-	/**
-	 * Loading Background color
-	 * 
-	 * @property
-	 * @type {String}
-	 */
-
-	"bgClr": "black",
-
-	/**
-	 * Loading text color
-	 * 
-	 * @property
-	 * @type {String}
-	 */
-
-	"txtClr": "White",
-
-	/**
-	 * Loading font face
-	 * 
-	 * @property
-	 * @type {String}
-	 */
-
-	"txtFace": "arial",
-
-	/**
-	 * Loading text align
-	 * 
-	 * @property
-	 * @type {String}
-	 */
-
-	"txtAlign": "center",
-
-	/**
-	 * Loading text
-	 * 
-	 * @property
-	 * @type {String}
-	 */
-
-	"txt": "Loading...",
-
-	/**
-	 * y-position
-	 * 
-	 * @property
-	 * @type {String}
-	 */
-
-	"yPos": "center",
-
-	/**
-	 * Text size
-	 * 
-	 * @property
-	 * @type {Number}
-	 */
-
-	"txtSize": 20
+	bgClr: "black",
+	txtClr: "white",
+	txtFace: "arial",
+	txtAlign: "center",
+	txt: "Loading...",
+	yPos: "center",
+	txtSize: 20
 }
 
 /**
