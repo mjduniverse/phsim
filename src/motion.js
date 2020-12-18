@@ -1,11 +1,11 @@
+const DynObject = require("./dynObject");
+
 /**
  * Namespace of functions used to move objects in various ways.
  * @memberof PhSim
  * @namespace
  * 
  */
-
-const DynObject = require("./dynObject");
 
 var Motion = {}
 

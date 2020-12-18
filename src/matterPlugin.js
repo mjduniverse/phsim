@@ -105,3 +105,31 @@ PhSim.matterPlugin = {
     }
 
 }
+
+/**
+ * Register as Matter plugin
+ * @function
+ */
+
+PhSim.registerAsMatterPlugin = function() {
+    return Matter.Plugin.register(PhSim.matterPlugin); 
+}
+
+/**
+ * Use as matter plugin
+ * @function
+ */
+
+PhSim.useAsMatterPlugin = function() {
+   return Matter.use(PhSim.matterPlugin); 
+}
+
+/**
+ * @function
+ * Execute {@link PhSim.registerAsMatterPlugin} and {@link PhSim.useAsMatterPlugin}
+ */
+
+PhSim.activateMatterPlugin = function() {
+    PhSim.registerAsMatterPlugin();
+    PhSim.useAsMatterPlugin();
+}

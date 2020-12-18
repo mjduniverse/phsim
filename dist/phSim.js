@@ -143,6 +143,16 @@
 
 function PhSim(dynSimOptions = new PhSim.Static()) {
 
+	// Register Plugin
+
+	if(!dynSimOptions.noRegistration) {
+		PhSim.registerAsMatterPlugin();
+	}
+
+	if(!dynSimOptions.noUse) {
+		PhSim.useAsMatterPlugin();
+	}
+
 	/**
 	 * The static simulation object
 	 * @typedef {DynSimOptions}
@@ -475,15 +485,35 @@ PhSim.prototype.bgFillStyle = "white";
 
 PhSim.version = "0.1.0-alpha"
 
+/**
+ * Loading screen properties
+ * @type {Object}
+ * @property {String} [bgColor = "black"] - Background Color
+ * @property {String} [txtColor = "white"] - Text Color
+ * @property {String} [txtFace = "arial"] - Text Face
+ * @property {String} [txtAlign = "center"] - Text align
+ * @property {String} [txt = "Loading..."] - Loading text
+ * @property {String} [yPos = "center"] - y-position
+ * @property {Number} [txtSize = 20] -  Text size
+ */
+
 PhSim.prototype.loading = {
-	"bgClr": "black",
-	"txtClr": "White",
-	"txtFace": "arial",
-	"txtAlign": "center",
-	"txt": "Loading...",
-	"yPos": "center",
-	"txtSize": 20
+	bgClr: "black",
+	txtClr: "white",
+	txtFace: "arial",
+	txtAlign: "center",
+	txt: "Loading...",
+	yPos: "center",
+	txtSize: 20
 }
+
+/**
+ * The `drawLoadingScreen` function draws the loading screen for a simulation change.
+ * The behaviour of the loading screen can be customized by modifing the properties of
+ * {@link PhSim#loading}.
+ * 
+ * @function
+ */
 
 PhSim.prototype.drawLoadingScreen = function() {
 	this.simCtx.fillStyle = this.loading.bgClr;
@@ -1150,14 +1180,14 @@ module.exports = Vector;
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const DynObject = __webpack_require__(1);
+
 /**
  * Namespace of functions used to move objects in various ways.
  * @memberof PhSim
  * @namespace
  * 
  */
-
-const DynObject = __webpack_require__(1);
 
 var Motion = {}
 
@@ -2354,10 +2384,33 @@ PhSim.matterPlugin = {
 
 }
 
-// Register Plugin
+/**
+ * Register as Matter plugin
+ * @function
+ */
 
-Matter.Plugin.register(PhSim.matterPlugin);
-Matter.use(PhSim.matterPlugin);
+PhSim.registerAsMatterPlugin = function() {
+    return Matter.Plugin.register(PhSim.matterPlugin); 
+}
+
+/**
+ * Use as matter plugin
+ * @function
+ */
+
+PhSim.useAsMatterPlugin = function() {
+   return Matter.use(PhSim.matterPlugin); 
+}
+
+/**
+ * @function
+ * Execute {@link PhSim.registerAsMatterPlugin} and {@link PhSim.useAsMatterPlugin}
+ */
+
+PhSim.activateMatterPlugin = function() {
+    PhSim.registerAsMatterPlugin();
+    PhSim.useAsMatterPlugin();
+}
 
 /***/ }),
 /* 8 */
@@ -6947,6 +7000,11 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
  * PhSim simulation or references an instance of {@link PhSim.DynObject}.
  * 
  * @typedef {Function} WFunction
+ * 
+ * @property {Function} _options - Options used to create WFunction
+ * @property {Function|Number} _ref
+ * @property {String} _name - WFunction name
+ * @property {Function} _bodyFunction - Body Function
  */
 
 /**
@@ -6985,14 +7043,8 @@ PhSim.prototype.createWFunction = function(arg,thisRef) {
 
 **/
 
-/**
- * 
- * @param {wFunctionTrigger} trigger 
- * @param {*} ref - Reference
- * @param {Function} call - The function wrapper that is executed 
- */
 
-PhSim.WFunctionRef = function(options,ref,call) {
+PhSim.WFunction = function(options,ref,call) {
 
 	/**
 	 * Options used to create simple event
@@ -7009,11 +7061,13 @@ PhSim.WFunctionRef = function(options,ref,call) {
 	this.ref = ref;
 	
 	/**
-	 * Reference to wFunction body function
+	 * Reference to main wFunction 
 	 * @type {WFunctionBody}
 	 */
 
-    this.call = call;
+	this.call = call;
+	
+
 }
 
 // Simple Event Reference Array
@@ -7134,7 +7188,7 @@ PhSim.prototype.wFunctionRefs = [];
  * `{@link PhSim#options.wFunctions}[i]`
  * 
  * @param {WFunctionOptions} options -  [The Simple Event Options Object]{@link WFunctionOptions}.
- * @returns {PhSim.WFunctionRef} - A reference to the simple event.
+ * @returns {WFunction} - A reference to the simple event.
  * @this {PhSim}
  * 
  */
@@ -7151,12 +7205,23 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		wFunctionBody = new Function("e",options.function)
 	}
 
+	/**
+	 * 
+	 * New WFunction
+	 * 
+	 * @inner
+	 * @type {WFunction}
+	 */
+
     var call = function(e) {
         return wFunctionBody.apply(thisRef,e);
 	}
+
+	call._options = options;
+	call._bodyFunction = wFunctionBody;
 	
-	if(options.name) {
-		self.wFunctions[options.name] = call;
+	if(options._name) {
+		self.wFunctions[options._name] = call;
 	}
 	
 	if(options.trigger === "key") {
@@ -7182,9 +7247,11 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		self.on("keydown",f,{
 			"slEvent": true
 		});
-		
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 		
 	}
 
@@ -7216,7 +7283,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			"slEvent": true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return f;
 
 	}
 
@@ -7230,7 +7300,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 		
 	}
 
@@ -7256,7 +7329,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 	}
 
 	else if(options.trigger === "objmousedown" || options.trigger === "objmousedown_global") {
@@ -7280,7 +7356,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+		return call;
+
 	}
 
 	else if(options.trigger === "firstslupdate") {
@@ -7290,6 +7369,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		}
 
 		this.on("firstslupdate",f);
+
+
+		call._ref = f;
+		return call;
 
 	}
 	
@@ -7313,7 +7396,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 	}
 
 	else if(options.trigger === "objlink") {
@@ -7331,7 +7417,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 
 	}
 
@@ -7382,11 +7471,16 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		refFunc.__interN = setInterval(refFunc,refFunc.__phtime);
 
-		return new PhSim.WFunctionRef(options,refFunc.__interN,call);
+
+		call._ref = refFunc.__interN;
+
+		return call;
 	}
 
 	else {
-		return new PhSim.WFunctionRef(options,call,call);
+
+		call._ref = call;
+		return call;	
 	}
 
 }
@@ -7398,30 +7492,30 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
  * Disable wFunction
  * 
  * @function
- * @param {PhSim.WFunctionRef} o - Reference created by {@link PhSim#createWFunction}.
+ * @param {WFunction} o - Reference created by {@link PhSim#createWFunction}.
  * 
 */
 
 PhSim.prototype.disableWFunction = function(o) {
 	
-	if(o.options.trigger === "key") {
-		this.off("keydown",o.ref);
+	if(o._options.trigger === "key") {
+		this.off("keydown",o._ref);
 	}
 
-	else if(o.options.trigger === "sensor") {
-		this.off("collisionstart",o.ref);
+	else if(o._options.trigger === "sensor") {
+		this.off("collisionstart",o._ref);
 	}
 
-	else if(o.options.trigger === "update") {
-		this.off("beforeupdate",o.ref);
+	else if(o._options.trigger === "update") {
+		this.off("beforeupdate",o._ref);
 	}
 
-	else if(o.options.trigger === "time") {
-		clearInterval()
+	else if(o._options.trigger === "time") {
+		clearInterval(o._ref)
 	}
 
-	if(o.name) {
-		delete this.wFunctions[o.name];
+	if(o._name) {
+		delete this.wFunctions[o._name];
 	}
 
 }
@@ -7883,24 +7977,104 @@ PhSim.MagicWords = {
 		return "4";
 	},
 
+	/**
+	 * The `__game__score` magical word returns the game score if the game widget is enabled.
+	 * @function
+	 * @returns {Number} - Game score.
+	 */
+
 	__game__score: function() {
 		return this.lclGame && this.lclGame.score;
 	},
+
+	/**
+	 * The `__game__life` magical word returns the live count of the player if the 
+	 * game widget is enabled.
+	 * 
+	 * @function
+	 * @returns {Number} - Life count
+	 */
 
 	__game__life: function() {
 		return this.lclGame && this.lclGame.life; 
 	},
 
+	/**
+	 * The `__game__goal` magical word returns the goal of the game if the game widget
+	 * is enabled.
+	 * 
+	 * @function
+	 * @returns {Number}
+	 */
+
 	__game__goal: function() {
 		return this.lclGame && this.lclGame.goal;
 	},
+
+	/**
+	 * The `__game__int_life` magical word returns the intial life count of the game,
+	 * given the game widget is enabled.
+	 * 
+	 * @function
+	 * @returns {Number}
+	 */
 
 	__game__int_life: function() {
 		return this.lclGame && this.lclGame.intLife;
 	},
 
+	/**
+	 * The `__game__int_score` magical word returns the inital game score given the 
+	 * game widget is enabled.
+	 * 
+	 * @function
+	 * @returns {Number}
+	 */
+
 	__game__int_score: function() {
 		return this.lclGame && this.lclGame.intScore;
+	}
+
+}
+
+/**
+ * 
+ * Adds a global magical word function.
+ * 
+ * @function
+ * @param {String} name - Name of magical word
+ * @param {Function} call 
+ */
+
+PhSim.addGlobalMagicalWord = function(name,call) {
+	
+	if(PhSim.MagicWords[name]) {
+		throw "Magical word " + name + " already exists."
+	}
+
+	else {
+		PhSim.MagicWords[name] = call;
+	}
+
+}
+
+/**
+ * 
+ * Adds a local magical word function.
+ * 
+ * @function
+ * @param {String} name - Name of magical word
+ * @param {Function} call 
+ */
+
+PhSim.prototype.addLocalMagicalWord = function(name,call) {
+
+	if(this.magicWords[name]) {
+		throw "Magical word " + name + " already exists."
+	}
+
+	else {
+		this.magicWords[name] = call;
 	}
 
 }

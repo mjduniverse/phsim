@@ -52,6 +52,16 @@
 
 function PhSim(dynSimOptions = new PhSim.Static()) {
 
+	// Register Plugin
+
+	if(!dynSimOptions.noRegistration) {
+		PhSim.registerAsMatterPlugin();
+	}
+
+	if(!dynSimOptions.noUse) {
+		PhSim.useAsMatterPlugin();
+	}
+
 	/**
 	 * The static simulation object
 	 * @typedef {DynSimOptions}
@@ -116,12 +126,6 @@ function PhSim(dynSimOptions = new PhSim.Static()) {
 	else {
 		this.gotoSimulationIndex(0);
 	}
-
-
-	// Register Plugin
-
-	Matter.Plugin.register(PhSim.matterPlugin);
-	Matter.use(PhSim.matterPlugin);
 
 }
 

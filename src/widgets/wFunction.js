@@ -4,6 +4,11 @@
  * PhSim simulation or references an instance of {@link PhSim.DynObject}.
  * 
  * @typedef {Function} WFunction
+ * 
+ * @property {Function} _options - Options used to create WFunction
+ * @property {Function|Number} _ref
+ * @property {String} _name - WFunction name
+ * @property {Function} _bodyFunction - Body Function
  */
 
 /**
@@ -42,14 +47,8 @@ PhSim.prototype.createWFunction = function(arg,thisRef) {
 
 **/
 
-/**
- * 
- * @param {wFunctionTrigger} trigger 
- * @param {*} ref - Reference
- * @param {Function} call - The function wrapper that is executed 
- */
 
-PhSim.WFunctionRef = function(options,ref,call) {
+PhSim.WFunction = function(options,ref,call) {
 
 	/**
 	 * Options used to create simple event
@@ -66,11 +65,13 @@ PhSim.WFunctionRef = function(options,ref,call) {
 	this.ref = ref;
 	
 	/**
-	 * Reference to wFunction body function
+	 * Reference to main wFunction 
 	 * @type {WFunctionBody}
 	 */
 
-    this.call = call;
+	this.call = call;
+	
+
 }
 
 // Simple Event Reference Array
@@ -191,7 +192,7 @@ PhSim.prototype.wFunctionRefs = [];
  * `{@link PhSim#options.wFunctions}[i]`
  * 
  * @param {WFunctionOptions} options -  [The Simple Event Options Object]{@link WFunctionOptions}.
- * @returns {PhSim.WFunctionRef} - A reference to the simple event.
+ * @returns {WFunction} - A reference to the simple event.
  * @this {PhSim}
  * 
  */
@@ -208,12 +209,23 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		wFunctionBody = new Function("e",options.function)
 	}
 
+	/**
+	 * 
+	 * New WFunction
+	 * 
+	 * @inner
+	 * @type {WFunction}
+	 */
+
     var call = function(e) {
         return wFunctionBody.apply(thisRef,e);
 	}
+
+	call._options = options;
+	call._bodyFunction = wFunctionBody;
 	
-	if(options.name) {
-		self.wFunctions[options.name] = call;
+	if(options._name) {
+		self.wFunctions[options._name] = call;
 	}
 	
 	if(options.trigger === "key") {
@@ -239,9 +251,11 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		self.on("keydown",f,{
 			"slEvent": true
 		});
-		
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 		
 	}
 
@@ -273,7 +287,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			"slEvent": true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return f;
 
 	}
 
@@ -287,7 +304,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 		
 	}
 
@@ -313,7 +333,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 	}
 
 	else if(options.trigger === "objmousedown" || options.trigger === "objmousedown_global") {
@@ -337,7 +360,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+		return call;
+
 	}
 
 	else if(options.trigger === "firstslupdate") {
@@ -347,6 +373,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		}
 
 		this.on("firstslupdate",f);
+
+
+		call._ref = f;
+		return call;
 
 	}
 	
@@ -370,7 +400,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 	}
 
 	else if(options.trigger === "objlink") {
@@ -388,7 +421,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 
 	}
 
@@ -439,11 +475,16 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		refFunc.__interN = setInterval(refFunc,refFunc.__phtime);
 
-		return new PhSim.WFunctionRef(options,refFunc.__interN,call);
+
+		call._ref = refFunc.__interN;
+
+		return call;
 	}
 
 	else {
-		return new PhSim.WFunctionRef(options,call,call);
+
+		call._ref = call;
+		return call;	
 	}
 
 }
@@ -455,30 +496,30 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
  * Disable wFunction
  * 
  * @function
- * @param {PhSim.WFunctionRef} o - Reference created by {@link PhSim#createWFunction}.
+ * @param {WFunction} o - Reference created by {@link PhSim#createWFunction}.
  * 
 */
 
 PhSim.prototype.disableWFunction = function(o) {
 	
-	if(o.options.trigger === "key") {
-		this.off("keydown",o.ref);
+	if(o._options.trigger === "key") {
+		this.off("keydown",o._ref);
 	}
 
-	else if(o.options.trigger === "sensor") {
-		this.off("collisionstart",o.ref);
+	else if(o._options.trigger === "sensor") {
+		this.off("collisionstart",o._ref);
 	}
 
-	else if(o.options.trigger === "update") {
-		this.off("beforeupdate",o.ref);
+	else if(o._options.trigger === "update") {
+		this.off("beforeupdate",o._ref);
 	}
 
-	else if(o.options.trigger === "time") {
-		clearInterval()
+	else if(o._options.trigger === "time") {
+		clearInterval(o._ref)
 	}
 
-	if(o.name) {
-		delete this.wFunctions[o.name];
+	if(o._name) {
+		delete this.wFunctions[o._name];
 	}
 
 }
