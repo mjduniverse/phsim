@@ -399,11 +399,11 @@ PhSim.prototype.getCollisionList = function(dynObject) {
 
 		var a = this.matterJSEngine.pairs.list[i];
 
-		if(a.bodyA.plugin.phsim.dynObject.id === dynObject.id || a.bodyB.plugin.phsim.dynObject.id === dynObject.id) {
+		if(a.bodyA.plugin.dynObject.id === dynObject.id || a.bodyB.plugin.dynObject.id === dynObject.id) {
 			
-			var o = new PhSim.phSimCollision();
-			o.bodyA = a.bodyA.plugin.phsim.dynObject;
-			o.bodyB = a.bodyB.plugin.phsim.dynObject;
+			var o = new PhSim.Events.PhSimCollision;
+			o.bodyA = a.bodyA.plugin.dynObject;
+			o.bodyB = a.bodyB.plugin.dynObject;
 			o.matter = a;
 			z.push(o);
 
@@ -513,11 +513,11 @@ PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
 		var dynCol = a[i]
 		var matterCol = dynCol.matter;
 
-		if(matterCol.bodyA.plugin.phsim.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyB)) {
+		if(matterCol.bodyA.plugin.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyB)) {
 			b.push(dynCol.bodyB);
 		}
 
-		if(matterCol.bodyB.plugin.phsim.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyA)) {
+		if(matterCol.bodyB.plugin.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyA)) {
 			b.push(dynCol.bodyA);		
 		}
 
