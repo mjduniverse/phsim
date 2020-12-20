@@ -79,7 +79,7 @@ PhSimEventTarget.off = function(eventStr,call) {
 
 /**
  * @function
- * @param {PhSim.Events.PhEvent} event - Event Object
+ * @param {PhSim.Events.PhSimEvent} event - Event Object
  */
 
 PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
