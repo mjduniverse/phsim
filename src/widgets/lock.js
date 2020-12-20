@@ -1,9 +1,12 @@
+const PhSim = require("../phSim");
+
 /**
  * Set lock of the Dynamic Object
  * @function
  * @param {PhSim.DynObject} dynObject 
  * @param {Boolean} value - If  `true`, lock. Otherwise, unlock.
  */
+
 
 PhSim.prototype.setLock = function(dynObject,value) {
     dynObject.locked = value;
