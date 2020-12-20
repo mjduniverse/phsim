@@ -53,8 +53,30 @@
 
 function PhSim(dynSimOptions = new PhSim.Static()) {
 
+	PhSim.Static.call(this);
+
+	if(Array.isArray(dynSimOptions.simulations)) {
+		this.simulations = dynSimOptions.simulations;
+	}
+
+	else if(Array.isArray(dynSimOptions.layers)) {
+		this.simulations[0] = dynSimOptions;
+	}
+
+	else if(Array.isArray(dynSimOptions.objUniverse)) {
+		this.simulations[0].layers[0] = dynSimOptions;
+	}
+
+	else if(Array.isArray(dynSimOptions)) {
+		this.simulations[0].layers[0].objUniverse = [];
+	}
+
 	if(!typeof Matter === "object") {
 		throw "PhSim requires matter.js."
+	}
+
+	if(typeof dynSimOptions.wFunctions === "object") {
+		this.wFunctions = dynSimOptions.wFunctions
 	}
 
 	// Register Plugin
@@ -68,29 +90,8 @@ function PhSim(dynSimOptions = new PhSim.Static()) {
 	 * @typedef {DynSimOptions}
 	 */
 
-	this.options;
+	this.options = dynSimOptions;
 
-	if(Array.isArray(dynSimOptions.simulations)) {
-		this.options = dynSimOptions;
-	}
-
-	else if(Array.isArray(dynSimOptions.layers)) {
-		this.options = new PhSim.Static();
-		this.options.simulations[0] = dynSimOptions;
-	}
-
-	else if(Array.isArray(dynSimOptions)) {
-		this.options = new PhSim.Static();
-		this.options.simulations[0].layers[0].objUniverse = dynSimOptions;
-	}
-
-	/**
-	 * Array of simulations to be loaded.
-	 * 
-	 * @type {PhSim.Static.Simulation[]}
-	 */
-
-	this.simulations = PhSim.Query.deepClone(this.options.simulations);
 
 	// Configure canvas
 
@@ -154,8 +155,8 @@ PhSim.prototype.connectCanvas = function(canvas) {
 	this.simCtx = canvas.getContext("2d");
 
 	
-	this.simCanvas.width = this.options.box.w || this.options.box.width;
-	this.simCanvas.height = this.options.box.h || this.options.box.height;
+	this.simCanvas.width = this.box.w || this.box.width;
+	this.simCanvas.height = this.box.h || this.box.height;
 	this.registerCanvasEvents();
 	this.configRender(this.simCtx);
 }
@@ -315,7 +316,7 @@ PhSim.prototype.paused = true;
 /**
   * 
   * @callback PhSimEventCall
-  * @param {PhSim.Events.PhEvent} phEvent
+  * @param {PhSim.Events.PhSimEvent} phEvent
   * 
   */
 
