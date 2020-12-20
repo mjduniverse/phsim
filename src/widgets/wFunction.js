@@ -258,7 +258,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		call._ref = f;
 
-		return f;
+		return call;
 
 	}
 
