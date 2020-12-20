@@ -63,16 +63,6 @@ var Game = function(phSim,options) {
 
 	// Adding arrays to phSim eventstack
 
-	phSim.eventStack["score"] = [];
-
-	phSim.eventStack["hazard"] = [];
-
-	phSim.eventStack["gamewin"] = [];
-
-	phSim.eventStack["levelwin"] = [];
-
-	phSim.eventStack["levelloss"] = [];
-
 }
 
 /**

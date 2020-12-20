@@ -11,7 +11,8 @@ const EventStack = function() {
 
 	/** 
 	 * 
-	 * Array of functions to be executed whenever two or more objects contact each other 
+	 * Array of functions to be executed whenever two or more objects contact each other
+	 * This array represents {@link event:contact} 
 	 * @type {PhSimEventCall[]}
 	 * 
 	*/
@@ -21,6 +22,7 @@ const EventStack = function() {
 	/** 
 	 * 
 	 * Array of functions to be executed before the simulation updates 
+	 * This array represents {@link event:beforeupdate} 
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
@@ -31,6 +33,7 @@ const EventStack = function() {
 	/** 
 	 * 
 	 * Array of functions to be exected when PhSim.updateDynObject is called 
+	 * This array represents {@link event:objupdate} 
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
@@ -42,6 +45,7 @@ const EventStack = function() {
 	/** 
 	 * 
 	 * Array of functions to be executed after the simulation updates 
+	 * This array represents {@link event:afterupdate} 
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
@@ -52,6 +56,7 @@ const EventStack = function() {
 	/** 
 	 * 
 	 * Array of functions to be executed before the simulation is changed 
+	 * This array represents {@link event:beforeslchange} 
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
@@ -62,6 +67,7 @@ const EventStack = function() {
 	/** 
 	 * 
 	 * Array of functions to be executed after the simulation is changed 
+	 * This array represents {@link event:afterslchange} 
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
@@ -72,6 +78,7 @@ const EventStack = function() {
 	/** 
 	 * 
 	 * Array of functions to be executed before the Sprite Image Array loads 
+	 * This array represents {@link event:beforespriteimgload} 
 	 * 
 	 * @type {PhSimEventCall[]}
 	 * 
@@ -84,15 +91,30 @@ const EventStack = function() {
 	this.afterspriteimgload = [];
 	this.beforeforcekey = [];
 
-	/** Array of functions to be executed when mouse is let go while over simulation canvas */
+	/** 
+	 * Array of functions to be executed when mouse is let go while over simulation 
+	 * canvas 
+	 * 
+	 * This array represents {@link event:mouseup} 
+	 * 
+	 */
 
 	this.mouseup = [];
 
-	/** Array of functions to be executed when mouse leaves simulation canvas */
+	/** 
+	 * Array of functions to be executed when mouse leaves simulation canvas 
+	 * 
+	 * This array represents {@link event:mouseout} 
+	 *
+	 */
 
 	this.mouseout = [];
 
-	/** Array of functions to be executed when the mouse moves */
+	/** 
+	 * Array of functions to be executed when the mouse moves
+	 * This array represents {@link event:mousemove} 
+	 * 
+	 */
 
 	this.mousemove = [];
 
@@ -159,6 +181,16 @@ const EventStack = function() {
 	this.objmousemove = [];
 
 	this.objmouseup = [];
+
+	this.score = [];
+
+	this.hazard = [];
+
+	this.gamewin = [];
+
+	this.levelwin = [];
+
+	this.levelloss = [];
 
 
 }
