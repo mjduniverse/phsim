@@ -57,4 +57,15 @@ Events.PhMouseEvent = function() {
 
 Events.PhMouseEvent.prototype = Object.create(Events.PhDynEvent.prototype);
 
+/**
+ * @constructor
+ */
+
+
+Events.PhSimCollision = function() {
+	this.bodyA = null;
+	this.bodyB = null;
+	this.matter = null;
+}
+
 module.exports = Events;
