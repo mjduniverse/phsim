@@ -24,7 +24,7 @@ var gotoSimulationIndex = function (i) {
 
 	this.firstSlUpdate = false;
 
-	var event = new PhSim.Events.PhEvent("slchange");
+	var event = new PhSim.Events.PhSimEvent("slchange");
 
 	event.type = "slchange";
 
@@ -38,8 +38,8 @@ var gotoSimulationIndex = function (i) {
 	    this.drawLoadingScreen();
 	}
 
-	this.simulation = this.options.simulations[i];
-	this.simOptions = this.options.simulations[i];
+	this.simulation = this.simulations[i];
+	this.simOptions = this.simulations[i];
 
 	this.simulationIndex = i;
 
@@ -69,7 +69,7 @@ var gotoSimulationIndex = function (i) {
 		this.bgFillStyle = this.simOptions.world.bg;
 	}
 
-	if(this.options.simulations) {
+	if(this.simulations) {
 	
 		for(var L = 0; L < this.simOptions.layers.length; L++) {
 
@@ -112,7 +112,7 @@ var gotoSimulationIndex = function (i) {
 				}
 			}
 
-			var a = new PhSim.Events.PhDynEvent();
+			var a = new PhSim.Events.PhSimDynEvent();
 			this_a.callEventClass("matterJSLoad",this_a,a);
 
 		}
@@ -121,7 +121,7 @@ var gotoSimulationIndex = function (i) {
 
 	Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
 		
-		var a = new PhSim.Events.PhDynEvent();
+		var a = new PhSim.Events.PhSimDynEvent();
 		a.matterEvent = event;
 		this_a.callEventClass("collisionstart",this_a,a);
 
@@ -245,7 +245,7 @@ var gotoSimulationIndex = function (i) {
 
 		self.status = PhSim.statusCodes.LOADED_SIMULATION;
 
-		var e = new PhSim.Events.PhDynEvent();
+		var e = new PhSim.Events.PhSimDynEvent();
 	
 		self.callEventClass("load",self,e);
 
