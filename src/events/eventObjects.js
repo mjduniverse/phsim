@@ -1,5 +1,6 @@
 /**
  * Namespace for event objects
+ * @memberof PhSim
  * @namespace
  */
 
@@ -12,7 +13,7 @@ const Events = {}
  */
 
 Events.PhSimEvent = function(type) {
-	this.target = null;
+	this.target = null; 
 	this.timestamp = null;
 	this.type = type;
 }
@@ -32,6 +33,7 @@ Events.PhSimDynEvent.prototype = Object.create(Events.PhSimEvent.prototype);
 
 /**
  * @constructor
+ * @extends PhSim.Events.PhSimEvent
  */
 
 
@@ -44,7 +46,10 @@ Events.PhSimEventKey = function() {
 Events.PhSimEventKey.prototype = Object.create(Events.PhSimDynEvent.prototype);
 
 /**
+ * Event object for mouse events.
+ * 
  * @constructor
+ * @extends PhSim.Events.PhSimDynEvent
  */
 
 
@@ -62,12 +67,14 @@ Events.PhSimMouseEvent.prototype = Object.create(Events.PhSimDynEvent.prototype)
  * 
  * Event fired whenever the mouse is pressed down on an object.
  * 
- * @event objmousedown
- * @property {Event} domEvent - Standard JavaScript `mousedown` event.
- * @property {Number} x - Position of mouse
- * @property {Number} y - Position of mouse
- * @property {String} type - Event type
- * @property {PhSim.DynEvent[]}
+ * @event PhSim.Events#objmousedown
+ * @type {PhSim.Events.PhSimMouseEvent}
+ */
+
+/**
+ * Event fired whenever the mouse is let go of while over an object
+ * 
+ * @event PhSim.Events#objmouseup
  * @type {PhSim.Events.PhSimMouseEvent}
  */
 
