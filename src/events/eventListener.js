@@ -21,8 +21,8 @@ const PhSimEventTarget = {}
 PhSimEventTarget.on = function(eventStr,call,options = {}) {
 	
 	if(options && options.slEvent === true) {
-		if(this.slEventStack[eventStr]) {
-			this.slEventStack[eventStr].push(call);
+		if(this.simulationEventStack[eventStr]) {
+			this.simulationEventStack[eventStr].push(call);
 		}
 	}
 
@@ -70,9 +70,9 @@ PhSimEventTarget.off = function(eventStr,call) {
 		this.eventStack[eventStr].splice(callIndex,1);
 	}
 
-	if(this.slEventStack[eventStr] && this.slEventStack[eventStr].includes(call)) {
-		var callIndex = this.slEventStack[eventStr].indexOf(call);
-		this.slEventStack[eventStr].splice(callIndex,1);
+	if(this.simulationEventStack[eventStr] && this.simulationEventStack[eventStr].includes(call)) {
+		var callIndex = this.simulationEventStack[eventStr].indexOf(call);
+		this.simulationEventStack[eventStr].splice(callIndex,1);
 	}
 
 }
@@ -95,10 +95,10 @@ PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
 			}
 		}
 
-		if(this.slEventStack[eventStr]) {
-			for(var i = 0; i < this.slEventStack[eventStr].length; i++) {
+		if(this.simulationEventStack[eventStr]) {
+			for(var i = 0; i < this.simulationEventStack[eventStr].length; i++) {
 
-				var func = this.slEventStack[eventStr][i]
+				var func = this.simulationEventStack[eventStr][i]
 				eventArg.func = func;
 				func.call(thisArg,eventArg);
 
