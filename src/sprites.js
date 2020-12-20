@@ -68,12 +68,89 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 	
 	// Force load if sprites list is empty
 
-	this.static = {};
-	this.loaded_n = 0;
-	this.loaded = false;
-	this.onload = onload;
-	this.length = 0;
-	this.urls = [];
+	/**
+	 * 
+	 * STAIC
+	 * 
+	 * @type {Object}
+	 * @name PhSim.Sprites.spriteImgObj#static
+	 */
+
+	Object.defineProperty(this,"static",{
+		enumerable: false,
+		value: {},
+		writable: true,
+	});
+
+	/**
+	 * 
+	 * Number of loaded sprites
+	 * 
+	 * @type {Number}
+	 * @name PhSim.Sprites.spriteImgObj#loaded_n
+	 */
+
+	Object.defineProperty(this,"loaded_n",{
+		enumerable: false,
+		value: 0,
+		writable: true
+	});
+
+	/**
+	 * 
+	 * Boolean telling us if it is loaded or not.
+	 * 
+	 * @type {Boolean}
+	 * @name PhSim.Sprites.spriteImgObj#length
+	 */
+
+	Object.defineProperty(this,"loaded",{
+		enumerable: false,
+		value: false,
+		writable: true,
+	});
+
+	/**
+	 * 
+	 * Function to call if loaded.
+	 * 
+	 * @type {Function}
+	 * @name PhSim.Sprites.spriteImgObj#onload
+	 */
+
+	Object.defineProperty(this,"onload",{
+		enumerable: false,
+		value: onload,
+		writable: true
+	});
+
+	/**
+	 * 
+	 * URL List
+	 * 
+	 * @type {Object}
+	 * @name PhSim.Sprites.spriteImgObj#urls
+	 */
+
+	Object.defineProperty(this,"urls",{
+		enumerable: false,
+		value: [],
+		writable: true
+	})
+
+	/**
+	 * 
+	 * Length
+	 * 
+	 * @type {Number}
+	 * @name PhSim.Sprites.spriteImgObj#length
+	 */
+
+	Object.defineProperty(this,"length",{
+		enumerable: false,
+		value: 0,
+		writable: true,
+	})
 
 	var self = this;
 
@@ -92,6 +169,12 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 		self.onload();
 		self.loaded = true;
 	}
+
+}
+
+Sprites.spriteImgObj.prototype.getBlobs = function() {
+
+
 
 }
 
