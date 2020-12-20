@@ -83,7 +83,7 @@ Vertices.rectangle = function(rectangle) {
  */
 
 
-PhSim.getRectangleCorners = function(rectangle) {
+Vertices.getRectangleCorners = function(rectangle) {
 
 
 	var a = PhSim.Vertices.rectangle(rectangle)
