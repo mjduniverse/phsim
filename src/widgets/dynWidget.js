@@ -7,7 +7,7 @@ const PhSim = require("../phSim");
 
 PhSim.prototype.connectDynObjects = function(parent,child) {
 
-	PhSim.Matter.Body.setStatic(child,true);
+	Matter.Body.setStatic(child,true);
 
 	var self = this;
 	
@@ -60,7 +60,7 @@ PhSim.prototype.forAllObjects = function(call) {
 PhSim.prototype.addToOverlayer = function(o) {
 	
 	if(o instanceof DynObject) {
-		PhSim.Matter.World.add(this.matterJSWorld, o.matter);
+		Matter.World.add(this.matterJSWorld, o.matter);
 	}
 
 	this.objUniverse.push(o);
@@ -106,7 +106,7 @@ PhSim.prototype.addObject = function(o,options = {}) {
 
 		o.phSim = this;
 
-		PhSim.Matter.World.add(this.matterJSWorld,o.matter);
+		Matter.World.add(this.matterJSWorld,o.matter);
 
 		if(o.static.widgets) {
 			this.extractWidgets(o);
@@ -127,7 +127,7 @@ PhSim.prototype.addObject = function(o,options = {}) {
 
 PhSim.prototype.removeDynObj = function(dynObject) {
 
-	PhSim.Matter.Composite.remove(this.matterJSWorld,dynObject.matter);
+	Matter.Composite.remove(this.matterJSWorld,dynObject.matter);
 
 	this.objUniverse.splice(this.objUniverse.indexOf(dynObject),1);
 

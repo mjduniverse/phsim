@@ -1,72 +1,68 @@
+const Static = require("../objects");
+
 /**
+ * Get bounding box from an array of vectors.
  * 
- * Get bounding box from an array of vertices.
- * 
- * 
- * @function
- * @param {Array} verts 
+ * @constructor
+ * @memberof PhSim
+ * @extends PhSim.Options.Rectangle
+ * @param {Vector[]} verts 
  */
 
-PhSim.getVertBoundingBox = function(verts) {
-
-	var verts = JSON.parse(JSON.stringify(verts));
-
-	var o = {
-		"smallX": null,
-		"largeX": null,
-		"smallY": null,
-		"largeY": null,
-		"w": null,
-		"h": null,
-		"x": null,
-		"y": null,
-		"upperLeftCorner": null,
-		"upperRightCorner": null,
-		"lowerLeftCorner": null,
-		"lowerRightCorner": null,
-		"rectangle": true,
-	};
+const BoundingBox = function(verts) {
 
 	verts.sort(function(a,b){
 		return a.x - b.x;
 	});
 
-	o.smallX = verts[0].x;
-	o.largeX = verts[verts.length - 1].x;
+	/**
+	 * The x coordinate of the left most vertex of `verts`.
+	 * @type {Number}
+	 */
+
+	this.smallX = verts[0].x;
+
+	/**
+	 * The x coordinate of the right most vertex of `verts`.
+	 * @type {Number}
+	 */
+
+	this.largeX = verts[verts.length - 1].x;
 
 	verts.sort(function(a,b){
 		return a.y - b.y;
 	});
 
-	o.smallY = verts[0].y;
-	o.largeY = verts[verts.length - 1].y;
+	this.smallY = verts[0].y;
+	this.largeY = verts[verts.length - 1].y;
 
-	o.w = o.largeX - o.smallX;
-	o.h = o.largeY - o.smallY;
-	o.x = o.smallX;
-	o.y = o.smallY;
+	var w = this.largeX - this.smallX;
+	var h = this.largeY - this.smallY;
+	var x = this.smallX;
+	var y = this.smallY;
 
-	return o;
+	Static.Rectangle.call(this,w,h,x,y);
+
 }
 
 /**
- * 
- * @param {Object} object - The Static Object
- * @returns {Object} 
+ * Get bounding box of PhSim shape.
+ * @param {PhSimObject} object - The Static Object
+ * @returns {PhSim.BoundingBox} 
  */
 
-PhSim.getStaticBoundingBox = function(object) {
+BoundingBox.fromShape = function(object) {
 	
 	if(object.shape === "polygon") {
-		return PhSim.getVertBoundingBox(object.verts);
+		return new BoundingBox(object.verts);
 	}
 
 	if(object.shape === "regPolygon") {
-		return PhSim.getVertBoundingBox(PhSim.getRegPolygonVerts(object));
+		return new BoundingBox(PhSim.Vertices.regPolygon(object));
 	}
 
 	if(object.shape === "rectangle") {
-		return PhSim.getVertBoundingBox(PhSim.getRectangleVertArray(object,true));
+		return new BoundingBox(PhSim.Vertices.rectangle(object,true));
 	}
 
 	if(object.shape === "circle") {
@@ -84,29 +80,14 @@ PhSim.getStaticBoundingBox = function(object) {
 		var a = [];
 
 		for(var i = 0; i < object.objUniverse.length; i++) {
-			a.push( PhSim.getRectangleVertArray( this.getStaticBoundingBox(object.objUniverse[i]) ) );
+			a.push( PhSim.Vertices.rectangle( this.getStaticBoundingBox(object.objUniverse[i]) ) );
 		}
 
 		a = a.flat(Infinity);
 
-		return PhSim.getVertBoundingBox(a);
+		return new BoundingBox(a);
 
 	}
 }
 
-/**
- * 
- * Get bounding box of a static object
- * 
- * @function
- * @param {PhSim.DynObject} dynObj 
- */
-
-PhSim.getDynBoundingBox = function(dynObj) {
-	return {
-		"x": dynObj.matter.bounds.min.x,
-		"y": dynObj.matter.bounds.min.y,
-		"w": dynObj.matter.bounds.max.x - dynObj.bounds.min.x,
-		"h": dynObj.matter.bounds.max.y - dynObj.bounds.min.y,
-	}
-}
+module.exports = BoundingBox;

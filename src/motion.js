@@ -1,11 +1,12 @@
+const DynObject = require("./dynObject");
+const Centroid = require("./tools/centroid");
+
 /**
  * Namespace of functions used to move objects in various ways.
  * @memberof PhSim
  * @namespace
  * 
  */
-
-const DynObject = require("./dynObject");
 
 var Motion = {}
 
@@ -23,7 +24,7 @@ var Motion = {}
 
 Motion.applyForce = function(dynObject,position,forceVector) {
 	if(!dynObject.locked && !dynObject.noDyn) {
-		return PhSim.Matter.Body.applyForce(dynObject.matter,position,forceVector);
+		return Matter.Body.applyForce(dynObject.matter,position,forceVector);
 	}
 }
 
@@ -40,7 +41,7 @@ Motion.applyForce = function(dynObject,position,forceVector) {
 
 Motion.setVelocity = function(dynObject,velocityVector) {
 	if(!dynObject.locked) {
-		return PhSim.Matter.Body.setVelocity(dynObject.matter,velocityVector);
+		return Matter.Body.setVelocity(dynObject.matter,velocityVector);
 	}
 
 }
@@ -72,7 +73,7 @@ Motion.translate = function(o,translationVector) {
 		}
 
 		if(o instanceof DynObject) {
-			return PhSim.Matter.Body.translate(o.matter,translationVector);
+			return Matter.Body.translate(o.matter,translationVector);
 		}
 
 	}
@@ -84,23 +85,40 @@ Motion.translate = function(o,translationVector) {
  * Setting positions is ineffective against locked and permanetly static objects.
  * 
  * @function
- * @param {PhSim.DynObject} dynObject 
- * @param {Vector} positionVector 
+ * @param {PhSim.DynObject} o 
+ * @param {Vector} position 
  */
 
-Motion.setPosition = function(dynObject,positionVector) {
-	if(!dynObject.locked) {
+Motion.setPosition = function(o,position) {
+
+	if(!o.locked) {
 
 		if(o.type === "circle" || o.type === "regPolygon") {
-				o.x = positionVector.x;
-				o.y = positionVector.y;
+			o.x = position.x;
+			o.y = position.y;
 		}
 
 		if(o.shape === "rectangle") {
+			var c = Centroid.rectangle(o);
+			o.x = (o.x - c.x) + position.x;
+			o.y = (o.y - c.y) + position.y;
+		}
+
+		if(o.shape === "polygon") {
+
+			var c = Centroid.polygon(dynObject)
+
+			for(var i = 0; i < o.verts.length; i++) {
+				o.verts[i].x = (o.verts[i].x - c.x) + position.x;
+				o.verts[i].y = (o.verts[i].y - c.y) + position.y;
+			}
 
 		}
 
-		PhSim.Matter.Body.setPosition(dynObject.matter,positionVector);
+		if(o instanceof DynObject) {
+			Matter.Body.setPosition(o.matter,position);
+		}
+
 	}
 }
 
@@ -116,10 +134,10 @@ Motion.rotate = function(dynObject,angle,point) {
 	if(!dynObject.locked) {
 
 		if(dynObject.skinmesh) {
-			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
+			Matter.Vertices.rotate(dynObject.skinmesh,angle,point);
 		}
 
-		return PhSim.Matter.Body.rotate(dynObject.matter, angle, point)
+		return Matter.Body.rotate(dynObject.matter, angle, point)
 
 	}
 }
@@ -135,11 +153,11 @@ Motion.setAngle = function(dynObject,angle) {
 	if(!dynObject.locked) {
 
 		if(dynObject.skinmesh) {
-			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
-			PhSim.Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
+			Matter.Vertices.rotate(dynObject.skinmesh,-dynObject.cycle,dynObject);
+			Matter.Vertices.rotate(dynObject.skinmesh,angle,dynObject);
 		}
 
-		return PhSim.Matter.Body.setAngle(dynObject.matter,angle);
+		return Matter.Body.setAngle(dynObject.matter,angle);
 
 	}
 }

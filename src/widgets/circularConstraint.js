@@ -9,7 +9,7 @@
 
 PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 	
-	var c = PhSim.Matter.Constraint.create({
+	var c = Matter.Constraint.create({
 		
 		"bodyA": dynObject.matter,
 		
@@ -20,7 +20,7 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 	});
 
-	PhSim.Matter.World.add(this.matterJSWorld,c)
+	Matter.World.add(this.matterJSWorld,c)
 
 	var relAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x);
 

@@ -24,7 +24,7 @@ var gotoSimulationIndex = function (i) {
 
 	this.firstSlUpdate = false;
 
-	var event = new PhSim.PhEvent("slchange");
+	var event = new PhSim.Events.PhEvent("slchange");
 
 	event.type = "slchange";
 
@@ -52,9 +52,9 @@ var gotoSimulationIndex = function (i) {
 
 	var this_a = this;
 
-	this.matterJSWorld = PhSim.Matter.World.create();
+	this.matterJSWorld = Matter.World.create();
 
-	this.matterJSEngine = PhSim.Matter.Engine.create({
+	this.matterJSEngine = Matter.Engine.create({
 		world: this_a.matterJSWorld
 	});
 
@@ -112,16 +112,16 @@ var gotoSimulationIndex = function (i) {
 				}
 			}
 
-			var a = new PhSim.PhDynEvent();
+			var a = new PhSim.Events.PhDynEvent();
 			this_a.callEventClass("matterJSLoad",this_a,a);
 
 		}
 
 	}
 
-	PhSim.Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
+	Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
 		
-		var a = new PhSim.PhDynEvent();
+		var a = new PhSim.Events.PhDynEvent();
 		a.matterEvent = event;
 		this_a.callEventClass("collisionstart",this_a,a);
 
@@ -188,9 +188,9 @@ var gotoSimulationIndex = function (i) {
 				b.pointB = a.pointB;
 			}
 
-			var c = PhSim.Matter.Constraint.create(b);
+			var c = Matter.Constraint.create(b);
 
-			PhSim.Matter.World.add(this.matterJSWorld,c)
+			Matter.World.add(this.matterJSWorld,c)
 
 		}
 
@@ -245,7 +245,7 @@ var gotoSimulationIndex = function (i) {
 
 		self.status = PhSim.statusCodes.LOADED_SIMULATION;
 
-		var e = new PhSim.PhDynEvent();
+		var e = new PhSim.Events.PhDynEvent();
 	
 		self.callEventClass("load",self,e);
 

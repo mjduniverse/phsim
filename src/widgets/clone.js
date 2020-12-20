@@ -1,3 +1,5 @@
+const PhSim = require("../phSim");
+
 /**
  * 
  * Clone object
@@ -11,15 +13,29 @@
 
 PhSim.prototype.cloneObject = function(dynObject,options = {}) {
     
-	var obj = new PhSim.DynObject(dynObject.static);
-	obj.cloned = true;
+    var obj = new PhSim.DynObject(dynObject.static);
+    
+    /**
+     * Property telling if object is cloned.
+     * 
+     * @type {Boolean|undefined}
+     * @memberof PhSim.DynObject
+     */
+
+    obj.cloned = true;
+    
+    /**
+     * 
+     */
+
+
     obj.cloneParent = dynObject;
     
     PhSim.Motion.setVelocity(obj,options.velocity);
 
 	this.addToOverlayer(obj);
 	
-	var eventObj = new PhSim.PhEvent("clone");
+	var eventObj = new PhSim.Events.PhEvent("clone");
 	eventObj.target = dynObject;
 	eventObj.clonedObj = obj;
 

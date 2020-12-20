@@ -1,4 +1,9 @@
-const PhSim = require("../phSim");
+/**
+ * @mixin
+ * @memberof PhSim
+ */
+
+const PhSimEventTarget = {}
 
 /**
  * 
@@ -13,10 +18,8 @@ const PhSim = require("../phSim");
  * 
  */
 
-PhSim.prototype.on = function(eventStr,call,options = {}) {
+PhSimEventTarget.on = function(eventStr,call,options = {}) {
 	
-	
-
 	if(options && options.slEvent === true) {
 		if(this.slEventStack[eventStr]) {
 			this.slEventStack[eventStr].push(call);
@@ -60,7 +63,7 @@ PhSim.prototype.on = function(eventStr,call,options = {}) {
  */
 
 
-PhSim.prototype.off = function(eventStr,call) {
+PhSimEventTarget.off = function(eventStr,call) {
 	
 	if(this.eventStack[eventStr] && this.eventStack[eventStr].includes(call)) {
 		var callIndex = this.eventStack[eventStr].indexOf(call);
@@ -76,27 +79,34 @@ PhSim.prototype.off = function(eventStr,call) {
 
 /**
  * @function
- * @param {PhSim.PhEvent} event - Event Object
+ * @param {PhSim.Events.PhEvent} event - Event Object
  */
 
-PhSim.prototype.callEventClass = function(eventStr,thisArg,eventArg) {
+PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
 
-	if(this.eventStack[eventStr]) {
-		for(var i = 0; i < this.eventStack[eventStr].length; i++) {
-			var func = this.eventStack[eventStr][i]
-			eventArg.func = func;
-			func.call(thisArg,eventArg);
+	if(this instanceof PhSim) {
 
+		if(this.eventStack[eventStr]) {
+			for(var i = 0; i < this.eventStack[eventStr].length; i++) {
+				var func = this.eventStack[eventStr][i]
+				eventArg.func = func;
+				func.call(thisArg,eventArg);
+
+			}
 		}
-	}
 
-	if(this.slEventStack[eventStr]) {
-		for(var i = 0; i < this.slEventStack[eventStr].length; i++) {
+		if(this.slEventStack[eventStr]) {
+			for(var i = 0; i < this.slEventStack[eventStr].length; i++) {
 
-			var func = this.slEventStack[eventStr][i]
-			eventArg.func = func;
-			func.call(thisArg,eventArg);
+				var func = this.slEventStack[eventStr][i]
+				eventArg.func = func;
+				func.call(thisArg,eventArg);
 
+			}
 		}
+
 	}
+	
 }
+
+module.exports = PhSimEventTarget;

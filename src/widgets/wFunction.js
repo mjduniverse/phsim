@@ -1,13 +1,32 @@
+const PhSim = require("../phSim");
+
+/**
+ * @file File for dealing with wFunctions.
+ * @module widgets/wFunction.js
+ * @author Mjduniverse
+ * 
+ */
+
 /**
  * A widget function is a function that used for the `WidgetFunction` widget.
  * The "this" keyword in the body of function usually refers to the current instance of
  * PhSim simulation or references an instance of {@link PhSim.DynObject}.
  * 
+ * To learn more, see the {@tutorial Widget Functions}
+ * 
+ * @module wFunction
  * @typedef {Function} WFunction
+ * @property {Function} _options - Options used to create WFunction
+ * @property {Function|Number} _ref
+ * @property {String} _name - WFunction name
+ * @property {Function} _bodyFunction - Body Function
+ * 
+ * 
  */
 
 /**
  * Array of widget functions
+ * @memberof PhSim
  * @type {WFunctions[]}
  */
 
@@ -16,62 +35,11 @@ PhSim.prototype.wFunctions = [];
 /**
  * Create a widget function and push it to the wFunctions array.
  * @function
+ * @memberof PhSim
  * @param {String|Function} arg - content of function if string, function if function
  * @param {Object} thisRef - 
  * @returns {WFunction}
  */
-
- /**
-
-PhSim.prototype.createWFunction = function(arg,thisRef) {
-
-	if(typeof arg === "string") {
-		var o = new Function(arg).bind(thisRef);
-	}
-
-	else if(typeof arg === "function") {
-		var o = arg.bind(thisRef);
-	}
-
-	else {
-		throw "Expecting \"function\" or \"string\" type";
-	}
-
-    return o;
-}
-
-**/
-
-/**
- * 
- * @param {wFunctionTrigger} trigger 
- * @param {*} ref - Reference
- * @param {Function} call - The function wrapper that is executed 
- */
-
-PhSim.WFunctionRef = function(options,ref,call) {
-
-	/**
-	 * Options used to create simple event
-	 * @type {WFunctionOptions}
-	 */
-
-	this.options = options;
-
-	/**
-	 * Reference to wrapped function
-	 * @type {Function|Number}
-	 */
-
-	this.ref = ref;
-	
-	/**
-	 * Reference to wFunction body function
-	 * @type {WFunctionBody}
-	 */
-
-    this.call = call;
-}
 
 // Simple Event Reference Array
 
@@ -134,7 +102,8 @@ PhSim.prototype.wFunctionRefs = [];
  * is linked to another object by the objlink widget.
  */
 
-/** @typedef {"afterslchange"} afterslchangeTriggerString
+/**
+ *  @typedef {"afterslchange"} afterslchangeTriggerString
  * 
  * The "afterslchange" trigger means that the simple event will execute after the 
  * superlayer changes.
@@ -178,11 +147,11 @@ PhSim.prototype.wFunctionRefs = [];
   */
 
 /**
- *
- * The WFunction is a fundemental part of many PhSim widgets. 
- * It is a function wrapped by another function that
+ * Function used to generate {@link WFunction|WFunctions.}
+ * To learn more, see the {@tutorial Widget Functions} tutorial.
  * 
  * @function
+ * @memberof PhSim
  * 
  * @param {wFunctionTrigger} trigger - The type of SimpleEvent.
  * 
@@ -191,7 +160,7 @@ PhSim.prototype.wFunctionRefs = [];
  * `{@link PhSim#options.wFunctions}[i]`
  * 
  * @param {WFunctionOptions} options -  [The Simple Event Options Object]{@link WFunctionOptions}.
- * @returns {PhSim.WFunctionRef} - A reference to the simple event.
+ * @returns {WFunction} - The wFunction.
  * @this {PhSim}
  * 
  */
@@ -208,12 +177,23 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		wFunctionBody = new Function("e",options.function)
 	}
 
+	/**
+	 * 
+	 * New WFunction
+	 * 
+	 * @inner
+	 * @type {WFunction}
+	 */
+
     var call = function(e) {
         return wFunctionBody.apply(thisRef,e);
 	}
+
+	call._options = options;
+	call._bodyFunction = wFunctionBody;
 	
-	if(options.name) {
-		self.wFunctions[options.name] = call;
+	if(options._name) {
+		self.wFunctions[options._name] = call;
 	}
 	
 	if(options.trigger === "key") {
@@ -239,9 +219,11 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		self.on("keydown",f,{
 			"slEvent": true
 		});
-		
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 		
 	}
 
@@ -273,7 +255,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			"slEvent": true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 
 	}
 
@@ -287,7 +272,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 		
 	}
 
@@ -313,7 +301,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 	}
 
 	else if(options.trigger === "objmousedown" || options.trigger === "objmousedown_global") {
@@ -337,7 +328,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+		return call;
+
 	}
 
 	else if(options.trigger === "firstslupdate") {
@@ -347,6 +341,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		}
 
 		this.on("firstslupdate",f);
+
+
+		call._ref = f;
+		return call;
 
 	}
 	
@@ -370,7 +368,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 	}
 
 	else if(options.trigger === "objlink") {
@@ -388,7 +389,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-		return new PhSim.WFunctionRef(options,f,call);
+
+		call._ref = f;
+
+		return call;
 
 	}
 
@@ -439,11 +443,16 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		refFunc.__interN = setInterval(refFunc,refFunc.__phtime);
 
-		return new PhSim.WFunctionRef(options,refFunc.__interN,call);
+
+		call._ref = refFunc.__interN;
+
+		return call;
 	}
 
 	else {
-		return new PhSim.WFunctionRef(options,call,call);
+
+		call._ref = call;
+		return call;	
 	}
 
 }
@@ -454,31 +463,32 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
  * 
  * Disable wFunction
  * 
+ * @memberof PhSim
  * @function
- * @param {PhSim.WFunctionRef} o - Reference created by {@link PhSim#createWFunction}.
+ * @param {WFunction} o - Reference created by {@link PhSim#createWFunction}.
  * 
 */
 
 PhSim.prototype.disableWFunction = function(o) {
 	
-	if(o.options.trigger === "key") {
-		this.off("keydown",o.ref);
+	if(o._options.trigger === "key") {
+		this.off("keydown",o._ref);
 	}
 
-	else if(o.options.trigger === "sensor") {
-		this.off("collisionstart",o.ref);
+	else if(o._options.trigger === "sensor") {
+		this.off("collisionstart",o._ref);
 	}
 
-	else if(o.options.trigger === "update") {
-		this.off("beforeupdate",o.ref);
+	else if(o._options.trigger === "update") {
+		this.off("beforeupdate",o._ref);
 	}
 
-	else if(o.options.trigger === "time") {
-		clearInterval()
+	else if(o._options.trigger === "time") {
+		clearInterval(o._ref)
 	}
 
-	if(o.name) {
-		delete this.wFunctions[o.name];
+	if(o._name) {
+		delete this.wFunctions[o._name];
 	}
 
 }
@@ -487,8 +497,9 @@ PhSim.prototype.disableWFunction = function(o) {
  * 
  * The `wFunction` widget is used to create wFunctions.
  * 
+ * @memberof PhSim
  * @function
- * @param {PhSim.DynObject]} dyn_object 
+ * @param {PhSim.DynObject} dyn_object 
  * @param {WFunctionOptions} widget 
  */
 

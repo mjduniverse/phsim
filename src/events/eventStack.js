@@ -1,14 +1,13 @@
-var PhSim = require("../phSim");
-
 /**
  * 
  * The event stack is an object that is used to store event listeners.
  * @constructor
+ * @memberof PhSim
  * @enum {PhSimEventCall[]}
  * 
  */
 
-PhSim.EventStack = function() {
+const EventStack = function() {
 
 	/** 
 	 * 
@@ -163,3 +162,5 @@ PhSim.EventStack = function() {
 
 
 }
+
+module.exports = EventStack;

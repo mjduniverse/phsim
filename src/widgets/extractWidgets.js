@@ -7,7 +7,7 @@ const PhSim = require("../phSim");
  * well-formed PhSim object and then translate it into JavaScript.
  * 
  * @function
- * @param {Widget} widget - The Widget
+ * @param {WidgetOptions} widget - The Widget
  * @param {PhSim.DynObject} dyn_object The individual Dynamic Object
  * @returns undefined
  * 

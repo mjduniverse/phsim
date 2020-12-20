@@ -1,4 +1,8 @@
+const EventStack = require("./events/eventStack");
+const Static = require("./objects");
 const PhSim = require("./phSim");
+const Vertices = require("./tools/vertex");
+const PhSimEventTarget = require("./events/eventListener");
 
 /**
  * 
@@ -6,15 +10,25 @@ const PhSim = require("./phSim");
  * @constructor
  * @memberof PhSim
  * @param {PhSimObject} staticObject - Static Object
- * @augments StaticObject
+ * @param {Matter.Body} [matterBody] - Matter Body
+ * 
+ * @mixes PhSim.PhSimEventTarget
+ * @mixes StaticObject
+ * 
+ * @property {Number} x - x position
+ * @property {Number} y - y position
  * 
  */
 
-var DynObject = function(staticObject) {
+var DynObject = function(staticObject,matterBody) {
+
+	Object.assign(this,PhSimEventTarget);
+
+	var self = this;
 
 	Object.assign(this,JSON.parse(JSON.stringify(staticObject)));
 
-	this.matter = PhSim.DynObject.createMatterObject(staticObject);
+	this.matter = matterBody || PhSim.DynObject.createMatterObject(staticObject);
 
 	if(staticObject.shape === "polygon") {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
@@ -26,7 +40,6 @@ var DynObject = function(staticObject) {
 		this.flattenedParts = DynObject.flattenComposite();
 	}
 
-	
 	/** 
 	 * Reference to static object used to create the DynObject
 	 * @type {StaticObject}
@@ -51,27 +64,24 @@ var DynObject = function(staticObject) {
 
 	/** 
 	 * Refernce of DynObj in matter object 
-	 * @type {Object}
+	 * @type {PhSim.DynObject}
 	 * */
 
-	this.matter.plugin.ph = this;
+	this.matter.plugin.dynObject = this;
 
 }
 
-DynObject.prototype.eventStack = {
-	update: [],
-	click: [],
-	mousemove: [],
-	mouseup:[],
-	mousedown: []
+DynObject.prototype.eventStack = new EventStack();
+
+
+
+DynObject.prototype.on = function() {
+	this.phSim.on(eventStr,call,options);
 }
 
-DynObject.prototype.on = function(eventStr,call,options = {}) {
-	if(this.eventStack[eventStr]) {
-		this.eventStack[eventStr].push(call);
-	}
+DynObject.prototype.on = function() {
+	this.phSim.on(eventStr,call,options);
 }
-
 
 /**
  * Set color for dynObject.
@@ -86,9 +96,20 @@ DynObject.setColor = function(dyn_object,colorStr) {
 }
 
 /**
+ * Set color for dynObject.
+ * This can be done alternatively by setting `dynObject.fillStyle` directly.
+ * 
+ * @param {String} colorStr - Color String
+ */
+
+DynObject.prototype.setColor = function(colorStr) {
+	return DynObject.setColor(this,colorStr)
+}
+
+/**
  * Set border color.
  * @param {PhSim.DynObject} dyn_object 
- * @param {*} colorStr 
+ * @param {String} colorStr 
  */
 
 DynObject.setBorderColor = function(dyn_object,colorStr) {
@@ -96,28 +117,22 @@ DynObject.setBorderColor = function(dyn_object,colorStr) {
 }
 
 /**
+ * Set border color.
+ * @param {String} colorStr 
+ */
+
+DynObject.prototype.setBorderColor = function(colorStr) {
+	return DynObject.setBorderColor(this,colorStr);
+}
+
+/**
  * 
  * @param {PhSim.DynObject} dyn_object 
- * @param {*} lineWidth 
+ * @param {Number} lineWidth 
  */
 
 DynObject.setLineWidth = function(dyn_object,lineWidth) {
 	dyn_object.lineWidth = lineWidth;
-}
-
-DynObject.setProperty = function(o,key,value) {
-	
-	if(key === "x") {
-		PhSim.Motion.setPosition(value,0);
-	}
-
-	else if(key === "y") {
-		PhSim.Motion.setPosition(0,value)
-	}
-
-	else if(key === "locked") {
-		
-	}
 }
 
 DynObject.setRegPolygonSideNumber = function(dyn_object,sides) {
@@ -231,10 +246,6 @@ DynObject.createRegPolygon = function(x,y,r,n,options = {}) {
 	return new DynObject(o);
 }
 
-DynObject.setRadius = function(dynObject,radius) {
-
-}
-
 /**
  * 
  * Create a matter.js object from a DynSim static object
@@ -246,7 +257,7 @@ DynObject.setRadius = function(dynObject,radius) {
 
 DynObject.createMatterObject = function(staticObject) {
 
-	var opts = staticObject;
+	var opts = staticObject.matter || {}
 
 	opts.label = staticObject.name || "Untitled Object";
 
@@ -278,23 +289,23 @@ DynObject.createMatterObject = function(staticObject) {
 
 
 	if(staticObject.shape === "polygon") {
-		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(staticObject.verts).x, PhSim.Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
 	}
 
 	
 	else if(staticObject.shape === "circle") {
-		return PhSim.Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
+		return Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
 	}
 
 
 	else if(staticObject.shape === "rectangle") {
-		var set = PhSim.getRectangleVertArray(staticObject);
-		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(set).x, PhSim.Matter.Vertices.centre(set).y, set, opts); 
+		var set = Vertices.rectangle(staticObject);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 
 	else if(staticObject.shape === "regPolygon") {
-		var set = PhSim.getRegPolygonVerts(staticObject);
-		return PhSim.Matter.Bodies.fromVertices(PhSim.Matter.Vertices.centre(set).x, PhSim.Matter.Vertices.centre(set).y, set, opts); 
+		var set = Vertices.regPolygon(staticObject);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 
 

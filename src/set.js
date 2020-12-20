@@ -26,7 +26,7 @@ PhSim.prototype.setRadius = function(dynObject,radius) {
 	var ratio = radius / dynObject.radius;
 
 	if(dynObject.shape === "regPolygon" || dynObject.shape === "circle") {
-		PhSim.Matter.Body.scale(dynObject.object, ratio, ratio);
+		Matter.Body.scale(dynObject.object, ratio, ratio);
 	}
 
 }

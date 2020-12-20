@@ -1,3 +1,4 @@
+const Vertices = {}
 
 /**
  * 
@@ -9,7 +10,7 @@
  * 
  */
 
-PhSim.getRegPolygonVerts = function(regularPolygon) {
+Vertices.regPolygon = function(regularPolygon) {
 
 	var a = []
 	
@@ -35,7 +36,7 @@ PhSim.getRegPolygonVerts = function(regularPolygon) {
  * @returns {Object[]} 
  */
 
-PhSim.getRectangleVertArray = function(rectangle) {
+Vertices.rectangle = function(rectangle) {
 
 	var a = [
 
@@ -65,7 +66,7 @@ PhSim.getRectangleVertArray = function(rectangle) {
 	
 	];
 
-	PhSim.Matter.Vertices.rotate(a, rectangle.cycle, PhSim.getRectangleCentroid(rectangle));
+	Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
 
 
 	return a;
@@ -82,10 +83,10 @@ PhSim.getRectangleVertArray = function(rectangle) {
  */
 
 
-PhSim.getRectangleCorners = function(rectangle) {
+Vertices.getRectangleCorners = function(rectangle) {
 
 
-	var a = PhSim.getRectangleVertArray(rectangle)
+	var a = PhSim.Vertices.rectangle(rectangle)
 
 	
 	var z = {
@@ -103,3 +104,5 @@ PhSim.getRectangleCorners = function(rectangle) {
 	return z;
 
 }
+
+module.exports = Vertices;

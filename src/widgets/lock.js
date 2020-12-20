@@ -1,3 +1,5 @@
+const PhSim = require("../phSim");
+
 /**
  * Set lock of the Dynamic Object
  * @function
@@ -5,9 +7,10 @@
  * @param {Boolean} value - If  `true`, lock. Otherwise, unlock.
  */
 
+
 PhSim.prototype.setLock = function(dynObject,value) {
     dynObject.locked = value;
-	PhSim.Matter.Body.setStatic(dynObject.matter,value);
+	Matter.Body.setStatic(dynObject.matter,value);
 }
 
 /**
@@ -30,7 +33,7 @@ PhSim.prototype.toggleLock = function(dynObject) {
 
 PhSim.prototype.toggleSemiLock = function(dynObject) {
 	dynObject.locked = !dynObject.locked;
-	PhSim.Matter.Body.setStatic(dynObject.matter,dynObject.locked);
+	Matter.Body.setStatic(dynObject.matter,dynObject.locked);
 }
 
 /**

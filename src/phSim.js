@@ -47,10 +47,21 @@
  * 
  * @constructor
  * @param {DynSimOptions} [dynSimOptions] - The simulation object
+ * @mixes PhSim.PhSimEventTarget
  * 
  */
 
 function PhSim(dynSimOptions = new PhSim.Static()) {
+
+	if(!typeof Matter === "object") {
+		throw "PhSim requires matter.js."
+	}
+
+	// Register Plugin
+
+	if(!dynSimOptions.noUse) {
+	    Matter.use(PhSim.matterPlugin);
+	}
 
 	/**
 	 * The static simulation object
@@ -304,7 +315,7 @@ PhSim.prototype.paused = true;
 /**
   * 
   * @callback PhSimEventCall
-  * @param {PhSim.PhEvent} phEvent
+  * @param {PhSim.Events.PhEvent} phEvent
   * 
   */
 
@@ -384,15 +395,35 @@ PhSim.prototype.bgFillStyle = "white";
 
 PhSim.version = "0.1.0-alpha"
 
+/**
+ * Loading screen properties
+ * @type {Object}
+ * @property {String} [bgColor = "black"] - Background Color
+ * @property {String} [txtColor = "white"] - Text Color
+ * @property {String} [txtFace = "arial"] - Text Face
+ * @property {String} [txtAlign = "center"] - Text align
+ * @property {String} [txt = "Loading..."] - Loading text
+ * @property {String} [yPos = "center"] - y-position
+ * @property {Number} [txtSize = 20] -  Text size
+ */
+
 PhSim.prototype.loading = {
-	"bgClr": "black",
-	"txtClr": "White",
-	"txtFace": "arial",
-	"txtAlign": "center",
-	"txt": "Loading...",
-	"yPos": "center",
-	"txtSize": 20
+	bgClr: "black",
+	txtClr: "white",
+	txtFace: "arial",
+	txtAlign: "center",
+	txt: "Loading...",
+	yPos: "center",
+	txtSize: 20
 }
+
+/**
+ * The `drawLoadingScreen` function draws the loading screen for a simulation change.
+ * The behaviour of the loading screen can be customized by modifing the properties of
+ * {@link PhSim#loading}.
+ * 
+ * @function
+ */
 
 PhSim.prototype.drawLoadingScreen = function() {
 	this.simCtx.fillStyle = this.loading.bgClr;
@@ -414,34 +445,34 @@ if(typeof module === "object") {
 PhSim.Static = require("./objects" );
 
 require("./matterPlugin.js" );
-require("./events/eventStack" );
 
+PhSim.EventStack = require("./events/eventStack" );
 PhSim.PhRender = require("./phRender");
 PhSim.Sprites = require("./sprites");
 PhSim.Audio = require("./audio");
 PhSim.Vector = require("./tools/vector");
-
-require("./tools/objectChecker");
-
 PhSim.diagRect = require("./tools/diagRect");
+PhSim.Vertices = require("./tools/vertex");
 
-require("./tools/vertex");
-require("./tools/centroid");
+PhSim.Centroid = require("./tools/centroid");
 
 // Bounding box functions
 
-require("./tools/boundingBox");
-
+PhSim.BoundingBox = require("./tools/boundingBox");
 PhSim.DynObject = require("./dynObject");
+PhSim.Events = require("./events/eventObjects");
 
-require("./events/eventObjects");
 require("./lo");
 require("./makeQuickly");
 require("./filter");
 require("./widgets/dynWidget");
 require("./audioToggle");
 require("./events/registerEvents");
-require("./events/eventListener");
+
+PhSim.PhSimEventTarget =  require("./events/eventListener");
+
+Object.assign(PhSim.prototype,PhSim.PhSimEventTarget);
+
 require("./query");
 require("./gravity");
 require("./loop/toggle");
