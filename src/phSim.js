@@ -512,7 +512,7 @@ PhSim.prototype.eventStack = new PhSim.EventStack();
  * @type {PhSim.EventStack}
  */
 
-PhSim.prototype.slEventStack = new PhSim.EventStack();
+PhSim.prototype.simulationEventStack = new PhSim.EventStack();
 
  
 
