@@ -82,8 +82,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 	 * @this HTMLCanvasElement
 	 * @param {external:MouseEvent} e - MouseEvent object
 	 * 
-	 * @fires event:mousedown
-	 * @fires event:objmousedown
+	 * @fires Events#mousedown
+	 * @fires Events#objmousedown
 	 * 
 	 */
 
@@ -117,7 +117,16 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	self.simCanvas.addEventListener("mousedown",self.pressMouseDown);
 
-	self.dispatchClick = function(e) {
+	/**
+	 * @function
+	 * @param {external:MouseEvent} e 
+	 * 
+	 * @fires Events#click
+	 * @fires Events#objclick
+	 * 
+	 */
+
+	this.dispatchClick = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
@@ -137,7 +146,20 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	self.simCanvas.addEventListener("click",self.dispatchClick);
 
-	self.dispatchMouseMove = function(e) {
+	/**
+	 * 
+	 * Dispatch `mousemove` event.
+	 * 
+	 * @function
+	 * @param {external:MouseEvent} e - Standard MouseEvent Javascript object 
+	 * 
+	 * @fires PhSim.Events#objmousemove
+	 * @fires PhSim.Events#objmouseover
+	 * @fires PhSim.Events#objmouseout
+	 * @fires PhSim.Events#mousemove
+	 */
+
+	this.dispatchMouseMove = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
@@ -210,7 +232,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	self.simCanvas.addEventListener("mousemove",self.dispatchMouseMove);
 
-	self.dispatchMouseUp = function(e) {
+	this.dispatchMouseUp = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
