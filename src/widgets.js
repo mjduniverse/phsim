@@ -1,3 +1,5 @@
+const PhSim = require("./phSim");
+
 /*
 
 Constraint types
@@ -55,7 +57,7 @@ PhSim.Widget.WidgetOptions = function(type) {
 /**
  * Widget Namespace.
  * @namespace
- * 
+ * @memberof PhSim
  */
 
 PhSim.Widgets = {};
