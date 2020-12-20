@@ -598,7 +598,7 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 		report.current = self.collided(dynObjectA,dynObjectB);
 		report.difference = report.current - report.before;
 		if(report.difference) {
-			var eventObj = new PhSim.Events.PhDynEvent();
+			var eventObj = new PhSim.Events.PhSimDynEvent();
 			eventObj.report = report;
 			eventObj.difference = report.difference;
 			self.callEventClass("collisionchange",self,eventObj);
