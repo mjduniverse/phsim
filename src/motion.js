@@ -1,4 +1,5 @@
 const DynObject = require("./dynObject");
+const Centroid = require("./tools/centroid");
 
 /**
  * Namespace of functions used to move objects in various ways.
@@ -84,23 +85,40 @@ Motion.translate = function(o,translationVector) {
  * Setting positions is ineffective against locked and permanetly static objects.
  * 
  * @function
- * @param {PhSim.DynObject} dynObject 
- * @param {Vector} positionVector 
+ * @param {PhSim.DynObject} o 
+ * @param {Vector} position 
  */
 
-Motion.setPosition = function(dynObject,positionVector) {
-	if(!dynObject.locked) {
+Motion.setPosition = function(o,position) {
+
+	if(!o.locked) {
 
 		if(o.type === "circle" || o.type === "regPolygon") {
-				o.x = positionVector.x;
-				o.y = positionVector.y;
+			o.x = position.x;
+			o.y = position.y;
 		}
 
 		if(o.shape === "rectangle") {
+			var c = Centroid.rectangle(o);
+			o.x = (o.x - c.x) + position.x;
+			o.y = (o.y - c.y) + position.y;
+		}
+
+		if(o.shape === "polygon") {
+
+			var c = Centroid.polygon(dynObject)
+
+			for(var i = 0; i < o.verts.length; i++) {
+				o.verts[i].x = (o.verts[i].x - c.x) + position.x;
+				o.verts[i].y = (o.verts[i].y - c.y) + position.y;
+			}
 
 		}
 
-		Matter.Body.setPosition(dynObject.matter,positionVector);
+		if(o instanceof DynObject) {
+			Matter.Body.setPosition(o.matter,position);
+		}
+
 	}
 }
 
