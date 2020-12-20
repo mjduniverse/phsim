@@ -1,72 +1,6 @@
 const DynObject = require("./dynObject");
 const PhSim = require("./phSim");
 
-MatterPluginObj = function(dynObject) {
-    this.dynObject = dynObject
-}
-
-/**
- * The `matter-skinmesh` plugin for matter.js.
- * @author Mjduniverse
- * @namespace
- */
-
-const MatterSkinmesh = {
-
-    name: "matter-skinmesh",
-
-    version: "0.1.0",
-
-
-    install: function(matter) {
-        
-        matter.before("Bodies.fromVertices",function(x, y, vertexSets, options, flagInternal, removeCollinear, minimumArea){
-            MatterSkinmesh.Bodies.fromVertices.apply(this,arguments);
-        });
-    },
-
-    Bodies: {
-
-        /**
-         * @function
-         * @param {*} x 
-         * @param {*} y 
-         * @param {Array[]} vertexSets 
-         * @param {*} options 
-         * @param {*} flagInternal 
-         * @param {*} removeCollinear 
-         * @param {*} minimumArea 
-         */
-
-        fromVertices: function(x, y, vertexSets, options, flagInternal, removeCollinear, minimumArea) {
-            
-            if(!Array.isArray(vertexSets[0])) {
-                vertexSets = [vertexSets];
-            }
-
-            // Array holding matter skinmeshes.
-
-            var matterSkinmesh = [];
-
-            for(var i = 0; i < vertexSets.length; i++) {
-
-                // A single matter skinmesh
-
-                var a = [];
-
-                for(var j = 0; j < vertexSets[i].length; i++) {
-                    
-                }
-            }
-            
-        }
-    }
-
-
-}
-
-
-
 /**
  * Object that registers PhSim as a Matter.js plugin.
  * The modified matter.js object is stored in {@link Matter}
@@ -74,7 +8,7 @@ const MatterSkinmesh = {
  * 
  */
 
-PhSim.matterPlugin = {
+const matterPlugin = {
 
     name: "phsim",
 
@@ -88,12 +22,12 @@ PhSim.matterPlugin = {
     install: function(matter) {
 
         matter.after('Detector.collisions',function(){
-            PhSim.matterPlugin.Detector.collisions.call(this,arguments);
+            matterPlugin.Detector.collisions.call(this,arguments);
         });
 
-        //matter.after('Body.create',function(){
-          //  PhSim.matterPlugin.Body(body)
-        //})
+        //matter.after('Body.create',function(options){
+          //  matterPlugin.Body.init(options)
+        //});
 
     },
 
@@ -106,21 +40,21 @@ PhSim.matterPlugin = {
 
         /**
          *  
-         * @param {Object'} body 
+         * @param {Object} body 
          */
 
-        //init: function(body) {
-          //  body.plugin.phsim = body.plugin.phsim || new DynObject({
+        init: function(options) {
+            if(options.plugin && options.plugin.dynObject) {
 
-            //});
-        //}
+            }
+        }
 
     },
 
     Bodies: {
 
-        circle: function() {
-
+        circle: function(x, y, radius, options) {
+            
         },
 
         rectangle: function() {
@@ -155,19 +89,23 @@ PhSim.matterPlugin = {
                 var bodyB = this[i].bodyB;
 
                 if(bodyA.parent === bodyA) {
-                    var c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.phsim.dynObject);
+                    if(bodyA.plugin.dynObject instanceof DynObject) {
+                        var c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.dynObject);
+                    }
                 }
                 
                 else {
-                    var c_classesA = PhSim.Query.getCollisionClasses(bodyA.parent.plugin.phsim.dynObject);
+                    var c_classesA = PhSim.Query.getCollisionClasses(bodyA.parent.plugin.dynObject);
                 }
 
                 if(bodyB.parent === bodyB) {
-                    var c_classesB = PhSim.Query.getCollisionClasses(bodyB.plugin.phsim.dynObject);
+                    if(bodyB.plugin.dynObject instanceof DynObject) {
+                        var c_classesB = PhSim.Query.getCollisionClasses(bodyB.plugin.dynObject);
+                    }    
                 }
 
                 else {
-                    var c_classesB = PhSim.Query.getCollisionClasses(bodyB.parent.plugin.phsim.dynObject);                    
+                    var c_classesB = PhSim.Query.getCollisionClasses(bodyB.parent.plugin.dynObject);                    
                 }
 
                 if(c_classesA.length > 0 && c_classesB.length > 0) {
@@ -182,11 +120,14 @@ PhSim.matterPlugin = {
                     }
                 }
 
+
             }
 
         }
     }
 
 }
+
+PhSim.matterPlugin = matterPlugin;
 
 Matter.Plugin.register(PhSim.matterPlugin); 
