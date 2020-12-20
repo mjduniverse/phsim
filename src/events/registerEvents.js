@@ -8,6 +8,13 @@
  * @param {MouseEvent} e - Mouse Event Object
  */
 
+/**
+ * The standard object for mouse related DOM events
+ * @external MouseEvent
+ * @type {MouseEvent} 
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent
+ */
+
 
 /**
  * Listens click event
@@ -62,6 +69,7 @@ PhSim.prototype.getEventBridge = function(f) {
  * and {@link PhSim.prototype#simCanvas} are set.
  * 
  * @function
+ * @this PhSim
  *  
  */
 
@@ -69,9 +77,20 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	var self = this;
 
-	self.dispatchMouseDown = function(e) {
+	/**
+	 * @function 
+	 * @this HTMLCanvasElement
+	 * @param {external:MouseEvent} e - MouseEvent object
+	 * 
+	 * @fires event:mousedown
+	 * @fires event:objmousedown
+	 * 
+	 */
 
-		var eventObj = new PhSim.Events.PhMouseEvent();
+
+	this.dispatchMouseDown = function(e) {
+
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -82,16 +101,16 @@ PhSim.prototype.registerCanvasEvents = function() {
 	
 		if(!self.paused) {
 			if(self.objMouseArr && self.objMouseArr.length > 0) {
-	
-					/**
-					 * @event objmousedown
-					 * @type {PhSim.Events.PhMouseEvent}
-					 */
-	
-	
+
 				self.callEventClass("objmousedown",canvas,eventObj);
 			}
 		}
+
+		/**
+		 * PhSim `mousedown` event.
+		 * @event mousedown
+		 * @type {PhSim.Events.PhSimMouseEvent}
+		 */
 	
 		self.callEventClass("mousedown",canvas,eventObj);
 	}
@@ -99,7 +118,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("mousedown",self.pressMouseDown);
 
 	self.dispatchClick = function(e) {
-		var eventObj = new PhSim.Events.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -119,7 +138,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("click",self.dispatchClick);
 
 	self.dispatchMouseMove = function(e) {
-		var eventObj = new PhSim.Events.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -192,7 +211,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("mousemove",self.dispatchMouseMove);
 
 	self.dispatchMouseUp = function(e) {
-		var eventObj = new PhSim.Events.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -211,7 +230,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.simCanvas.addEventListener("mouseup",self.getEventBridge(self.dispatchMouseUp));
 
 	self.dispatchMouseOut = function(e) {
-		var eventObj = new PhSim.Events.PhMouseEvent();
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
@@ -242,7 +261,7 @@ PhSim.prototype.registerKeyEvents = function() {
 	self.windowObj = self.windowObj || window;
 
 	self.keydownBridge = function(e) {
-		var eventObj = new PhSim.Events.PhKeyEvent();
+		var eventObj = new PhSim.Events.PhSimEventKey();
 		eventObj.domEvent = e;
 		eventObj.key = e.key;
 		eventObj.code = e.code;
