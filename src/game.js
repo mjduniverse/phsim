@@ -143,7 +143,7 @@ Game.prototype.setScore = function(c) {
 
 		// Code to execute 
 
-		if(this.phSim.simulationIndex + 1 === this.PhSim.Static.simulations.length) {
+		if(this.phSim.simulationIndex + 1 === this.phSim.simulations.length) {
 
 			if(this.defaultGameWinModal) {
 
