@@ -47,6 +47,7 @@
  * 
  * @constructor
  * @param {DynSimOptions} [dynSimOptions] - The simulation object
+ * @mixes PhSim.PhSimEventTarget
  * 
  */
 
@@ -467,7 +468,11 @@ require("./filter");
 require("./widgets/dynWidget");
 require("./audioToggle");
 require("./events/registerEvents");
-require("./events/eventListener");
+
+PhSim.PhSimEventTarget =  require("./events/eventListener");
+
+Object.assign(PhSim.prototype,PhSim.PhSimEventTarget);
+
 require("./query");
 require("./gravity");
 require("./loop/toggle");
