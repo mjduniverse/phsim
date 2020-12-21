@@ -3,6 +3,8 @@
  * @memberof PhSim
  */
 
+const EventStack = require("./eventStack");
+
 const PhSimEventTarget = {}
 
 /**
@@ -84,26 +86,34 @@ PhSimEventTarget.off = function(eventStr,call) {
 
 PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
 
-	if(this instanceof PhSim) {
+	var self = this;
 
-		if(this.eventStack[eventStr]) {
-			for(var i = 0; i < this.eventStack[eventStr].length; i++) {
-				var func = this.eventStack[eventStr][i]
-				eventArg.func = func;
-				func.call(thisArg,eventArg);
+	if(this.eventStack[eventStr]) {
+		for(var i = 0; i < this.eventStack[eventStr].length; i++) {
+			var func = this.eventStack[eventStr][i]
+			eventArg.func = func;
+			func.call(thisArg,eventArg);
 
-			}
 		}
+	}
+
+	if(this instanceof PhSim) {
 
 		if(this.simulationEventStack[eventStr]) {
 			for(var i = 0; i < this.simulationEventStack[eventStr].length; i++) {
-
+	
 				var func = this.simulationEventStack[eventStr][i]
 				eventArg.func = func;
 				func.call(thisArg,eventArg);
-
+	
 			}
 		}
+
+		//this.forAllObjects(function(o){
+			//if(typeof o.callEventClass === "function") {
+				//o.callEventClass(eventStr,thisArg,eventArg);
+			//}
+		//})
 
 	}
 	
