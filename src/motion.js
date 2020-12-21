@@ -1,4 +1,5 @@
 const DynObject = require("./dynObject");
+const PhSim = require("./phSim");
 const Centroid = require("./tools/centroid");
 
 /**
@@ -140,6 +141,20 @@ Motion.rotate = function(dynObject,angle,point) {
 		return Matter.Body.rotate(dynObject.matter, angle, point)
 
 	}
+}
+
+/**
+ * Rotate dynamic object towards point
+ * 
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Vector} point 
+ */
+
+Motion.rotateTowards = function(dynObject,point) {
+
+	var a = Math.atan2(point.y - dynObject.matter.position.y ,point.x - dynObject.matter.position.x)
+
+	Motion.rotate(dynObject,a,dynObject.matter.position);
 }
 
 /**
