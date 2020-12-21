@@ -448,6 +448,21 @@ PhSim.Static = require("./objects" );
 require("./matterPlugin.js" );
 
 PhSim.EventStack = require("./events/eventStack" );
+
+/**
+ * Object containing array functions to be called.
+ * @type {PhSim.EventStack}
+ */
+
+PhSim.prototype.eventStack = new PhSim.EventStack();
+
+/**
+ * An array stack that is cleared each time the main simulation is changed.
+ * @type {PhSim.EventStack}
+ */
+
+PhSim.prototype.simulationEventStack = new PhSim.EventStack();
+
 PhSim.PhRender = require("./phRender");
 PhSim.Sprites = require("./sprites");
 PhSim.Audio = require("./audio");
