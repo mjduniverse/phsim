@@ -1,8 +1,8 @@
-const EventStack = require("./events/eventStack");
 const Static = require("./objects");
 const PhSim = require("./phSim");
 const Vertices = require("./tools/vertex");
 const PhSimEventTarget = require("./events/eventListener");
+const EventStack = require("./events/eventStack");
 
 /**
  * 
@@ -62,6 +62,13 @@ var DynObject = function(staticObject,matterBody) {
 
 	this.phSim;
 
+	/**
+ 	 * Object containing array functions to be called.
+ 	 * @type {PhSim.EventStack}
+ 	 */
+
+	this.eventStack = new EventStack();
+
 	/** 
 	 * Refernce of DynObj in matter object 
 	 * @type {PhSim.DynObject}
@@ -71,17 +78,6 @@ var DynObject = function(staticObject,matterBody) {
 
 }
 
-DynObject.prototype.eventStack = new EventStack();
-
-
-
-DynObject.prototype.on = function() {
-	this.phSim.on(eventStr,call,options);
-}
-
-DynObject.prototype.on = function() {
-	this.phSim.on(eventStr,call,options);
-}
 
 /**
  * Set color for dynObject.
