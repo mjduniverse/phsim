@@ -101,8 +101,15 @@ PhSim.prototype.registerCanvasEvents = function() {
 	
 		if(!self.paused) {
 			if(self.objMouseArr && self.objMouseArr.length > 0) {
+				
+				eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
 
 				self.callEventClass("objmousedown",canvas,eventObj);
+
+				for(var i = 0; i < eventObj.dynArr.length; i++) {
+					eventObj.dynArr[i].callEventClass("objmousedown",eventObj.dynArr[i],eventObj);
+				}
+
 			}
 		}
 
@@ -115,7 +122,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 		self.callEventClass("mousedown",canvas,eventObj);
 	}
 
-	self.simCanvas.addEventListener("mousedown",self.pressMouseDown);
+	this.simCanvas.addEventListener("mousedown",this.dispatchMouseDown);
 
 	/**
 	 * @function
@@ -135,16 +142,23 @@ PhSim.prototype.registerCanvasEvents = function() {
 		eventObj.y = e.clientY - rect.top;
 		eventObj.type = "click";
 		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
-	
-	
+
 		if(self.objMouseArr.length > 0) {
+
+			eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
+
 			self.callEventClass("objclick",canvas,eventObj);
+
+			for(var i = 0; i < eventObj.dynArr.length; i++) {
+				eventObj.dynArr[i].callEventClass("objclick",eventObj.dynArr[i],eventObj);
+			}
+
 		}
 	
 		self.callEventClass("click",canvas,eventObj);
 	}
 
-	self.simCanvas.addEventListener("click",self.dispatchClick);
+	this.simCanvas.addEventListener("click",this.dispatchClick);
 
 	/**
 	 * 
@@ -167,6 +181,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 	
 		eventObj.x =  e.clientX - rect.left;
 		eventObj.y = e.clientY - rect.top;
+
+		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
 	
 		if(self.mouseX && self.mouseY) {
 			self.prevMouseX = self.mouseX;
@@ -207,17 +223,43 @@ PhSim.prototype.registerCanvasEvents = function() {
 			}
 	
 			if(self.objMouseArr && self.objMouseArr.length > 0) {
+
+				eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
+
 				self.callEventClass("objmousemove",canvas,eventObj);
+
+				for(var i = 0; i < eventObj.dynArr.length; i++) {
+					eventObj.dynArr[i].callEventClass("objmousemove",eventObj.dynArr[i],eventObj);
+				}
+
 			}
 	
-			if(self.newMouseObj && self.newMouseObjs.length > 0) {
+			if(self.newMouseObjs && self.newMouseObjs.length > 0) {
+
 				eventObj.newMouseObjs = self.newMouseObjs;
+
+				eventObj.target = eventObj.newMouseObjs[eventObj.dynArr.length - 1];
+
 				self.callEventClass("objmouseover",canvas,eventObj);
+
+				for(var i = 0; i < eventObj.newMouseObjs.length; i++) {
+					eventObj.newMouseObjs[i].callEventClass("objmouseover",eventObj.newMouseObjs[i],eventObj);
+				}
+
 			}
 	
 			if(self.formerMouseObjs && self.formerMouseObjs.length > 0) {
+
 				eventObj.formerMouseObjs = self.formerMouseObjs;
+
+				eventObj.target = eventObj.formerMouseObjs[eventObj.dynArr.length - 1];
+
 				self.callEventClass("objmouseout",canvas,eventObj);
+
+				for(var i = 0; i < eventObj.formerMouseObjs.length; i++) {
+					eventObj.formerMouseObjs[i].callEventClass("objmouseout",eventObj.formerMouseObjs[i],eventObj);
+				}
+
 			}
 		}
 	
@@ -230,7 +272,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 		//console.log(eventObj);
 	}
 
-	self.simCanvas.addEventListener("mousemove",self.dispatchMouseMove);
+	this.simCanvas.addEventListener("mousemove",this.dispatchMouseMove);
 
 	this.dispatchMouseUp = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
@@ -241,15 +283,25 @@ PhSim.prototype.registerCanvasEvents = function() {
 		eventObj.y = e.clientY - rect.top;
 		self.mouseX = eventObj.x;
 		self.mouseY = eventObj.y;
+
+		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
 	
 		if(self.objMouseArr.length > 0) {
+
+			eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
+
 			self.callEventClass("objmouseup",canvas,eventObj);
+
+			for(var i = 0; i < eventObj.dynArr.length; i++) {
+				eventObj.dynArr[i].callEventClass("objmouseup",eventObj.dynArr[i],eventObj);
+			}
+
 		}
 	
 		self.callEventClass("mouseup",canvas,eventObj);
 	}
 
-	self.simCanvas.addEventListener("mouseup",self.getEventBridge(self.dispatchMouseUp));
+	this.simCanvas.addEventListener("mouseup",this.getEventBridge(self.dispatchMouseUp));
 
 	self.dispatchMouseOut = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
@@ -263,7 +315,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 		self.callEventClass("mouseout",canvas,eventObj);
 	}
 
-	self.simCanvas.addEventListener("mouseout",self.dispatchMouseOut);
+	this.simCanvas.addEventListener("mouseout",this.dispatchMouseOut);
 
 }
 
