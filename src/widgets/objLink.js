@@ -29,30 +29,30 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
     
     var widgetO = widget;
 
-    this.on("matterJSLoad",function(){
-        var eventFuncClosure = function() {
 
-            if(widget.target instanceof PhSim)
+    var eventFuncClosure = function() {
 
-            if(typeof widget.target.L === "number" && typeof widget.target.O === "number") {
-                var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
-            }
+        if(widget.target instanceof PhSim)
 
-            var eventFunc = function(){
-                self.callObjLinkFunctions(targetObj);
-            } 
-
-            return eventFunc;
-        
+        if(typeof widget.target.L === "number" && typeof widget.target.O === "number") {
+            var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
         }
 
+        var eventFunc = function(){
+            self.callObjLinkFunctions(targetObj);
+        } 
 
-        var options = {
-            ...widgetO,
-            wFunctionObj: dyn_object
-        }
+        return eventFunc;
+    
+    }
 
-        var f = self.createWFunction(widgetO.trigger,eventFuncClosure(),options);
-    });
+
+    var options = {
+        ...widgetO,
+        wFunctionObj: dyn_object
+    }
+
+    var f = self.createWFunction(widgetO.trigger,eventFuncClosure(),options);
+
 
 }
