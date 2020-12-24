@@ -11,6 +11,8 @@ const Static = require("../objects");
 
 const BoundingBox = function(verts) {
 
+	var verts = Object.assign([],verts);
+
 	verts.sort(function(a,b){
 		return a.x - b.x;
 	});

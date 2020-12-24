@@ -35,7 +35,7 @@ PhSim.prototype.cloneObject = function(dynObject,options = {}) {
 
 	this.addToOverlayer(obj);
 	
-	var eventObj = new PhSim.Events.PhEvent("clone");
+	var eventObj = new PhSim.Events.PhSimEvent("clone");
 	eventObj.target = dynObject;
 	eventObj.clonedObj = obj;
 

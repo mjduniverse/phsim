@@ -6,7 +6,7 @@ const PhSim = require("../phSim");
  * 
  * @function
  * @param {PhSimObject} currentObj - Object to be updated
- * @fires PhSim.Events.PhEvent
+ * @fires PhSim.Events.PhSimEvent
  * 
  */
 
@@ -52,7 +52,7 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 
 	}
 
-	var event = new PhSim.Events.PhEvent("objupdate");
+	var event = new PhSim.Events.PhSimEvent("objupdate");
 	event.target = currentObj;
 
 	this.callEventClass("objupdate",this,event);
@@ -63,7 +63,7 @@ PhSim.prototype.loopFunction = function() {
 
 	if(this.paused === false) {
 
-		var beforeUpdateEvent = new PhSim.Events.PhDynEvent()
+		var beforeUpdateEvent = new PhSim.Events.PhSimDynEvent()
 
 		beforeUpdateEvent.simulation = this.simulation;
 
@@ -103,7 +103,7 @@ PhSim.prototype.loopFunction = function() {
 	
 		this.applyGravitationalField()
 
-		var afterUpdateEvent = new PhSim.Events.PhDynEvent()
+		var afterUpdateEvent = new PhSim.Events.PhSimDynEvent()
 
 		afterUpdateEvent.simulation = this.simulation;
 

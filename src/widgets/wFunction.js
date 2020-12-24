@@ -170,7 +170,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	var self = this;
 
 	if(typeof wFunctionBody === "number") {
-		wFunctionBody = this.options.wFunctions[wFunctionBody];
+		wFunctionBody = this.wFunctions[wFunctionBody];
 	}
 
 	if(typeof wFunctionBody === "string") {
@@ -193,7 +193,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	call._bodyFunction = wFunctionBody;
 	
 	if(options._name) {
-		self.wFunctions[options._name] = call;
+		self.wFunctionNames[options._name] = call;
 	}
 	
 	if(options.trigger === "key") {
@@ -488,7 +488,7 @@ PhSim.prototype.disableWFunction = function(o) {
 	}
 
 	if(o._name) {
-		delete this.wFunctions[o._name];
+		delete this.wFunctionNames[o._name];
 	}
 
 }
@@ -507,4 +507,4 @@ PhSim.Widgets.wFunction = function(dyn_object,widget) {
 	this.createWFunction(dyn_object,widget.function,widget);
 }
 
-PhSim.prototype.wFunctions = {}
+PhSim.prototype.wFunctionNames = {}

@@ -1,5 +1,6 @@
 /**
  * Namespace for event objects
+ * @memberof PhSim
  * @namespace
  */
 
@@ -7,11 +8,12 @@ const Events = {}
 
 /**
  * @constructor
+ * @
  * 
  */
 
-Events.PhEvent = function(type) {
-	this.target = null;
+Events.PhSimEvent = function(type) {
+	this.target = null; 
 	this.timestamp = null;
 	this.type = type;
 }
@@ -20,42 +22,61 @@ Events.PhEvent = function(type) {
  * @constructor
  */
 
-Events.PhDynEvent = function() {
-	Events.PhEvent.call(this);
+Events.PhSimDynEvent = function() {
+	Events.PhSimEvent.call(this);
 	this.layer = null;
 	this.simulation = null;
 	this.object = null;
 }
 
-Events.PhDynEvent.prototype = Object.create(Events.PhEvent.prototype);
+Events.PhSimDynEvent.prototype = Object.create(Events.PhSimEvent.prototype);
 
 /**
  * @constructor
+ * @extends PhSim.Events.PhSimEvent
  */
 
 
-Events.PhKeyEvent = function() {
-	Events.PhDynEvent.call(this);
+Events.PhSimEventKey = function() {
+	Events.PhSimDynEvent.call(this);
 	this.key = null;
 	this.domEvent = null;
 }
 
-Events.PhKeyEvent.prototype = Object.create(Events.PhDynEvent.prototype);
+Events.PhSimEventKey.prototype = Object.create(Events.PhSimDynEvent.prototype);
 
 /**
+ * Event object for mouse events.
+ * 
  * @constructor
+ * @extends PhSim.Events.PhSimDynEvent
  */
 
 
-Events.PhMouseEvent = function() {
-	Events.PhDynEvent.call(this);
+Events.PhSimMouseEvent = function() {
+	Events.PhSimDynEvent.call(this);
 	this.x = null;
 	this.y = null;
 	this.domEvent = null;
 	this.dynArr = null;
 }
 
-Events.PhMouseEvent.prototype = Object.create(Events.PhDynEvent.prototype);
+Events.PhSimMouseEvent.prototype = Object.create(Events.PhSimDynEvent.prototype);
+
+/**
+ * 
+ * Event fired whenever the mouse is pressed down on an object.
+ * 
+ * @event PhSim.Events#objmousedown
+ * @type {PhSim.Events.PhSimMouseEvent}
+ */
+
+/**
+ * Event fired whenever the mouse is let go of while over an object
+ * 
+ * @event PhSim.Events#objmouseup
+ * @type {PhSim.Events.PhSimMouseEvent}
+ */
 
 /**
  * @constructor
