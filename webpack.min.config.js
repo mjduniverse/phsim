@@ -8,14 +8,14 @@ module.exports = {
     mode: "production",
     node: false,
     optimization: {
-        minimize: false,
+        minimize: true,
         //namedChunks: false,
         //concatenateModules: false
     },
 
     output: {
         path: path.resolve(__dirname, './dist'),
-        filename: "phsim.js",
+        filename: "phsim.min.js",
         globalObject: 'this',
     },
 
