@@ -1008,10 +1008,6 @@ var Static = function() {
 
 	this.box = new PhSim.Static.Rectangle(0,0,800,600);
 
-	/** PhSim Camera */
-
-	this.camera = new PhSim.Static.Camera(0,0,1);
-
 }
 
 /**
@@ -4233,7 +4229,7 @@ const Events = {}
 
 /**
  * @constructor
- * @
+ * 
  * 
  */
 
