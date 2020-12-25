@@ -1,0 +1,4899 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>PhSim Namespace: Widgets</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">PhSim</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="matterPlugin.Body.html">matterPlugin.Body</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.html#.Centroid">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="widgets_wFunction.module_js.html">widgets/wFunction.js</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="@.html">@</a></li><li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Audio.AudioArray.html">PhSim.Audio.AudioArray</a></li><li><a href="PhSim.BoundingBox.html">PhSim.BoundingBox</a></li><li><a href="PhSim.Camera.html">PhSim.Camera</a></li><li><a href="PhSim.DynObject.html">PhSim.DynObject</a></li><li><a href="PhSim.Events.PhSimCollision.html">PhSim.Events.PhSimCollision</a></li><li><a href="PhSim.Events.PhSimDynEvent.html">PhSim.Events.PhSimDynEvent</a></li><li><a href="PhSim.Events.PhSimEventKey.html">PhSim.Events.PhSimEventKey</a></li><li><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></li><li><a href="PhSim.EventStack.html">PhSim.EventStack</a></li><li><a href="PhSim.Game.html">PhSim.Game</a></li><li><a href="PhSim.Game.Options.html">PhSim.Game.Options</a></li><li><a href="PhSim.PhRender.html">PhSim.PhRender</a></li><li><a href="PhSim.Sprites.spriteImgObj.html">PhSim.Sprites.spriteImgObj</a></li><li><a href="PhSim.Static.html">PhSim.Static</a></li><li><a href="PhSim.Static.Camera.html">PhSim.Static.Camera</a></li><li><a href="PhSim.Static.Circle.html">PhSim.Static.Circle</a></li><li><a href="PhSim.Static.Gradient.html">PhSim.Static.Gradient</a></li><li><a href="PhSim.Static.GradientLimits.html">PhSim.Static.GradientLimits</a></li><li><a href="PhSim.Static.GradientStop.html">PhSim.Static.GradientStop</a></li><li><a href="PhSim.Static.Layer.html">PhSim.Static.Layer</a></li><li><a href="PhSim.Static.Polygon.html">PhSim.Static.Polygon</a></li><li><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></li><li><a href="PhSim.Static.RegPolygon.html">PhSim.Static.RegPolygon</a></li><li><a href="PhSim.Static.SimBox.html">PhSim.Static.SimBox</a></li><li><a href="PhSim.Static.Simulation.html">PhSim.Static.Simulation</a></li><li><a href="PhSim.Vector.html">PhSim.Vector</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#event:mousedown">event:mousedown</a></li><li><a href="global.html#event:mousemove">event:mousemove</a></li><li><a href="PhSim.Events.html#event:objmousedown">PhSim.Events#event:objmousedown</a></li><li><a href="PhSim.Events.html#event:objmouseup">PhSim.Events#event:objmouseup</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="tutorial-Creating PhSim Composite Simulation.html">Creating PhSim Composite Simulation</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li><li><a href="tutorial-dynamic-objects.html">dynamic-objects</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#DynObject">DynObject</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="externals.list.html" class="dropdown-toggle" data-toggle="dropdown">Externals<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="external-MatterBody.html">MatterBody</a></li><li><a href="external-MouseEvent.html">MouseEvent</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
+
+	<h1 class="page-title">Namespace: Widgets</h1>
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="PhSim.html">PhSim</a>.</span>
+        
+        Widgets
+        </h2>
+        
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Widget Namespace.</p></div>
+        
+
+        
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets.js.html">widgets.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<hr>
+<dt class="name" id=".coin">
+    <h4 id=".coin"><span class="type-signature">&lt;static> </span>coin<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets.js.html">widgets.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id=".endGame">
+    <h4 id=".endGame"><span class="type-signature">&lt;static> </span>endGame<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets.js.html">widgets.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id=".hazard">
+    <h4 id=".hazard"><span class="type-signature">&lt;static> </span>hazard<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets.js.html">widgets.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id=".health">
+    <h4 id=".health"><span class="type-signature">&lt;static> </span>health<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets.js.html">widgets.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id=".circularConstraint"><span class="type-signature">&lt;static> </span>circularConstraint(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>circularConstraint</code> widget creates circular constraints.</p>
+<p>A circular constraint is a special kind of constraint that is made up of an
+object <code>dyn_object</code> and a point <code>(x,y)</code> in space.</p>
+<p>The object rotates around the centroid of <code>dyn_object</code> as it rotates around the
+point <code>(x,y)</code>.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Circular Constraint options</p>
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>x</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>x-coordinate of the other end of the constraint</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>y-coordinate of the other end of the constraint</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_circularConstraint.js.html">widgets/circularConstraint.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".clone"><span class="type-signature">&lt;static> </span>clone(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>clone</code> widget is a widget that makes copies of an object and inserts them into
+the simulation.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Options.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_clone.js.html">widgets/clone.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".deleteSelf"><span class="type-signature">&lt;static> </span>deleteSelf(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The deleteSelf widget makes an object delete itself from the simulation.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Dynamic Object to be configured.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Configuration options</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_deleteSelf.js.html">widgets/deleteSelf.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".draggable"><span class="type-signature">&lt;static> </span>draggable(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>draggable</code> widget makes <a href="PhSim.DynObject.html">PhSim.DynObject</a> objects draggable.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>This:</h5>
+        <ul><li><a href="PhSim.html">PhSim</a></li></ul>
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_draggable.js.html">widgets/draggable.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".elevator"><span class="type-signature">&lt;static> </span>elevator(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>elevator</code> widget makes objects go back and forth within some range.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Options</p>
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pointA</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>First point of the elevator</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pointB</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Second point of the elevator</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bounding</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">"x"</span>
+|
+
+<span class="param-type">"y"</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Rules for deteriming the range of the elevator.</p>
+<p>If <code>widget.bounding</code> is equal to <code>&quot;x&quot;</code>, then the elevator switches direction if the
+<code>x</code> value of the position of <code>dyn_object</code> is equal to <code>widget.pointA.x</code> or <code>widget.pointB.x</code>.</p>
+<p>If <code>widget.bounding</code> is equal to <code>&quot;y&quot;</code>, then the elevator switches direction if the
+<code>y</code> value of the position of <code>dyn_object</code> is equal to <code>widget.pointA.y</code> or <code>widget.pointB.y</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_elevator.js.html">widgets/elevator.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".force"><span class="type-signature">&lt;static> </span>force(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>force</code> widget exerts a force on an object</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_motion.js.html">widgets/motion.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".noRotation"><span class="type-signature">&lt;static> </span>noRotation(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Make object not rotate</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets.js.html">widgets.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".objLink_a"><span class="type-signature">&lt;static> </span>objLink_a(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>objLink_a</code> widget executes all functions in the PhSim.DynObject#objLinkFunctions
+array of <code>widget.target</code>.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Reciever Object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Widget options</p>
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#LOAddress">LOAddress</a></span>
+|
+
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Target object</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_objLink.js.html">widgets/objLink.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".playAudio"><span class="type-signature">&lt;static> </span>playAudio(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>PlayAudio Widget</p>
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>This:</h5>
+        <ul><li><a href="PhSim.html">PhSim</a></li></ul>
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets.js.html">widgets.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".position"><span class="type-signature">&lt;static> </span>position(dynObject, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>position</code> widget sets the position of an object.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>This:</h5>
+        <ul><li>{<a href="PhSim.html">PhSim</a>}</li></ul>
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dynObject</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Dynamic object that will have its position changed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Widget options.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_motion.js.html">widgets/motion.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".rectText"><span class="type-signature">&lt;static> </span>rectText(dyn_object)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Widget that sets the PhSim.DynObject#rectTextWidget as true.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_rectText.js.html">widgets/rectText.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".rotation"><span class="type-signature">&lt;static> </span>rotation(dynObject, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>rotation</code> widget rotates an object.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>This:</h5>
+        <ul><li>{<a href="PhSim.html">PhSim</a>}</li></ul>
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dynObject</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_motion.js.html">widgets/motion.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setAngle"><span class="type-signature">&lt;static> </span>setAngle(dynObject, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>setAngle</code> widget makes a widget change angle.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dynObject</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Dynamic Object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_motion.js.html">widgets/motion.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setBorderColor"><span class="type-signature">&lt;static> </span>setBorderColor(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>setBorderColor</code> widget sets the border color of an object.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Widget properties.</p>
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The new color of the object border</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_setRenderProperties.js.html">widgets/setRenderProperties.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setColor"><span class="type-signature">&lt;static> </span>setColor(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>setColor</code> widget changes the color of an object.
+It utlizies the <a href="PhSim.DynObject.html#.setColor">PhSim.DynObject.setColor</a> function.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Dynamic Object that will have it's color changed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Widget Options</p>
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The new color of the object.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_setRenderProperties.js.html">widgets/setRenderProperties.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setLineWidth"><span class="type-signature">&lt;static> </span>setLineWidth(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>setLineWidth</code> widget sets the line width of an object.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The object to be affected.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Widget options</p>
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>width</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>New line width</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_setRenderProperties.js.html">widgets/setRenderProperties.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".stack"><span class="type-signature">&lt;static> </span>stack(o, w)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+        <h5>This:</h5>
+        <ul><li>{<a href="PhSim.html">PhSim</a>}</li></ul>
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>o</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DynSimObject</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>w</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Widget Options</p>
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rows</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Widget Rows</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rowDist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Distance between two adjacent objects in a row</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>columns</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Columns</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>colDist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Distance between two adjecent objects in the column</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_stack.js.html">widgets/stack.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".toggleLock"><span class="type-signature">&lt;static> </span>toggleLock(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>toggleLock</code> widget toggles the lock status of the Dynamic Object.
+If locked, the object is unlocked.
+If unlocked, the object is locked.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Configuration</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_lock.js.html">widgets/lock.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".toggleSemiLock"><span class="type-signature">&lt;static> </span>toggleSemiLock(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>toggleSemiLock</code> widget toggles the semi-lock status of the Dynamic Object.
+If semi-locked, the object is semi-unlocked.
+If semi-unlocked, the object is semi-locked.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Configuration</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_lock.js.html">widgets/lock.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".transformCameraByObj"><span class="type-signature">&lt;static> </span>transformCameraByObj(dyn_object)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>transformCameraByObj</code> widget transforms the camera by an object.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>This:</h5>
+        <ul><li><a href="PhSim.html">PhSim</a></li></ul>
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Object that will transform object.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_transformCameraByObj.js.html">widgets/transformCameraByObj.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".translate"><span class="type-signature">&lt;static> </span>translate(dynObject, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>translate</code> widget moves objects.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>This:</h5>
+        <ul><li>{<a href="PhSim.html">PhSim</a>}</li></ul>
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dynObject</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Dynamic Object to be translated.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Widget options.</p>
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>vector</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Translation vector</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_motion.js.html">widgets/motion.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".velocity"><span class="type-signature">&lt;static> </span>velocity(dynObject, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>velocity</code> widget makes dynamic objects go at a certain velocity.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>This:</h5>
+        <ul><li>{<a href="PhSim.html">PhSim</a>}</li></ul>
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dynObject</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>vector</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Velocity vector</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_motion.js.html">widgets/motion.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".wFunction"><span class="type-signature">&lt;static> </span>wFunction(dyn_object, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>The <code>wFunction</code> widget is used to create wFunctions.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dyn_object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WFunctionOptions</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_wFunction.js.html">widgets/wFunction.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	Copyright 2020 Mjduniverse
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
+	
+		on 2020-12-24T23:11:30-06:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>PhSim Source: events/registerEvents.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">PhSim</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="matterPlugin.Body.html">matterPlugin.Body</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.html#.Centroid">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="widgets_wFunction.module_js.html">widgets/wFunction.js</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="@.html">@</a></li><li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Audio.AudioArray.html">PhSim.Audio.AudioArray</a></li><li><a href="PhSim.BoundingBox.html">PhSim.BoundingBox</a></li><li><a href="PhSim.Camera.html">PhSim.Camera</a></li><li><a href="PhSim.DynObject.html">PhSim.DynObject</a></li><li><a href="PhSim.Events.PhSimCollision.html">PhSim.Events.PhSimCollision</a></li><li><a href="PhSim.Events.PhSimDynEvent.html">PhSim.Events.PhSimDynEvent</a></li><li><a href="PhSim.Events.PhSimEventKey.html">PhSim.Events.PhSimEventKey</a></li><li><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></li><li><a href="PhSim.EventStack.html">PhSim.EventStack</a></li><li><a href="PhSim.Game.html">PhSim.Game</a></li><li><a href="PhSim.Game.Options.html">PhSim.Game.Options</a></li><li><a href="PhSim.PhRender.html">PhSim.PhRender</a></li><li><a href="PhSim.Sprites.spriteImgObj.html">PhSim.Sprites.spriteImgObj</a></li><li><a href="PhSim.Static.html">PhSim.Static</a></li><li><a href="PhSim.Static.Camera.html">PhSim.Static.Camera</a></li><li><a href="PhSim.Static.Circle.html">PhSim.Static.Circle</a></li><li><a href="PhSim.Static.Gradient.html">PhSim.Static.Gradient</a></li><li><a href="PhSim.Static.GradientLimits.html">PhSim.Static.GradientLimits</a></li><li><a href="PhSim.Static.GradientStop.html">PhSim.Static.GradientStop</a></li><li><a href="PhSim.Static.Layer.html">PhSim.Static.Layer</a></li><li><a href="PhSim.Static.Polygon.html">PhSim.Static.Polygon</a></li><li><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></li><li><a href="PhSim.Static.RegPolygon.html">PhSim.Static.RegPolygon</a></li><li><a href="PhSim.Static.SimBox.html">PhSim.Static.SimBox</a></li><li><a href="PhSim.Static.Simulation.html">PhSim.Static.Simulation</a></li><li><a href="PhSim.Vector.html">PhSim.Vector</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#event:mousedown">event:mousedown</a></li><li><a href="global.html#event:mousemove">event:mousemove</a></li><li><a href="PhSim.Events.html#event:objmousedown">PhSim.Events#event:objmousedown</a></li><li><a href="PhSim.Events.html#event:objmouseup">PhSim.Events#event:objmouseup</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="tutorial-Creating PhSim Composite Simulation.html">Creating PhSim Composite Simulation</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li><li><a href="tutorial-dynamic-objects.html">dynamic-objects</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#DynObject">DynObject</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="externals.list.html" class="dropdown-toggle" data-toggle="dropdown">Externals<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="external-MatterBody.html">MatterBody</a></li><li><a href="external-MouseEvent.html">MouseEvent</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: events/registerEvents.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript ">/**
+ * Fire the mousedown event for PhSim.
+ * If {@link PhSim#objMouseArr} length is greater than zero, 
+ * this also executes the objmousedown event
+ *
+ * @listens objmousedown
+ * @function
+ * @param {MouseEvent} e - Mouse Event Object
+ */
+
+/**
+ * The standard object for mouse related DOM events
+ * @external MouseEvent
+ * @type {MouseEvent} 
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent
+ */
+
+
+/**
+ * Listens click event
+ * @function
+ * @listens MouseEvent
+ * @param {MouseEvent} e 
+ */
+
+/**
+ * Fire the mousedown event for PhSim.
+ * If {@link PhSim#objMouseArr} length is greater than zero, 
+ * this also executes the objmousedown event
+ *
+ * @listens MouseEvent
+ * @function
+ * @param {MouseEvent} e - Mouse Event Object
+ */
+
+/**
+ * @function
+ * @param {MouseEvent} e 
+ */
+
+/**
+ * @function
+ * @param {MouseEvent} e 
+ */
+
+
+
+/**
+ * 
+ * Create a wrapping function that is used for events.
+ * 
+ * @param {Function} f - Function
+ * 
+ */
+
+PhSim.prototype.getEventBridge = function(f) {
+
+	var self = this;
+
+	return function(e) {
+		f.call(self,e);
+	}
+}
+
+/**
+ * 
+ * Used to set event listeners for a canvas.
+ * This function works if {@link PhSim.prototype#simCtx} 
+ * and {@link PhSim.prototype#simCanvas} are set.
+ * 
+ * @function
+ * @this PhSim
+ *  
+ */
+
+PhSim.prototype.registerCanvasEvents = function() {
+
+	var self = this;
+
+	/**
+	 * @function 
+	 * @this HTMLCanvasElement
+	 * @param {external:MouseEvent} e - MouseEvent object
+	 * 
+	 * @fires Events#mousedown
+	 * @fires Events#objmousedown
+	 * 
+	 */
+
+
+	this.dispatchMouseDown = function(e) {
+
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
+		var canvas = self.simCtx.canvas;
+		var rect = canvas.getBoundingClientRect();
+		eventObj.domEvent = e;
+		eventObj.x =  e.clientX - rect.left;
+		eventObj.y = e.clientY - rect.top;
+		eventObj.type = "mousedown";
+		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
+	
+		if(!self.paused) {
+			if(self.objMouseArr &amp;&amp; self.objMouseArr.length > 0) {
+				
+				eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
+
+				self.callEventClass("objmousedown",canvas,eventObj);
+
+				for(var i = 0; i &lt; eventObj.dynArr.length; i++) {
+					eventObj.dynArr[i].callEventClass("objmousedown",eventObj.dynArr[i],eventObj);
+				}
+
+			}
+		}
+
+		/**
+		 * PhSim `mousedown` event.
+		 * @event mousedown
+		 * @type {PhSim.Events.PhSimMouseEvent}
+		 */
+	
+		self.callEventClass("mousedown",canvas,eventObj);
+	}
+
+	this.simCanvas.addEventListener("mousedown",this.dispatchMouseDown);
+
+	/**
+	 * @function
+	 * @param {external:MouseEvent} e 
+	 * 
+	 * @fires Events#click
+	 * @fires Events#objclick
+	 * 
+	 */
+
+	this.dispatchClick = function(e) {
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
+		var canvas = self.simCtx.canvas;
+		var rect = canvas.getBoundingClientRect();
+		eventObj.domEvent = e;
+		eventObj.x =  e.clientX - rect.left;
+		eventObj.y = e.clientY - rect.top;
+		eventObj.type = "click";
+		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
+
+		if(self.objMouseArr.length > 0) {
+
+			eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
+
+			self.callEventClass("objclick",canvas,eventObj);
+
+			for(var i = 0; i &lt; eventObj.dynArr.length; i++) {
+				eventObj.dynArr[i].callEventClass("objclick",eventObj.dynArr[i],eventObj);
+			}
+
+		}
+	
+		self.callEventClass("click",canvas,eventObj);
+	}
+
+	this.simCanvas.addEventListener("click",this.dispatchClick);
+
+	/**
+	 * 
+	 * Dispatch `mousemove` event.
+	 * 
+	 * @function
+	 * @param {external:MouseEvent} e - Standard MouseEvent Javascript object 
+	 * 
+	 * @fires PhSim.Events#objmousemove
+	 * @fires PhSim.Events#objmouseover
+	 * @fires PhSim.Events#objmouseout
+	 * @fires PhSim.Events#mousemove
+	 */
+
+	this.dispatchMouseMove = function(e) {
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
+		var canvas = self.simCtx.canvas;
+		var rect = canvas.getBoundingClientRect();
+		eventObj.domEvent = e;
+	
+		eventObj.x =  e.clientX - rect.left;
+		eventObj.y = e.clientY - rect.top;
+
+		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
+	
+		if(self.mouseX &amp;&amp; self.mouseY) {
+			self.prevMouseX = self.mouseX;
+			self.prevMouseY = self.mouseY;
+		}
+	
+		self.prevObjMouseArr = [];
+	
+		if(self.objMouseArr) {
+			self.prevObjMouseArr = [...self.objMouseArr];
+		}
+	
+		self.mouseX = eventObj.x;
+		self.mouseY = eventObj.y;
+	
+		self.dynArr = self.objMouseArr;
+	
+		self.objMouseArr = [];
+		self.formerMouseObjs = [];
+		self.newMouseObjs = [];
+	
+		if(self.init) {
+	
+			for(i = 0; i &lt; self.objUniverse.length; i++) {
+	
+				if(self.pointInObject(self.objUniverse[i],self.mouseX,self.mouseY)) {
+					self.objMouseArr.push(self.objUniverse[i])
+				}
+	
+				if(!self.objMouseArr.includes(self.objUniverse[i]) &amp;&amp; self.prevObjMouseArr.includes(self.objUniverse[i])) {
+					self.formerMouseObjs.push(self.objUniverse[i])
+				}
+	
+				if(self.objMouseArr.includes(self.objUniverse[i]) &amp;&amp; !self.prevObjMouseArr.includes(self.objUniverse[i])) {
+					self.newMouseObjs.push(self.objUniverse[i])
+				}
+	
+			}
+	
+			if(self.objMouseArr &amp;&amp; self.objMouseArr.length > 0) {
+
+				eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
+
+				self.callEventClass("objmousemove",canvas,eventObj);
+
+				for(var i = 0; i &lt; eventObj.dynArr.length; i++) {
+					eventObj.dynArr[i].callEventClass("objmousemove",eventObj.dynArr[i],eventObj);
+				}
+
+			}
+	
+			if(self.newMouseObjs &amp;&amp; self.newMouseObjs.length > 0) {
+
+				eventObj.newMouseObjs = self.newMouseObjs;
+
+				eventObj.target = eventObj.newMouseObjs[eventObj.dynArr.length - 1];
+
+				self.callEventClass("objmouseover",canvas,eventObj);
+
+				for(var i = 0; i &lt; eventObj.newMouseObjs.length; i++) {
+					eventObj.newMouseObjs[i].callEventClass("objmouseover",eventObj.newMouseObjs[i],eventObj);
+				}
+
+			}
+	
+			if(self.formerMouseObjs &amp;&amp; self.formerMouseObjs.length > 0) {
+
+				eventObj.formerMouseObjs = self.formerMouseObjs;
+
+				eventObj.target = eventObj.formerMouseObjs[eventObj.dynArr.length - 1];
+
+				self.callEventClass("objmouseout",canvas,eventObj);
+
+				for(var i = 0; i &lt; eventObj.formerMouseObjs.length; i++) {
+					eventObj.formerMouseObjs[i].callEventClass("objmouseout",eventObj.formerMouseObjs[i],eventObj);
+				}
+
+			}
+		}
+	
+		/**
+		 * @event mousemove
+		 */
+	
+		self.callEventClass("mousemove",canvas,eventObj);
+	
+		//console.log(eventObj);
+	}
+
+	this.simCanvas.addEventListener("mousemove",this.dispatchMouseMove);
+
+	this.dispatchMouseUp = function(e) {
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
+		var canvas = self.simCtx.canvas;
+		var rect = canvas.getBoundingClientRect();
+		eventObj.domEvent = e;
+		eventObj.x =  e.clientX - rect.left;
+		eventObj.y = e.clientY - rect.top;
+		self.mouseX = eventObj.x;
+		self.mouseY = eventObj.y;
+
+		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
+	
+		if(self.objMouseArr.length > 0) {
+
+			eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
+
+			self.callEventClass("objmouseup",canvas,eventObj);
+
+			for(var i = 0; i &lt; eventObj.dynArr.length; i++) {
+				eventObj.dynArr[i].callEventClass("objmouseup",eventObj.dynArr[i],eventObj);
+			}
+
+		}
+	
+		self.callEventClass("mouseup",canvas,eventObj);
+	}
+
+	this.simCanvas.addEventListener("mouseup",this.getEventBridge(self.dispatchMouseUp));
+
+	self.dispatchMouseOut = function(e) {
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
+		var canvas = self.simCtx.canvas;
+		var rect = canvas.getBoundingClientRect();
+		eventObj.domEvent = e;
+		eventObj.x =  e.clientX - rect.left;
+		eventObj.y = e.clientY - rect.top;
+		self.mouseX = eventObj.x;
+		self.mouseY = eventObj.y;
+		self.callEventClass("mouseout",canvas,eventObj);
+	}
+
+	this.simCanvas.addEventListener("mouseout",this.dispatchMouseOut);
+
+}
+
+PhSim.prototype.deregisterCanvasEvents = function() {
+	//self.simCanvas.removeEventListener("mousedown",self.getEventBridge(self.mousedownListener));
+	//self.simCanvas.removeEventListener("click",self.getEventBridge(self.clickListener));
+	//self.simCanvas.removeEventListener("mousemove",self.getEventBridge(self.mousemoveListener));
+	//self.simCanvas.removeEventListener("mouseup",self.getEventBridge(self.mouseupListener));
+	//self.simCanvas.removeEventListener("mouseout",self.getEventBridge(self.mouseoutListener));
+
+}
+
+PhSim.prototype.registerKeyEvents = function() {
+
+	var self = this;
+
+	self.windowObj = self.windowObj || window;
+
+	self.keydownBridge = function(e) {
+		var eventObj = new PhSim.Events.PhSimEventKey();
+		eventObj.domEvent = e;
+		eventObj.key = e.key;
+		eventObj.code = e.code;
+		eventObj.type = "keydown";
+		self.callEventClass("keydown",this,eventObj);
+	}
+
+	self.keydownBridgeWrapper = function(e) {
+		if(!self.filter) {
+			self.keydownBridge(e);
+		}
+	}
+
+	self.windowObj.addEventListener("keydown",self.keydownBridgeWrapper);
+}
+
+PhSim.prototype.deregisterKeyEvents = function() {
+	this.windowObj.removeEventListener("keydown",self.keydownBridgeWrapper);
+}</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	Copyright 2020 Mjduniverse
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
+	
+		on 2020-12-24T23:11:29-06:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>
