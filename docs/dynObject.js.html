@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>PhSim Source: dynObject.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">PhSim</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="matterPlugin.Body.html">matterPlugin.Body</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.html#.Centroid">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="widgets_wFunction.module_js.html">widgets/wFunction.js</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="@.html">@</a></li><li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Audio.AudioArray.html">PhSim.Audio.AudioArray</a></li><li><a href="PhSim.BoundingBox.html">PhSim.BoundingBox</a></li><li><a href="PhSim.Camera.html">PhSim.Camera</a></li><li><a href="PhSim.DynObject.html">PhSim.DynObject</a></li><li><a href="PhSim.Events.PhSimCollision.html">PhSim.Events.PhSimCollision</a></li><li><a href="PhSim.Events.PhSimDynEvent.html">PhSim.Events.PhSimDynEvent</a></li><li><a href="PhSim.Events.PhSimEventKey.html">PhSim.Events.PhSimEventKey</a></li><li><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></li><li><a href="PhSim.EventStack.html">PhSim.EventStack</a></li><li><a href="PhSim.Game.html">PhSim.Game</a></li><li><a href="PhSim.Game.Options.html">PhSim.Game.Options</a></li><li><a href="PhSim.PhRender.html">PhSim.PhRender</a></li><li><a href="PhSim.Sprites.spriteImgObj.html">PhSim.Sprites.spriteImgObj</a></li><li><a href="PhSim.Static.html">PhSim.Static</a></li><li><a href="PhSim.Static.Camera.html">PhSim.Static.Camera</a></li><li><a href="PhSim.Static.Circle.html">PhSim.Static.Circle</a></li><li><a href="PhSim.Static.Gradient.html">PhSim.Static.Gradient</a></li><li><a href="PhSim.Static.GradientLimits.html">PhSim.Static.GradientLimits</a></li><li><a href="PhSim.Static.GradientStop.html">PhSim.Static.GradientStop</a></li><li><a href="PhSim.Static.Layer.html">PhSim.Static.Layer</a></li><li><a href="PhSim.Static.Polygon.html">PhSim.Static.Polygon</a></li><li><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></li><li><a href="PhSim.Static.RegPolygon.html">PhSim.Static.RegPolygon</a></li><li><a href="PhSim.Static.SimBox.html">PhSim.Static.SimBox</a></li><li><a href="PhSim.Static.Simulation.html">PhSim.Static.Simulation</a></li><li><a href="PhSim.Vector.html">PhSim.Vector</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#event:mousedown">event:mousedown</a></li><li><a href="global.html#event:mousemove">event:mousemove</a></li><li><a href="PhSim.Events.html#event:objmousedown">PhSim.Events#event:objmousedown</a></li><li><a href="PhSim.Events.html#event:objmouseup">PhSim.Events#event:objmouseup</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="tutorial-Creating PhSim Composite Simulation.html">Creating PhSim Composite Simulation</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li><li><a href="tutorial-dynamic-objects.html">dynamic-objects</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#DynObject">DynObject</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="externals.list.html" class="dropdown-toggle" data-toggle="dropdown">Externals<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="external-MatterBody.html">MatterBody</a></li><li><a href="external-MouseEvent.html">MouseEvent</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: dynObject.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript ">const Static = require("./objects");
+const PhSim = require("./phSim");
+const Vertices = require("./tools/vertex");
+const PhSimEventTarget = require("./events/eventListener");
+const EventStack = require("./events/eventStack");
+
+/**
+ * 
+ * Create Dynamic Object from static object
+ * @constructor
+ * @memberof PhSim
+ * @param {PhSimObject} staticObject - Static Object
+ * @param {Matter.Body} [matterBody] - Matter Body
+ * 
+ * @mixes PhSim.PhSimEventTarget
+ * @mixes StaticObject
+ * 
+ * @property {Number} x - x position
+ * @property {Number} y - y position
+ * 
+ */
+
+var DynObject = function(staticObject,matterBody) {
+
+	Object.assign(this,PhSimEventTarget);
+
+	var self = this;
+
+	Object.assign(this,JSON.parse(JSON.stringify(staticObject)));
+
+	this.matter = matterBody || PhSim.DynObject.createMatterObject(staticObject);
+
+	if(staticObject.shape === "polygon") {
+		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
+	}
+
+	this.firstCycle = staticObject.cycle;
+
+	if(staticObject.shape === "composite") {
+		this.flattenedParts = DynObject.flattenComposite();
+	}
+
+	/** 
+	 * Reference to static object used to create the DynObject
+	 * @type {StaticObject}
+	 */
+
+	this.static = staticObject;
+
+	/** 
+	 * Object ID 
+	 * @type {String}
+	 * */
+
+	this.id = DynObject.nextId;
+	DynObject.nextId++;
+	
+	/**
+	 * Reference to parent simulation
+	 * @type {null|PhSim}
+	 */
+
+	this.phSim;
+
+	/**
+ 	 * Object containing array functions to be called.
+ 	 * @type {PhSim.EventStack}
+ 	 */
+
+	this.eventStack = new EventStack();
+
+	/** 
+	 * Refernce of DynObj in matter object 
+	 * @type {PhSim.DynObject}
+	 * */
+
+	this.matter.plugin.dynObject = this;
+
+}
+
+
+/**
+ * Set color for dynObject.
+ * This can be done alternatively by setting `dynObject.fillStyle` directly.
+ * 
+ * @param {PhSim.DynObject} dyn_object - Dynamic Object
+ * @param {String} colorStr - Color String
+ */
+
+DynObject.setColor = function(dyn_object,colorStr) {
+	dyn_object.fillStyle = colorStr;
+}
+
+/**
+ * Set color for dynObject.
+ * This can be done alternatively by setting `dynObject.fillStyle` directly.
+ * 
+ * @param {String} colorStr - Color String
+ */
+
+DynObject.prototype.setColor = function(colorStr) {
+	return DynObject.setColor(this,colorStr)
+}
+
+/**
+ * Set border color.
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {String} colorStr 
+ */
+
+DynObject.setBorderColor = function(dyn_object,colorStr) {
+	dyn_object.strokeStyle = colorStr;
+}
+
+/**
+ * Set border color.
+ * @param {String} colorStr 
+ */
+
+DynObject.prototype.setBorderColor = function(colorStr) {
+	return DynObject.setBorderColor(this,colorStr);
+}
+
+/**
+ * 
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Number} lineWidth 
+ */
+
+DynObject.setLineWidth = function(dyn_object,lineWidth) {
+	dyn_object.lineWidth = lineWidth;
+}
+
+DynObject.setRegPolygonSideNumber = function(dyn_object,sides) {
+
+}
+
+/**
+ * 
+ * @function
+ * @param {PhSimObject} composite - The composite to be flattened.
+ * @returns {PhSimObject[]} - The array of objects found in the composites. 
+ */
+
+DynObject.flattenComposite = function(composite) {
+
+	var a = [];
+
+	/**
+	 * 
+	 * @param {*} composite
+	 * @inner
+	 */
+	
+	var __f = function(composite) {
+
+		for(var i = 0; i &lt; composite.parts.length; i++) {
+
+			if(composite.parts[i].shape === "composite") {
+				DynObject.flattenComposite(composite.parts[i].shape === "composite");
+			}
+
+			else {
+				a.push(composite.parts[i]);
+			}
+
+		}
+
+	}
+
+	__f(composite);
+
+	return a;
+
+}
+
+/**
+ * 
+ * Create path
+ * 
+ * @function
+ * @param {Vector[]} vectorSet 
+ * @param {Path} options 
+ */
+
+DynObject.createPath = function(vectorSet,options) {
+	var o = new Static.Polygon(vectorSet);
+	Object.assign(o,options);
+	return new DynObject(o);
+}
+
+/**
+ * Create circle
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of center
+ * @param {Number} y - y-coordinate of center
+ * @param {Number} r - radius
+ * @param {Circle} options - options
+ * @returns {PhSim.DynObject}
+ */
+
+DynObject.createCircle = function(x,y,r,options = {}) {
+	var o = new Static.Circle(x,y,r);
+	Object.assign(o,options);
+	return new DynObject(o);
+}
+
+/**
+ * 
+ * Create rectangle
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of upper left corner 
+ * @param {Number} y - y-coordinate of upper left corner 
+ * @param {Number} w - Width
+ * @param {Number} h - Height
+ * @param {Rectangle} options 
+ * @returns {PhSim.DynObject} - The rectangle
+ */
+
+DynObject.createRectangle = function(x,y,w,h,options = {}) {
+	var o = new Static.Rectangle(x,y,w,h);
+	Object.assign(o,options);
+}
+
+/**
+ * Create regular polgyon.
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of center
+ * @param {Number} y - y-coordinate of center
+ * @param {Number} r - radius
+ * @param {Number} n - number of sides
+ * @param {RegPolygon} options - options
+ * @returns {PhSim.DynObject}
+ */
+
+DynObject.createRegPolygon = function(x,y,r,n,options = {}) {
+	var o = new Static.RegPolygon(x,y,r,n);
+	Object.assign(o,options);
+	return new DynObject(o);
+}
+
+/**
+ * 
+ * Create a matter.js object from a DynSim static object
+ * 
+ * @function
+ * @param {StaticObject} staticObject
+ * @returns {MatterBody} 
+ */
+
+DynObject.createMatterObject = function(staticObject) {
+
+	var opts = staticObject.matter || {}
+
+	opts.label = staticObject.name || "Untitled Object";
+
+	opts.isStatic = staticObject.semiLocked;
+
+	opts.isStatic = staticObject.locked;
+
+	if(typeof staticObject.density === "number") {
+		opts.density = staticObject.density;
+
+	}
+
+	else {
+		opts.density = 0.001;
+	}
+
+	if(typeof staticObject.mass === "number") {
+		opts.mass = staticObject.mass;
+		opts.inverseMass = 1/staticObject.mass;
+	}
+
+	if(typeof staticObject.airFriction === "number") {
+		opts.airFriction = staticObject.airFriction;
+	}
+
+	if(Number.isInteger(staticObject.collisionNum)) {
+		opts.collisionFilter = staticObject.collisionNum;
+	}
+
+
+	if(staticObject.shape === "polygon") {
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
+	}
+
+	
+	else if(staticObject.shape === "circle") {
+		return Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
+	}
+
+
+	else if(staticObject.shape === "rectangle") {
+		var set = Vertices.rectangle(staticObject);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+	}
+
+	else if(staticObject.shape === "regPolygon") {
+		var set = Vertices.regPolygon(staticObject);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+	}
+
+
+}
+
+DynObject.nextId = 0;
+
+/**
+ * A PhSimObject is either a static object or a dynamic object.
+ * 
+ * @typedef {PhSim.DynObject|StaticObject} PhSimObject
+ * 
+ */
+
+ /**
+  * A PhSimObject array is an array of PhSimObject objects
+  * @typedef {PhSimObject[]} PhSimObjectArr
+  */
+
+module.exports = DynObject;</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	Copyright 2020 Mjduniverse
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
+	
+		on 2020-12-24T23:11:29-06:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

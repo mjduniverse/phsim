@@ -1,0 +1,24 @@
+{
+  "opts": {
+    "template": "./node_modules/ink-docstrap/template",
+    "readme": "./README.md",
+    "recurseDepth": 10,
+    "destination": "./docs/",
+    "theme_opts": {
+      "theme": "dark"
+    },
+
+    "tutorials": "./tutorials"
+
+  },
+
+  "templates": {
+    "copyright": "Copyright 2020 Mjduniverse",
+    "systemName": "PhSim",
+    "outputSourceFiles":true
+  },
+
+  "plugins": [
+    "plugins/markdown"
+  ]
+}

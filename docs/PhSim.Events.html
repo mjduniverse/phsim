@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>PhSim Namespace: Events</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">PhSim</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="matterPlugin.Body.html">matterPlugin.Body</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.html#.Centroid">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="widgets_wFunction.module_js.html">widgets/wFunction.js</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="@.html">@</a></li><li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Audio.AudioArray.html">PhSim.Audio.AudioArray</a></li><li><a href="PhSim.BoundingBox.html">PhSim.BoundingBox</a></li><li><a href="PhSim.Camera.html">PhSim.Camera</a></li><li><a href="PhSim.DynObject.html">PhSim.DynObject</a></li><li><a href="PhSim.Events.PhSimCollision.html">PhSim.Events.PhSimCollision</a></li><li><a href="PhSim.Events.PhSimDynEvent.html">PhSim.Events.PhSimDynEvent</a></li><li><a href="PhSim.Events.PhSimEventKey.html">PhSim.Events.PhSimEventKey</a></li><li><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></li><li><a href="PhSim.EventStack.html">PhSim.EventStack</a></li><li><a href="PhSim.Game.html">PhSim.Game</a></li><li><a href="PhSim.Game.Options.html">PhSim.Game.Options</a></li><li><a href="PhSim.PhRender.html">PhSim.PhRender</a></li><li><a href="PhSim.Sprites.spriteImgObj.html">PhSim.Sprites.spriteImgObj</a></li><li><a href="PhSim.Static.html">PhSim.Static</a></li><li><a href="PhSim.Static.Camera.html">PhSim.Static.Camera</a></li><li><a href="PhSim.Static.Circle.html">PhSim.Static.Circle</a></li><li><a href="PhSim.Static.Gradient.html">PhSim.Static.Gradient</a></li><li><a href="PhSim.Static.GradientLimits.html">PhSim.Static.GradientLimits</a></li><li><a href="PhSim.Static.GradientStop.html">PhSim.Static.GradientStop</a></li><li><a href="PhSim.Static.Layer.html">PhSim.Static.Layer</a></li><li><a href="PhSim.Static.Polygon.html">PhSim.Static.Polygon</a></li><li><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></li><li><a href="PhSim.Static.RegPolygon.html">PhSim.Static.RegPolygon</a></li><li><a href="PhSim.Static.SimBox.html">PhSim.Static.SimBox</a></li><li><a href="PhSim.Static.Simulation.html">PhSim.Static.Simulation</a></li><li><a href="PhSim.Vector.html">PhSim.Vector</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#event:mousedown">event:mousedown</a></li><li><a href="global.html#event:mousemove">event:mousemove</a></li><li><a href="PhSim.Events.html#event:objmousedown">PhSim.Events#event:objmousedown</a></li><li><a href="PhSim.Events.html#event:objmouseup">PhSim.Events#event:objmouseup</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="tutorial-Creating PhSim Composite Simulation.html">Creating PhSim Composite Simulation</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li><li><a href="tutorial-dynamic-objects.html">dynamic-objects</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#DynObject">DynObject</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="externals.list.html" class="dropdown-toggle" data-toggle="dropdown">Externals<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="external-MatterBody.html">MatterBody</a></li><li><a href="external-MouseEvent.html">MouseEvent</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
+
+	<h1 class="page-title">Namespace: Events</h1>
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="PhSim.html">PhSim</a>.</span>
+        
+        Events
+        </h2>
+        
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Namespace for event objects</p></div>
+        
+
+        
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="events_eventObjects.js.html">events/eventObjects.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="PhSim.Events.PhSimCollision.html">PhSimCollision</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Events.PhSimDynEvent.html">PhSimDynEvent</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Events.PhSimEventKey.html">PhSimEventKey</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Events.PhSimMouseEvent.html">PhSimMouseEvent</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Events</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="event:objmousedown">objmousedown</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Event fired whenever the mouse is pressed down on an object.</p>
+    </div>
+    
+
+    
+
+    
+        <h5>Type: 
+<span class="param-type"><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></span>
+
+
+</h5>
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="events_eventObjects.js.html">events/eventObjects.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="event:objmouseup">objmouseup</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Event fired whenever the mouse is let go of while over an object</p>
+    </div>
+    
+
+    
+
+    
+        <h5>Type: 
+<span class="param-type"><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></span>
+
+
+</h5>
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="events_eventObjects.js.html">events/eventObjects.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
+    
+</article>
+
+</section>
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	Copyright 2020 Mjduniverse
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
+	
+		on 2020-12-24T23:11:29-06:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

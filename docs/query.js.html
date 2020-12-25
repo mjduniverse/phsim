@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>PhSim Source: query.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">PhSim</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="matterPlugin.Body.html">matterPlugin.Body</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.html#.Centroid">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="widgets_wFunction.module_js.html">widgets/wFunction.js</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="@.html">@</a></li><li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Audio.AudioArray.html">PhSim.Audio.AudioArray</a></li><li><a href="PhSim.BoundingBox.html">PhSim.BoundingBox</a></li><li><a href="PhSim.Camera.html">PhSim.Camera</a></li><li><a href="PhSim.DynObject.html">PhSim.DynObject</a></li><li><a href="PhSim.Events.PhSimCollision.html">PhSim.Events.PhSimCollision</a></li><li><a href="PhSim.Events.PhSimDynEvent.html">PhSim.Events.PhSimDynEvent</a></li><li><a href="PhSim.Events.PhSimEventKey.html">PhSim.Events.PhSimEventKey</a></li><li><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></li><li><a href="PhSim.EventStack.html">PhSim.EventStack</a></li><li><a href="PhSim.Game.html">PhSim.Game</a></li><li><a href="PhSim.Game.Options.html">PhSim.Game.Options</a></li><li><a href="PhSim.PhRender.html">PhSim.PhRender</a></li><li><a href="PhSim.Sprites.spriteImgObj.html">PhSim.Sprites.spriteImgObj</a></li><li><a href="PhSim.Static.html">PhSim.Static</a></li><li><a href="PhSim.Static.Camera.html">PhSim.Static.Camera</a></li><li><a href="PhSim.Static.Circle.html">PhSim.Static.Circle</a></li><li><a href="PhSim.Static.Gradient.html">PhSim.Static.Gradient</a></li><li><a href="PhSim.Static.GradientLimits.html">PhSim.Static.GradientLimits</a></li><li><a href="PhSim.Static.GradientStop.html">PhSim.Static.GradientStop</a></li><li><a href="PhSim.Static.Layer.html">PhSim.Static.Layer</a></li><li><a href="PhSim.Static.Polygon.html">PhSim.Static.Polygon</a></li><li><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></li><li><a href="PhSim.Static.RegPolygon.html">PhSim.Static.RegPolygon</a></li><li><a href="PhSim.Static.SimBox.html">PhSim.Static.SimBox</a></li><li><a href="PhSim.Static.Simulation.html">PhSim.Static.Simulation</a></li><li><a href="PhSim.Vector.html">PhSim.Vector</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#event:mousedown">event:mousedown</a></li><li><a href="global.html#event:mousemove">event:mousemove</a></li><li><a href="PhSim.Events.html#event:objmousedown">PhSim.Events#event:objmousedown</a></li><li><a href="PhSim.Events.html#event:objmouseup">PhSim.Events#event:objmouseup</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="tutorial-Creating PhSim Composite Simulation.html">Creating PhSim Composite Simulation</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li><li><a href="tutorial-dynamic-objects.html">dynamic-objects</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#DynObject">DynObject</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="externals.list.html" class="dropdown-toggle" data-toggle="dropdown">Externals<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="external-MatterBody.html">MatterBody</a></li><li><a href="external-MouseEvent.html">MouseEvent</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: query.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript ">const DynObject = require("./dynObject");
+const Vector = require("./tools/vector");
+
+/**
+ * @namespace
+ * @memberof PhSim
+ */
+
+PhSim.Query = {}
+
+/**
+ * 
+ * Get the special points of a rectangle
+ * 
+ * @function
+ * @param {Object} rectangle 
+ */
+
+PhSim.Query.getSpecialRectanglePoints = function(rectangle) {
+	
+	var o = {
+
+		"center": {
+			"rel": {
+				"x": 0.5 * rectangle.w,
+				"y": 0.5 * rectangle.h
+			},
+	
+			"abs": {
+				"x": rectangle.x + o.center.rel.x,
+				"y": rectangle.h + o.center.rel.y
+			},
+		},
+
+		"sidepoint": {
+
+			"rel": {
+				"x": rectangle.w,
+				"y": 0.5 * rectangle.h
+			},
+
+			"abs": {
+				"x": o.sidepoint.rel.x + rectangle.x,
+				"y": o.sidepoint.rel.y + rectangle.y 
+			}
+
+		},
+
+	}
+
+	return o;
+
+}
+
+/**
+ * Get the status string of the the dynamic simulation
+ * @function
+ */
+
+PhSim.prototype.getStatusStr = function() {
+	return PhSim.statusStruct[this.status];
+}
+
+/**
+ * 
+ * Get collision classes
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject - Dynamic Object
+ * @returns {String[]}
+ * 
+ */
+
+PhSim.Query.getCollisionClasses = function(dynObject) {
+
+	if(dynObject.collisionClass) {
+		var a = dynObject.collisionClass;
+		var b = a.split(" ");
+		return b;
+	}
+
+	else {
+		return [];
+	}
+}
+
+/**
+ * @function
+ */
+
+PhSim.prototype.getUniversalObjArray = function() {
+	
+	var array = []
+	
+	for(var i = 0; i &lt; this.matterJSWorld.composites.length; i++) {
+		
+		var a = this.matterJSWorld.composites[i].bodies;
+
+		for(var j = 0; j &lt; a.length; j++) {
+			array.push(a[j]);
+		}
+
+	}
+
+	for(var i = 0; i &lt; this.matterJSWorld.bodies.length; i++) {
+		array.push(this.matterJSWorld.bodies[i]);
+	}
+
+	return array;
+
+}
+
+/**
+ * Check widget type and return the widget type
+ * @param {WidgetOptions} widget 
+ */
+
+PhSim.Query.chkWidgetType = function(widget) {
+	
+	for(var i = 0; i &lt; PhSim.boolKey_lc.length; i++) {
+		if(widget[PhSim.boolKey_lc[i]]) {
+			return PhSim.boolKey_lc[i];
+		}
+	}
+
+	return "unknown_widget";
+
+}
+
+/**
+ * Get static object of a dynamic object
+ * @param {PhSim.DynObject} dynObject - The dynamic object
+ */
+
+PhSim.prototype.getStatic = function(dynObject) {
+	
+	if(dynObject.static || dynObject.static) {
+		return null;
+	}
+
+	else {
+		return dynObject.static;
+	}
+}
+
+/**
+ * Get object by name
+ * 
+ * @function
+ * @param {String} str - String for the name
+ * @returns {PhSimObject|null} -  Returns the object if found, but returns "null" object if not.
+ */
+
+PhSim.prototype.getObjectByName = function(str) {
+
+	for(var i = 0; i &lt; this.objUniverse.length; i++) {
+		if(this.objUniverse[i].name === str) {
+			return this.objUniverse[i];
+		}
+	}
+
+	return null;
+
+}
+
+/**
+ * Check if two objects are colliding
+ * @function
+ * @param {PhSim.DynObject} dynObjectA 
+ * @param {PhSim.DynObject} dynObjectB
+ * @returns {Boolean} 
+ */
+
+PhSim.prototype.collided = function(dynObjectA,dynObjectB) {
+	return Matter.SAT.collides(dynObjectA.matter,dynObjectB.matter).collided;
+}
+
+/**
+ * Check if an object is in a collision
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ * @returns {Boolean}
+ */
+
+PhSim.prototype.isInCollision = function(dynObject) {
+
+	var self = this;
+
+	var returnValue = false;
+
+	this.forAllObjects(function(object) {
+		var a = self.collided(dynObject,object);
+		if(a === true) {
+			returnValue = a;
+			return false;
+		}	
+	});
+
+	return returnValue;
+}
+
+/**
+ * See if point is contained in shape defined by vertices set.
+ * @function
+ * @param {Vector[]} a - Set of vertices
+ * @param {Vector} v - The vertex to be checked.
+ * @return {Boolean} - Returns true if `v` is contained in the shape defined by `a` and false if otherwise.
+ */
+
+PhSim.Query.pointInVerts = function(a,v) {
+
+	var canvas = document.createElement("canvas");
+	var ctx = canvas.getContext("2d");
+
+	ctx.beginPath();
+	ctx.moveTo(a[0].x,a[0].y);
+
+	for(var i = 0; i &lt; a.length; i++) {
+		ctx.lineTo(a[i].x,a[i].y);
+	}
+
+	ctx.closePath();
+	var p = ctx.isPointInPath(v.x,v.y);
+	ctx.stroke();
+
+
+	return p;
+
+
+}
+
+/**
+ * 
+ * See if point is in vertices border
+ * 
+ * @function
+ * @param {Vector[]} a - Vertices to check
+ * @param {Vector} v - Point to check.
+ * @param {Number} width - Width of vertices border
+ * @returns {Boolean} - Returns `true` if `v` is in the border of the 
+ * polygon defined by `a` and false otherwise.
+ */
+
+PhSim.Query.pointInVertsBorder = function(a,v,width) {
+
+	if(width) {
+		var canvas = document.createElement("canvas");
+		var ctx = canvas.getContext("2d");
+		ctx.lineWidth = width;
+		ctx.beginPath();
+		ctx.lineTo(a[0].x,a[0].y);
+
+		for(var i = 0; i &lt; a.length; i++) {
+			ctx.moveTo(a[i].x,a[i].y);
+		}
+
+		ctx.closePath();
+		var p = ctx.isPointInPath(v.x,v.y);
+		ctx.stroke();
+
+
+		return p;		
+	}
+
+	else {
+		return false;
+	}
+
+}
+
+/**
+ * Deep clone a JavaScript object.
+ * @param {Object} o 
+ */
+
+PhSim.Query.deepClone = function(o) {
+	return JSON.parse(JSON.stringify(o));
+}
+
+/**
+ * @function
+ * @param {*} o 
+ * @param {*} x 
+ * @param {*} y 
+ */
+
+PhSim.Query.pointInRectangle = function(o,x,y) {
+	var a = PhSim.Vertices.rectangle(o);
+	return PhSim.Query.pointInVerts(a,new Vector(x,y));
+}
+
+/**
+ * 
+ * Check if a point (x,y) is in a dynamic object
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject - Dynamic Object
+ * @param {Number} x - x-coordinate
+ * @param {Number} y - y-coordinate
+ * @returns {Boolean}
+ */
+
+PhSim.Query.pointInObject = function(o,x,y) {
+
+	if(o.shape === "rectangle") {
+		return PhSim.Query.pointInRectangle(o,x,y);
+	}
+
+	else if(o.shape === "circle") {
+
+		var d = Vector.distance(o,new Vector(x,y));
+		
+		if(d &lt; o.radius) {
+			return true;
+		}
+
+		else {
+			return false;
+		}
+
+	}  
+	
+	else if(o.shape === "regPolygon") {
+		var a = PhSim.Vertices.regPolygon(o);
+		return PhSim.Query.pointInVerts(a,new Vector(x,y));
+	}
+
+	else if(o.shape === "polygon") {
+		return PhSim.Query.pointInVerts(o.verts,new Vector(x,y));
+	}
+}
+
+PhSim.prototype.pointInObject = function(o,x,y) {
+	return PhSim.Query.pointInObject(o,x,y)
+}
+
+/**
+ * Get object by ID
+ * 
+ * @function
+ * @param {String} idNum
+ * @returns {PhSim.DynObject} 
+ * 
+ */
+
+PhSim.prototype.getDynObjectByID = function(idNum) {
+
+	var a = this.getUniversalObjArray();
+
+	for(var i = 0; i &lt; a.length; i++) {
+		if(a[i].id === idNum) {
+			return a[i];
+		}
+	}
+
+}
+
+/**
+ * 
+ * Get array of objects that contain a certain point 
+ * 
+ * @function
+ * @param {Number} x - x-coordinate
+ * @param {Number} y - y-coordinate
+ * @returns {PhSim.DynObject[]}
+ * 
+ */
+
+PhSim.prototype.pointObjArray = function(x,y) {
+
+	var b = [];
+
+	var a = this.objUniverse || [];
+
+	for(var i = 0; i &lt; a.length; i++) {
+		if(this.pointInObject(a[i],x,y)) {
+			b.push(a[i]);
+		}
+	}
+
+	return b;
+
+}
+
+/** 
+ * Get the collison pairs that contain a certain object 
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject
+ * @returns {PhSim.phSimCollision[]}
+ * 
+ */
+
+PhSim.prototype.getCollisionList = function(dynObject) {
+
+	var z = [];
+
+	for(var i = 0; i &lt; this.matterJSEngine.pairs.list.length; i++) {
+
+		var a = this.matterJSEngine.pairs.list[i];
+
+		if(a.bodyA.plugin.dynObject.id === dynObject.id || a.bodyB.plugin.dynObject.id === dynObject.id) {
+			
+			var o = new PhSim.Events.PhSimCollision;
+			o.bodyA = a.bodyA.plugin.dynObject;
+			o.bodyB = a.bodyB.plugin.dynObject;
+			o.matter = a;
+			z.push(o);
+
+			console.dir(o);
+
+		}
+
+	}
+
+	return z;
+}
+
+/**
+ * 
+ * Get array of Dynamic Object colliding some specified colliding object
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject - Dynamic Object
+ * @returns {PhSim.DynObject[]}
+ * 
+ */
+
+PhSim.prototype.getCollidingObjects = function(dynObject) {
+	
+	var a = this.getCollisionList(dynObject);
+	var b = []
+
+	for(var i = 0; i &lt; a.length; i++) {
+
+		if(a[i].matter.bodyA.plugin.id === dynObject.id) {
+			b.push(a[i].bodyB);
+		}
+
+		if(a[i].matter.bodyB.plugin.id === dynObject.id) {
+			b.push(a[i].bodyA);		
+		}
+
+	}
+
+	return b;
+
+}
+
+/**
+ * Get senor classes
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ * @returns {String[]}
+ */
+
+PhSim.Query.getSensorClasses = function(dynObject) {
+
+	if(dynObject.sensorClass) {
+		var a = dynObject.sensorClass;
+		var b = a.split(" ");
+		return b;
+	}
+
+	else {
+		return [];
+	}
+}
+
+/**
+ * 
+ * Check if two objects share at least one sensor class
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObjectA 
+ * @param {PhSim.DynObject} dynObjectB 
+ * @returns {Boolean}
+ */
+
+PhSim.Query.sameSensorClasses = function(dynObjectA,dynObjectB) {
+	return PhSim.Query.intersectionExists(PhSim.Query.getSensorClasses(dynObjectA),PhSim.Query.getSensorClasses(dynObjectB));
+}
+
+PhSim.Query.intersectionExists = function(array1,array2) {
+
+	for(var i = 0; i &lt; array1.length; i++) {
+		var a = array2.indexOf(array1[i]);
+		if(a !== -1) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * 
+ * Get objects colliding some object that share the same 
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject - Object to check for colliding sensor objects
+ * @returns {PhSim.DynObject[]} 
+ */
+
+PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
+	
+	var a = this.getCollisionList(dynObject);
+	var b = []
+
+	for(var i = 0; i &lt; a.length; i++) {
+
+		var dynCol = a[i]
+		var matterCol = dynCol.matter;
+
+		if(matterCol.bodyA.plugin.dynObject.id === dynObject.id &amp;&amp; PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyB)) {
+			b.push(dynCol.bodyB);
+		}
+
+		if(matterCol.bodyB.plugin.dynObject.id === dynObject.id &amp;&amp; PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyA)) {
+			b.push(dynCol.bodyA);		
+		}
+
+	}
+
+	return b;
+
+}
+
+/**
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ * @returns {Boolean}
+ */
+
+PhSim.prototype.inSensorCollision = function(dynObject) {
+	
+	var a = this.getCollidingSensorObjects(dynObject); 
+	
+	if(a.length > 0) {
+		return true;	
+	}
+
+	else {
+		return false;
+	}
+}
+
+/**
+ * @function
+ * @param {Number} cx - x-coordinate of upper left corner.
+ * @param {Number} cy - y-coordinate of upper left corner.
+ * @param {Number} cw - width of rectangle
+ * @param {Number} ch - height of rectangle
+ * @param {Number} px - x-coordinate of point to be checked.
+ * @param {Number} py - y-coordinate of point to be checked.
+ * @returns {Boolean}
+ */
+
+PhSim.Query.isPointInRawRectangle = function(cx,cy,cw,ch,px,py) {
+	
+	var cond = (cx &lt; px) &amp;&amp; (px &lt; cx + cw) &amp;&amp; (cy &lt; py) &amp;&amp; (py &lt; cy + ch) 
+
+	if(cond) {
+		return true;
+	}
+
+	else {
+		return false;
+	}
+}
+
+/**
+ * 
+ * Get object that checks the collision relations between two objects
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObjectA - The first object
+ * @param {PhSim.DynObject} dynObjectB - The second object
+ * @returns {PhSim.CollisionReport} - A collision report that updates itself after each update
+ */
+
+PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
+
+	var self = this;
+	var report = new PhSim.CollisionReport();
+	report.before = null;
+	report.current = null;
+	report.difference = null;
+	report.objectA = dynObjectA;
+	report.objectB = dynObjectB;
+
+	this.on("beforeupdate",function() {
+		report.before = self.collided(dynObjectA,dynObjectB);
+	});
+
+	this.on("afterupdate",function() {
+		report.current = self.collided(dynObjectA,dynObjectB);
+		report.difference = report.current - report.before;
+		if(report.difference) {
+			var eventObj = new PhSim.Events.PhSimDynEvent();
+			eventObj.report = report;
+			eventObj.difference = report.difference;
+			self.callEventClass("collisionchange",self,eventObj);
+		}
+
+	})
+
+	return report;
+}
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	Copyright 2020 Mjduniverse
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
+	
+		on 2020-12-24T23:11:29-06:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>
