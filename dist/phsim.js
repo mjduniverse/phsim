@@ -8121,7 +8121,7 @@ PhSim.Widgets.deleteSelf = function(dyn_object,widget) {
         self.disableWFunction(ref);
     }
 
-    var ref = this.createWFunction(dyn_object,f,widget);
+    ref = this.createWFunction(dyn_object,f,widget);
 
 }
 
