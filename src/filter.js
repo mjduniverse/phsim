@@ -21,7 +21,7 @@ PhSim.prototype.configFilter = function(container) {
  */
 
 PhSim.prototype.enableFilter = function() {
-	var elmBox = this.simCanvas.getBoundingClientRect();
+	var elmBox = this.canvas.getBoundingClientRect();
 	this.htmlFilter.style.display = "inline-block";
 	this.htmlFilter.style.left = "0px";
 	this.htmlFilter.style.position = "absolute";
@@ -80,7 +80,7 @@ PhSim.prototype.alert = function(options) {
 
 	var rect = alertBox.getBoundingClientRect();
 
-	var elmBox = this.simCanvas.getBoundingClientRect();
+	var elmBox = this.canvas.getBoundingClientRect();
 
 	var alertBoxMsg = document.createElement("div");
 	alertBoxMsg.className = "phsim-alertbox-msg"

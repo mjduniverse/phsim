@@ -236,7 +236,7 @@ PhSim.prototype.connectCanvas = function(canvas) {
 	 * @type {HTMLCanvasElement}
 	 */
 
-	this.simCanvas = canvas;
+	this.canvas = canvas;
 
 	/**
 	 * Simulation context for the canvas
@@ -246,8 +246,8 @@ PhSim.prototype.connectCanvas = function(canvas) {
 	this.simCtx = canvas.getContext("2d");
 
 	
-	this.simCanvas.width = this.box.w || this.box.width;
-	this.simCanvas.height = this.box.h || this.box.height;
+	this.canvas.width = this.box.w || this.box.width;
+	this.canvas.height = this.box.h || this.box.height;
 	this.registerCanvasEvents();
 	this.configRender(this.simCtx);
 }
@@ -266,13 +266,13 @@ PhSim.prototype.connectContainer = function(c) {
 	
 	/**
 	 * The simulation container.
-	 * This is is supposed to be the wrapping element of the {@link PhSim#simCanvas|PhSim canvas}.
+	 * This is is supposed to be the wrapping element of the {@link PhSim#canvas|PhSim canvas}.
 	 * @type {HTMLElement}
 	 */
 
 	this.simContainer = c;
 
-	c.appendChild(this.simCanvas);
+	c.appendChild(this.canvas);
 	c.classList.add("phsim-container");
 
 	this.configFilter(c);
@@ -519,11 +519,11 @@ PhSim.prototype.loading = {
 
 PhSim.prototype.drawLoadingScreen = function() {
 	this.simCtx.fillStyle = this.loading.bgClr;
-	this.simCtx.fillRect(0,0,this.camera.scale,this.simCanvas.height);
+	this.simCtx.fillRect(0,0,this.camera.scale,this.canvas.height);
 	this.simCtx.fillStyle = this.loading.txtClr;
 	this.simCtx.textAlign = this.loading.txtAlign;
 	this.simCtx.font = this.loading.txtSize + "px " + this.loading.txtFace;
-	this.simCtx.fillText(this.loading.txt,this.simCanvas.width / 2,this.simCanvas.height / 2)
+	this.simCtx.fillText(this.loading.txt,this.canvas.width / 2,this.canvas.height / 2)
 }
 
 if(typeof window === "object") {
@@ -4468,7 +4468,7 @@ PhSim.prototype.configFilter = function(container) {
  */
 
 PhSim.prototype.enableFilter = function() {
-	var elmBox = this.simCanvas.getBoundingClientRect();
+	var elmBox = this.canvas.getBoundingClientRect();
 	this.htmlFilter.style.display = "inline-block";
 	this.htmlFilter.style.left = "0px";
 	this.htmlFilter.style.position = "absolute";
@@ -4527,7 +4527,7 @@ PhSim.prototype.alert = function(options) {
 
 	var rect = alertBox.getBoundingClientRect();
 
-	var elmBox = this.simCanvas.getBoundingClientRect();
+	var elmBox = this.canvas.getBoundingClientRect();
 
 	var alertBoxMsg = document.createElement("div");
 	alertBoxMsg.className = "phsim-alertbox-msg"
@@ -4879,7 +4879,7 @@ PhSim.prototype.getEventBridge = function(f) {
  * 
  * Used to set event listeners for a canvas.
  * This function works if {@link PhSim.prototype#simCtx} 
- * and {@link PhSim.prototype#simCanvas} are set.
+ * and {@link PhSim.prototype#canvas} are set.
  * 
  * @function
  * @this PhSim
@@ -4935,7 +4935,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 		self.callEventClass("mousedown",canvas,eventObj);
 	}
 
-	this.simCanvas.addEventListener("mousedown",this.dispatchMouseDown);
+	this.canvas.addEventListener("mousedown",this.dispatchMouseDown);
 
 	/**
 	 * @function
@@ -4971,7 +4971,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 		self.callEventClass("click",canvas,eventObj);
 	}
 
-	this.simCanvas.addEventListener("click",this.dispatchClick);
+	this.canvas.addEventListener("click",this.dispatchClick);
 
 	/**
 	 * 
@@ -5085,7 +5085,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 		//console.log(eventObj);
 	}
 
-	this.simCanvas.addEventListener("mousemove",this.dispatchMouseMove);
+	this.canvas.addEventListener("mousemove",this.dispatchMouseMove);
 
 	this.dispatchMouseUp = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
@@ -5114,7 +5114,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 		self.callEventClass("mouseup",canvas,eventObj);
 	}
 
-	this.simCanvas.addEventListener("mouseup",this.getEventBridge(self.dispatchMouseUp));
+	this.canvas.addEventListener("mouseup",this.getEventBridge(self.dispatchMouseUp));
 
 	self.dispatchMouseOut = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
@@ -5128,16 +5128,16 @@ PhSim.prototype.registerCanvasEvents = function() {
 		self.callEventClass("mouseout",canvas,eventObj);
 	}
 
-	this.simCanvas.addEventListener("mouseout",this.dispatchMouseOut);
+	this.canvas.addEventListener("mouseout",this.dispatchMouseOut);
 
 }
 
 PhSim.prototype.deregisterCanvasEvents = function() {
-	//self.simCanvas.removeEventListener("mousedown",self.getEventBridge(self.mousedownListener));
-	//self.simCanvas.removeEventListener("click",self.getEventBridge(self.clickListener));
-	//self.simCanvas.removeEventListener("mousemove",self.getEventBridge(self.mousemoveListener));
-	//self.simCanvas.removeEventListener("mouseup",self.getEventBridge(self.mouseupListener));
-	//self.simCanvas.removeEventListener("mouseout",self.getEventBridge(self.mouseoutListener));
+	//self.canvas.removeEventListener("mousedown",self.getEventBridge(self.mousedownListener));
+	//self.canvas.removeEventListener("click",self.getEventBridge(self.clickListener));
+	//self.canvas.removeEventListener("mousemove",self.getEventBridge(self.mousemoveListener));
+	//self.canvas.removeEventListener("mouseup",self.getEventBridge(self.mouseupListener));
+	//self.canvas.removeEventListener("mouseout",self.getEventBridge(self.mouseoutListener));
 
 }
 
