@@ -5574,15 +5574,17 @@ PhSim.prototype.getCollisionList = function(dynObject) {
 
 		var a = this.matterJSEngine.pairs.list[i];
 
-		if(a.bodyA.plugin.dynObject.id === dynObject.id || a.bodyB.plugin.dynObject.id === dynObject.id) {
-			
-			var o = new PhSim.Events.PhSimCollision;
-			o.bodyA = a.bodyA.plugin.dynObject;
-			o.bodyB = a.bodyB.plugin.dynObject;
-			o.matter = a;
-			z.push(o);
+		if(a.bodyA.parent === a.bodyA && a.bodyB.parent === a.bodyB) {
 
-			console.dir(o);
+			if(a.bodyA.plugin.dynObject.id === dynObject.id || a.bodyB.plugin.dynObject.id === dynObject.id) {
+			
+				var o = new PhSim.Events.PhSimCollision;
+				o.bodyA = a.bodyA.plugin.dynObject;
+				o.bodyB = a.bodyB.plugin.dynObject;
+				o.matter = a;
+				z.push(o);
+		
+			}
 
 		}
 
