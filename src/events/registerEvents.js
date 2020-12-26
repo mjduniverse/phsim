@@ -8,6 +8,8 @@
  * @param {MouseEvent} e - Mouse Event Object
  */
 
+const PhSim = require("../phSim");
+
 /**
  * The standard object for mouse related DOM events
  * @external MouseEvent
@@ -94,8 +96,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
 		eventObj.type = "mousedown";
 		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
 	
@@ -138,8 +140,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
 		eventObj.type = "click";
 		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
 
@@ -179,8 +181,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 	
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
+		eventObj.x =  e.clientX - rect.left - self.camera.x;
+		eventObj.y = e.clientY - rect.top - self.camera.y;
 
 		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
 	
@@ -279,8 +281,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
 		self.mouseX = eventObj.x;
 		self.mouseY = eventObj.y;
 
@@ -308,8 +310,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
 		self.mouseX = eventObj.x;
 		self.mouseY = eventObj.y;
 		self.callEventClass("mouseout",canvas,eventObj);

@@ -4807,7 +4807,7 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
 
 /***/ }),
 /* 23 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Fire the mousedown event for PhSim.
@@ -4818,6 +4818,8 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
  * @function
  * @param {MouseEvent} e - Mouse Event Object
  */
+
+const PhSim = __webpack_require__(0);
 
 /**
  * The standard object for mouse related DOM events
@@ -4905,8 +4907,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
 		eventObj.type = "mousedown";
 		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
 	
@@ -4949,8 +4951,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
 		eventObj.type = "click";
 		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
 
@@ -4990,8 +4992,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 	
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
+		eventObj.x =  e.clientX - rect.left - self.camera.x;
+		eventObj.y = e.clientY - rect.top - self.camera.y;
 
 		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
 	
@@ -5090,8 +5092,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
 		self.mouseX = eventObj.x;
 		self.mouseY = eventObj.y;
 
@@ -5119,8 +5121,8 @@ PhSim.prototype.registerCanvasEvents = function() {
 		var canvas = self.simCtx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
-		eventObj.x =  e.clientX - rect.left;
-		eventObj.y = e.clientY - rect.top;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
 		self.mouseX = eventObj.x;
 		self.mouseY = eventObj.y;
 		self.callEventClass("mouseout",canvas,eventObj);
