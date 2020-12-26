@@ -102,7 +102,7 @@ PhSim.prototype.alert = function(options) {
 	closeButton.innerText = options.closeButtonTxt;
 	alertBox.appendChild(closeButton);
 
-	this.simContainer.appendChild(alertBox);
+	this.container.appendChild(alertBox);
 
 	alertBox.style.position = "absolute";
 	alertBox.style.left = (elmBox.width * 0.5 - alertBox.offsetWidth * 0.5) + "px";

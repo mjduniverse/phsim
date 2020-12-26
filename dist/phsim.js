@@ -270,7 +270,7 @@ PhSim.prototype.connectContainer = function(c) {
 	 * @type {HTMLElement}
 	 */
 
-	this.simContainer = c;
+	this.container = c;
 
 	c.appendChild(this.canvas);
 	c.classList.add("phsim-container");
@@ -4549,7 +4549,7 @@ PhSim.prototype.alert = function(options) {
 	closeButton.innerText = options.closeButtonTxt;
 	alertBox.appendChild(closeButton);
 
-	this.simContainer.appendChild(alertBox);
+	this.container.appendChild(alertBox);
 
 	alertBox.style.position = "absolute";
 	alertBox.style.left = (elmBox.width * 0.5 - alertBox.offsetWidth * 0.5) + "px";

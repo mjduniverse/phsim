@@ -179,7 +179,7 @@ PhSim.prototype.connectContainer = function(c) {
 	 * @type {HTMLElement}
 	 */
 
-	this.simContainer = c;
+	this.container = c;
 
 	c.appendChild(this.canvas);
 	c.classList.add("phsim-container");

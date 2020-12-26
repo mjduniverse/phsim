@@ -38,14 +38,14 @@
 
     m.addObject(c);
 
-    var container = m.simContainer;
+    var container = m.container;
 
     m.addEventListener("click",function(){
         m.toggle();
     })
 
     window.addEventListener("load",function(){
-        document.body.appendChild(m.simContainer);
+        document.body.appendChild(m.container);
         document.body.appendChild(cord);
         m.play()
     })
