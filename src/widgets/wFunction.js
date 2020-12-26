@@ -18,9 +18,9 @@ const PhSim = require("../phSim");
  * @typedef {Function} WFunction
  * @property {Function} _options - Options used to create WFunction
  * @property {Function|Number} _ref
- * @property {String} _name - WFunction name
+ * @property {String} [_name] - WFunction name
  * @property {Function} _bodyFunction - Body Function
- * 
+ * @property {String} _eventclass - Event class
  * 
  */
 
@@ -222,6 +222,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 
 		call._ref = f;
+		call._eventclass = "keydown";
 
 		return call;
 		
@@ -257,6 +258,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 
 		call._ref = f;
+		call._eventclass = "collisionstart";
 
 		return call;
 
@@ -274,6 +276,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 
 		call._ref = f;
+		call._eventclass = "beforeupdate";
 
 		return call;
 		
@@ -301,6 +304,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
+		call._eventclass = "objclick";
 
 		call._ref = f;
 
@@ -328,7 +332,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
-
+		call._eventclass = "objmousedown";
 		call._ref = f;
 		return call;
 
@@ -344,6 +348,8 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 
 		call._ref = f;
+		call._eventclass = "firstslupdate";
+
 		return call;
 
 	}
@@ -368,6 +374,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
+		call._eventclass = "objmouseup";
 
 		call._ref = f;
 
@@ -375,8 +382,14 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	}
 
 	else if(options.trigger === "objlink") {
+
 		thisRef.objLinkFunctions = thisRef.objLinkFunctions || [];
 		thisRef.objLinkFunctions.push(call);
+
+		call._ref = f;
+
+		return call;
+
 	}
 
 	else if(options.trigger === "afterslchange") {
@@ -389,6 +402,8 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			slEvent: true
 		});
 
+
+		call._eventclass = "afterslchange";
 
 		call._ref = f;
 
@@ -481,6 +496,10 @@ PhSim.prototype.disableWFunction = function(o) {
 
 	else if(o._options.trigger === "update") {
 		this.off("beforeupdate",o._ref);
+	}
+
+	else if(o._options.trigger === "time") {
+		clearInterval(o._ref)
 	}
 
 	else if(o._options.trigger === "time") {
