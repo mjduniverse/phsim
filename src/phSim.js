@@ -145,20 +145,20 @@ PhSim.prototype.connectCanvas = function(canvas) {
 	 * @type {HTMLCanvasElement}
 	 */
 
-	this.simCanvas = canvas;
+	this.canvas = canvas;
 
 	/**
 	 * Simulation context for the canvas
 	 * @type {CanvasRenderingContext2D}
 	 */
 
-	this.simCtx = canvas.getContext("2d");
+	this.ctx = canvas.getContext("2d");
 
 	
-	this.simCanvas.width = this.box.w || this.box.width;
-	this.simCanvas.height = this.box.h || this.box.height;
+	this.canvas.width = this.box.w || this.box.width;
+	this.canvas.height = this.box.h || this.box.height;
 	this.registerCanvasEvents();
-	this.configRender(this.simCtx);
+	this.configRender(this.ctx);
 }
 
 /**
@@ -175,13 +175,13 @@ PhSim.prototype.connectContainer = function(c) {
 	
 	/**
 	 * The simulation container.
-	 * This is is supposed to be the wrapping element of the {@link PhSim#simCanvas|PhSim canvas}.
+	 * This is is supposed to be the wrapping element of the {@link PhSim#canvas|PhSim canvas}.
 	 * @type {HTMLElement}
 	 */
 
-	this.simContainer = c;
+	this.container = c;
 
-	c.appendChild(this.simCanvas);
+	c.appendChild(this.canvas);
 	c.classList.add("phsim-container");
 
 	this.configFilter(c);
@@ -427,12 +427,12 @@ PhSim.prototype.loading = {
  */
 
 PhSim.prototype.drawLoadingScreen = function() {
-	this.simCtx.fillStyle = this.loading.bgClr;
-	this.simCtx.fillRect(0,0,this.camera.scale,this.simCanvas.height);
-	this.simCtx.fillStyle = this.loading.txtClr;
-	this.simCtx.textAlign = this.loading.txtAlign;
-	this.simCtx.font = this.loading.txtSize + "px " + this.loading.txtFace;
-	this.simCtx.fillText(this.loading.txt,this.simCanvas.width / 2,this.simCanvas.height / 2)
+	this.ctx.fillStyle = this.loading.bgClr;
+	this.ctx.fillRect(0,0,this.camera.scale,this.canvas.height);
+	this.ctx.fillStyle = this.loading.txtClr;
+	this.ctx.textAlign = this.loading.txtAlign;
+	this.ctx.font = this.loading.txtSize + "px " + this.loading.txtFace;
+	this.ctx.fillText(this.loading.txt,this.canvas.width / 2,this.canvas.height / 2)
 }
 
 if(typeof window === "object") {

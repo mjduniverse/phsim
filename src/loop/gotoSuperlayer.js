@@ -37,7 +37,7 @@ var gotoSimulationIndex = function (i) {
 		this.camera.translate(-this.camera.x,-this.camera.y);
 	}
 
-	if(this.simCtx) {
+	if(this.ctx) {
 	    this.drawLoadingScreen();
 	}
 
@@ -46,9 +46,9 @@ var gotoSimulationIndex = function (i) {
 
 	this.simulationIndex = i;
 
-	if(this.simCtx) {
-		this.width = this.simCtx.canvas.width;
-		this.height = this.simCtx.canvas.height;
+	if(this.ctx) {
+		this.width = this.ctx.canvas.width;
+		this.height = this.ctx.canvas.height;
 	}
 	
 	this.paused = false;

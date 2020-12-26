@@ -68,7 +68,7 @@ PhSim.loadFromJSON = function(jsonURL,onload) {
 
 PhSim.prototype.configRender = function() {
 	
-	this.assignPhRender(new PhSim.PhRender(this.simCtx));
+	this.assignPhRender(new PhSim.PhRender(this.ctx));
 	
 	if(!this.noCamera) {
 		this.camera = new PhSim.Camera(this);

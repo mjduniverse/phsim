@@ -44,13 +44,8 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
         var eventFunc = function(){
             self.callObjLinkFunctions(targetObj);
         } 
-        
-        var options = {
-            ...widgetO,
-            wFunctionObj: dyn_object
-        }
     
-        var f = self.createWFunction(widgetO.trigger,eventFunc,options);
+        var f = self.createWFunction(dyn_object,eventFunc,widget);
 
     });
 

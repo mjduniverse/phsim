@@ -18,9 +18,9 @@ const PhSim = require("../phSim");
  * @typedef {Function} WFunction
  * @property {Function} _options - Options used to create WFunction
  * @property {Function|Number} _ref
- * @property {String} _name - WFunction name
+ * @property {String} [_name] - WFunction name
  * @property {Function} _bodyFunction - Body Function
- * 
+ * @property {String} _eventclass - Event class
  * 
  */
 
@@ -191,6 +191,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 	call._options = options;
 	call._bodyFunction = wFunctionBody;
+	call._thisRef = thisRef;
 	
 	if(options._name) {
 		self.wFunctionNames[options._name] = call;
@@ -216,14 +217,8 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		}
 
-		self.on("keydown",f,{
-			"slEvent": true
-		});
-
-
 		call._ref = f;
-
-		return call;
+		call._eventclass = "keydown";
 		
 	}
 
@@ -251,14 +246,8 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			}
 		}
 
-		self.on("collisionstart",f,{
-			"slEvent": true
-		});
-
-
 		call._ref = f;
-
-		return call;
+		call._eventclass = "collisionstart";
 
 	}
 
@@ -268,15 +257,9 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			call();
 		}
 
-		self.on("beforeupdate",f,{
-			slEvent: true
-		});
-
-
 		call._ref = f;
+		call._eventclass = "beforeupdate";
 
-		return call;
-		
 	}
 
 	else if(options.trigger === "objclick" || options.trigger === "objclick_global") {
@@ -297,14 +280,9 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			}
 		}
 
-		self.on("objclick",f,{
-			slEvent: true
-		});
-
-
+		call._eventclass = "objclick";
 		call._ref = f;
 
-		return call;
 	}
 
 	else if(options.trigger === "objmousedown" || options.trigger === "objmousedown_global") {
@@ -324,13 +302,8 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			}
 		}
 
-		self.on("objmousedown",f,{
-			slEvent: true
-		});
-
-
+		call._eventclass = "objmousedown";
 		call._ref = f;
-		return call;
 
 	}
 
@@ -340,11 +313,9 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			call(e)
 		}
 
-		this.on("firstslupdate",f);
-
-
 		call._ref = f;
-		return call;
+		call._eventclass = "firstslupdate";
+
 
 	}
 	
@@ -364,19 +335,20 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			}
 		}
 
-		self.on("objmouseup",f,{
-			slEvent: true
-		});
+		call._eventclass = "objmouseup";
+		call._ref = f;
 
+	}
+
+	else if(options.trigger === "objlink") {
+
+		thisRef.objLinkFunctions = thisRef.objLinkFunctions || [];
+		thisRef.objLinkFunctions.push(call);
 
 		call._ref = f;
 
 		return call;
-	}
 
-	else if(options.trigger === "objlink") {
-		thisRef.objLinkFunctions = thisRef.objLinkFunctions || [];
-		thisRef.objLinkFunctions.push(call);
 	}
 
 	else if(options.trigger === "afterslchange") {
@@ -384,15 +356,9 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		var f = function(e) {
 			call(e);
 		}
-		
-		self.on("afterslchange",f,{
-			slEvent: true
-		});
 
-
+		call._eventclass = "afterslchange";
 		call._ref = f;
-
-		return call;
 
 	}
 
@@ -450,10 +416,20 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	}
 
 	else {
-
-		call._ref = call;
-		return call;	
+		call._ref = call;	
+		call._eventclass = options.trigger;
 	}
+
+	if(typeof call._eventclass === "string") {
+		
+		self.on(call._eventclass,call._ref,{
+			"slEvent": true
+		});
+	}
+
+	// Return wFunction
+
+	return call
 
 }
 
@@ -470,21 +446,22 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 */
 
 PhSim.prototype.disableWFunction = function(o) {
-	
-	if(o._options.trigger === "key") {
-		this.off("keydown",o._ref);
-	}
 
-	else if(o._options.trigger === "sensor") {
-		this.off("collisionstart",o._ref);
-	}
-
-	else if(o._options.trigger === "update") {
-		this.off("beforeupdate",o._ref);
+	if(typeof o._eventclass === "string") {
+		this.off(o._eventclass,o._ref);
 	}
 
 	else if(o._options.trigger === "time") {
 		clearInterval(o._ref)
+	}
+
+	else if(o._options.trigger === "time") {
+		clearInterval(o._ref)
+	}
+
+	else if(o._options.trigger === "objlink") {
+		var i = o._thisRef.objLinkFunctions.indexOf(o)
+		o._thisRef.objLinkFunctions.splice(i,1);
 	}
 
 	if(o._name) {
