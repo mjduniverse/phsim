@@ -67,7 +67,7 @@ PhSim.prototype.getEventBridge = function(f) {
 /**
  * 
  * Used to set event listeners for a canvas.
- * This function works if {@link PhSim.prototype#simCtx} 
+ * This function works if {@link PhSim.prototype#ctx} 
  * and {@link PhSim.prototype#canvas} are set.
  * 
  * @function
@@ -93,7 +93,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	this.dispatchMouseDown = function(e) {
 
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.simCtx.canvas;
+		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX
@@ -137,7 +137,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	this.dispatchClick = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.simCtx.canvas;
+		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX
@@ -177,7 +177,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	this.dispatchMouseMove = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.simCtx.canvas;
+		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 	
@@ -278,7 +278,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	this.dispatchMouseUp = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.simCtx.canvas;
+		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX
@@ -307,7 +307,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	self.dispatchMouseOut = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.simCtx.canvas;
+		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX

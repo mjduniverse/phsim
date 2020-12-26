@@ -243,13 +243,13 @@ PhSim.prototype.connectCanvas = function(canvas) {
 	 * @type {CanvasRenderingContext2D}
 	 */
 
-	this.simCtx = canvas.getContext("2d");
+	this.ctx = canvas.getContext("2d");
 
 	
 	this.canvas.width = this.box.w || this.box.width;
 	this.canvas.height = this.box.h || this.box.height;
 	this.registerCanvasEvents();
-	this.configRender(this.simCtx);
+	this.configRender(this.ctx);
 }
 
 /**
@@ -518,12 +518,12 @@ PhSim.prototype.loading = {
  */
 
 PhSim.prototype.drawLoadingScreen = function() {
-	this.simCtx.fillStyle = this.loading.bgClr;
-	this.simCtx.fillRect(0,0,this.camera.scale,this.canvas.height);
-	this.simCtx.fillStyle = this.loading.txtClr;
-	this.simCtx.textAlign = this.loading.txtAlign;
-	this.simCtx.font = this.loading.txtSize + "px " + this.loading.txtFace;
-	this.simCtx.fillText(this.loading.txt,this.canvas.width / 2,this.canvas.height / 2)
+	this.ctx.fillStyle = this.loading.bgClr;
+	this.ctx.fillRect(0,0,this.camera.scale,this.canvas.height);
+	this.ctx.fillStyle = this.loading.txtClr;
+	this.ctx.textAlign = this.loading.txtAlign;
+	this.ctx.font = this.loading.txtSize + "px " + this.loading.txtFace;
+	this.ctx.fillText(this.loading.txt,this.canvas.width / 2,this.canvas.height / 2)
 }
 
 if(typeof window === "object") {
@@ -4432,7 +4432,7 @@ PhSim.loadFromJSON = function(jsonURL,onload) {
 
 PhSim.prototype.configRender = function() {
 	
-	this.assignPhRender(new PhSim.PhRender(this.simCtx));
+	this.assignPhRender(new PhSim.PhRender(this.ctx));
 	
 	if(!this.noCamera) {
 		this.camera = new PhSim.Camera(this);
@@ -4878,7 +4878,7 @@ PhSim.prototype.getEventBridge = function(f) {
 /**
  * 
  * Used to set event listeners for a canvas.
- * This function works if {@link PhSim.prototype#simCtx} 
+ * This function works if {@link PhSim.prototype#ctx} 
  * and {@link PhSim.prototype#canvas} are set.
  * 
  * @function
@@ -4904,7 +4904,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 	this.dispatchMouseDown = function(e) {
 
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.simCtx.canvas;
+		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX
@@ -4948,7 +4948,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	this.dispatchClick = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.simCtx.canvas;
+		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX
@@ -4988,7 +4988,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	this.dispatchMouseMove = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.simCtx.canvas;
+		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 	
@@ -5089,7 +5089,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	this.dispatchMouseUp = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.simCtx.canvas;
+		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX
@@ -5118,7 +5118,7 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 	self.dispatchMouseOut = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.simCtx.canvas;
+		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX
@@ -5920,7 +5920,7 @@ var gotoSimulationIndex = function (i) {
 		this.camera.translate(-this.camera.x,-this.camera.y);
 	}
 
-	if(this.simCtx) {
+	if(this.ctx) {
 	    this.drawLoadingScreen();
 	}
 
@@ -5929,9 +5929,9 @@ var gotoSimulationIndex = function (i) {
 
 	this.simulationIndex = i;
 
-	if(this.simCtx) {
-		this.width = this.simCtx.canvas.width;
-		this.height = this.simCtx.canvas.height;
+	if(this.ctx) {
+		this.width = this.ctx.canvas.width;
+		this.height = this.ctx.canvas.height;
 	}
 	
 	this.paused = false;
@@ -6289,16 +6289,16 @@ PhSim.prototype.loopFunction = function() {
 
 		Matter.Engine.update(this.matterJSEngine,this.delta);
 
-		if(this.simCtx) {
+		if(this.ctx) {
 
-			this.simCtx.fillStyle = this.bgFillStyle;
+			this.ctx.fillStyle = this.bgFillStyle;
 
 			if(this.noCamera) {
-				this.simCtx.fillRect(0,0,this.width,this.height);
+				this.ctx.fillRect(0,0,this.width,this.height);
 			}
 	
 			else {
-				this.simCtx.fillRect(0 - this.camera.x,0 - this.camera.y,this.width / this.camera.scale,this.height / this.camera.scale);
+				this.ctx.fillRect(0 - this.camera.x,0 - this.camera.y,this.width / this.camera.scale,this.height / this.camera.scale);
 			}
 		}
 
@@ -6315,8 +6315,8 @@ PhSim.prototype.loopFunction = function() {
 		this.sl_time = this.sl_time + this.delta;
 
 		if(this.filter) {
-			this.simCtx.fillStyle = "rgba(3,3,3,0.7)";
-			this.simCtx.fillRect(0,0,this.width / this.camera.scale,this.height / this.camera.scale);
+			this.ctx.fillStyle = "rgba(3,3,3,0.7)";
+			this.ctx.fillRect(0,0,this.width / this.camera.scale,this.height / this.camera.scale);
 		}
 
 		if(!this.firstSlUpdate) {
@@ -6461,13 +6461,13 @@ Camera.prototype.transformingObjects = []
 
 Camera.prototype.zoomIn = function(scaleFactor) {
 	this.scale = this.scale * scaleFactor;
-	this.dynSim.simCtx.scale(scaleFactor,scaleFactor);
+	this.dynSim.ctx.scale(scaleFactor,scaleFactor);
 }
 
 Camera.prototype.translate = function(dx,dy) {
 	this.x = this.x + dx;
 	this.y = this.y + dy;
-	this.dynSim.simCtx.translate(dx,dy);
+	this.dynSim.ctx.translate(dx,dy);
 
 	for(var i = 0; i < this.transformingObjects.length; i++) {
 		PhSim.Motion.translate(this.transformingObjects[i],dx,dy);
@@ -6475,7 +6475,7 @@ Camera.prototype.translate = function(dx,dy) {
 }
 
 Camera.prototype.setPosition = function(x,y) {
-	this.dynSim.simCtx.translate(-this.x,-this.y)
+	this.dynSim.ctx.translate(-this.x,-this.y)
 	this.x = x;
 	this.y = y;
 }

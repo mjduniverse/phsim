@@ -52,13 +52,13 @@ Camera.prototype.transformingObjects = []
 
 Camera.prototype.zoomIn = function(scaleFactor) {
 	this.scale = this.scale * scaleFactor;
-	this.dynSim.simCtx.scale(scaleFactor,scaleFactor);
+	this.dynSim.ctx.scale(scaleFactor,scaleFactor);
 }
 
 Camera.prototype.translate = function(dx,dy) {
 	this.x = this.x + dx;
 	this.y = this.y + dy;
-	this.dynSim.simCtx.translate(dx,dy);
+	this.dynSim.ctx.translate(dx,dy);
 
 	for(var i = 0; i < this.transformingObjects.length; i++) {
 		PhSim.Motion.translate(this.transformingObjects[i],dx,dy);
@@ -66,7 +66,7 @@ Camera.prototype.translate = function(dx,dy) {
 }
 
 Camera.prototype.setPosition = function(x,y) {
-	this.dynSim.simCtx.translate(-this.x,-this.y)
+	this.dynSim.ctx.translate(-this.x,-this.y)
 	this.x = x;
 	this.y = y;
 }

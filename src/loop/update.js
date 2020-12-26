@@ -84,16 +84,16 @@ PhSim.prototype.loopFunction = function() {
 
 		Matter.Engine.update(this.matterJSEngine,this.delta);
 
-		if(this.simCtx) {
+		if(this.ctx) {
 
-			this.simCtx.fillStyle = this.bgFillStyle;
+			this.ctx.fillStyle = this.bgFillStyle;
 
 			if(this.noCamera) {
-				this.simCtx.fillRect(0,0,this.width,this.height);
+				this.ctx.fillRect(0,0,this.width,this.height);
 			}
 	
 			else {
-				this.simCtx.fillRect(0 - this.camera.x,0 - this.camera.y,this.width / this.camera.scale,this.height / this.camera.scale);
+				this.ctx.fillRect(0 - this.camera.x,0 - this.camera.y,this.width / this.camera.scale,this.height / this.camera.scale);
 			}
 		}
 
@@ -110,8 +110,8 @@ PhSim.prototype.loopFunction = function() {
 		this.sl_time = this.sl_time + this.delta;
 
 		if(this.filter) {
-			this.simCtx.fillStyle = "rgba(3,3,3,0.7)";
-			this.simCtx.fillRect(0,0,this.width / this.camera.scale,this.height / this.camera.scale);
+			this.ctx.fillStyle = "rgba(3,3,3,0.7)";
+			this.ctx.fillRect(0,0,this.width / this.camera.scale,this.height / this.camera.scale);
 		}
 
 		if(!this.firstSlUpdate) {
