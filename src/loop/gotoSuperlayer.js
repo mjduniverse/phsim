@@ -72,6 +72,10 @@ var gotoSimulationIndex = function (i) {
 		this.bgFillStyle = this.simOptions.world.bg;
 	}
 
+	if(this.world && this.world && this.world.bg) {
+		this.bgFillStyle = this.world.bg;
+	}
+
 	if(this.simulations) {
 	
 		for(var L = 0; L < this.simOptions.layers.length; L++) {
