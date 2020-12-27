@@ -3100,7 +3100,7 @@ PhRender.prototype.renderPolygon = function (path) {
 	this.ctx.stroke();
 	this.ctx.fill();
 
-	if(path.sprite) {
+	if(path.sprite && path.sprite.src) {
 
 		var img = this.spriteImgObj[path.sprite.src];
 
@@ -3263,7 +3263,7 @@ PhRender.prototype.renderCircle = function (circle) {
 
 	}
 
-	if(circle.sprite) {
+	if(circle.sprite && circle.sprite.src) {
 
 		var img = this.spriteImgObj[circle.sprite.src];
 
@@ -3343,7 +3343,7 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 	this.ctx.translate(-c.x,-c.y);
 
 
-	if(rectangle.sprite) {
+	if(rectangle.sprite && rectangle.sprite.src) {
 
 		var img = this.spriteImgObj[rectangle.sprite.src];
 
@@ -3466,7 +3466,7 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 	this.ctx.fill();
 
-	if(regPolygon.sprite) {
+	if(regPolygon.sprite && regPolygon.sprite.src) {
 
 		var img = this.spriteImgObj[regPolygon.sprite.src];
 
@@ -3693,7 +3693,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 		
 		this.ctx.fill();
 
-		if(dynObject.sprite) {
+		if(dynObject.sprite && dynObject.sprite.src) {
 
 			var img = this.spriteImgObj[dynObject.sprite.src];
 
@@ -3999,20 +3999,24 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 
 			var img = document.createElement("img");
 
+			var self = this;
+
 			var f = function() {
 				onload();
-				img.removeEventListener("load",f)
+				img.removeEventListener("load",f);
+
+				self.static[staticObj.src] = staticObj;
+				self[staticObj.src] = img;
+				self.urls.push(staticObj.src);
+			
+				self.length++;
+
 			}
 
 			img.addEventListener("load",f);
 		
 			img.src = staticObj.src;
 		
-			this.static[staticObj.src] = staticObj;
-			this[staticObj.src] = img;
-			this.urls.push(staticObj.src);
-		
-			this.length++;
 
 		}
 
