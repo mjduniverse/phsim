@@ -7300,6 +7300,7 @@ PhSim.Widgets.objLink = function(dyn_object,widget) {
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const { statusCodes } = __webpack_require__(0);
 const PhSim = __webpack_require__(0);
 
 /**
@@ -7487,16 +7488,16 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	 * @type {WFunction}
 	 */
 
-    var call = function(e) {
+    var wFunction = function(e) {
         return wFunctionBody.apply(thisRef,e);
 	}
 
-	call._options = options;
-	call._bodyFunction = wFunctionBody;
-	call._thisRef = thisRef;
+	wFunction._options = options;
+	wFunction._bodyFunction = wFunctionBody;
+	wFunction._thisRef = thisRef;
 	
 	if(options._name) {
-		self.wFunctionNames[options._name] = call;
+		self.wFunctionNames[options._name] = wFunction;
 	}
 	
 	if(options.trigger === "key") {
@@ -7505,7 +7506,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		
 			var f = function(e) {
 				if( e.key.match( new RegExp("^" + options.key + "$","i") ) ) {
-					call(e);
+					wFunction(e);
 				}
 			};
 
@@ -7514,13 +7515,13 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		else {
 
 			var f = function(e) {
-				call(e);
+				wFunction(e);
 			}
 
 		}
 
-		call._ref = f;
-		call._eventclass = "keydown";
+		wFunction._ref = f;
+		wFunction._eventclass = "keydown";
 		
 	}
 
@@ -7536,7 +7537,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 				var m = self.inSensorCollision(thisRef)
 	
 				if(m) {
-					call(e);
+					wFunction(e);
 				}
 	
 			}
@@ -7544,23 +7545,23 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		else {
 			f = function(e) {
-				call(e);
+				wFunction(e);
 			}
 		}
 
-		call._ref = f;
-		call._eventclass = "collisionstart";
+		wFunction._ref = f;
+		wFunction._eventclass = "collisionstart";
 
 	}
 
 	else if(options.trigger === "update") {
 		
 		var f = function() {
-			call();
+			wFunction();
 		}
 
-		call._ref = f;
-		call._eventclass = "beforeupdate";
+		wFunction._ref = f;
+		wFunction._eventclass = "beforeupdate";
 
 	}
 
@@ -7571,19 +7572,19 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		if(options.trigger === "objclick") {
 			f = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
-					call(e);
+					wFunction(e);
 				}
 			};
 		}
 
 		else {
 			f = function(e) {
-				call(e);
+				wFunction(e);
 			}
 		}
 
-		call._eventclass = "objclick";
-		call._ref = f;
+		wFunction._eventclass = "objclick";
+		wFunction._ref = f;
 
 	}
 
@@ -7592,7 +7593,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		if(options.trigger === "objmousedown") {
 			var f = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
-					call(e);
+					wFunction(e);
 				}
 			}
 		}
@@ -7600,23 +7601,23 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		else {
 			var f = function(e) {
-				call(e);
+				wFunction(e);
 			}
 		}
 
-		call._eventclass = "objmousedown";
-		call._ref = f;
+		wFunction._eventclass = "objmousedown";
+		wFunction._ref = f;
 
 	}
 
 	else if(options.trigger === "firstslupdate") {
 		
 		var f = function(e) {
-			call(e)
+			wFunction(e)
 		}
 
-		call._ref = f;
-		call._eventclass = "firstslupdate";
+		wFunction._ref = f;
+		wFunction._eventclass = "firstslupdate";
 
 
 	}
@@ -7626,41 +7627,41 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		if(options.trigger === "objmouseup") {
 			var f = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
-					call(e);
+					wFunction(e);
 				}
 			};
 		}
 
 		else {
 			var f = function(e) {
-				call(e);
+				wFunction(e);
 			}
 		}
 
-		call._eventclass = "objmouseup";
-		call._ref = f;
+		wFunction._eventclass = "objmouseup";
+		wFunction._ref = f;
 
 	}
 
 	else if(options.trigger === "objlink") {
 
 		thisRef.objLinkFunctions = thisRef.objLinkFunctions || [];
-		thisRef.objLinkFunctions.push(call);
+		thisRef.objLinkFunctions.push(wFunction);
 
-		call._ref = f;
+		wFunction._ref = f;
 
-		return call;
+		return wFunction;
 
 	}
 
 	else if(options.trigger === "afterslchange") {
 
 		var f = function(e) {
-			call(e);
+			wFunction(e);
 		}
 
-		call._eventclass = "afterslchange";
-		call._ref = f;
+		wFunction._eventclass = "afterslchange";
+		wFunction._ref = f;
 
 	}
 
@@ -7678,7 +7679,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 					else {
 						if(!self.paused) {
-							call();
+							wFunction();
 							func.__n++;
 						}
 					}
@@ -7693,7 +7694,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 				func = function(e) {
 					if(!self.paused) {
-						call();
+						wFunction();
 					}
 				}
 
@@ -7709,29 +7710,39 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		var refFunc = getFunction();
 
-		refFunc.__interN = setInterval(refFunc,refFunc.__phtime);
+		// Making sure that the interval starts after the simulation has has it's first
+		// Update and not run at the moment the wFunction is created.
 
+		if(this.status === statusCodes.LOADED_SIMULATION) {
+			refFunc.__interN = setInterval(refFunc,refFunc.__phtime);
+		}
 
-		call._ref = refFunc.__interN;
+		else if(this.status < statusCodes.LOADED_SIMULATION) {
+			self.on("firstslupdate",function(){
+				refFunc.__interN = setInterval(refFunc,refFunc.__phtime);
+			});
+		}
 
-		return call;
+		wFunction._ref = refFunc.__interN;
+
+		return wFunction;
 	}
 
 	else {
-		call._ref = call;	
-		call._eventclass = options.trigger;
+		wFunction._ref = wFunction;	
+		wFunction._eventclass = options.trigger;
 	}
 
-	if(typeof call._eventclass === "string") {
+	if(typeof wFunction._eventclass === "string") {
 		
-		self.on(call._eventclass,call._ref,{
+		self.on(wFunction._eventclass,wFunction._ref,{
 			"slEvent": true
 		});
 	}
 
 	// Return wFunction
 
-	return call
+	return wFunction
 
 }
 
