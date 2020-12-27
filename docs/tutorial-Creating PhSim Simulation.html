@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>PhSim Tutorial: Creating PhSim Composite Simulation</title>
+	<title>PhSim Tutorial: Creating PhSim Simulation</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -61,7 +61,7 @@
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-Creating PhSim Composite Simulation.html">Creating PhSim Composite Simulation</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li><li><a href="tutorial-dynamic-objects.html">dynamic-objects</a></li>
+					<li><a href="tutorial-Creating PhSim Simulation.html">Creating PhSim Simulation</a></li><li><a href="tutorial-Dynamic Objects.html">Dynamic Objects</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li>
 				</ul>
 			</li>
 			
@@ -110,14 +110,14 @@
 <header>
     
 
-    <h2>Creating PhSim Composite Simulation</h2>
+    <h2>Creating PhSim Simulation</h2>
 </header>
 
 <article>
     <script src="https://cdn.jsdelivr.net/npm/poly-decomp@0.3.0/build/decomp.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/matter-js@0.14.2/build/matter.min.js"></script>
 <script src="../dist/phsim.js"></script>
-<p>A composite PhSim simulation is a simulation that consists of multiple simulations, as the name suggests.</p>
+<p>Creating a PhSim simulation requires some steps.</p>
 <h2>The Constructor</h2>
 <p>The first step in creating a PhSim simulation is understanding what the <a href="global.html#PhSim">PhSim</a> constructor does. The PhSim constructor accepts one argument that is optional: the <code>dynSimOptions</code> argument.</p>
 <p>Here are the possible options:</p>
@@ -137,7 +137,7 @@ var o = {
                     &quot;h&quot;: 119,
                     &quot;cycle&quot;: 0,
                     &quot;strokeStyle&quot;: &quot;#000000&quot;,
-                    &quot;lineWidth&quot;: &quot;4&quot;,
+                    &quot;lineWidth&quot;: 4,
                     &quot;fillStyle&quot;: &quot;#333333&quot;
                 },
                 {
@@ -148,7 +148,7 @@ var o = {
                     &quot;h&quot;: 134,
                     &quot;cycle&quot;: 0,
                     &quot;strokeStyle&quot;: &quot;#000000&quot;,
-                    &quot;lineWidth&quot;: &quot;4&quot;,
+                    &quot;lineWidth&quot;: 4,
                     &quot;fillStyle&quot;: &quot;#333333&quot;
                 },
                 {
@@ -159,7 +159,7 @@ var o = {
                     &quot;h&quot;: 149,
                     &quot;cycle&quot;: 0,
                     &quot;strokeStyle&quot;: &quot;#000000&quot;,
-                    &quot;lineWidth&quot;: &quot;4&quot;,
+                    &quot;lineWidth&quot;: 4,
                     &quot;fillStyle&quot;: &quot;#333333&quot;
                 }
             ],
@@ -199,7 +199,7 @@ var phSim = new PhSim(o);
                             "h": 119,
                             "cycle": 0,
                             "strokeStyle": "#000000",
-                            "lineWidth": "4",
+                            "lineWidth": 4,
                             "fillStyle": "#333333"
                         },
                         {
@@ -210,7 +210,7 @@ var phSim = new PhSim(o);
                             "h": 134,
                             "cycle": 0,
                             "strokeStyle": "#000000",
-                            "lineWidth": "4",
+                            "lineWidth": 4,
                             "fillStyle": "#333333"
                         },
                         {
@@ -221,7 +221,7 @@ var phSim = new PhSim(o);
                             "h": 149,
                             "cycle": 0,
                             "strokeStyle": "#000000",
-                            "lineWidth": "4",
+                            "lineWidth": 4,
                             "fillStyle": "#333333"
                         }
                     ],
@@ -278,7 +278,7 @@ var o = {
             &quot;h&quot;: 47,
             &quot;cycle&quot;: 0,
             &quot;strokeStyle&quot;: &quot;#0000ff&quot;,
-            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;lineWidth&quot;: 4,
             &quot;fillStyle&quot;: &quot;#333333&quot;,
             &quot;locked&quot;: true
         },
@@ -293,7 +293,7 @@ var o = {
             &quot;h&quot;: 93,
             &quot;cycle&quot;: 0,
             &quot;strokeStyle&quot;: &quot;#000000&quot;,
-            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;lineWidth&quot;: 4,
             &quot;fillStyle&quot;: &quot;#33cf33&quot;,
             &quot;widgets&quot;: [
                 {
@@ -331,7 +331,7 @@ var phSim = new PhSim(o);
                     "h": 47,
                     "cycle": 0,
                     "strokeStyle": "#0000ff",
-                    "lineWidth": "4",
+                    "lineWidth": 4,
                     "fillStyle": "#333333",
                     "locked": true
                 },
@@ -346,7 +346,7 @@ var phSim = new PhSim(o);
                     "h": 93,
                     "cycle": 0,
                     "strokeStyle": "#000000",
-                    "lineWidth": "4",
+                    "lineWidth": 4,
                     "fillStyle": "#33cf33",
                     "widgets": [
                         {
@@ -383,6 +383,13 @@ var phSim = new PhSim(o);
     })();
 
 </script>
+<h3>A composite simulation object</h3>
+<p>A composite PhSim simulation is a simulation that consists of multiple simulations, as the name suggests.</p>
+<p>The object consists of an array named <code>simulations</code>, which is an array of static simulation objects.</p>
+<h3>An array</h3>
+<p>An array of objects can be accepted.</p>
+<h3>None</h3>
+<p>As said before, the argument is optional. It is not needed.</p>
 </article>
 
 </section>
@@ -424,7 +431,7 @@ var phSim = new PhSim(o);
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2020-12-26T20:11:58-06:00
+		on 2020-12-27T01:19:43-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

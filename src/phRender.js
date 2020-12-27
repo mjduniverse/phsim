@@ -118,7 +118,7 @@ PhRender.prototype.renderPolygon = function (path) {
 	this.ctx.stroke();
 	this.ctx.fill();
 
-	if(path.sprite) {
+	if(path.sprite && path.sprite.src) {
 
 		var img = this.spriteImgObj[path.sprite.src];
 
@@ -281,7 +281,7 @@ PhRender.prototype.renderCircle = function (circle) {
 
 	}
 
-	if(circle.sprite) {
+	if(circle.sprite && circle.sprite.src) {
 
 		var img = this.spriteImgObj[circle.sprite.src];
 
@@ -361,7 +361,7 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 	this.ctx.translate(-c.x,-c.y);
 
 
-	if(rectangle.sprite) {
+	if(rectangle.sprite && rectangle.sprite.src) {
 
 		var img = this.spriteImgObj[rectangle.sprite.src];
 
@@ -484,7 +484,7 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 	this.ctx.fill();
 
-	if(regPolygon.sprite) {
+	if(regPolygon.sprite && regPolygon.sprite.src) {
 
 		var img = this.spriteImgObj[regPolygon.sprite.src];
 
@@ -711,7 +711,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 		
 		this.ctx.fill();
 
-		if(dynObject.sprite) {
+		if(dynObject.sprite && dynObject.sprite.src) {
 
 			var img = this.spriteImgObj[dynObject.sprite.src];
 

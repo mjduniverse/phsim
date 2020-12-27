@@ -204,20 +204,24 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 
 			var img = document.createElement("img");
 
+			var self = this;
+
 			var f = function() {
 				onload();
-				img.removeEventListener("load",f)
+				img.removeEventListener("load",f);
+
+				self.static[staticObj.src] = staticObj;
+				self[staticObj.src] = img;
+				self.urls.push(staticObj.src);
+			
+				self.length++;
+
 			}
 
 			img.addEventListener("load",f);
 		
 			img.src = staticObj.src;
 		
-			this.static[staticObj.src] = staticObj;
-			this[staticObj.src] = img;
-			this.urls.push(staticObj.src);
-		
-			this.length++;
 
 		}
 
