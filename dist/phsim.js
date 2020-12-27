@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -143,6 +143,10 @@
  */
 
 function PhSim(dynSimOptions = new PhSim.Static()) {
+
+	if(dynSimOptions) {
+		Object.assign(this,dynSimOptions);
+	}
 
 	PhSim.Static.call(this);
 
@@ -536,7 +540,7 @@ if(true) {
 
 PhSim.Static = __webpack_require__(2 );
 
-__webpack_require__(11 );
+__webpack_require__(10 );
 
 PhSim.EventStack = __webpack_require__(3 );
 
@@ -554,55 +558,55 @@ PhSim.prototype.eventStack = new PhSim.EventStack();
 
 PhSim.prototype.simulationEventStack = new PhSim.EventStack();
 
-PhSim.PhRender = __webpack_require__(12);
-PhSim.Sprites = __webpack_require__(13);
-PhSim.Audio = __webpack_require__(14);
+PhSim.PhRender = __webpack_require__(11);
+PhSim.Sprites = __webpack_require__(12);
+PhSim.Audio = __webpack_require__(13);
 PhSim.Vector = __webpack_require__(4);
-PhSim.diagRect = __webpack_require__(15);
+PhSim.diagRect = __webpack_require__(14);
 PhSim.Vertices = __webpack_require__(6);
 
 PhSim.Centroid = __webpack_require__(5);
 
 // Bounding box functions
 
-PhSim.BoundingBox = __webpack_require__(16);
+PhSim.BoundingBox = __webpack_require__(15);
 PhSim.DynObject = __webpack_require__(1);
-PhSim.Events = __webpack_require__(17);
+PhSim.Events = __webpack_require__(16);
 
+__webpack_require__(17);
 __webpack_require__(18);
 __webpack_require__(19);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
-__webpack_require__(23);
 
 PhSim.PhSimEventTarget =  __webpack_require__(7);
 
 Object.assign(PhSim.prototype,PhSim.PhSimEventTarget);
 
+__webpack_require__(23);
 __webpack_require__(24);
 __webpack_require__(25);
-__webpack_require__(26);
 
-PhSim.prototype.gotoSimulationIndex = __webpack_require__(27);
+PhSim.prototype.gotoSimulationIndex = __webpack_require__(26);
 PhSim.Motion = __webpack_require__(8);
 
+__webpack_require__(27);
 __webpack_require__(28);
 __webpack_require__(29);
-__webpack_require__(30);
 
-PhSim.Camera = __webpack_require__(31);
+PhSim.Camera = __webpack_require__(30);
 PhSim.Game = __webpack_require__(9);
-PhSim.Gradients = __webpack_require__(32);
+PhSim.Gradients = __webpack_require__(31);
 
-__webpack_require__(33);
+__webpack_require__(32);
 
-PhSim.calc_skinmesh = __webpack_require__(47);
+PhSim.calc_skinmesh = __webpack_require__(46);
 
+__webpack_require__(47);
 __webpack_require__(48);
-__webpack_require__(49);
 
-PhSim.ObjLoops = __webpack_require__(50);
+PhSim.ObjLoops = __webpack_require__(49);
 
 
 /**
@@ -2834,14 +2838,6 @@ module.exports = Game;
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(0);
-module.exports = __webpack_require__(51);
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
 const DynObject = __webpack_require__(1);
 const PhSim = __webpack_require__(0);
 
@@ -2977,7 +2973,7 @@ PhSim.matterPlugin = matterPlugin;
 Matter.Plugin.register(PhSim.matterPlugin); 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /** 
@@ -3790,7 +3786,7 @@ PhRender.prototype.dynamicDrawLayer = function(L) {
 module.exports = PhRender;
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /**
@@ -4027,7 +4023,7 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 module.exports = Sprites;
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /**
@@ -4089,7 +4085,7 @@ Audio.AudioArray = function(p_audio,onload) {
 module.exports = Audio;
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -4120,7 +4116,7 @@ module.exports = diagRect;
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Static = __webpack_require__(2);
@@ -4220,7 +4216,7 @@ BoundingBox.fromShape = function(object) {
 module.exports = BoundingBox;
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /**
@@ -4317,7 +4313,7 @@ Events.PhSimCollision = function() {
 module.exports = Events;
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -4363,7 +4359,7 @@ PhSim.prototype.getObjectFromLOStr = function(str) {
 }
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -4446,7 +4442,7 @@ PhSim.prototype.configRender = function() {
 }
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -4564,7 +4560,7 @@ PhSim.prototype.alert = function(options) {
 }
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Set Angle to mouse.
@@ -4736,7 +4732,7 @@ PhSim.prototype.renderAllCounters = function() {
 }
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -4810,7 +4806,7 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
 }
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -5174,7 +5170,7 @@ PhSim.prototype.deregisterKeyEvents = function() {
 }
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const DynObject = __webpack_require__(1);
@@ -5792,7 +5788,7 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -5821,7 +5817,7 @@ PhSim.prototype.applyGravitationalField = function() {
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -5882,7 +5878,7 @@ PhSim.prototype.exit = function() {
 }
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -6167,7 +6163,7 @@ var gotoSimulationIndex = function (i) {
 module.exports = gotoSimulationIndex;
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -6204,7 +6200,7 @@ PhSim.prototype.setRadius = function(dynObject,radius) {
 }
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -6338,7 +6334,7 @@ PhSim.prototype.loopFunction = function() {
 }
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -6408,7 +6404,7 @@ PhSim.prototype.extractWidget = function(dyn_object,widget) {
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports) {
 
 /**
@@ -6487,7 +6483,7 @@ Camera.prototype.setPosition = function(x,y) {
 module.exports = Camera;
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports) {
 
 
@@ -6520,7 +6516,7 @@ Gradients.extractGradient = function(ctx,jsObject) {
 module.exports = Gradients;
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -6592,9 +6588,9 @@ PhSim.Query.chkWidgetType = function() {
 }
 
 
+__webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
-__webpack_require__(36);
 
 
 const Game = __webpack_require__(9);
@@ -6624,6 +6620,7 @@ PhSim.Widgets.health = Game.Widgets.health;
 
 PhSim.Widgets.endGame = Game.Widgets.endGame;
 
+__webpack_require__(36);
 __webpack_require__(37);
 __webpack_require__(38);
 __webpack_require__(39);
@@ -6633,7 +6630,6 @@ __webpack_require__(42);
 __webpack_require__(43);
 __webpack_require__(44);
 __webpack_require__(45);
-__webpack_require__(46);
 
 /**
  * PlayAudio Widget
@@ -6674,7 +6670,7 @@ PhSim.Widgets.noRotation = function(dyn_object) {
 }
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports) {
 
 /**
@@ -6738,7 +6734,7 @@ PhSim.Widgets.circularConstraint = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -6885,7 +6881,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /**
@@ -6957,7 +6953,7 @@ PhSim.Widgets.draggable = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -7055,7 +7051,7 @@ PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Motion = __webpack_require__(8);
@@ -7240,7 +7236,7 @@ PhSim.Widgets.force = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -7261,7 +7257,7 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 
 /**
  * 
- * The `objLink_a` widget executes all functions in the {@link PhSim.DynObject#objLinkFunctions}
+ * The `objLink` widget executes all functions in the {@link PhSim.DynObject#objLinkFunctions}
  * array of `widget.target`. 
  * 
  * @function
@@ -7270,7 +7266,7 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
  * @param {LOAddress|PhSim.DynObject} widget.target -  Target object
  */
 
-PhSim.Widgets.objLink_a = function(dyn_object,widget) {
+PhSim.Widgets.objLink = function(dyn_object,widget) {
 
     var self = this;
     
@@ -7297,7 +7293,7 @@ PhSim.Widgets.objLink_a = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -7789,7 +7785,7 @@ PhSim.Widgets.wFunction = function(dyn_object,widget) {
 PhSim.prototype.wFunctionNames = {}
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports) {
 
 /**
@@ -7917,7 +7913,7 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports) {
 
 /**
@@ -7967,7 +7963,7 @@ PhSim.Widgets.keyboardControls = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /**
@@ -7995,7 +7991,7 @@ PhSim.Widgets.transformCameraByObj = function(dyn_object) {
 }
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports) {
 
 /**
@@ -8083,7 +8079,7 @@ PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports) {
 
 /**
@@ -8111,7 +8107,7 @@ PhSim.Widgets.deleteSelf = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports) {
 
 /**
@@ -8163,7 +8159,7 @@ PhSim.Widgets.stack = function(o,w) {
 }
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports) {
 
 /**
@@ -8200,13 +8196,13 @@ var calc_skinmesh = function(dynObject) {
 module.exports = calc_skinmesh;
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -8388,7 +8384,7 @@ PhSim.prototype.processVar = function(str) {
 }
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -8458,155 +8454,6 @@ ObjLoops.layer = function(layer,method) {
 }
 
 module.exports = ObjLoops;
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports) {
-
-// Generated by TypeDefGen module 
-// Built on Wed Oct 28 2020 13:14:50 GMT-0500 (Central Daylight Time)
-PhSim.boolKey = ["Velocity","Force","Position","Translate","DeleteSelf","Draggable","Coin","Hazard","Health","Elevator","TransformCameraByObject","TransformWithCamera","KeyboardControls","Alert","Connection","SetAngle","Rotation","NoRotation","RectText","NumVar","SetNumVar","SetColor","SetBorderColor","SetLineWidth","PlayAudio","ObjLink_a","Game","DeleteSelf","ToggleLock","CircularConstraint","DeleteSelf","ToggleSemiLock","WFunction"];
-PhSim.boolKey_lc = ["velocity","force","position","translate","deleteSelf","draggable","coin","hazard","health","elevator","transformCameraByObject","transformWithCamera","keyboardControls","alert","connection","setAngle","rotation","noRotation","rectText","numVar","setNumVar","setColor","setBorderColor","setLineWidth","playAudio","objLink_a","game","deleteSelf","toggleLock","circularConstraint","deleteSelf","toggleSemiLock","wFunction"];
-
- 
- 
-
-/**
-* @typedef {WFunctionOptions|DeleteSelf}
-* @property {Boolean} deleteSelf - Boolean for enabling the force widget
-*/
- 
-/**
-* @typedef {Object|Elevator}
-* @property {Vector} pointA - First point
-* @property {Vector} pointB - Second point
-*/
-
- 
-/**
-* @typedef {Object|TransformWithCamera}
-* @property {Boolean} transformWithCamera - Boolean for determining the object moves with the camera
-*/
- 
-/**
-* @typedef {Object|KeyboardControls}
-* @property {Number} up - Up velocity
-* @property {Number} down - Down velocity
-* @property {Number} left - Left velocity
-* @property {Number} right - Right velocity
-* @property {Boolean} keyboardControls - Boolean for enabling keyboard controls widget
-*/
- 
-/**
-* @typedef {Object|Alert}
-* @property {String} buttonTxt - Button Text
-* @property {String} name - Alert Name
-* @property {String} text - Text Message
-* @property {Boolean} alert - Boolean for enabling alert
-*/
- 
-/**
-* @typedef {Object|Connection}
-* @property {LOAddress} objectA - First Object
-* @property {LOAddress} objectB - Second Object
-* @property {Boolean} connection - Right velocity
-*/
- 
-/**
-* @typedef {WFunctionOptions|SetAngle}
-* @property {Number} cycle - Angle
-* @property {Boolean} circularConstraintRotation - Down velocity
-* @property {Boolean} rotation - Right velocity
-*/
- 
-/**
-* @typedef {WFunctionOptions|Rotation}
-* @property {Number} cycle - Angle
-* @property {Boolean} circularConstraintRotation - Down velocity
-* @property {Boolean} rotation - Right velocity
-*/
- 
-/**
-* @typedef {Object|NoRotation}
-* @property {Boolean} deleteSelf - Boolean for enabling the no rotation widget
-*/
- 
-/**
-* @typedef {Object|RectText}
-* @property {String} content - Rectangular Text Content
-* @property {String} font - Rectangular Text Font
-* @property {Number} margin - Text Margin
-* @property {Number} size - Text Margin
-* @property {Number} bordersize - Text Margin
-* @property {String} fill - Text Fill
-* @property {Boolean} rectText - Content
-* @property {String} lineWidth - Text Line Width
-*/
- 
-/**
-* @typedef {Object|NumVar}
-* @property {String} name - undefined
-* @property {Number} value - undefined
-* @property {Boolean} numVar - undefined
-*/
- 
-
-/**
-* @typedef {wFunctionObjects|SetColor}
-* @property {String} color - undefined
-* @property {Boolean} setColor - undefined
-*/
- 
-/**
-* @typedef {wFunctionObjects|SetBorderColor}
-* @property {String} color - undefined
-* @property {Boolean} setBorderColor - undefined
-*/
- 
-/**
-* @typedef {wFunctionObjects|SetLineWidth}
-* @property {Number} lineWidth - undefined
-* @property {Boolean} setLineWidth - undefined
-*/
- 
-/**
-* @typedef {wFunctionObjects|PlayAudio}
-* @property {String} src - undefined
-* @property {Boolean} playAudio - undefined
-*/
- 
-/**
-* @typedef {wFunctionObjects|ObjLink_a}
-* @property {LOAddress} target - undefined
-* @property {Boolean} objLink_a - undefined
-*/
- 
-/**
-* @typedef {Object|Game}
-* @property {Number} life - undefined
-* @property {Number} goal - undefined
-* @property {Number} score - undefined
-* @property {Boolean} game - undefined
-*/
- 
-/**
-* @typedef {Object|CircularConstraint}
-* @property {Boolean} circularConstraint - Boolean for enabling the circular constraint widget
-* @property {Number} x - Boolean for enabling the circular constraint widget
-* @property {Number} y - Boolean for enabling the circular constraint widget
-*/
- 
- 
-/**
-* @typedef {WFunctionOptions|WFunction}
-* @property {Function|String} function - WFunction widget
-* @property {Boolean} wFunction - Boolean for enabling wFunction widget.
-*/
- 
-/** 
- * @typedef {Velocity|Force|Position|Translate|DeleteSelf|Draggable|Coin|Hazard|Health|Elevator|TransformCameraByObject|TransformWithCamera|KeyboardControls|Alert|Connection|SetAngle|Rotation|NoRotation|RectText|NumVar|SetNumVar|SetColor|SetBorderColor|SetLineWidth|PlayAudio|ObjLink_a|Game|DeleteSelf|ToggleLock|CircularConstraint|DeleteSelf|ToggleSemiLock|WFunction} Widget 
-*/
-
 
 /***/ })
 /******/ ]);
