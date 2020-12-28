@@ -1,8 +1,6 @@
 const path = require('path');
 
-module.exports = [
-
-    // Non-minified
+var o = [
 
     {
         entry: "./src/phSim.js",
@@ -23,8 +21,6 @@ module.exports = [
         }
     },
 
-    // Minified Version
-
     {
         entry: "./src/phSim.js",
         mode: "production",
@@ -44,3 +40,5 @@ module.exports = [
         }
     }
 ];
+
+module.exports = o;
