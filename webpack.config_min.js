@@ -4,11 +4,11 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'phsim.js'
+    filename: 'phsim.min.js'
   },
 
   optimization: {
-    minimize: false,
+    minimize: true,
     concatenateModules: false
   },
 
