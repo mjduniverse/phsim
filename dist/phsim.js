@@ -5595,7 +5595,7 @@ PhSim.prototype.getCollisionList = function(dynObject) {
 
 /**
  * 
- * Get array of Dynamic Object colliding some specified colliding object
+ * Get array of Dynamic Object colliding some specified colliding object.
  * 
  * @function
  * @param {PhSim.DynObject} dynObject - Dynamic Object
