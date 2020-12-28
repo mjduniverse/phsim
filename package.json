@@ -19,14 +19,16 @@
     "jsdoc": "^3.6.6",
     "minami": "^1.2.3",
     "script-loader": "^0.7.2",
+    "terser": "^5.5.1",
     "terser-webpack-plugin": "^5.0.3",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx webpack && npx webpack --config webpack.config_min.js",
-    "generate-docs": "jsdoc src -c jsdoc.json --verbose -r"
+    "build": "npx webpack && npm run minify",
+    "generate-docs": "jsdoc src -c jsdoc.json --verbose -r",
+    "minify": "terser ./dist/phsim.js -o ./dist/phsim.min.js"
   },
   "keywords": [
     "phsim",
