@@ -4809,6 +4809,8 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const PhSim = __webpack_require__(0);
+
 /**
  * Fire the mousedown event for PhSim.
  * If {@link PhSim#objMouseArr} length is greater than zero, 
@@ -4818,8 +4820,6 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
  * @function
  * @param {MouseEvent} e - Mouse Event Object
  */
-
-const PhSim = __webpack_require__(0);
 
 /**
  * The standard object for mouse related DOM events
@@ -5881,6 +5881,9 @@ PhSim.prototype.exit = function() {
 /* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const Centroid = __webpack_require__(5);
+const Vector = __webpack_require__(4);
+
 /**
  * Go to simulation in the composite simulation
  * 
@@ -5896,9 +5899,6 @@ PhSim.prototype.exit = function() {
  * 
  *  
  */
-
-const Centroid = __webpack_require__(5);
-const Vector = __webpack_require__(4);
 
 var gotoSimulationIndex = function (i) {
 

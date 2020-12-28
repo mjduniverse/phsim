@@ -1,3 +1,6 @@
+const Centroid = require("../tools/centroid");
+const Vector = require("../tools/vector");
+
 /**
  * Go to simulation in the composite simulation
  * 
@@ -13,9 +16,6 @@
  * 
  *  
  */
-
-const Centroid = require("../tools/centroid");
-const Vector = require("../tools/vector");
 
 var gotoSimulationIndex = function (i) {
 

@@ -1,3 +1,5 @@
+const PhSim = require("../phSim");
+
 /**
  * Fire the mousedown event for PhSim.
  * If {@link PhSim#objMouseArr} length is greater than zero, 
@@ -7,8 +9,6 @@
  * @function
  * @param {MouseEvent} e - Mouse Event Object
  */
-
-const PhSim = require("../phSim");
 
 /**
  * The standard object for mouse related DOM events
