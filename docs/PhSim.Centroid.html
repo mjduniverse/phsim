@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>PhSim Class: PhSimCollision</title>
+	<title>PhSim Namespace: Centroid</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -107,15 +107,15 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: PhSimCollision</h1>
+	<h1 class="page-title">Namespace: Centroid</h1>
 <section>
 
 <header>
     
         <h2>
-            <span class="ancestors"><a href="PhSim.html">PhSim</a><a href="PhSim.Events.html">.Events</a>.</span>
+            <span class="ancestors"><a href="PhSim.html">PhSim</a>.</span>
         
-        PhSimCollision
+        Centroid
         </h2>
         
     
@@ -126,21 +126,148 @@
     <div class="container-overview">
     
         
+            <div class="description"><p>Namespace for functions that get the centroid (the center) of a <a href="global.html#PhSimObject">PhSimObject</a>.</p></div>
+        
+
+        
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="tools_centroid.js.html">tools/centroid.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
 <hr>
 <dt>
-    <h4 class="name" id="PhSimCollision"><span class="type-signature"></span>new PhSimCollision()</h4>
+    <h4 class="name" id=".polygon"><span class="type-signature">&lt;static> </span>polygon(a)</h4>
     
     
 </dt>
 <dd>
 
     
-
+    <div class="description">
+        <p>Find Centroid of a polygon</p>
+    </div>
     
 
     
 
     
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>a</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Polygon">Polygon</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Path</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -178,7 +305,7 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="events_eventObjects.js.html">events/eventObjects.js</a>
+				<a href="tools_centroid.js.html">tools/centroid.js</a>
 			</li>
 		</ul>
 	</dd>
@@ -203,12 +330,151 @@
     
 
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
 
     
 </dd>
 
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".rectangle"><span class="type-signature">&lt;static> </span>rectangle(rectangle)</h4>
     
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get centroid of a rectangle</p>
     </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rectangle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="tools_centroid.js.html">tools/centroid.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
 
     
 
@@ -221,7 +487,190 @@
     
 
     
+    <h5>Returns:</h5>
+    
+            
 
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".shape"><span class="type-signature">&lt;static> </span>shape(o)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get centroid of any shape.
+If it is a circle or a regPolygon, then <code>o</code> is returned because the properties <code>x</code> and
+<code>y</code> already define the centroid of the object.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>o</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#PhSimObject">PhSimObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="tools_centroid.js.html">tools/centroid.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        </dl>
     
 
     
