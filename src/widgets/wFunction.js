@@ -1,5 +1,5 @@
-const { statusCodes } = require("../phSim");
-const PhSim = require("../phSim");
+const { statusCodes } = require("..");
+const PhSim = require("..");
 
 /**
  * @file File for dealing with wFunctions.

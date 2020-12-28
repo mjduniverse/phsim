@@ -1,5 +1,5 @@
 const DynObject = require("./dynObject");
-const PhSim = require("./phSim");
+const PhSim = require(".");
 const Centroid = require("./tools/centroid");
 
 /**

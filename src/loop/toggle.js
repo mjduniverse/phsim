@@ -1,14 +1,29 @@
-const PhSim = require("../phSim");
+const PhSim = require("..");
+
+/**
+ * Play simulation
+ * @function
+ */
 
 PhSim.prototype.play = function() {
 	this.paused = false;
 	this.intervalLoop = setInterval(this.loopFunction.bind(this),this.delta);
 }
 
+/**
+ * Pause simulation
+ * @function
+ */
+
 PhSim.prototype.pause = function() {
 	clearInterval(this.intervalLoop);
 	this.paused = true;
 }
+
+/**
+ * Toggle Simulation
+ * @function
+ */
 
 PhSim.prototype.toggle = function() {
 	
@@ -21,6 +36,11 @@ PhSim.prototype.toggle = function() {
 	}
 
 }
+
+/**
+ * Exit simulation
+ * @function
+ */
 
 PhSim.prototype.exitSl = function() {
 	this.callEventClass("beforeslchange",this,new PhSim.Events.PhSimEvent("beforeslchange"));

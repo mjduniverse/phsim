@@ -1,4 +1,4 @@
-const PhSim = require("../phSim");
+const PhSim = require("..");
 
 /**
  * Set lock of the Dynamic Object

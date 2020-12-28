@@ -1,5 +1,5 @@
 const DynObject = require("./dynObject");
-const PhSim = require("./phSim");
+const PhSim = require(".");
 
 /**
  * Object that registers PhSim as a Matter.js plugin.
