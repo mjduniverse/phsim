@@ -1,5 +1,5 @@
 const Static = require("./objects");
-const PhSim = require("./phSim");
+const PhSim = require(".");
 const Vertices = require("./tools/vertex");
 const PhSimEventTarget = require("./events/eventListener");
 const EventStack = require("./events/eventStack");

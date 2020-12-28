@@ -1,4 +1,4 @@
-const PhSim = require("./phSim");
+const PhSim = require(".");
 
 /**
  * Assign PhRender to PhSim simulation

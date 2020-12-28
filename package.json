@@ -1,37 +1,45 @@
 {
   "name": "phsim",
   "version": "0.1.0-alpha",
-  "description": "A library that allows one to easily create web simulations. Runs on top of Matter.js.",
-  "main": "./src/phSim.js",
+  "description": "A matter-js library that allows one to easily create web simulations.",
+  "main": "./src/index.js",
   "directories": {
-    "test": "test"
+    "doc": "docs"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mjduniverse/phsim.git"
+    "url": "git+https://github.com/mjduniverse/phsim.git"
   },
   "dependencies": {
-    "ink-docstrap": "^1.3.2",
     "matter-js": "^0.14.2",
     "poly-decomp": "^0.3.0"
   },
   "devDependencies": {
+    "ink-docstrap": "^1.3.2",
+    "jsdoc": "^3.6.6",
     "minami": "^1.2.3",
     "script-loader": "^0.7.2",
+    "terser": "^5.5.1",
+    "terser-webpack-plugin": "^5.0.3",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./build.sh",
-    "generate-docs": "jsdoc src -c jsdoc.json --verbose -r"
+    "build": "npx webpack && npm run minify",
+    "generate-docs": "jsdoc src -c jsdoc.json --verbose -r",
+    "minify": "terser ./dist/phsim.js -o ./dist/phsim.min.js"
   },
   "keywords": [
-    "phSim",
+    "phsim",
     "matter-js",
     "physics",
     "games"
   ],
   "author": "mjduniverse",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mjduniverse/phsim/issues"
+  },
+  "homepage": "https://github.com/mjduniverse/phsim#readme"
 }

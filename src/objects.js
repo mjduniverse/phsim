@@ -1,4 +1,4 @@
-const PhSim = require("./phSim");
+const PhSim = require(".");
 
 /**
  * A static object is an object that is not simulated by the PhSim simulation.

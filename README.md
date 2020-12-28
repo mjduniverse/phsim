@@ -1,5 +1,5 @@
 # phsim
-PhSim is a matter.js plugin by [@mjduniverse](https://mjduniverse.github.io/). PhSim allows one to easily create a physics simulation without much hassle. PhSim could be used to create games as well.
+PhSim is a library built by [@mjduniverse](https://mjduniverse.github.io/) that runs on top of Matter.js. PhSim allows one to easily create a physics simulation without much hassle. PhSim could be used to create games as well.
 
  
 * [GitHub Repository](https://github.com/mjduniverse/phsim/)
@@ -14,7 +14,7 @@ PhSim requires the libaries [Matter.js](https://brm.io/matter-js/) and [poly-dec
 ```
 
 <script src="./js/decomp.min.js"></script>
-<script src=./js/matter.min.js"></script>
+<script src="./js/matter.min.js"></script>
 <script src="./js/phsim.min.js"></script>
 
 ```
@@ -22,8 +22,6 @@ PhSim requires the libaries [Matter.js](https://brm.io/matter-js/) and [poly-dec
 
 ## Some of the features:
 
-<li>The ablity to easily create games by treating composite simulations as games and the individual simulations as levels.</li>
-</ul>
 
 ### Rendering
 
@@ -45,3 +43,7 @@ A widget is something that extends the functionality of widgets and simulations.
 * __wFunctions:__ Special functions known as wFunctions that allow one to deal with events and time in an easier way.
 
 * __Draggable Objects:__: Objects tcan be dragged by the mouse using the [`draggable`](https://mjduniverse.github.io/phsim/docs/PhSim.Widgets.html#.draggable) widget</li>
+
+### Making games
+
+One can create basic games on PhSim using the [PhSim.Game](https://mjduniverse.github.io/phsim/docs/PhSim.Game.html) object. The library provides widgets that make objects act as [coins](https://mjduniverse.github.io/phsim/docs/PhSim.Widgets.html#.coin__anchor), [health](https://mjduniverse.github.io/phsim/docs/PhSim.Widgets.html#.health__anchor) and [hazards](https://mjduniverse.github.io/phsim/docs/PhSim.Widgets.html#.hazard__anchor). However, one can build their own game engine if they do not like the in built one. 

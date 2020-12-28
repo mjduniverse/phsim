@@ -53,6 +53,10 @@
 
 function PhSim(dynSimOptions = new PhSim.Static()) {
 
+	if(dynSimOptions) {
+		Object.assign(this,dynSimOptions);
+	}
+
 	PhSim.Static.call(this);
 
 	if(Array.isArray(dynSimOptions.simulations)) {

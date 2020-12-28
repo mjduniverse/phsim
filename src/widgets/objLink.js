@@ -16,7 +16,7 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 
 /**
  * 
- * The `objLink_a` widget executes all functions in the {@link PhSim.DynObject#objLinkFunctions}
+ * The `objLink` widget executes all functions in the {@link PhSim.DynObject#objLinkFunctions}
  * array of `widget.target`. 
  * 
  * @function
@@ -25,7 +25,7 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
  * @param {LOAddress|PhSim.DynObject} widget.target -  Target object
  */
 
-PhSim.Widgets.objLink_a = function(dyn_object,widget) {
+PhSim.Widgets.objLink = function(dyn_object,widget) {
 
     var self = this;
     

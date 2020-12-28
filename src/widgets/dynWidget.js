@@ -1,7 +1,7 @@
 // Set Angle to mouse.
 
 const DynObject = require("../dynObject");
-const PhSim = require("../phSim");
+const PhSim = require("..");
 
 // Object Connection
 

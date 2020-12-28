@@ -1,4 +1,4 @@
-const PhSim = require("./phSim");
+const PhSim = require(".");
 
 /**
  * Object containing variables that can be read by widgets such as

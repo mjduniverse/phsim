@@ -114,8 +114,534 @@
 </header>
 
 <article>
-    <p>Widgets extend the functionality of PhSim objects. These are stored as functions in the <a href="PhSim.Widgets.html">PhSim.Widgets</a> namespace and it can be extended.</p>
+    <script src="https://cdn.jsdelivr.net/npm/poly-decomp@0.3.0/build/decomp.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/matter-js@0.14.2/build/matter.min.js"></script>
+<script src="../dist/phsim.js"></script>
+<p>Widgets extend the functionality of PhSim objects. These are stored as functions in the <a href="PhSim.Widgets.html">PhSim.Widgets</a> namespace and it can be extended.</p>
 <p>Widgets are activated using the <a href="global.html#PhSim#extractWidget">PhSim#extractWidget</a> function.</p>
+<p>Here is an example of a simualtion using widgets:</p>
+<pre class="prettyprint source"><code>var o = {
+    &quot;objUniverse&quot;: [
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 45.571428571428555,
+            &quot;y&quot;: 161.14285714285714,
+            &quot;w&quot;: 60,
+            &quot;h&quot;: 57,
+            &quot;cycle&quot;: 0,
+            &quot;strokeStyle&quot;: &quot;#000000&quot;,
+            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;fillStyle&quot;: &quot;#333333&quot;,
+            &quot;widgets&quot;: [
+                {
+                    &quot;type&quot;: &quot;setColor&quot;,
+                    &quot;trigger&quot;: &quot;key&quot;,
+                    &quot;key&quot;: &quot;a&quot;,
+                    &quot;color&quot;: &quot;#b40000&quot;
+                }
+            ],
+            &quot;locked&quot;: true
+        },
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 45.571428571428555,
+            &quot;y&quot;: 108.14285714285714,
+            &quot;w&quot;: 216,
+            &quot;h&quot;: 36,
+            &quot;cycle&quot;: 0,
+            &quot;strokeStyle&quot;: &quot;transparent&quot;,
+            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;fillStyle&quot;: &quot;transparent&quot;,
+            &quot;widgets&quot;: [
+                {
+                    &quot;type&quot;: &quot;rectText&quot;,
+                    &quot;font&quot;: &quot;Arial&quot;,
+                    &quot;content&quot;: &quot;Press \&quot;a\&quot;.&quot;,
+                    &quot;fill&quot;: &quot;#000000&quot;,
+                    &quot;borderColor&quot;: &quot;#3f0000&quot;,
+                    &quot;size&quot;: 16
+                }
+            ],
+            &quot;locked&quot;: true
+        },
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 261.57142857142856,
+            &quot;y&quot;: 162.39285714285714,
+            &quot;w&quot;: 60,
+            &quot;h&quot;: 57,
+            &quot;cycle&quot;: 0,
+            &quot;strokeStyle&quot;: &quot;#000000&quot;,
+            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;fillStyle&quot;: &quot;#333333&quot;,
+            &quot;widgets&quot;: [
+                {
+                    &quot;type&quot;: &quot;setColor&quot;,
+                    &quot;trigger&quot;: &quot;time&quot;,
+                    &quot;key&quot;: &quot;a&quot;,
+                    &quot;color&quot;: &quot;#b40000&quot;,
+                    &quot;time&quot;: 3000
+                }
+            ],
+            &quot;locked&quot;: true
+        },
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 240.57142857142856,
+            &quot;y&quot;: 107.39285714285714,
+            &quot;w&quot;: 216,
+            &quot;h&quot;: 36,
+            &quot;cycle&quot;: 0,
+            &quot;strokeStyle&quot;: &quot;transparent&quot;,
+            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;fillStyle&quot;: &quot;transparent&quot;,
+            &quot;widgets&quot;: [
+                {
+                    &quot;type&quot;: &quot;rectText&quot;,
+                    &quot;font&quot;: &quot;Arial&quot;,
+                    &quot;content&quot;: &quot;Wait 3 seconds&quot;,
+                    &quot;fill&quot;: &quot;#000000&quot;,
+                    &quot;borderColor&quot;: &quot;#3f0000&quot;,
+                    &quot;size&quot;: 16
+                }
+            ],
+            &quot;locked&quot;: true
+        },
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 472.57142857142856,
+            &quot;y&quot;: 166.3928571428571,
+            &quot;w&quot;: 60,
+            &quot;h&quot;: 57,
+            &quot;cycle&quot;: 0.0035211122086378807,
+            &quot;strokeStyle&quot;: &quot;#000000&quot;,
+            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;fillStyle&quot;: &quot;#333333&quot;,
+            &quot;widgets&quot;: [
+                {
+                    &quot;type&quot;: &quot;setColor&quot;,
+                    &quot;trigger&quot;: &quot;objclick&quot;,
+                    &quot;key&quot;: &quot;a&quot;,
+                    &quot;color&quot;: &quot;#b40000&quot;,
+                    &quot;time&quot;: 3000
+                }
+            ],
+            &quot;locked&quot;: true
+        },
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 464.57142857142856,
+            &quot;y&quot;: 113.39285714285714,
+            &quot;w&quot;: 216,
+            &quot;h&quot;: 36,
+            &quot;cycle&quot;: 0,
+            &quot;strokeStyle&quot;: &quot;transparent&quot;,
+            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;fillStyle&quot;: &quot;transparent&quot;,
+            &quot;widgets&quot;: [
+                {
+                    &quot;type&quot;: &quot;rectText&quot;,
+                    &quot;font&quot;: &quot;Arial&quot;,
+                    &quot;content&quot;: &quot;Click me!&quot;,
+                    &quot;fill&quot;: &quot;#000000&quot;,
+                    &quot;borderColor&quot;: &quot;#3f0000&quot;,
+                    &quot;size&quot;: 16
+                }
+            ],
+            &quot;locked&quot;: true
+        },
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 209.57142857142856,
+            &quot;y&quot;: 20.14285714285714,
+            &quot;w&quot;: 724,
+            &quot;h&quot;: 43,
+            &quot;cycle&quot;: 0,
+            &quot;strokeStyle&quot;: &quot;transparent&quot;,
+            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;fillStyle&quot;: &quot;transparent&quot;,
+            &quot;widgets&quot;: [
+                {
+                    &quot;type&quot;: &quot;rectText&quot;,
+                    &quot;font&quot;: &quot;Arial&quot;,
+                    &quot;name&quot;: &quot;&quot;,
+                    &quot;fill&quot;: &quot;#000000&quot;,
+                    &quot;borderColor&quot;: &quot;transparent&quot;,
+                    &quot;content&quot;: &quot;Follow instructions to change color of objects&quot;,
+                    &quot;size&quot;: 20
+                }
+            ],
+            &quot;locked&quot;: true
+        },
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 669,
+            &quot;y&quot;: 165.5,
+            &quot;w&quot;: 60,
+            &quot;h&quot;: 57,
+            &quot;cycle&quot;: 0,
+            &quot;strokeStyle&quot;: &quot;#000000&quot;,
+            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;fillStyle&quot;: &quot;#333333&quot;,
+            &quot;widgets&quot;: [
+                {
+                    &quot;type&quot;: &quot;setColor&quot;,
+                    &quot;trigger&quot;: &quot;objlink&quot;,
+                    &quot;key&quot;: &quot;a&quot;,
+                    &quot;color&quot;: &quot;#b40000&quot;,
+                    &quot;time&quot;: 3000
+                }
+            ],
+            &quot;locked&quot;: true,
+            &quot;name&quot;: &quot;object_4&quot;
+        },
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 24,
+            &quot;y&quot;: 575,
+            &quot;w&quot;: 757,
+            &quot;h&quot;: -20,
+            &quot;cycle&quot;: 0,
+            &quot;strokeStyle&quot;: &quot;#000000&quot;,
+            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;fillStyle&quot;: &quot;#00ff00&quot;,
+            &quot;locked&quot;: true,
+            &quot;name&quot;: &quot;green_rectangle&quot;,
+            &quot;sensorClass&quot;: &quot;class_1&quot;
+        },
+        {
+            &quot;shape&quot;: &quot;circle&quot;,
+            &quot;x&quot;: 403,
+            &quot;y&quot;: 374,
+            &quot;radius&quot;: 35.90264614203248,
+            &quot;cycle&quot;: 1.346085158380254,
+            &quot;name&quot;: &quot;blue_circle&quot;,
+            &quot;strokeStyle&quot;: &quot;#000000&quot;,
+            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;fillStyle&quot;: &quot;#0000ff&quot;,
+            &quot;sensorClass&quot;: &quot;class_1&quot;,
+            &quot;widgets&quot;: [
+                {
+                    &quot;type&quot;: &quot;objLink&quot;,
+                    &quot;target&quot;: {
+                        &quot;L&quot;: 0,
+                        &quot;O&quot;: 7
+                    },
+                    &quot;trigger&quot;: &quot;sensor&quot;
+                }
+            ]
+        },
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 642,
+            &quot;y&quot;: 108,
+            &quot;w&quot;: 216,
+            &quot;h&quot;: 36,
+            &quot;cycle&quot;: 0,
+            &quot;strokeStyle&quot;: &quot;transparent&quot;,
+            &quot;lineWidth&quot;: &quot;4&quot;,
+            &quot;fillStyle&quot;: &quot;transparent&quot;,
+            &quot;widgets&quot;: [
+                {
+                    &quot;type&quot;: &quot;rectText&quot;,
+                    &quot;font&quot;: &quot;Arial&quot;,
+                    &quot;content&quot;: &quot;(Watch blue ball)&quot;,
+                    &quot;fill&quot;: &quot;#000000&quot;,
+                    &quot;borderColor&quot;: &quot;#3f0000&quot;,
+                    &quot;size&quot;: 16
+                }
+            ],
+            &quot;locked&quot;: true
+        }
+    ],
+    &quot;name&quot;: &quot;Untitled Layer&quot;,
+
+    &quot;world&quot;: {
+        &quot;grav&quot;: 1,
+        &quot;bg&quot;: &quot;#0077ff&quot;,
+        &quot;border&quot;: null,
+        &quot;unit&quot;: 1
+}
+
+var phSim = new PhSim(o);
+
+</code></pre>
+<p>Which can be tested here:</p>
+<div style="border: 1px solid #aaa;" id="simulation-1"></div>
+<p><span class="btn btn-default" style="float: right; margin-top: 10px;"  id="play-simulation-1">Play</span></p>
+<script>
+
+(function() {
+
+    var o = {
+        "objUniverse": [
+            {
+                "shape": "rectangle",
+                "x": 45.571428571428555,
+                "y": 161.14285714285714,
+                "w": 60,
+                "h": 57,
+                "cycle": 0,
+                "strokeStyle": "#000000",
+                "lineWidth": "4",
+                "fillStyle": "#333333",
+                "widgets": [
+                    {
+                        "type": "setColor",
+                        "trigger": "key",
+                        "key": "a",
+                        "color": "#b40000"
+                    }
+                ],
+                "locked": true
+            },
+            {
+                "shape": "rectangle",
+                "x": 45.571428571428555,
+                "y": 108.14285714285714,
+                "w": 216,
+                "h": 36,
+                "cycle": 0,
+                "strokeStyle": "transparent",
+                "lineWidth": "4",
+                "fillStyle": "transparent",
+                "widgets": [
+                    {
+                        "type": "rectText",
+                        "font": "Arial",
+                        "content": "Press \"a\".",
+                        "fill": "#000000",
+                        "borderColor": "#3f0000",
+                        "size": 16
+                    }
+                ],
+                "locked": true
+            },
+            {
+                "shape": "rectangle",
+                "x": 261.57142857142856,
+                "y": 162.39285714285714,
+                "w": 60,
+                "h": 57,
+                "cycle": 0,
+                "strokeStyle": "#000000",
+                "lineWidth": "4",
+                "fillStyle": "#333333",
+                "widgets": [
+                    {
+                        "type": "setColor",
+                        "trigger": "time",
+                        "key": "a",
+                        "color": "#b40000",
+                        "time": 3000
+                    }
+                ],
+                "locked": true
+            },
+            {
+                "shape": "rectangle",
+                "x": 240.57142857142856,
+                "y": 107.39285714285714,
+                "w": 216,
+                "h": 36,
+                "cycle": 0,
+                "strokeStyle": "transparent",
+                "lineWidth": "4",
+                "fillStyle": "transparent",
+                "widgets": [
+                    {
+                        "type": "rectText",
+                        "font": "Arial",
+                        "content": "Wait 3 seconds",
+                        "fill": "#000000",
+                        "borderColor": "#3f0000",
+                        "size": 16
+                    }
+                ],
+                "locked": true
+            },
+            {
+                "shape": "rectangle",
+                "x": 472.57142857142856,
+                "y": 166.3928571428571,
+                "w": 60,
+                "h": 57,
+                "cycle": 0.0035211122086378807,
+                "strokeStyle": "#000000",
+                "lineWidth": "4",
+                "fillStyle": "#333333",
+                "widgets": [
+                    {
+                        "type": "setColor",
+                        "trigger": "objclick",
+                        "key": "a",
+                        "color": "#b40000",
+                        "time": 3000
+                    }
+                ],
+                "locked": true
+            },
+            {
+                "shape": "rectangle",
+                "x": 464.57142857142856,
+                "y": 113.39285714285714,
+                "w": 216,
+                "h": 36,
+                "cycle": 0,
+                "strokeStyle": "transparent",
+                "lineWidth": "4",
+                "fillStyle": "transparent",
+                "widgets": [
+                    {
+                        "type": "rectText",
+                        "font": "Arial",
+                        "content": "Click me!",
+                        "fill": "#000000",
+                        "borderColor": "#3f0000",
+                        "size": 16
+                    }
+                ],
+                "locked": true
+            },
+            {
+                "shape": "rectangle",
+                "x": 209.57142857142856,
+                "y": 20.14285714285714,
+                "w": 724,
+                "h": 43,
+                "cycle": 0,
+                "strokeStyle": "transparent",
+                "lineWidth": "4",
+                "fillStyle": "transparent",
+                "widgets": [
+                    {
+                        "type": "rectText",
+                        "font": "Arial",
+                        "name": "",
+                        "fill": "#000000",
+                        "borderColor": "transparent",
+                        "content": "Follow instructions to change color of objects",
+                        "size": 20
+                    }
+                ],
+                "locked": true
+            },
+            {
+                "shape": "rectangle",
+                "x": 669,
+                "y": 165.5,
+                "w": 60,
+                "h": 57,
+                "cycle": 0,
+                "strokeStyle": "#000000",
+                "lineWidth": "4",
+                "fillStyle": "#333333",
+                "widgets": [
+                    {
+                        "type": "setColor",
+                        "trigger": "objlink",
+                        "key": "a",
+                        "color": "#b40000",
+                        "time": 3000
+                    }
+                ],
+                "locked": true,
+                "name": "object_4"
+            },
+            {
+                "shape": "rectangle",
+                "x": 24,
+                "y": 575,
+                "w": 757,
+                "h": -20,
+                "cycle": 0,
+                "strokeStyle": "#000000",
+                "lineWidth": "4",
+                "fillStyle": "#00ff00",
+                "locked": true,
+                "name": "green_rectangle",
+                "sensorClass": "class_1"
+            },
+            {
+                "shape": "circle",
+                "x": 403,
+                "y": 374,
+                "radius": 35.90264614203248,
+                "cycle": 1.346085158380254,
+                "name": "blue_circle",
+                "strokeStyle": "#000000",
+                "lineWidth": "4",
+                "fillStyle": "#0000ff",
+                "sensorClass": "class_1",
+                "widgets": [
+                    {
+                        "type": "objLink",
+                        "target": {
+                            "L": 0,
+                            "O": 7
+                        },
+                        "trigger": "sensor"
+                    }
+                ]
+            },
+            {
+                "shape": "rectangle",
+                "x": 642,
+                "y": 108,
+                "w": 216,
+                "h": 36,
+                "cycle": 0,
+                "strokeStyle": "transparent",
+                "lineWidth": "4",
+                "fillStyle": "transparent",
+                "widgets": [
+                    {
+                        "type": "rectText",
+                        "font": "Arial",
+                        "content": "(Watch blue ball)",
+                        "fill": "#000000",
+                        "borderColor": "#3f0000",
+                        "size": 16
+                    }
+                ],
+                "locked": true
+            }
+        ],
+
+        "world": {
+            "grav": 1,
+            "bg": "#0077ff",
+            "border": null,
+            "unit": 1
+        }
+
+    }
+
+    var phSim = new PhSim(o);
+
+    // HTML elements
+
+    var played = false
+
+    document.querySelector("#simulation-1").appendChild(phSim.container);
+
+    document.querySelector("#play-simulation-1").addEventListener("click",function(){
+
+        if(played) {
+            phSim.gotoSimulationIndex(0);
+        }
+
+        else {
+            phSim.play();
+            played = true;
+        }
+
+    })
+
+
+})();
+
+</script>
 <h2>Adding widgets to a Dynamic Object</h2>
 <p>Here is an example of a static polygon with the velocity widget:</p>
 <pre class="prettyprint source"><code>{
@@ -275,7 +801,7 @@ phSim.play();
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2020-12-27T01:19:43-06:00
+		on 2020-12-27T17:46:34-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
