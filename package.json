@@ -4,11 +4,11 @@
   "description": "A matter-js library that allows one to easily create web simulations.",
   "main": "./src/index.js",
   "directories": {
-    "test": "test"
+    "doc": "docs"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mjduniverse/phsim.git"
+    "url": "git+https://github.com/mjduniverse/phsim.git"
   },
   "dependencies": {
     "matter-js": "^0.14.2",
@@ -35,5 +35,9 @@
     "games"
   ],
   "author": "mjduniverse",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mjduniverse/phsim/issues"
+  },
+  "homepage": "https://github.com/mjduniverse/phsim#readme"
 }
