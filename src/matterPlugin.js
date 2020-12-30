@@ -1,6 +1,16 @@
 const DynObject = require("./dynObject");
 const PhSim = require(".");
 
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = require("matter-js");
+}
+
+catch {
+	
+}
+
 /**
  * Object that registers PhSim as a Matter.js plugin.
  * The modified matter.js object is stored in {@link Matter}

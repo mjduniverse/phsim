@@ -1,3 +1,13 @@
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = require("matter-js");
+}
+
+catch {
+	
+}
+
 /**
  * The `draggable` widget makes {@link PhSim.DynObject} objects draggable.
  * 

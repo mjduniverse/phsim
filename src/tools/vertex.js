@@ -1,5 +1,15 @@
 const Vertices = {}
 
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = require("matter-js");
+}
+
+catch {
+	
+}
+
 /**
  * 
  * Get vertices for a static object representing a regular polygon.

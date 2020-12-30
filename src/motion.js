@@ -2,6 +2,16 @@ const DynObject = require("./dynObject");
 const PhSim = require(".");
 const Centroid = require("./tools/centroid");
 
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = require("matter-js");
+}
+
+catch {
+	
+}
+
 /**
  * Namespace of functions used to move objects in various ways.
  * @memberof PhSim

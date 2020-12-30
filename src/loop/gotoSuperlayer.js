@@ -1,6 +1,16 @@
 const Centroid = require("../tools/centroid");
 const Vector = require("../tools/vector");
 
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = require("matter-js");
+}
+
+catch {
+	
+}
+
 /**
  * Go to simulation in the composite simulation
  * 

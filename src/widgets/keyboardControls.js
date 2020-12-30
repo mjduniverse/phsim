@@ -1,3 +1,13 @@
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = require("matter-js");
+}
+
+catch {
+	
+}
+
 /**
  * 
  * The `keyboardControls` widget is a widget that makes an object go at a certain velocity
