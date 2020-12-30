@@ -1739,6 +1739,12 @@ const EventStack = function() {
 
 	this.levelloss = [];
 
+	/**
+	 * Array of functions to be executed when an wFunction body makes an error.
+	 */
+
+	this.wfunctionerror = [];
+
 
 }
 
@@ -1976,6 +1982,49 @@ Vector.rotate = function(x,y,a) {
 
 Vector.svgVector = function(x,y) {
 	return x + "," + y;
+}
+
+/**
+ * Calculate dot product of `vector1` and `vector2`.
+ * 
+ * @function
+ * @param {Vector} vector1
+ * @param {Vector} vector2
+ * @returns {Number} - The dot product 
+ */
+
+Vector.dotProduct = function(vector1,vector2) {
+	return vector1.x * vector2.x + vector1.y * vector2.y;
+}
+
+/**
+ * 
+ * Gets angle between two lines that both end at `vertex`.
+ * 
+ * That is, suppose that `A` is the point `ray1`, `B` is the point `ray2` and that
+ * `C` is the point `vertex`. Then, `vectorToArray` returns the angle between the lines
+ * `AC` and `BC`.
+ * 
+ * @param {Vector} vertex 
+ * @param {Vector} ray1 
+ * @param {Vector} ray2
+ * @returns {Number} - The angle 
+ */
+
+Vector.vectorToArray = function(vertex,ray1,ray2) {
+
+	ray1.x = ray1.x - vertex.x;
+	ray1.y = ray1.y - vertex.y;
+
+	ray2.x = ray2.x - vertex.x;
+	ray2.y = ray2.y - vertex.y;
+
+	var ratio = calc_dot_product(ray1.x,ray1.y,ray2.x,ray2.y);
+
+	var angle = Math.acos(ratio);
+
+	return angle;
+
 }
 
 module.exports = Vector;
@@ -7509,7 +7558,16 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	 */
 
     var wFunction = function(e) {
-        return wFunctionBody.apply(thisRef,e);
+
+		try {
+			return wFunctionBody.apply(thisRef,e);
+		}
+
+		catch(e) {
+			self.callEventClass("wfunctionerror",self,e);
+			throw e;
+		}
+
 	}
 
 	wFunction._options = options;
