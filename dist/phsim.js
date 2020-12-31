@@ -7784,7 +7784,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		catch(e) {
 			self.callEventClass("wfunctionerror",self,e);
-			throw e;
+			console.error(e);
 		}
 
 	}
