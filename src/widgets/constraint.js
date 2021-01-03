@@ -1,4 +1,7 @@
+const Vector = require("../tools/vector");
+
 /**
+ * 
  * 
  * Constraint Widget
  * 

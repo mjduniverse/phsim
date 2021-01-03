@@ -548,11 +548,11 @@ if(true) {
     module.exports = PhSim;
 }
 
-PhSim.Static = __webpack_require__(3 );
+PhSim.Static = __webpack_require__(4 );
 
 __webpack_require__(11 );
 
-PhSim.EventStack = __webpack_require__(4 );
+PhSim.EventStack = __webpack_require__(5 );
 
 /**
  * Object containing array functions to be called.
@@ -571,7 +571,7 @@ PhSim.prototype.simulationEventStack = new PhSim.EventStack();
 PhSim.PhRender = __webpack_require__(12);
 PhSim.Sprites = __webpack_require__(13);
 PhSim.Audio = __webpack_require__(14);
-PhSim.Vector = __webpack_require__(5);
+PhSim.Vector = __webpack_require__(3);
 PhSim.diagRect = __webpack_require__(15);
 PhSim.Vertices = __webpack_require__(7);
 
@@ -611,12 +611,12 @@ PhSim.Gradients = __webpack_require__(32);
 
 __webpack_require__(33);
 
-PhSim.calc_skinmesh = __webpack_require__(47);
+PhSim.calc_skinmesh = __webpack_require__(48);
 
-__webpack_require__(48);
 __webpack_require__(49);
+__webpack_require__(50);
 
-PhSim.ObjLoops = __webpack_require__(50);
+PhSim.ObjLoops = __webpack_require__(51);
 
 
 /**
@@ -659,11 +659,11 @@ module.exports = require("matter-js");
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(3);
+const Static = __webpack_require__(4);
 const PhSim = __webpack_require__(0);
 const Vertices = __webpack_require__(7);
 const PhSimEventTarget = __webpack_require__(8);
-const EventStack = __webpack_require__(4);
+const EventStack = __webpack_require__(5);
 
 // Try to import matter.js as a commonJS module
 
@@ -705,7 +705,7 @@ var DynObject = function(staticObject,matterBody) {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
 	}
 
-	this.firstCycle = staticObject.cycle;
+	this.firstCycle = staticObject.cycle || 0;
 
 	if(staticObject.shape === "composite") {
 		this.flattenedParts = DynObject.flattenComposite();
@@ -996,6 +996,288 @@ module.exports = DynObject;
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+/** 
+ * Constructor for the minimal requirements for being a {@link Vector}.
+ *  
+ * @memberof PhSim
+ * @constructor
+ * @param {Number} x 
+ * @param {Number} y
+ * 
+ */
+
+var Vector = function(x,y) {
+	
+	/**
+	 * x-coordinate of the vector
+	 * @type {Number}
+	 */
+	
+	this.x;
+
+	/**
+	 * y-coordinate of the vector
+	 * @type {Number}
+	 */
+	
+	this.y;
+
+	if(typeof x === "number") {
+		this.x = x;
+	}
+
+	else {
+		console.trace();
+		throw "Expecting a number in argument 1";
+	}
+
+	if(typeof y === "number") {
+		this.y = y;
+	}
+
+	else {
+		console.trace()
+		throw "Expecting a number in argument 2"
+	}
+
+}
+
+/**
+ * 
+ * Perform vector addition
+ * 
+ * @function
+ * @param {Vector} vector1 - The first vector
+ * @param {Vector} vector2 - The second vector
+ * 
+ * @param {Boolean} [newObj = true] - Boolean that determines the return value. 
+ * If true, then it returns a new Vector object `vector` such that 
+ * `vector.x === vector1.x + vector2.x` and `vector.x === vector1.y + vector2.y`
+ * 
+ * If false, then `vector2.x` is added to `vector1.x`, `vector2.y` is added to `vector1.y`
+ * and then `vector1` is returned.
+ * 
+ * @returns {Vector} - The sum of the two vectors. New object if `newObj` is true. Returns
+ * `vector1` otherwise. 
+ */
+
+Vector.add = function(vector1,vector2,newObj = true) {
+	
+	if(newObj) {
+		return new Vector(vector1.x + vector2.x, vector1.y + vector2.y);
+	}
+
+	else {
+		vector1.x = vector1.x + vector2.x;
+		vector1.y = vector1.y + vector2.y;
+		return vector1;
+	}
+
+}
+
+/**
+ * 
+ * Perform vector subtraction
+ * 
+ * @function
+ * @param {Vector} vector1 
+ * @param {Vector} vector2 
+ * 
+ * * @param {Boolean} [newObj = true] - Boolean that determines the return value. 
+ * If true, then it returns a new Vector object `vector` such that 
+ * `vector.x === vector1.x - vector2.x` and `vector.x === vector1.y - vector2.y`
+ * 
+ * If false, then `vector2.x` is subtracted from `vector1.x`, `vector2.y` is subtracted 
+ * from `vector1.y` and then `vector1` is returned.
+ * 
+ * @returns {Vector} - The difference between the two vectors. New object if `newObj` is true. Returns
+ * `vector1` otherwise. 
+ */
+
+Vector.subtract = function(vector1,vector2,newObj = true) {
+
+	if(newObj) {
+		return new Vector(vector1.x - vector2.x, vector1.y - vector2.y);	}
+
+	else {
+		vector1.x = vector1.x - vector2.x;
+		vector1.y = vector1.y - vector2.y;
+		return vector1;
+	}
+
+}
+
+/**
+ * 
+ * Multiply a vector by a scalar
+ * 
+ * @function
+ * @param {Vector} vector 
+ * @param {Number} scalar
+ * @returns {Vector} 
+ * 
+ */
+
+Vector.scale = function(vector,scalar) {
+	return new Vector(vector.x * scalar,vector.y * scalar)
+}
+
+/**
+ * 
+ * Divide a vector by a scalar
+ * 
+ * @function
+ * @param {Vector} vector 
+ * @param {Number} scalar
+ * @returns {Vector} 
+ *  
+ */
+
+Vector.divide = function(vector,scalar) {
+	return new Vector(vector.x * (1/scalar),vector.y * (1/scalar));
+}
+
+/**
+ * 
+ * Get distance between two vectors.
+ * 
+ * @function
+ * @param {Vector} vector1 
+ * @param {Vector} vector2
+ * @returns - The vector distance
+ *  
+ */
+
+Vector.distance = function(vector1,vector2) {
+	
+	var l1 = Math.pow(vector1.x - vector2.x,2);
+	var l2 = Math.pow(vector1.y - vector2.y,2);
+
+	return Math.sqrt(l1+l2);
+
+}
+
+/**
+ * 
+ * Get length of the vector
+ * 
+ * @function
+ * @param {Vector} vector 
+ * @returns {Number} - The length of the vector
+ */
+
+Vector.getLength = function(vector) {
+	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
+}
+
+/**
+ * 
+ * Get normalized vector of some vector.
+ * 
+ * @function
+ * @param {Vector} vector - Vector to normalize.
+ * @returns {Vector} -  The Unit Vector
+ */
+
+Vector.unitVector = function(vector) {
+	return Vector.scale(vector,1/Vector.getLength(vector));
+}
+
+/**
+ * Apply a linear transformation defined by a 2x2 matrix to a vector.
+ * 
+ * @function
+ * @param {Number} a11 - Element found in row 1, column 1
+ * @param {Number} a12 - Element found in row 1, column 2
+ * @param {Number} a21 - Element found in row 2, column 1
+ * @param {Number} a22 - Element found in row 2, column 2
+ * @param {Number} x - x-coordinate of vector to be transformed
+ * @param {Number} y - y-coordinate of vector to be transformed
+ * @returns - The transformed vector 
+ */
+
+Vector.applyTransformation = function(a11,a12,a21,a22,x,y) {
+	return new Vector(a11 * x + a12 * y,a21 * x + a22 * y);
+}
+
+/**
+ * 
+ * Rotate a vector (x,y) by angle a
+ * 
+ * @function
+ * @param {Number} x - x-coordinate
+ * @param {Number} y - y-coordinate
+ * @param {Number} a - Angle in radians
+ * @returns {Vector}
+ */
+
+Vector.rotate = function(x,y,a) {
+	return Vector.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
+}
+
+/**
+ * Get SVG point
+ * @param {Number} x 
+ * @param {Number} y
+ * @returns {String} - SVG Vector String 
+ */
+
+Vector.svgVector = function(x,y) {
+	return x + "," + y;
+}
+
+/**
+ * Calculate dot product of `vector1` and `vector2`.
+ * 
+ * @function
+ * @since 0.2.0-alpha
+ * @param {Vector} vector1
+ * @param {Vector} vector2
+ * @returns {Number} - The dot product 
+ */
+
+Vector.dotProduct = function(vector1,vector2) {
+	return vector1.x * vector2.x + vector1.y * vector2.y;
+}
+
+/**
+ * 
+ * Gets angle between two lines that both end at `vertex`.
+ * 
+ * That is, suppose that `A` is the point `ray1`, `B` is the point `ray2` and that
+ * `C` is the point `vertex`. Then, `vectorToArray` returns the angle between the lines
+ * `AC` and `BC`.
+ * 
+ * @function
+ * @since 0.2.0-alpha
+ * @param {Vector} vertex 
+ * @param {Vector} ray1 
+ * @param {Vector} ray2
+ * @returns {Number} - The angle 
+ */
+
+Vector.vectorToArray = function(vertex,ray1,ray2) {
+
+	ray1.x = ray1.x - vertex.x;
+	ray1.y = ray1.y - vertex.y;
+
+	ray2.x = ray2.x - vertex.x;
+	ray2.y = ray2.y - vertex.y;
+
+	var ratio = calc_dot_product(ray1.x,ray1.y,ray2.x,ray2.y);
+
+	var angle = Math.acos(ratio);
+
+	return angle;
+
+}
+
+module.exports = Vector;
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -1568,7 +1850,7 @@ Static.SLO = function(S,L,O) {
 module.exports = Static;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /**
@@ -1775,288 +2057,6 @@ const EventStack = function() {
 }
 
 module.exports = EventStack;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-/** 
- * Constructor for the minimal requirements for being a {@link Vector}.
- *  
- * @memberof PhSim
- * @constructor
- * @param {Number} x 
- * @param {Number} y
- * 
- */
-
-var Vector = function(x,y) {
-	
-	/**
-	 * x-coordinate of the vector
-	 * @type {Number}
-	 */
-	
-	this.x;
-
-	/**
-	 * y-coordinate of the vector
-	 * @type {Number}
-	 */
-	
-	this.y;
-
-	if(typeof x === "number") {
-		this.x = x;
-	}
-
-	else {
-		console.trace();
-		throw "Expecting a number in argument 1";
-	}
-
-	if(typeof y === "number") {
-		this.y = y;
-	}
-
-	else {
-		console.trace()
-		throw "Expecting a number in argument 2"
-	}
-
-}
-
-/**
- * 
- * Perform vector addition
- * 
- * @function
- * @param {Vector} vector1 - The first vector
- * @param {Vector} vector2 - The second vector
- * 
- * @param {Boolean} [newObj = true] - Boolean that determines the return value. 
- * If true, then it returns a new Vector object `vector` such that 
- * `vector.x === vector1.x + vector2.x` and `vector.x === vector1.y + vector2.y`
- * 
- * If false, then `vector2.x` is added to `vector1.x`, `vector2.y` is added to `vector1.y`
- * and then `vector1` is returned.
- * 
- * @returns {Vector} - The sum of the two vectors. New object if `newObj` is true. Returns
- * `vector1` otherwise. 
- */
-
-Vector.add = function(vector1,vector2,newObj = true) {
-	
-	if(newObj) {
-		return new Vector(vector1.x + vector2.x, vector1.y + vector2.y);
-	}
-
-	else {
-		vector1.x = vector1.x + vector2.x;
-		vector1.y = vector1.y + vector2.y;
-		return vector1;
-	}
-
-}
-
-/**
- * 
- * Perform vector subtraction
- * 
- * @function
- * @param {Vector} vector1 
- * @param {Vector} vector2 
- * 
- * * @param {Boolean} [newObj = true] - Boolean that determines the return value. 
- * If true, then it returns a new Vector object `vector` such that 
- * `vector.x === vector1.x - vector2.x` and `vector.x === vector1.y - vector2.y`
- * 
- * If false, then `vector2.x` is subtracted from `vector1.x`, `vector2.y` is subtracted 
- * from `vector1.y` and then `vector1` is returned.
- * 
- * @returns {Vector} - The difference between the two vectors. New object if `newObj` is true. Returns
- * `vector1` otherwise. 
- */
-
-Vector.subtract = function(vector1,vector2,newObj = true) {
-
-	if(newObj) {
-		return new Vector(vector1.x - vector2.x, vector1.y - vector2.y);	}
-
-	else {
-		vector1.x = vector1.x - vector2.x;
-		vector1.y = vector1.y - vector2.y;
-		return vector1;
-	}
-
-}
-
-/**
- * 
- * Multiply a vector by a scalar
- * 
- * @function
- * @param {Vector} vector 
- * @param {Number} scalar
- * @returns {Vector} 
- * 
- */
-
-Vector.scale = function(vector,scalar) {
-	return new Vector(vector.x * scalar,vector.y * scalar)
-}
-
-/**
- * 
- * Divide a vector by a scalar
- * 
- * @function
- * @param {Vector} vector 
- * @param {Number} scalar
- * @returns {Vector} 
- *  
- */
-
-Vector.divide = function(vector,scalar) {
-	return new Vector(vector.x * (1/scalar),vector.y * (1/scalar));
-}
-
-/**
- * 
- * Get distance between two vectors.
- * 
- * @function
- * @param {Vector} vector1 
- * @param {Vector} vector2
- * @returns - The vector distance
- *  
- */
-
-Vector.distance = function(vector1,vector2) {
-	
-	var l1 = Math.pow(vector1.x - vector2.x,2);
-	var l2 = Math.pow(vector1.y - vector2.y,2);
-
-	return Math.sqrt(l1+l2);
-
-}
-
-/**
- * 
- * Get length of the vector
- * 
- * @function
- * @param {Vector} vector 
- * @returns {Number} - The length of the vector
- */
-
-Vector.getLength = function(vector) {
-	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
-}
-
-/**
- * 
- * Get normalized vector of some vector.
- * 
- * @function
- * @param {Vector} vector - Vector to normalize.
- * @returns {Vector} -  The Unit Vector
- */
-
-Vector.unitVector = function(vector) {
-	return Vector.scale(vector,1/Vector.getLength(vector));
-}
-
-/**
- * Apply a linear transformation defined by a 2x2 matrix to a vector.
- * 
- * @function
- * @param {Number} a11 - Element found in row 1, column 1
- * @param {Number} a12 - Element found in row 1, column 2
- * @param {Number} a21 - Element found in row 2, column 1
- * @param {Number} a22 - Element found in row 2, column 2
- * @param {Number} x - x-coordinate of vector to be transformed
- * @param {Number} y - y-coordinate of vector to be transformed
- * @returns - The transformed vector 
- */
-
-Vector.applyTransformation = function(a11,a12,a21,a22,x,y) {
-	return new Vector(a11 * x + a12 * y,a21 * x + a22 * y);
-}
-
-/**
- * 
- * Rotate a vector (x,y) by angle a
- * 
- * @function
- * @param {Number} x - x-coordinate
- * @param {Number} y - y-coordinate
- * @param {Number} a - Angle in radians
- * @returns {Vector}
- */
-
-Vector.rotate = function(x,y,a) {
-	return Vector.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
-}
-
-/**
- * Get SVG point
- * @param {Number} x 
- * @param {Number} y
- * @returns {String} - SVG Vector String 
- */
-
-Vector.svgVector = function(x,y) {
-	return x + "," + y;
-}
-
-/**
- * Calculate dot product of `vector1` and `vector2`.
- * 
- * @function
- * @since 0.2.0-alpha
- * @param {Vector} vector1
- * @param {Vector} vector2
- * @returns {Number} - The dot product 
- */
-
-Vector.dotProduct = function(vector1,vector2) {
-	return vector1.x * vector2.x + vector1.y * vector2.y;
-}
-
-/**
- * 
- * Gets angle between two lines that both end at `vertex`.
- * 
- * That is, suppose that `A` is the point `ray1`, `B` is the point `ray2` and that
- * `C` is the point `vertex`. Then, `vectorToArray` returns the angle between the lines
- * `AC` and `BC`.
- * 
- * @function
- * @since 0.2.0-alpha
- * @param {Vector} vertex 
- * @param {Vector} ray1 
- * @param {Vector} ray2
- * @returns {Number} - The angle 
- */
-
-Vector.vectorToArray = function(vertex,ray1,ray2) {
-
-	ray1.x = ray1.x - vertex.x;
-	ray1.y = ray1.y - vertex.y;
-
-	ray2.x = ray2.x - vertex.x;
-	ray2.y = ray2.y - vertex.y;
-
-	var ratio = calc_dot_product(ray1.x,ray1.y,ray2.x,ray2.y);
-
-	var angle = Math.acos(ratio);
-
-	return angle;
-
-}
-
-module.exports = Vector;
 
 /***/ }),
 /* 6 */
@@ -2271,7 +2271,7 @@ module.exports = Vertices;
  * @memberof PhSim
  */
 
-const EventStack = __webpack_require__(4);
+const EventStack = __webpack_require__(5);
 
 const PhSimEventTarget = {}
 
@@ -4271,7 +4271,7 @@ module.exports = diagRect;
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(3);
+const Static = __webpack_require__(4);
 
 /**
  * Get bounding box from an array of vectors.
@@ -5337,7 +5337,7 @@ PhSim.prototype.deregisterKeyEvents = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 const DynObject = __webpack_require__(2);
-const Vector = __webpack_require__(5);
+const Vector = __webpack_require__(3);
 
 // Try to import matter-js as a commonJS module
 
@@ -6132,7 +6132,7 @@ PhSim.prototype.exit = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 const Centroid = __webpack_require__(6);
-const Vector = __webpack_require__(5);
+const Vector = __webpack_require__(3);
 
 // Try to import matter-js as a commonJS module
 
@@ -6290,95 +6290,8 @@ var gotoSimulationIndex = function (i) {
 	if(this_a.simulation.widgets) {
 
 		for(var C = 0; C < this_a.simulation.widgets.length; C++) {
-				
 			var a = this_a.simulation.widgets[C];
-
-			if(a.type === "constraint") {
-
-				var b = {}
-
-				if(a.objectA) {
-
-					if(a.objectA instanceof PhSim) {
-						b.bodyA = a.objectA.matter;
-					}
-
-					else {
-
-						if(typeof a.objectA.L === "number" && typeof a.objectA.O === "number") {
-							b.bodyA = this_a.LO(a.objectA.L,a.objectA.O).matter;
-						}
-
-						else {
-							b.bodyA = optionMap.get(a.objectA).matter;
-						}
-
-					}
-
-				}
-
-				if(a.objectB) {
-					b.bodyB = this_a.LO(a.objectB.L,a.objectB.O).matter;
-
-					if(a.objectB instanceof PhSim) {
-						b.bodyB = a.objectB.matter;
-					}
-
-					else {
-
-						if(typeof a.objectB.L === "number" && typeof a.objectB.O === "number") {
-							b.bodyB = this_a.LO(a.objectB.L,a.objectB.O).matter;
-						}
-
-						else {
-							b.bodyB = optionMap.get(a.objectB).matter;
-						}
-
-					}
-
-				}
-
-				if(a.pointA) {
-
-					if(a.objectA) {
-						b.pointA = Vector.subtract(a.pointA,b.bodyA.position);
-					}
-
-					else {
-						b.pointA = a.pointA;
-					}
-
-				}
-
-				if(a.pointB) {
-					
-					if(a.objectB) {
-						b.pointB = Vector.subtract(a.pointB,b.bodyB.position);
-					}
-
-					else {
-						b.pointB = a.pointB;
-					}
-				}
-
-				var c = Matter.Constraint.create(b);
-
-				Matter.World.add(this.matterJSWorld,c)
-
-			}
-
-			if(a.type === "connection") {
-
-				this_a.connectDynObjects(this_a.dynTree[a.objectA.L][a.objectA.O],this_a.dynTree[a.objectB.L][a.objectB.O]);
-
-			}
-
-			if(a.type === "wFunction") {
-				self.createWFunction(self,a.function,a);
-			}
-
-
-
+			this_a.extractWidget(this_a,a);
 		}
 
 	}
@@ -6847,8 +6760,14 @@ PhSim.prototype.getWidgetByName = function(nameStr) {
 
 PhSim.prototype.widgets = {};
 
+/**
+ * Widget Object
+ * @param {Function} onextraction 
+ */
 
-PhSim.Widget = {}
+PhSim.Widget = function(onextraction) {
+	this.onextraction = onextraction;
+}
 
 /**
  * 
@@ -6930,6 +6849,8 @@ __webpack_require__(43);
 __webpack_require__(44);
 __webpack_require__(45);
 __webpack_require__(46);
+
+PhSim.Widgets.constraint = __webpack_require__(47);
 
 /**
  * PlayAudio Widget
@@ -8124,12 +8045,12 @@ PhSim.prototype.disableWFunction = function(o) {
  * 
  * @memberof PhSim
  * @function
- * @param {PhSim.DynObject} dyn_object 
- * @param {WFunctionOptions} widget 
+ * @param {PhSim.DynObject|PhSim} o - Target object or simulation
+ * @param {WFunctionOptions} widget - wFunction options
  */
 
-PhSim.Widgets.wFunction = function(dyn_object,widget) {
-	this.createWFunction(dyn_object,widget.function,widget);
+PhSim.Widgets.wFunction = function(o,widget) {
+	this.createWFunction(o,widget.function,widget);
 }
 
 PhSim.prototype.wFunctionNames = {}
@@ -8532,6 +8453,101 @@ PhSim.Widgets.stack = function(o,w) {
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const Vector = __webpack_require__(3);
+
+/**
+ * 
+ * 
+ * Constraint Widget
+ * 
+ * @function
+ * @memberof PhSim.Widgets
+ * @param {PhSim} phsim 
+ * @param {Object} widget
+ * @param {LOAddress|PhSim.DynObject} widget.objectA - Object A
+ * @param {LOAddress|PhSim.DynObject} widget.objectB - Object B
+ */
+
+function constraint(phsim,widget) {
+    
+    var b = {}
+
+    if(widget.objectA) {
+
+        if(widget.objectA instanceof PhSim) {
+            b.bodyA = widget.objectA.matter;
+        }
+
+        else {
+
+            if(typeof widget.objectA.L === "number" && typeof widget.objectA.O === "number") {
+                b.bodyA = phsim.LO(widget.objectA.L,widget.objectA.O).matter;
+            }
+
+            else {
+                b.bodyA = optionMap.get(widget.objectA).matter;
+            }
+
+        }
+
+    }
+
+    if(widget.objectB) {
+        b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
+
+        if(widget.objectB instanceof PhSim) {
+            b.bodyB = widget.objectB.matter;
+        }
+
+        else {
+
+            if(typeof widget.objectB.L === "number" && typeof widget.objectB.O === "number") {
+                b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
+            }
+
+            else {
+                b.bodyB = optionMap.get(widget.objectB).matter;
+            }
+
+        }
+
+    }
+
+    if(widget.pointA) {
+
+        if(widget.objectA) {
+            b.pointA = Vector.subtract(widget.pointA,b.bodyA.position);
+        }
+
+        else {
+            b.pointA = widget.pointA;
+        }
+
+    }
+
+    if(widget.pointB) {
+        
+        if(widget.objectB) {
+            b.pointB = Vector.subtract(widget.pointB,b.bodyB.position);
+        }
+
+        else {
+            b.pointB = widget.pointB;
+        }
+    }
+
+    var c = Matter.Constraint.create(b);
+
+    Matter.World.add(phsim.matterJSWorld,c);
+
+}
+
+module.exports = constraint;
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
 /**
  * 
  * Calculate DynObject skinmesh
@@ -8576,13 +8592,13 @@ var calc_skinmesh = function(dynObject) {
 module.exports = calc_skinmesh;
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -8764,7 +8780,7 @@ PhSim.prototype.processVar = function(str) {
 }
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
