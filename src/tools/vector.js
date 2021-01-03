@@ -232,6 +232,7 @@ Vector.svgVector = function(x,y) {
  * Calculate dot product of `vector1` and `vector2`.
  * 
  * @function
+ * @since 0.2.0-alpha
  * @param {Vector} vector1
  * @param {Vector} vector2
  * @returns {Number} - The dot product 
@@ -249,6 +250,8 @@ Vector.dotProduct = function(vector1,vector2) {
  * `C` is the point `vertex`. Then, `vectorToArray` returns the angle between the lines
  * `AC` and `BC`.
  * 
+ * @function
+ * @since 0.2.0-alpha
  * @param {Vector} vertex 
  * @param {Vector} ray1 
  * @param {Vector} ray2
