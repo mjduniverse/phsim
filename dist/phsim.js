@@ -2014,6 +2014,7 @@ Vector.svgVector = function(x,y) {
  * Calculate dot product of `vector1` and `vector2`.
  * 
  * @function
+ * @since 0.2.0-alpha
  * @param {Vector} vector1
  * @param {Vector} vector2
  * @returns {Number} - The dot product 
@@ -2031,6 +2032,8 @@ Vector.dotProduct = function(vector1,vector2) {
  * `C` is the point `vertex`. Then, `vectorToArray` returns the angle between the lines
  * `AC` and `BC`.
  * 
+ * @function
+ * @since 0.2.0-alpha
  * @param {Vector} vertex 
  * @param {Vector} ray1 
  * @param {Vector} ray2
@@ -2217,8 +2220,9 @@ Vertices.rectangle = function(rectangle) {
 	
 	];
 
-	Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
-
+	if(rectangle.cycle) {
+		Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
+	}
 
 	return a;
 
@@ -4120,8 +4124,6 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 			var self = this;
 
 			var f = function() {
-				onload();
-				img.removeEventListener("load",f);
 
 				self.static[staticObj.src] = staticObj;
 				self[staticObj.src] = img;
@@ -4129,15 +4131,45 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 			
 				self.length++;
 
+				onload();
+
+				img.removeEventListener("load",f);
+
 			}
 
 			img.addEventListener("load",f);
-		
+
 			img.src = staticObj.src;
-		
+			
+		}
+
+		else if(typeof staticObj === "string") {
+
+			var img = document.createElement("img");
+
+			var self = this;
+
+			var f = function() {
+
+				self[staticObj] = img;
+				self.urls.push(staticObj);
+			
+				self.length++;
+
+				onload();
+
+				img.removeEventListener("load",f);
+
+			}
+
+			img.addEventListener("load",f);
+
+			img.src = staticObj;
+
 		}
 	}
 
+	
 }
 
 module.exports = Sprites;
@@ -6178,6 +6210,12 @@ var gotoSimulationIndex = function (i) {
 	this.staticAudio = [];
 	this.audioPlayers = 0;
 	this.simulationEventStack = new PhSim.EventStack();
+
+
+	if(this.sprites) {
+		this.staticSprites.concat(this.sprites);
+	}
+
 
 	if(this.simOptions && this.simOptions.world && this.simOptions.world.bg) {
 		this.bgFillStyle = this.simOptions.world.bg;
