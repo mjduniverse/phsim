@@ -44,7 +44,7 @@ var DynObject = function(staticObject,matterBody) {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
 	}
 
-	this.firstCycle = staticObject.cycle;
+	this.firstCycle = staticObject.cycle || 0;
 
 	if(staticObject.shape === "composite") {
 		this.flattenedParts = DynObject.flattenComposite();
