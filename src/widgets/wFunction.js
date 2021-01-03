@@ -496,12 +496,12 @@ PhSim.prototype.disableWFunction = function(o) {
  * 
  * @memberof PhSim
  * @function
- * @param {PhSim.DynObject} dyn_object 
- * @param {WFunctionOptions} widget 
+ * @param {PhSim.DynObject|PhSim} o - Target object or simulation
+ * @param {WFunctionOptions} widget - wFunction options
  */
 
-PhSim.Widgets.wFunction = function(dyn_object,widget) {
-	this.createWFunction(dyn_object,widget.function,widget);
+PhSim.Widgets.wFunction = function(o,widget) {
+	this.createWFunction(o,widget.function,widget);
 }
 
 PhSim.prototype.wFunctionNames = {}

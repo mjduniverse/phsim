@@ -36,8 +36,14 @@ PhSim.prototype.getWidgetByName = function(nameStr) {
 
 PhSim.prototype.widgets = {};
 
+/**
+ * Widget Object
+ * @param {Function} onextraction 
+ */
 
-PhSim.Widget = {}
+PhSim.Widget = function(onextraction) {
+	this.onextraction = onextraction;
+}
 
 /**
  * 
@@ -119,6 +125,8 @@ require("./widgets/transformCameraByObj");
 require("./widgets/setRenderProperties.js");
 require("./widgets/deleteSelf.js");
 require("./widgets/stack.js");
+
+PhSim.Widgets.constraint = require("./widgets/constraint.js");
 
 /**
  * PlayAudio Widget
