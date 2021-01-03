@@ -224,8 +224,6 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 			var self = this;
 
 			var f = function() {
-				onload();
-				img.removeEventListener("load",f);
 
 				self.static[staticObj.src] = staticObj;
 				self[staticObj.src] = img;
@@ -233,15 +231,45 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 			
 				self.length++;
 
+				onload();
+
+				img.removeEventListener("load",f);
+
 			}
 
 			img.addEventListener("load",f);
-		
+
 			img.src = staticObj.src;
-		
+			
+		}
+
+		else if(typeof staticObj === "string") {
+
+			var img = document.createElement("img");
+
+			var self = this;
+
+			var f = function() {
+
+				self[staticObj] = img;
+				self.urls.push(staticObj);
+			
+				self.length++;
+
+				onload();
+
+				img.removeEventListener("load",f);
+
+			}
+
+			img.addEventListener("load",f);
+
+			img.src = staticObj;
+
 		}
 	}
 
+	
 }
 
 module.exports = Sprites;
