@@ -4,6 +4,16 @@ const Vertices = require("./tools/vertex");
 const PhSimEventTarget = require("./events/eventListener");
 const EventStack = require("./events/eventStack");
 
+// Try to import matter.js as a commonJS module
+
+try {
+	const Matter = require("matter-js");
+}
+
+catch {
+	
+}
+
 /**
  * 
  * Create Dynamic Object from static object
@@ -34,7 +44,7 @@ var DynObject = function(staticObject,matterBody) {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
 	}
 
-	this.firstCycle = staticObject.cycle;
+	this.firstCycle = staticObject.cycle || 0;
 
 	if(staticObject.shape === "composite") {
 		this.flattenedParts = DynObject.flattenComposite();

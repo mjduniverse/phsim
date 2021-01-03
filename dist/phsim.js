@@ -133,6 +133,16 @@
  * 
  */
 
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
+
 /** 
  * Dynamic Simulation Instance Object 
  * 
@@ -538,11 +548,11 @@ if(true) {
     module.exports = PhSim;
 }
 
-PhSim.Static = __webpack_require__(2 );
+PhSim.Static = __webpack_require__(3 );
 
-__webpack_require__(10 );
+__webpack_require__(11 );
 
-PhSim.EventStack = __webpack_require__(3 );
+PhSim.EventStack = __webpack_require__(4 );
 
 /**
  * Object containing array functions to be called.
@@ -558,55 +568,55 @@ PhSim.prototype.eventStack = new PhSim.EventStack();
 
 PhSim.prototype.simulationEventStack = new PhSim.EventStack();
 
-PhSim.PhRender = __webpack_require__(11);
-PhSim.Sprites = __webpack_require__(12);
-PhSim.Audio = __webpack_require__(13);
-PhSim.Vector = __webpack_require__(4);
-PhSim.diagRect = __webpack_require__(14);
-PhSim.Vertices = __webpack_require__(6);
+PhSim.PhRender = __webpack_require__(12);
+PhSim.Sprites = __webpack_require__(13);
+PhSim.Audio = __webpack_require__(14);
+PhSim.Vector = __webpack_require__(5);
+PhSim.diagRect = __webpack_require__(15);
+PhSim.Vertices = __webpack_require__(7);
 
-PhSim.Centroid = __webpack_require__(5);
+PhSim.Centroid = __webpack_require__(6);
 
 // Bounding box functions
 
-PhSim.BoundingBox = __webpack_require__(15);
-PhSim.DynObject = __webpack_require__(1);
-PhSim.Events = __webpack_require__(16);
+PhSim.BoundingBox = __webpack_require__(16);
+PhSim.DynObject = __webpack_require__(2);
+PhSim.Events = __webpack_require__(17);
 
-__webpack_require__(17);
 __webpack_require__(18);
 __webpack_require__(19);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
+__webpack_require__(23);
 
-PhSim.PhSimEventTarget =  __webpack_require__(7);
+PhSim.PhSimEventTarget =  __webpack_require__(8);
 
 Object.assign(PhSim.prototype,PhSim.PhSimEventTarget);
 
-__webpack_require__(23);
 __webpack_require__(24);
 __webpack_require__(25);
+__webpack_require__(26);
 
-PhSim.prototype.gotoSimulationIndex = __webpack_require__(26);
-PhSim.Motion = __webpack_require__(8);
+PhSim.prototype.gotoSimulationIndex = __webpack_require__(27);
+PhSim.Motion = __webpack_require__(9);
 
-__webpack_require__(27);
 __webpack_require__(28);
 __webpack_require__(29);
+__webpack_require__(30);
 
-PhSim.Camera = __webpack_require__(30);
-PhSim.Game = __webpack_require__(9);
-PhSim.Gradients = __webpack_require__(31);
+PhSim.Camera = __webpack_require__(31);
+PhSim.Game = __webpack_require__(10);
+PhSim.Gradients = __webpack_require__(32);
 
-__webpack_require__(32);
+__webpack_require__(33);
 
-PhSim.calc_skinmesh = __webpack_require__(46);
+PhSim.calc_skinmesh = __webpack_require__(47);
 
-__webpack_require__(47);
 __webpack_require__(48);
+__webpack_require__(49);
 
-PhSim.ObjLoops = __webpack_require__(49);
+PhSim.ObjLoops = __webpack_require__(50);
 
 
 /**
@@ -641,13 +651,29 @@ PhSim.statusStruct = {
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+module.exports = require("matter-js");
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(2);
+const Static = __webpack_require__(3);
 const PhSim = __webpack_require__(0);
-const Vertices = __webpack_require__(6);
-const PhSimEventTarget = __webpack_require__(7);
-const EventStack = __webpack_require__(3);
+const Vertices = __webpack_require__(7);
+const PhSimEventTarget = __webpack_require__(8);
+const EventStack = __webpack_require__(4);
+
+// Try to import matter.js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * 
@@ -969,7 +995,7 @@ DynObject.nextId = 0;
 module.exports = DynObject;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -1542,7 +1568,7 @@ Static.SLO = function(S,L,O) {
 module.exports = Static;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 /**
@@ -1739,13 +1765,19 @@ const EventStack = function() {
 
 	this.levelloss = [];
 
+	/**
+	 * Array of functions to be executed when an wFunction body makes an error.
+	 */
+
+	this.wfunctionerror = [];
+
 
 }
 
 module.exports = EventStack;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /** 
@@ -1978,10 +2010,56 @@ Vector.svgVector = function(x,y) {
 	return x + "," + y;
 }
 
+/**
+ * Calculate dot product of `vector1` and `vector2`.
+ * 
+ * @function
+ * @since 0.2.0-alpha
+ * @param {Vector} vector1
+ * @param {Vector} vector2
+ * @returns {Number} - The dot product 
+ */
+
+Vector.dotProduct = function(vector1,vector2) {
+	return vector1.x * vector2.x + vector1.y * vector2.y;
+}
+
+/**
+ * 
+ * Gets angle between two lines that both end at `vertex`.
+ * 
+ * That is, suppose that `A` is the point `ray1`, `B` is the point `ray2` and that
+ * `C` is the point `vertex`. Then, `vectorToArray` returns the angle between the lines
+ * `AC` and `BC`.
+ * 
+ * @function
+ * @since 0.2.0-alpha
+ * @param {Vector} vertex 
+ * @param {Vector} ray1 
+ * @param {Vector} ray2
+ * @returns {Number} - The angle 
+ */
+
+Vector.vectorToArray = function(vertex,ray1,ray2) {
+
+	ray1.x = ray1.x - vertex.x;
+	ray1.y = ray1.y - vertex.y;
+
+	ray2.x = ray2.x - vertex.x;
+	ray2.y = ray2.y - vertex.y;
+
+	var ratio = calc_dot_product(ray1.x,ray1.y,ray2.x,ray2.y);
+
+	var angle = Math.acos(ratio);
+
+	return angle;
+
+}
+
 module.exports = Vector;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /**
@@ -2061,10 +2139,20 @@ Centroid.polygon = function(a) {
 module.exports = Centroid;
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports) {
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
 
 const Vertices = {}
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * 
@@ -2132,8 +2220,9 @@ Vertices.rectangle = function(rectangle) {
 	
 	];
 
-	Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
-
+	if(rectangle.cycle) {
+		Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
+	}
 
 	return a;
 
@@ -2174,7 +2263,7 @@ Vertices.getRectangleCorners = function(rectangle) {
 module.exports = Vertices;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -2182,7 +2271,7 @@ module.exports = Vertices;
  * @memberof PhSim
  */
 
-const EventStack = __webpack_require__(3);
+const EventStack = __webpack_require__(4);
 
 const PhSimEventTarget = {}
 
@@ -2301,12 +2390,22 @@ PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
 module.exports = PhSimEventTarget;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const DynObject = __webpack_require__(1);
+const DynObject = __webpack_require__(2);
 const PhSim = __webpack_require__(0);
-const Centroid = __webpack_require__(5);
+const Centroid = __webpack_require__(6);
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * Namespace of functions used to move objects in various ways.
@@ -2486,7 +2585,7 @@ Motion.setAngle = function(dynObject,angle) {
 module.exports = Motion;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 /**
@@ -2835,11 +2934,21 @@ Game.Widgets.endGame = function(dyn_object,widget) {
 module.exports = Game;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const DynObject = __webpack_require__(1);
+const DynObject = __webpack_require__(2);
 const PhSim = __webpack_require__(0);
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * Object that registers PhSim as a Matter.js plugin.
@@ -2973,7 +3082,7 @@ PhSim.matterPlugin = matterPlugin;
 Matter.Plugin.register(PhSim.matterPlugin); 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /** 
@@ -3786,7 +3895,7 @@ PhRender.prototype.dynamicDrawLayer = function(L) {
 module.exports = PhRender;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /**
@@ -3848,7 +3957,7 @@ Sprites.circularSpriteRenderCanvas = function(ctx,canvas,angle) {
 
 /**
  * 
- * The sprite image array is an interface that is used for 
+ * The `spriteImgObj` class is used to store catche for sprites.
  * 
  * @constructor
  * @param {Sprites.Sprite[]} sprites 
@@ -3860,8 +3969,18 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 	// Force load if sprites list is empty
 
 	/**
+	 * Array of catched sprites
+	 */
+
+	Object.defineProperty(this,"array",{
+		enumerable: false,
+		value: [],
+		writable: true,
+	})
+
+	/**
 	 * 
-	 * STAIC
+	 * Object of static sprite objects
 	 * 
 	 * @type {Object}
 	 * @name PhSim.Sprites.spriteImgObj#static
@@ -3991,15 +4110,20 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 
 	else {
 
-		if(staticObj.src) {
+		if(staticObj instanceof HTMLImageElement) {
+			self.static[staticObj.src] = staticObj;
+			self[staticObj.src] = staticObj;
+			self.urls.push(self.src);
+			onload();
+		}
+
+		else if(typeof staticObj === "object" && typeof staticObj.src === "string") {
 
 			var img = document.createElement("img");
 
 			var self = this;
 
 			var f = function() {
-				onload();
-				img.removeEventListener("load",f);
 
 				self.static[staticObj.src] = staticObj;
 				self[staticObj.src] = img;
@@ -4007,23 +4131,51 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 			
 				self.length++;
 
+				onload();
+
+				img.removeEventListener("load",f);
+
 			}
 
 			img.addEventListener("load",f);
-		
-			img.src = staticObj.src;
-		
 
+			img.src = staticObj.src;
+			
 		}
 
+		else if(typeof staticObj === "string") {
+
+			var img = document.createElement("img");
+
+			var self = this;
+
+			var f = function() {
+
+				self[staticObj] = img;
+				self.urls.push(staticObj);
+			
+				self.length++;
+
+				onload();
+
+				img.removeEventListener("load",f);
+
+			}
+
+			img.addEventListener("load",f);
+
+			img.src = staticObj;
+
+		}
 	}
 
+	
 }
 
 module.exports = Sprites;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -4085,7 +4237,7 @@ Audio.AudioArray = function(p_audio,onload) {
 module.exports = Audio;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /**
@@ -4116,10 +4268,10 @@ module.exports = diagRect;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(2);
+const Static = __webpack_require__(3);
 
 /**
  * Get bounding box from an array of vectors.
@@ -4216,7 +4368,7 @@ BoundingBox.fromShape = function(object) {
 module.exports = BoundingBox;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 /**
@@ -4313,7 +4465,7 @@ Events.PhSimCollision = function() {
 module.exports = Events;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -4359,7 +4511,7 @@ PhSim.prototype.getObjectFromLOStr = function(str) {
 }
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -4442,7 +4594,7 @@ PhSim.prototype.configRender = function() {
 }
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -4560,12 +4712,23 @@ PhSim.prototype.alert = function(options) {
 }
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
+
 
 // Set Angle to mouse.
 
-const DynObject = __webpack_require__(1);
+const DynObject = __webpack_require__(2);
 const PhSim = __webpack_require__(0);
 
 // Object Connection
@@ -4732,7 +4895,7 @@ PhSim.prototype.renderAllCounters = function() {
 }
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -4806,7 +4969,7 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
 }
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -5170,11 +5333,21 @@ PhSim.prototype.deregisterKeyEvents = function() {
 }
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const DynObject = __webpack_require__(1);
-const Vector = __webpack_require__(4);
+const DynObject = __webpack_require__(2);
+const Vector = __webpack_require__(5);
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * @namespace
@@ -5788,7 +5961,7 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -5817,45 +5990,85 @@ PhSim.prototype.applyGravitationalField = function() {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
 
 /**
  * Play simulation
+ * 
  * @function
+ * @memberof PhSim
+ * @this PhSim
+ * @returns {Promise} - A promise that is fulfilled if the playing the simulation is sucessful. 
+ * If resolved, the promise is fullfilled with the `PhSim` instance as its value.
  */
 
 PhSim.prototype.play = function() {
-	this.paused = false;
-	this.intervalLoop = setInterval(this.loopFunction.bind(this),this.delta);
+
+	var self = this;
+
+	return new Promise(function(resolve,reject){
+		self.paused = false;
+		self.intervalLoop = setInterval(self.loopFunction.bind(self),self.delta);
+		resolve(self);
+	});
 }
 
 /**
  * Pause simulation
  * @function
+ * @returns {Promise} - A promise that is fulfilled if the pausing the simulation is sucessful. 
+ * If resolved, the promise is fullfilled with the `PhSim` instance as its value.
  */
 
 PhSim.prototype.pause = function() {
-	clearInterval(this.intervalLoop);
-	this.paused = true;
+
+	var self = this;
+
+	return new Promise(function(resolve,reject){
+		clearInterval(self.intervalLoop);
+		self.paused = true;
+		resolve(self);
+	});
+
 }
 
 /**
  * Toggle Simulation
+ * 
  * @function
+ * @returns {Promise}
  */
 
 PhSim.prototype.toggle = function() {
-	
-	if(this.paused) {
-		this.play();
-	}
 
-	else {
-		this.pause();
-	}
+	var self = this;
+
+	return new Promise(function(resolve,reject){
+
+		if(self.paused) {
+
+			self.play().then(function(phsim){
+				resolve(phsim);
+			}).catch(function(e){
+				reject(e);
+			});
+
+		}
+
+		else {
+
+			self.pause().then(function(phsim){
+				resolve(phsim)
+			}).catch(function(e){
+				reject(e)
+			});
+
+		}
+	});
+
 
 }
 
@@ -5865,44 +6078,71 @@ PhSim.prototype.toggle = function() {
  */
 
 PhSim.prototype.exitSl = function() {
-	this.callEventClass("beforeslchange",this,new PhSim.Events.PhSimEvent("beforeslchange"));
-	this.paused = false;
-	clearInterval(this.intervalLoop);
+
+	var self = this;
+
+	return new Promise(function(resolve,reject){
+		self.callEventClass("beforeslchange",self,new PhSim.Events.PhSimEvent("beforeslchange"));
+		self.paused = false;
+		clearInterval(self.intervalLoop);
+		resolve(self);
+	});
+
 }
 
 /**
- * @function
- * Completely reset PhSim object. That is, make it as if it is a new one.
  * 
+ * Completely reset PhSim object. That is, make it as if it is a new one.
+ * @function
+ * @returns {Promise}
  */
 
 PhSim.prototype.exit = function() {
 
-	// Remove references to avoid memory leak
+	var self = this;
 
-	delete this.camera.dynSim
-	delete this.phRender.dynSim
+	return new Promise(function(resolve,reject){
 
-	for(var i = 0; i < this.objUniverse.length; i++) {
-		delete this.objUniverse[i].phSim;
-	}
+		// Remove references to avoid memory leak
 
-	this.callEventClass("exit",this,new PhSim.Events.PhSimEvent("exit"));
-	this.deregisterCanvasEvents();
-	this.deregisterKeyEvents();
-	this.exitSl();
+		delete self.camera.dynSim
+		delete self.phRender.dynSim
 
-	// Erase all things
+		for(var i = 0; i < self.objUniverse.length; i++) {
+			delete self.objUniverse[i].phSim;
+		}
 
-	Object.assign(this,new PhSim());
+		self.callEventClass("exit",self,new PhSim.Events.PhSimEvent("exit"));
+		self.deregisterCanvasEvents();
+		self.deregisterKeyEvents();
+		self.exitSl();
+
+		// Erase all things
+
+		Object.assign(self,new PhSim());
+
+		resolve(self);
+
+	});
+
 }
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Centroid = __webpack_require__(5);
-const Vector = __webpack_require__(4);
+const Centroid = __webpack_require__(6);
+const Vector = __webpack_require__(5);
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * Go to simulation in the composite simulation
@@ -5970,6 +6210,12 @@ var gotoSimulationIndex = function (i) {
 	this.staticAudio = [];
 	this.audioPlayers = 0;
 	this.simulationEventStack = new PhSim.EventStack();
+
+
+	if(this.sprites) {
+		this.staticSprites.concat(this.sprites);
+	}
+
 
 	if(this.simOptions && this.simOptions.world && this.simOptions.world.bg) {
 		this.bgFillStyle = this.simOptions.world.bg;
@@ -6187,10 +6433,20 @@ var gotoSimulationIndex = function (i) {
 module.exports = gotoSimulationIndex;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * Assign PhRender to PhSim simulation
@@ -6224,10 +6480,20 @@ PhSim.prototype.setRadius = function(dynObject,radius) {
 }
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * 
@@ -6358,7 +6624,7 @@ PhSim.prototype.loopFunction = function() {
 }
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -6428,7 +6694,7 @@ PhSim.prototype.extractWidget = function(dyn_object,widget) {
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /**
@@ -6507,7 +6773,7 @@ Camera.prototype.setPosition = function(x,y) {
 module.exports = Camera;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 
@@ -6540,10 +6806,20 @@ Gradients.extractGradient = function(ctx,jsObject) {
 module.exports = Gradients;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /*
 
@@ -6612,12 +6888,12 @@ PhSim.Query.chkWidgetType = function() {
 }
 
 
-__webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
+__webpack_require__(36);
 
 
-const Game = __webpack_require__(9);
+const Game = __webpack_require__(10);
 
 /**
  * @borrows PhSim.Game.Widgets.coin as PhSim.Widgets.coin
@@ -6644,7 +6920,6 @@ PhSim.Widgets.health = Game.Widgets.health;
 
 PhSim.Widgets.endGame = Game.Widgets.endGame;
 
-__webpack_require__(36);
 __webpack_require__(37);
 __webpack_require__(38);
 __webpack_require__(39);
@@ -6654,6 +6929,7 @@ __webpack_require__(42);
 __webpack_require__(43);
 __webpack_require__(44);
 __webpack_require__(45);
+__webpack_require__(46);
 
 /**
  * PlayAudio Widget
@@ -6694,8 +6970,18 @@ PhSim.Widgets.noRotation = function(dyn_object) {
 }
 
 /***/ }),
-/* 33 */
-/***/ (function(module, exports) {
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * Create circular constraint
@@ -6758,7 +7044,7 @@ PhSim.Widgets.circularConstraint = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -6905,8 +7191,18 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 35 */
-/***/ (function(module, exports) {
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * The `draggable` widget makes {@link PhSim.DynObject} objects draggable.
@@ -6977,8 +7273,18 @@ PhSim.Widgets.draggable = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 const PhSim = __webpack_require__(0);
 
@@ -7075,10 +7381,10 @@ PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Motion = __webpack_require__(8);
+const Motion = __webpack_require__(9);
 
 /** 
  * 
@@ -7260,7 +7566,7 @@ PhSim.Widgets.force = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -7271,7 +7577,7 @@ PhSim.Widgets.force = function(dyn_object,widget) {
  * @param {PhSim.DynObject} dynObject 
  */
 
-const DynObject = __webpack_require__(1);
+const DynObject = __webpack_require__(2);
 
 PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 	for(var i = 0; i < dynObject.objLinkFunctions.length; i++) {
@@ -7317,7 +7623,7 @@ PhSim.Widgets.objLink = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { statusCodes } = __webpack_require__(0);
@@ -7509,7 +7815,16 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	 */
 
     var wFunction = function(e) {
-        return wFunctionBody.apply(thisRef,e);
+
+		try {
+			return wFunctionBody.apply(thisRef,e);
+		}
+
+		catch(e) {
+			self.callEventClass("wfunctionerror",self,e);
+			console.error(e);
+		}
+
 	}
 
 	wFunction._options = options;
@@ -7820,8 +8135,18 @@ PhSim.Widgets.wFunction = function(dyn_object,widget) {
 PhSim.prototype.wFunctionNames = {}
 
 /***/ }),
-/* 40 */
-/***/ (function(module, exports) {
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * 
@@ -7948,8 +8273,18 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 41 */
-/***/ (function(module, exports) {
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+	
+}
 
 /**
  * 
@@ -7998,7 +8333,7 @@ PhSim.Widgets.keyboardControls = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports) {
 
 /**
@@ -8026,7 +8361,7 @@ PhSim.Widgets.transformCameraByObj = function(dyn_object) {
 }
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports) {
 
 /**
@@ -8114,7 +8449,7 @@ PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports) {
 
 /**
@@ -8142,7 +8477,7 @@ PhSim.Widgets.deleteSelf = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports) {
 
 /**
@@ -8194,8 +8529,8 @@ PhSim.Widgets.stack = function(o,w) {
 }
 
 /***/ }),
-/* 46 */
-/***/ (function(module, exports) {
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
 
 /**
  * 
@@ -8205,6 +8540,16 @@ PhSim.Widgets.stack = function(o,w) {
  * @memberof PhSim
  * @param {PhSim.DynObject} dynObject 
  */
+
+// Try to import matter.js as a commonJS module
+
+try {
+	const Matter = __webpack_require__(1);
+}
+
+catch {
+
+}
 
 var calc_skinmesh = function(dynObject) {
 
@@ -8231,13 +8576,13 @@ var calc_skinmesh = function(dynObject) {
 module.exports = calc_skinmesh;
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -8419,7 +8764,7 @@ PhSim.prototype.processVar = function(str) {
 }
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);

@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <title>Keyboard Widget Demo</title>
+        <script src="https://cdn.jsdelivr.net/npm/poly-decomp@0.3.0/build/decomp.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/matter-js@0.14.2/build/matter.min.js"></script>
+        <script src="../dist/phsim.js"></script>
+    </head>
+    <body>
+
+        <h1>Keyboard Widget Demo</h1>
+
+        <div id="sim-area"></div>
+
+        <script>
+            var o = {
+                "objUniverse": [
+
+                    // Platform
+
+                    {
+                        "shape": "rectangle",
+                        "x": 25,
+                        "y": 528,
+                        "w": 749,
+                        "h": 47,
+                        "strokeStyle": "#0000ff",
+                        "lineWidth": 4,
+                        "fillStyle": "#333333",
+                        "locked": true
+                    },
+
+                    // Green rectangle
+
+                    {
+                        "shape": "rectangle",
+                        "x": 367,
+                        "y": 231,
+                        "w": 91,
+                        "h": 93,
+                        "strokeStyle": "#000000",
+                        "lineWidth": 4,
+                        "fillStyle": "#33cf33",
+                        "widgets": [
+                            {
+                                "type": "keyboardControls",
+                                "up": 10,
+                                "down": 10,
+                                "left": 10,
+                                "right": 10
+                            }
+                        ]
+                    }
+                ],
+                "name": "Untitled Layer"
+            };
+
+            var phSim = new PhSim(o);
+
+            document.querySelector("#sim-area").appendChild(phSim.container);
+
+            phSim.play();
+
+
+
+        </script>
+    </body>
+</html>

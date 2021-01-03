@@ -7,6 +7,16 @@
  * @param {PhSim.DynObject} dynObject 
  */
 
+// Try to import matter.js as a commonJS module
+
+try {
+	const Matter = require("matter-js");
+}
+
+catch {
+
+}
+
 var calc_skinmesh = function(dynObject) {
 
 	/** Vector defining transformation */

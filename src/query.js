@@ -1,6 +1,16 @@
 const DynObject = require("./dynObject");
 const Vector = require("./tools/vector");
 
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = require("matter-js");
+}
+
+catch {
+	
+}
+
 /**
  * @namespace
  * @memberof PhSim

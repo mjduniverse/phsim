@@ -192,6 +192,12 @@ const EventStack = function() {
 
 	this.levelloss = [];
 
+	/**
+	 * Array of functions to be executed when an wFunction body makes an error.
+	 */
+
+	this.wfunctionerror = [];
+
 
 }
 

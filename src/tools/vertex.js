@@ -1,5 +1,15 @@
 const Vertices = {}
 
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = require("matter-js");
+}
+
+catch {
+	
+}
+
 /**
  * 
  * Get vertices for a static object representing a regular polygon.
@@ -66,8 +76,9 @@ Vertices.rectangle = function(rectangle) {
 	
 	];
 
-	Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
-
+	if(rectangle.cycle) {
+		Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
+	}
 
 	return a;
 

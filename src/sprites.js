@@ -57,7 +57,7 @@ Sprites.circularSpriteRenderCanvas = function(ctx,canvas,angle) {
 
 /**
  * 
- * The sprite image array is an interface that is used for 
+ * The `spriteImgObj` class is used to store catche for sprites.
  * 
  * @constructor
  * @param {Sprites.Sprite[]} sprites 
@@ -69,8 +69,18 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 	// Force load if sprites list is empty
 
 	/**
+	 * Array of catched sprites
+	 */
+
+	Object.defineProperty(this,"array",{
+		enumerable: false,
+		value: [],
+		writable: true,
+	})
+
+	/**
 	 * 
-	 * STAIC
+	 * Object of static sprite objects
 	 * 
 	 * @type {Object}
 	 * @name PhSim.Sprites.spriteImgObj#static
@@ -200,15 +210,20 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 
 	else {
 
-		if(staticObj.src) {
+		if(staticObj instanceof HTMLImageElement) {
+			self.static[staticObj.src] = staticObj;
+			self[staticObj.src] = staticObj;
+			self.urls.push(self.src);
+			onload();
+		}
+
+		else if(typeof staticObj === "object" && typeof staticObj.src === "string") {
 
 			var img = document.createElement("img");
 
 			var self = this;
 
 			var f = function() {
-				onload();
-				img.removeEventListener("load",f);
 
 				self.static[staticObj.src] = staticObj;
 				self[staticObj.src] = img;
@@ -216,17 +231,45 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 			
 				self.length++;
 
+				onload();
+
+				img.removeEventListener("load",f);
+
 			}
 
 			img.addEventListener("load",f);
-		
-			img.src = staticObj.src;
-		
 
+			img.src = staticObj.src;
+			
 		}
 
+		else if(typeof staticObj === "string") {
+
+			var img = document.createElement("img");
+
+			var self = this;
+
+			var f = function() {
+
+				self[staticObj] = img;
+				self.urls.push(staticObj);
+			
+				self.length++;
+
+				onload();
+
+				img.removeEventListener("load",f);
+
+			}
+
+			img.addEventListener("load",f);
+
+			img.src = staticObj;
+
+		}
 	}
 
+	
 }
 
 module.exports = Sprites;

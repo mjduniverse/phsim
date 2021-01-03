@@ -187,7 +187,16 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	 */
 
     var wFunction = function(e) {
-        return wFunctionBody.apply(thisRef,e);
+
+		try {
+			return wFunctionBody.apply(thisRef,e);
+		}
+
+		catch(e) {
+			self.callEventClass("wfunctionerror",self,e);
+			console.error(e);
+		}
+
 	}
 
 	wFunction._options = options;

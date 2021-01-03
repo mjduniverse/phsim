@@ -1,6 +1,16 @@
 const Centroid = require("../tools/centroid");
 const Vector = require("../tools/vector");
 
+// Try to import matter-js as a commonJS module
+
+try {
+	const Matter = require("matter-js");
+}
+
+catch {
+	
+}
+
 /**
  * Go to simulation in the composite simulation
  * 
@@ -67,6 +77,12 @@ var gotoSimulationIndex = function (i) {
 	this.staticAudio = [];
 	this.audioPlayers = 0;
 	this.simulationEventStack = new PhSim.EventStack();
+
+
+	if(this.sprites) {
+		this.staticSprites.concat(this.sprites);
+	}
+
 
 	if(this.simOptions && this.simOptions.world && this.simOptions.world.bg) {
 		this.bgFillStyle = this.simOptions.world.bg;

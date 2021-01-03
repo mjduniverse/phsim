@@ -12,6 +12,10 @@ module.exports = {
     concatenateModules: false
   },
 
-  mode: "production"
+  mode: "production",
+
+  externals: {
+    "matter-js": "commonjs2 matter-js"
+  }
   
 };
