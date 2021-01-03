@@ -103,7 +103,7 @@ A widget is something that extends the functionality of widgets and simulations.
 
 * __wFunctions:__ Special functions known as wFunctions that allow one to deal with events and time in an easier way.
 
-* __Draggable Objects:__: Objects tcan be dragged by the mouse using the [`draggable`](https://mjduniverse.github.io/phsim/docs/PhSim.Widgets.html#.draggable) widget</li>
+* __Draggable Objects:__: Objects can be dragged by the mouse using the [`draggable`](https://mjduniverse.github.io/phsim/docs/PhSim.Widgets.html#.draggable) widget</li>
 
 ### Making games
 
