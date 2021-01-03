@@ -78,6 +78,12 @@ var gotoSimulationIndex = function (i) {
 	this.audioPlayers = 0;
 	this.simulationEventStack = new PhSim.EventStack();
 
+
+	if(this.sprites) {
+		this.staticSprites.concat(this.sprites);
+	}
+
+
 	if(this.simOptions && this.simOptions.world && this.simOptions.world.bg) {
 		this.bgFillStyle = this.simOptions.world.bg;
 	}
