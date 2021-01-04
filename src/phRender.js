@@ -128,43 +128,29 @@ PhRender.prototype.renderPolygon = function (path) {
 
 		this.ctx.imageSmoothingEnabled = path.sprite.smooth;
 
+		this.ctx.save();
+
+		this.ctx.beginPath();
+
+		this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
+
+		for(var j = 0; j < path.verts.length; j++) {
+			this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
+		}
+
+		this.ctx.translate(centroid.x,centroid.y);
+
+		this.ctx.closePath();
+
 		if(path.sprite.repeat) {
-
-			this.ctx.save();
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
-
-			for(var j = 0; j < path.verts.length; j++) {
-				this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
-			}
-		
-
-			this.ctx.translate(centroid.x,centroid.y);
-
-			this.ctx.closePath();
 
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
 
 			this.ctx.fill();
-			this.ctx.restore();	
 		}
 
 		else if(path.sprite.fit) {
-
-			this.ctx.save();
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
-
-			for(var j = 0; j < path.verts.length; j++) {
-				this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
-			}
-
-			this.ctx.closePath();
 
 			this.ctx.clip();
 
@@ -173,33 +159,22 @@ PhRender.prototype.renderPolygon = function (path) {
 			var h = img.height * (box.w/img.width);
 
 			this.renderSpriteByCenter(path.sprite.src,centroid.x,centroid.y,box.w,h,0);
-
-			this.ctx.restore();	
-
 		}
 
 		else {
 
-			this.ctx.save();
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
-
-			for(var j = 0; j < path.verts.length; j++) {
-				this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
-			}
-
-			this.ctx.closePath();
-
 			this.ctx.clip();
 
-			this.renderSpriteByCenter(path.sprite.src,0,0,path.sprite.w,path.sprite.h,0);
+			var w = path.sprite.w || img.width;
+			var h = path.sprite.h || img.height;
 
-			this.ctx.restore();	
+			this.renderSpriteByCenter(path.sprite.src,0,0,w,h,0);
+
 		}
 
 	}
+
+	this.ctx.restore();	
 
 	this.unsetCtx();
 	
