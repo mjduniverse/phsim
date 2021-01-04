@@ -60,7 +60,7 @@ phSim.play();
 
 ```
 
-To see it in action, you can view the demo here (it is the ): https://mjduniverse.github.io/phsim/docs/tutorial-Creating%20PhSim%20Simulation.html
+To see it in action, you can view the demo here (it is the second simulation): https://mjduniverse.github.io/phsim/docs/tutorial-Creating%20PhSim%20Simulation.html
 
 ## Installation
 
