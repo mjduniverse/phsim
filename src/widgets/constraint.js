@@ -8,7 +8,7 @@ const Vector = require("../tools/vector");
  * @function
  * @memberof PhSim.Widgets
  * @param {PhSim} phsim 
- * @param {Object} widget
+ * @param {Object} widget - Widget Options
  * @param {LOAddress|PhSim.DynObject} widget.objectA - Object A - First point.
  * @param {LOAddress|PhSim.DynObject} widget.objectB - Object B - Second Point
  * 
@@ -22,7 +22,7 @@ const Vector = require("../tools/vector");
  * * If `widget.objectB` is set, then `widget.pointB` defines the offset from the centroid
  * of `widget.objectB`. Otherwise, the point is set to a point in the phsim space.
  * 
- * * If one is familar with Matter.js, then the rules are simular to rules of making a 
+ * Note: If one is familar with Matter.js, then the rules are simular to rules of making a 
  * constraint are simular to those in Matter.js.
  * 
  * If set to `"absolute"`, then the rules for positioning a point is that the points 

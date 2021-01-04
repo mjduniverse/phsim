@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>PhSim Source: render/phRender/animatedSprite.js</title>
+	<title>PhSim Source: widgets/constraint.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -107,48 +107,138 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: render/phRender/animatedSprite.js</h1>
+		<h1 class="page-title">Source: widgets/constraint.js</h1>
     
 <section>
     <article>
         <pre
-            class="sunlight-highlight-javascript ">PhSim.AnimatedSprite = function(dynObject) {
+            class="sunlight-highlight-javascript ">const Vector = require("../tools/vector");
 
-    /**
-     * @type {PhSim.Sprites}
-     */
+/**
+ * 
+ * 
+ * Constraint Widget
+ * 
+ * @function
+ * @memberof PhSim.Widgets
+ * @param {PhSim} phsim 
+ * @param {Object} widget
+ * @param {LOAddress|PhSim.DynObject} widget.objectA - Object A - First point.
+ * @param {LOAddress|PhSim.DynObject} widget.objectB - Object B - Second Point
+ * 
+ * @param {"relative"|"absolute"} [widget.position = "absolute"] - Positions of points. 
+ * 
+ * If set to `"relative"`, then the rules for positioning a point is the following:
+ * 
+ * * If `widget.objectA` is set, then `widget.pointA` defines the offset from the 
+ * centroid of `widget.objectA`. Otherwise, the point is set to a point in the phsim space.
+ * 
+ * * If `widget.objectB` is set, then `widget.pointB` defines the offset from the centroid
+ * of `widget.objectB`. Otherwise, the point is set to a point in the phsim space.
+ * 
+ * * If one is familar with Matter.js, then the rules are simular to rules of making a 
+ * constraint are simular to those in Matter.js.
+ * 
+ * If set to `"absolute"`, then the rules for positioning a point is that the points 
+ * are set to points in space. This is the default value.
+ */
 
-    this.frames = [];
-    this.frameIndex = 0;
+function constraint(phsim,widget) {
 
-    /**
-     * @type {PhSim.DynObject}
-     */
+    var position = "absolute";
 
-    this.dynObject = dynObject;
-}
-
-PhSim.AnimatedSprite.prototype.fps = 0.5;
-
-PhSim.AnimatedSprite.prototype.loopFunction = function() {
-    this.dynObject.sprite.src = this.frames[this.frameIndex]
-
-    if(this.frameIndex &lt; this.frames.length) {
-        this.frameIndex++;
-    }
-
-    else {
-        this.frameIndex = 0;
-    }
-}
-
-PhSim.AnimatedSprite.prototype.play = function() {
+    if(widget.position === "relative") {
+        position = "relative"
+    } 
     
-    var self = this;
+    else if(widget.position === "absolute") {
+        position = "absolute";
+    }
+    
+    var b = {}
 
-    this.loopRef = setInterval(this.loopFunction);
+    if(position === "absolute") {
 
-}</pre>
+        if(widget.objectA) {
+
+            if(widget.objectA instanceof PhSim) {
+                b.bodyA = widget.objectA.matter;
+            }
+    
+            else {
+    
+                if(typeof widget.objectA.L === "number" &amp;&amp; typeof widget.objectA.O === "number") {
+                    b.bodyA = phsim.LO(widget.objectA.L,widget.objectA.O).matter;
+                }
+    
+                else {
+                    b.bodyA = optionMap.get(widget.objectA).matter;
+                }
+    
+            }
+    
+        }
+    
+        if(widget.objectB) {
+            b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
+    
+            if(widget.objectB instanceof PhSim) {
+                b.bodyB = widget.objectB.matter;
+            }
+    
+            else {
+    
+                if(typeof widget.objectB.L === "number" &amp;&amp; typeof widget.objectB.O === "number") {
+                    b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
+                }
+    
+                else {
+                    b.bodyB = optionMap.get(widget.objectB).matter;
+                }
+    
+            }
+    
+        }
+    
+        if(widget.pointA) {
+    
+            if(widget.objectA) {
+                b.pointA = Vector.subtract(widget.pointA,b.bodyA.position);
+            }
+    
+            else {
+                b.pointA = widget.pointA;
+            }
+    
+        }
+    
+        if(widget.pointB) {
+            
+            if(widget.objectB) {
+                b.pointB = Vector.subtract(widget.pointB,b.bodyB.position);
+            }
+    
+            else {
+                b.pointB = widget.pointB;
+            }
+        }
+
+    }
+
+    if(positon === "relative") {
+        b.pointA = widget.pointA;
+        b.pointB = widget.pointB;
+        b.bodyA = widget.objectA.plugin.dynObject;
+        b.bodyB = widget.objectB.plugin.dynObject;
+    }
+
+    var c = Matter.Constraint.create(b);
+
+    Matter.World.add(phsim.matterJSWorld,c);
+
+}
+
+module.exports = constraint;</pre>
     </article>
 </section>
 

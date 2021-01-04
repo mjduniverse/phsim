@@ -3238,7 +3238,7 @@ PhRender.prototype.renderPolygon = function (path) {
 			this.ctx.restore();	
 		}
 
-		if(path.sprite.fit) {
+		else if(path.sprite.fit) {
 
 			this.ctx.save();
 
@@ -3265,7 +3265,24 @@ PhRender.prototype.renderPolygon = function (path) {
 		}
 
 		else {
-			this.renderSpriteByCenter(path.sprite.src,centroid.x,centroid.y,img.width,img.height,0);
+
+			this.ctx.save();
+
+			this.ctx.beginPath();
+
+			this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
+
+			for(var j = 0; j < path.verts.length; j++) {
+				this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
+			}
+
+			this.ctx.closePath();
+
+			this.ctx.clip();
+
+			this.renderSpriteByCenter(path.sprite.src,0,0,path.sprite.w,path.h,0);
+
+			this.ctx.restore();	
 		}
 
 	}
@@ -3386,7 +3403,7 @@ PhRender.prototype.renderCircle = function (circle) {
 			this.ctx.restore();	
 		}
 
-		if(circle.sprite.fit) {
+		else if(circle.sprite.fit) {
 			this.ctx.save();
 			this.ctx.translate(circle.x,circle.y);
 			this.ctx.rotate(circle.cycle);
@@ -3400,8 +3417,14 @@ PhRender.prototype.renderCircle = function (circle) {
 			this.ctx.restore();	
 		}
 
-		else { 
-			this.renderSpriteByCenter(circle.sprite.src,circle.x,circle.y,circle.cycle);
+		else {
+			this.ctx.save();
+			this.ctx.translate(circle.x,circle.y);
+			this.ctx.rotate(circle.cycle);
+			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
+			this.ctx.clip(); 
+			this.renderSpriteByCenter(circle.sprite.src,0,0,circle.sprite.w,circle.h,0);
+			this.ctx.restore();	
 		}
 
 	}
@@ -3479,7 +3502,13 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 		}
 
 		else { 
-			this.renderSpriteByCenter(rectangle.sprite.src,c.x,c.y,img.w,img.h,rectangle.cycle);
+			this.ctx.save();
+			this.ctx.translate(c.x,c.y);
+			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
+			this.ctx.rotate(rectangle.cycle);
+			this.ctx.clip();
+			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.sprite.w,rectangle.h,0);
+			this.ctx.restore();	
 		}
 
 	}
@@ -3627,7 +3656,28 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 		}
 
 		else { 
-			this.renderSpriteByCenter(regPolygon.sprite.src,regPolygon.x,regPolygon.y,img.width,img.height,regPolygon.cycle);
+
+			this.ctx.save();
+
+			this.ctx.beginPath();
+
+			this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
+		
+			for(var j = 0; j < vertSet.length; j++) {
+			  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
+			}
+		
+			this.ctx.closePath();
+
+			this.ctx.clip();
+
+			this.ctx.translate(regPolygon.x,regPolygon.y);
+			this.ctx.rotate(regPolygon.cycle);
+
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,regPolygon.sprite.w,regPolygon.h,0);
+			
+			this.ctx.restore();	
+	
 		}
 
 	}
@@ -8463,77 +8513,114 @@ const Vector = __webpack_require__(3);
  * @function
  * @memberof PhSim.Widgets
  * @param {PhSim} phsim 
- * @param {Object} widget
- * @param {LOAddress|PhSim.DynObject} widget.objectA - Object A
- * @param {LOAddress|PhSim.DynObject} widget.objectB - Object B
+ * @param {Object} widget - Widget Options
+ * @param {LOAddress|PhSim.DynObject} widget.objectA - Object A - First point.
+ * @param {LOAddress|PhSim.DynObject} widget.objectB - Object B - Second Point
+ * 
+ * @param {"relative"|"absolute"} [widget.position = "absolute"] - Positions of points. 
+ * 
+ * If set to `"relative"`, then the rules for positioning a point is the following:
+ * 
+ * * If `widget.objectA` is set, then `widget.pointA` defines the offset from the 
+ * centroid of `widget.objectA`. Otherwise, the point is set to a point in the phsim space.
+ * 
+ * * If `widget.objectB` is set, then `widget.pointB` defines the offset from the centroid
+ * of `widget.objectB`. Otherwise, the point is set to a point in the phsim space.
+ * 
+ * Note: If one is familar with Matter.js, then the rules are simular to rules of making a 
+ * constraint are simular to those in Matter.js.
+ * 
+ * If set to `"absolute"`, then the rules for positioning a point is that the points 
+ * are set to points in space. This is the default value.
  */
 
 function constraint(phsim,widget) {
+
+    var position = "absolute";
+
+    if(widget.position === "relative") {
+        position = "relative"
+    } 
+    
+    else if(widget.position === "absolute") {
+        position = "absolute";
+    }
     
     var b = {}
 
-    if(widget.objectA) {
-
-        if(widget.objectA instanceof PhSim) {
-            b.bodyA = widget.objectA.matter;
-        }
-
-        else {
-
-            if(typeof widget.objectA.L === "number" && typeof widget.objectA.O === "number") {
-                b.bodyA = phsim.LO(widget.objectA.L,widget.objectA.O).matter;
-            }
-
-            else {
-                b.bodyA = optionMap.get(widget.objectA).matter;
-            }
-
-        }
-
-    }
-
-    if(widget.objectB) {
-        b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
-
-        if(widget.objectB instanceof PhSim) {
-            b.bodyB = widget.objectB.matter;
-        }
-
-        else {
-
-            if(typeof widget.objectB.L === "number" && typeof widget.objectB.O === "number") {
-                b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
-            }
-
-            else {
-                b.bodyB = optionMap.get(widget.objectB).matter;
-            }
-
-        }
-
-    }
-
-    if(widget.pointA) {
+    if(position === "absolute") {
 
         if(widget.objectA) {
-            b.pointA = Vector.subtract(widget.pointA,b.bodyA.position);
-        }
 
-        else {
-            b.pointA = widget.pointA;
+            if(widget.objectA instanceof PhSim) {
+                b.bodyA = widget.objectA.matter;
+            }
+    
+            else {
+    
+                if(typeof widget.objectA.L === "number" && typeof widget.objectA.O === "number") {
+                    b.bodyA = phsim.LO(widget.objectA.L,widget.objectA.O).matter;
+                }
+    
+                else {
+                    b.bodyA = optionMap.get(widget.objectA).matter;
+                }
+    
+            }
+    
+        }
+    
+        if(widget.objectB) {
+            b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
+    
+            if(widget.objectB instanceof PhSim) {
+                b.bodyB = widget.objectB.matter;
+            }
+    
+            else {
+    
+                if(typeof widget.objectB.L === "number" && typeof widget.objectB.O === "number") {
+                    b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
+                }
+    
+                else {
+                    b.bodyB = optionMap.get(widget.objectB).matter;
+                }
+    
+            }
+    
+        }
+    
+        if(widget.pointA) {
+    
+            if(widget.objectA) {
+                b.pointA = Vector.subtract(widget.pointA,b.bodyA.position);
+            }
+    
+            else {
+                b.pointA = widget.pointA;
+            }
+    
+        }
+    
+        if(widget.pointB) {
+            
+            if(widget.objectB) {
+                b.pointB = Vector.subtract(widget.pointB,b.bodyB.position);
+            }
+    
+            else {
+                b.pointB = widget.pointB;
+            }
         }
 
     }
 
-    if(widget.pointB) {
-        
-        if(widget.objectB) {
-            b.pointB = Vector.subtract(widget.pointB,b.bodyB.position);
-        }
-
-        else {
-            b.pointB = widget.pointB;
-        }
+    if(positon === "relative") {
+        b.pointA = widget.pointA;
+        b.pointB = widget.pointB;
+        b.bodyA = widget.objectA.plugin.dynObject;
+        b.bodyB = widget.objectB.plugin.dynObject;
     }
 
     var c = Matter.Constraint.create(b);

@@ -61,7 +61,7 @@
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-Creating PhSim Simulation.html">Creating PhSim Simulation</a></li><li><a href="tutorial-Dynamic Objects.html">Dynamic Objects</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li>
+					<li><a href="tutorial-Constraints.html">Constraints</a></li><li><a href="tutorial-Creating PhSim Simulation.html">Creating PhSim Simulation</a></li><li><a href="tutorial-Dynamic Objects.html">Dynamic Objects</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li>
 				</ul>
 			</li>
 			
@@ -1356,6 +1356,200 @@ and then <code>vector1</code> is returned.</p></td>
             
 <hr>
 <dt>
+    <h4 class="name" id=".dotProduct"><span class="type-signature">&lt;static> </span>dotProduct(vector1, vector2)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Calculate dot product of <code>vector1</code> and <code>vector2</code>.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>vector1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vector2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+	<dt class="tag-since method-doc-label method-doc-details-label">Since:</dt>
+	<dd class="tag-since">
+		<ul class="dummy">
+			<li>0.2.0-alpha</li>
+		</ul>
+	</dd>
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="tools_vector.js.html">tools/vector.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>The dot product</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Number</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
     <h4 class="name" id=".getLength"><span class="type-signature">&lt;static> </span>getLength(vector)</h4>
     
     
@@ -2445,6 +2639,227 @@ from <code>vector1.y</code> and then <code>vector1</code> is returned.</p></td>
     
 </dd>
 
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".vectorToArray"><span class="type-signature">&lt;static> </span>vectorToArray(vertex, ray1, ray2)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Gets angle between two lines that both end at <code>vertex</code>.</p>
+<p>That is, suppose that <code>A</code> is the point <code>ray1</code>, <code>B</code> is the point <code>ray2</code> and that
+<code>C</code> is the point <code>vertex</code>. Then, <code>vectorToArray</code> returns the angle between the lines
+<code>AC</code> and <code>BC</code>.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>vertex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ray1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ray2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Vector">Vector</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+	<dt class="tag-since method-doc-label method-doc-details-label">Since:</dt>
+	<dd class="tag-since">
+		<ul class="dummy">
+			<li>0.2.0-alpha</li>
+		</ul>
+	</dd>
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="tools_vector.js.html">tools/vector.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>The angle</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Number</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
         </dl>
     
 
@@ -2499,7 +2914,7 @@ from <code>vector1.y</code> and then <code>vector1</code> is returned.</p></td>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2020-12-27T22:45:58-06:00
+		on 2021-01-03T14:50:54-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

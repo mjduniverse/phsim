@@ -61,7 +61,7 @@
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-Creating PhSim Simulation.html">Creating PhSim Simulation</a></li><li><a href="tutorial-Dynamic Objects.html">Dynamic Objects</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li>
+					<li><a href="tutorial-Constraints.html">Constraints</a></li><li><a href="tutorial-Creating PhSim Simulation.html">Creating PhSim Simulation</a></li><li><a href="tutorial-Dynamic Objects.html">Dynamic Objects</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li>
 				</ul>
 			</li>
 			
@@ -129,24 +129,77 @@
 
     <section class="readme-section">
         <article><h1>phsim</h1>
-<p>PhSim is a library built by <a href="https://mjduniverse.github.io/">@mjduniverse</a> that runs on top of Matter.js. PhSim allows one to easily create a physics simulation without much hassle. PhSim could be used to create games as well.</p>
+<p>PhSim (which stands for &quot;Physics Simulator&quot;) is a library built by <a href="https://mjduniverse.github.io/">@mjduniverse</a> that runs on top of Matter.js. PhSim allows one to easily create a physics simulation without much hassle. PhSim could be used to create games as well..</p>
 <ul>
 <li><a href="https://github.com/mjduniverse/phsim/">GitHub Repository</a></li>
 <li><a href="https://github.com/mjduniverse/phsim/tree/master/dist">Distribution Downloads</a></li>
 <li><a href="https://github.com/mjduniverse/phsim/blob/master/README.md">Readme</a></li>
 <li><a href="https://mjduniverse.github.io/phsim/docs/">Documentation</a></li>
 </ul>
+<h2>Demos</h2>
+<p>To get a clearer picture of what PhSim is and what it does, I have provided you demos. Here is an example of a PhSim simulation's code:</p>
+<pre class="prettyprint source"><code>var o = {
+    &quot;objUniverse&quot;: [
+
+        // Platform
+
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 25,
+            &quot;y&quot;: 528,
+            &quot;w&quot;: 749,
+            &quot;h&quot;: 47,
+            &quot;strokeStyle&quot;: &quot;#0000ff&quot;,
+            &quot;lineWidth&quot;: 4,
+            &quot;fillStyle&quot;: &quot;#333333&quot;,
+            &quot;locked&quot;: true
+        },
+
+        // Green rectangle
+
+        {
+            &quot;shape&quot;: &quot;rectangle&quot;,
+            &quot;x&quot;: 367,
+            &quot;y&quot;: 231,
+            &quot;w&quot;: 91,
+            &quot;h&quot;: 93,
+            &quot;strokeStyle&quot;: &quot;#000000&quot;,
+            &quot;lineWidth&quot;: 4,
+            &quot;fillStyle&quot;: &quot;#33cf33&quot;,
+            &quot;widgets&quot;: [
+                {
+                    &quot;type&quot;: &quot;keyboardControls&quot;,
+                    &quot;up&quot;: 10,
+                    &quot;down&quot;: 10,
+                    &quot;left&quot;: 10,
+                    &quot;right&quot;: 10
+                }
+            ]
+        }
+    ],
+    &quot;name&quot;: &quot;Untitled Layer&quot;
+};
+
+var phSim = new PhSim(o);
+
+phSim.play();
+
+</code></pre>
+<p>To see it in action, you can view the demo here (it is the second simulation): https://mjduniverse.github.io/phsim/docs/tutorial-Creating%20PhSim%20Simulation.html</p>
 <h2>Installation</h2>
-<p>PhSim requires the libaries <a href="https://brm.io/matter-js/">Matter.js</a> and <a href="">poly-decomp</a>. Download them and then include them in your page. For example, if you put the files in a directory named <code>js</code>, then include these tags in the html page:</p>
+<p>PhSim requires the libaries <a href="https://brm.io/matter-js/">Matter.js</a> and <a href="">poly-decomp</a>. Download them and then include them in your page. After doing that, look for a <a href="https://github.com/mjduniverse/phsim/releases">release</a> to download. However, you could also download the <a href="https://github.com/mjduniverse/phsim/tree/master/dist">bleeding edge build</a>, which might be unstable.</p>
+<p>After downloading it, you should include it into your desired HTML file. If you put the files in a directory named <code>js</code>, then include these tags in the html page:</p>
 <pre class="prettyprint source"><code>
 &lt;script src=&quot;./js/decomp.min.js&quot;>&lt;/script>
 &lt;script src=&quot;./js/matter.min.js&quot;>&lt;/script>
 &lt;script src=&quot;./js/phsim.min.js&quot;>&lt;/script>
 
 </code></pre>
+<p>If you are using PhSim in a project, including <code>phsim.js</code> instead might make it easier to develop, as it retains the JSDoc comments and the code is not minified.</p>
+<p>In addition, the latest stable build is avaliable as an NPM module: https://www.npmjs.com/package/phsim. One can install PhSim by executing <code>npm install phsim</code> if they have NPM installed on their computer.</p>
 <h2>Some of the features:</h2>
 <h3>Rendering</h3>
-<p>PhSim has a in-built renderer known as <code>PhRender</code>. It allows one to add gradients and sprites to objects.</p>
+<p>PhSim has a in-built renderer known as <code>PhRender</code>. It allows one to add gradients and sprites to objects. Sprites are stored in a catche object called <code>PhSim.Sprites.spriteImgObj</code>.</p>
 <h3>Widgets</h3>
 <p>A widget is something that extends the functionality of widgets and simulations. There are widgets that make objects undergo various forms of motion. The <a href="https://mjduniverse.github.io/phsim/docs/PhSim.Widgets.html">PhSim.Widgets</a> namespace contains the built in widgets of the library. Here are some widgets that are built into the library:</p>
 <ul>
@@ -166,7 +219,7 @@
 <p><strong>wFunctions:</strong> Special functions known as wFunctions that allow one to deal with events and time in an easier way.</p>
 </li>
 <li>
-<p><strong>Draggable Objects:</strong>: Objects tcan be dragged by the mouse using the <a href="https://mjduniverse.github.io/phsim/docs/PhSim.Widgets.html#.draggable"><code>draggable</code></a> widget</li></p>
+<p><strong>Draggable Objects:</strong>: Objects can be dragged by the mouse using the <a href="https://mjduniverse.github.io/phsim/docs/PhSim.Widgets.html#.draggable"><code>draggable</code></a> widget</li></p>
 </li>
 </ul>
 <h3>Making games</h3>
@@ -220,7 +273,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2020-12-27T22:45:58-06:00
+		on 2021-01-03T14:50:53-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
