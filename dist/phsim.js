@@ -548,11 +548,11 @@ if(true) {
     module.exports = PhSim;
 }
 
-PhSim.Static = __webpack_require__(4 );
+PhSim.Static = __webpack_require__(5 );
 
 __webpack_require__(11 );
 
-PhSim.EventStack = __webpack_require__(5 );
+PhSim.EventStack = __webpack_require__(6 );
 
 /**
  * Object containing array functions to be called.
@@ -571,11 +571,11 @@ PhSim.prototype.simulationEventStack = new PhSim.EventStack();
 PhSim.PhRender = __webpack_require__(12);
 PhSim.Sprites = __webpack_require__(13);
 PhSim.Audio = __webpack_require__(14);
-PhSim.Vector = __webpack_require__(3);
+PhSim.Vector = __webpack_require__(4);
 PhSim.diagRect = __webpack_require__(15);
 PhSim.Vertices = __webpack_require__(7);
 
-PhSim.Centroid = __webpack_require__(6);
+PhSim.Centroid = __webpack_require__(3);
 
 // Bounding box functions
 
@@ -659,11 +659,11 @@ module.exports = require("matter-js");
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(4);
+const Static = __webpack_require__(5);
 const PhSim = __webpack_require__(0);
 const Vertices = __webpack_require__(7);
 const PhSimEventTarget = __webpack_require__(8);
-const EventStack = __webpack_require__(5);
+const EventStack = __webpack_require__(6);
 
 // Try to import matter.js as a commonJS module
 
@@ -998,6 +998,86 @@ module.exports = DynObject;
 /* 3 */
 /***/ (function(module, exports) {
 
+/**
+ * Namespace for functions that get the centroid (the center) of a {@link PhSimObject}.
+ * @memberof PhSim
+ * @namespace
+ */
+
+const Centroid = {}
+
+/**
+ * Get centroid of any shape.
+ * If it is a circle or a regPolygon, then `o` is returned because the properties `x` and
+ * `y` already define the centroid of the object.
+ * 
+ * @param {PhSimObject} o 
+ * @returns {Vector}
+ */
+
+Centroid.shape = function(o) {
+	
+	if(o.shape === "rectangle") {
+		return Centroid.rectangle(o);
+	}
+
+	if(o.shape === "polygon") {
+		return Centroid.polygon(o)
+	}
+
+	if(o.shape === "circle" || o.shape === "regPolygon") {
+		return o;
+	}
+
+}
+
+/**
+ * 
+ * Get centroid of a rectangle
+ * 
+ * @function
+ * @param {PhSim.Static.Rectangle} rectangle
+ * @returns {Vector}
+ *  
+ */
+
+Centroid.rectangle = function(rectangle) {
+	return {
+		"x": rectangle.x + 0.5 * rectangle.w,
+		"y": rectangle.y + 0.5 * rectangle.h
+	}
+}
+
+
+/** 
+ * Find Centroid of a polygon
+ * @function
+ * @param {Polygon} a - Path
+ * @returns {Vector}
+ */
+
+Centroid.polygon = function(a) {
+		
+	var v = new PhSim.Vector(0,0);
+	
+	for(var j = 0; j < a.verts.length; j++) { 
+		v.x += a.verts[j].x;
+		v.y += a.verts[j].y;
+	}
+	
+	v.x = (1/a.verts.length) * v.x;
+	v.y = (1/a.verts.length) * v.y;
+	
+	return v;
+
+}
+
+module.exports = Centroid;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
 /** 
  * Constructor for the minimal requirements for being a {@link Vector}.
  *  
@@ -1277,7 +1357,7 @@ Vector.vectorToArray = function(vertex,ray1,ray2) {
 module.exports = Vector;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -1850,7 +1930,7 @@ Static.SLO = function(S,L,O) {
 module.exports = Static;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /**
@@ -2059,86 +2139,6 @@ const EventStack = function() {
 module.exports = EventStack;
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-/**
- * Namespace for functions that get the centroid (the center) of a {@link PhSimObject}.
- * @memberof PhSim
- * @namespace
- */
-
-const Centroid = {}
-
-/**
- * Get centroid of any shape.
- * If it is a circle or a regPolygon, then `o` is returned because the properties `x` and
- * `y` already define the centroid of the object.
- * 
- * @param {PhSimObject} o 
- * @returns {Vector}
- */
-
-Centroid.shape = function(o) {
-	
-	if(o.shape === "rectangle") {
-		return Centroid.rectangle(o);
-	}
-
-	if(o.shape === "polygon") {
-		return Centroid.polygon(o)
-	}
-
-	if(o.shape === "circle" || o.shape === "regPolygon") {
-		return o;
-	}
-
-}
-
-/**
- * 
- * Get centroid of a rectangle
- * 
- * @function
- * @param {PhSim.Static.Rectangle} rectangle
- * @returns {Vector}
- *  
- */
-
-Centroid.rectangle = function(rectangle) {
-	return {
-		"x": rectangle.x + 0.5 * rectangle.w,
-		"y": rectangle.y + 0.5 * rectangle.h
-	}
-}
-
-
-/** 
- * Find Centroid of a polygon
- * @function
- * @param {Polygon} a - Path
- * @returns {Vector}
- */
-
-Centroid.polygon = function(a) {
-		
-	var v = new PhSim.Vector(0,0);
-	
-	for(var j = 0; j < a.verts.length; j++) { 
-		v.x += a.verts[j].x;
-		v.y += a.verts[j].y;
-	}
-	
-	v.x = (1/a.verts.length) * v.x;
-	v.y = (1/a.verts.length) * v.y;
-	
-	return v;
-
-}
-
-module.exports = Centroid;
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2271,7 +2271,7 @@ module.exports = Vertices;
  * @memberof PhSim
  */
 
-const EventStack = __webpack_require__(5);
+const EventStack = __webpack_require__(6);
 
 const PhSimEventTarget = {}
 
@@ -2395,7 +2395,7 @@ module.exports = PhSimEventTarget;
 
 const DynObject = __webpack_require__(2);
 const PhSim = __webpack_require__(0);
-const Centroid = __webpack_require__(6);
+const Centroid = __webpack_require__(3);
 
 // Try to import matter-js as a commonJS module
 
@@ -3083,7 +3083,9 @@ Matter.Plugin.register(PhSim.matterPlugin);
 
 /***/ }),
 /* 12 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+const Centroid = __webpack_require__(3);
 
 /** 
  * 
@@ -3209,7 +3211,7 @@ PhRender.prototype.renderPolygon = function (path) {
 
 		var img = this.spriteImgObj[path.sprite.src];
 
-		var centroid = findCentroidOfPath(path);
+		var centroid = Centroid.polygon(path);
 
 		this.ctx.imageSmoothingEnabled = path.sprite.smooth;
 
@@ -3280,7 +3282,7 @@ PhRender.prototype.renderPolygon = function (path) {
 
 			this.ctx.clip();
 
-			this.renderSpriteByCenter(path.sprite.src,0,0,path.sprite.w,path.h,0);
+			this.renderSpriteByCenter(path.sprite.src,0,0,path.sprite.w,path.sprite.h,0);
 
 			this.ctx.restore();	
 		}
@@ -3423,7 +3425,7 @@ PhRender.prototype.renderCircle = function (circle) {
 			this.ctx.rotate(circle.cycle);
 			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
 			this.ctx.clip(); 
-			this.renderSpriteByCenter(circle.sprite.src,0,0,circle.sprite.w,circle.h,0);
+			this.renderSpriteByCenter(circle.sprite.src,0,0,circle.sprite.w,circle.sprite.h,0);
 			this.ctx.restore();	
 		}
 
@@ -3674,7 +3676,7 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 			this.ctx.translate(regPolygon.x,regPolygon.y);
 			this.ctx.rotate(regPolygon.cycle);
 
-			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,regPolygon.sprite.w,regPolygon.h,0);
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,regPolygon.sprite.w,regPolygon.sprite.h,0);
 			
 			this.ctx.restore();	
 	
@@ -4321,7 +4323,7 @@ module.exports = diagRect;
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(4);
+const Static = __webpack_require__(5);
 
 /**
  * Get bounding box from an array of vectors.
@@ -5387,7 +5389,7 @@ PhSim.prototype.deregisterKeyEvents = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 const DynObject = __webpack_require__(2);
-const Vector = __webpack_require__(3);
+const Vector = __webpack_require__(4);
 
 // Try to import matter-js as a commonJS module
 
@@ -6181,8 +6183,8 @@ PhSim.prototype.exit = function() {
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Centroid = __webpack_require__(6);
-const Vector = __webpack_require__(3);
+const Centroid = __webpack_require__(3);
+const Vector = __webpack_require__(4);
 
 // Try to import matter-js as a commonJS module
 
@@ -8503,7 +8505,7 @@ PhSim.Widgets.stack = function(o,w) {
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Vector = __webpack_require__(3);
+const Vector = __webpack_require__(4);
 
 /**
  * 

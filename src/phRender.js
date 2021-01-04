@@ -142,12 +142,11 @@ PhRender.prototype.renderPolygon = function (path) {
 		
 
 			this.ctx.translate(centroid.x,centroid.y);
-			//this.ctx.rotate(circle.cycle);
-			this.ctx.scale(path.sprite.scale,path.sprite.scale);
-			var pattern = this.ctx.createPattern(img,"repeat");
-			this.ctx.fillStyle = pattern;
 
 			this.ctx.closePath();
+
+			var pattern = this.ctx.createPattern(img,"repeat");
+			this.ctx.fillStyle = pattern;
 
 			this.ctx.fill();
 			this.ctx.restore();	
@@ -195,7 +194,7 @@ PhRender.prototype.renderPolygon = function (path) {
 
 			this.ctx.clip();
 
-			this.renderSpriteByCenter(path.sprite.src,0,0,path.sprite.w,path.h,0);
+			this.renderSpriteByCenter(path.sprite.src,0,0,path.sprite.w,path.sprite.h,0);
 
 			this.ctx.restore();	
 		}
@@ -338,7 +337,7 @@ PhRender.prototype.renderCircle = function (circle) {
 			this.ctx.rotate(circle.cycle);
 			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
 			this.ctx.clip(); 
-			this.renderSpriteByCenter(circle.sprite.src,0,0,circle.sprite.w,circle.h,0);
+			this.renderSpriteByCenter(circle.sprite.src,0,0,circle.sprite.w,circle.sprite.h,0);
 			this.ctx.restore();	
 		}
 
@@ -589,7 +588,7 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 			this.ctx.translate(regPolygon.x,regPolygon.y);
 			this.ctx.rotate(regPolygon.cycle);
 
-			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,regPolygon.sprite.w,regPolygon.h,0);
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,regPolygon.sprite.w,regPolygon.sprite.h,0);
 			
 			this.ctx.restore();	
 	
