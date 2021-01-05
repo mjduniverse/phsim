@@ -276,27 +276,28 @@ PhRender.prototype.renderCircle = function (circle) {
 
 	if(circle.sprite && circle.sprite.src) {
 
+		/**
+		 * 
+		 * @type {HTMLImageElement}
+		 */
+
 		var img = this.spriteImgObj[circle.sprite.src];
 
 		this.ctx.imageSmoothingEnabled = circle.sprite.smooth;
 
+		this.ctx.save();
+		this.ctx.translate(circle.x,circle.y);
+		this.ctx.rotate(circle.cycle);
+		this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
+
 		if(circle.sprite.repeat) {
-			this.ctx.save();
-			this.ctx.translate(circle.x,circle.y);
-			this.ctx.rotate(circle.cycle);
-			this.ctx.scale(circle.sprite.scale,circle.sprite.scale);
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
-			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
-			this.ctx.fill();
-			this.ctx.restore();	
+			this.ctx.fill();	
 		}
 
 		else if(circle.sprite.fit) {
-			this.ctx.save();
-			this.ctx.translate(circle.x,circle.y);
-			this.ctx.rotate(circle.cycle);
-			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
+
 			this.ctx.clip();
 			var box = PhSim.BoundingBox.fromShape(circle);
 
@@ -307,16 +308,17 @@ PhRender.prototype.renderCircle = function (circle) {
 		}
 
 		else {
-			this.ctx.save();
-			this.ctx.translate(circle.x,circle.y);
-			this.ctx.rotate(circle.cycle);
-			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
+
+			var w = circle.sprite.w || img.width;
+			var h = circle.sprite.h || img.height;
+
 			this.ctx.clip(); 
-			this.renderSpriteByCenter(circle.sprite.src,0,0,circle.sprite.w,circle.sprite.h,0);
-			this.ctx.restore();	
+			this.renderSpriteByCenter(circle.sprite.src,0,0,w,h,0);
 		}
 
 	}
+
+	this.ctx.restore();
 
 	this.unsetCtx();
 
@@ -366,42 +368,36 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 
 		this.ctx.imageSmoothingEnabled = rectangle.sprite.smooth;
 
+		this.ctx.save();
+		this.ctx.translate(c.x,c.y);
+		this.ctx.rotate(rectangle.cycle);
+		this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
+
 		if(rectangle.sprite.repeat) {
-			this.ctx.save();
-			this.ctx.translate(c.x,c.y);
-			this.ctx.rotate(rectangle.cycle);
+	
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
-			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
 			this.ctx.fill();
 			this.ctx.restore();	
 		}
 
 		if(rectangle.sprite.fit) {
-			this.ctx.save();
-			this.ctx.translate(c.x,c.y);
-			this.ctx.rotate(rectangle.cycle);
-			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
+
 			this.ctx.clip();
 
 			var h = img.height * (rectangle.w/img.width);
 
 			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.w,h,0);
-			this.ctx.restore();	
 		}
 
 		else { 
-			this.ctx.save();
-			this.ctx.translate(c.x,c.y);
-			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
-			this.ctx.rotate(rectangle.cycle);
 			this.ctx.clip();
 			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.sprite.w,rectangle.h,0);
-			this.ctx.restore();	
 		}
 
 	}
 
+	this.ctx.restore();	
 	this.unsetCtx();
 
 }
@@ -495,81 +491,54 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 		this.ctx.imageSmoothingEnabled = regPolygon.sprite.smooth;
 
+		this.ctx.save();
+		this.ctx.translate(regPolygon.x,regPolygon.y);
+		this.ctx.rotate(regPolygon.cycle);
+
+		this.ctx.beginPath();
+
+		this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
+	
+		for(var j = 0; j < vertSet.length; j++) {
+		  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
+		}
+	
+		this.ctx.closePath();
+
+		this.ctx.translate(regPolygon.x,regPolygon.y);
+		this.ctx.rotate(regPolygon.cycle);
+
 		if(regPolygon.sprite.repeat) {
-			this.ctx.save();
-			this.ctx.translate(regPolygon.x,regPolygon.y);
-			this.ctx.rotate(regPolygon.cycle);
-			this.ctx.scale(regPolygon.sprite.scale,regPolygon.sprite.scale);
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
-		
-			for(var j = 0; j < vertSet.length; j++) {
-			  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
-			}
-		
-			this.ctx.closePath();
-
 			this.ctx.fill();
-			this.ctx.restore();	
 		}
 
 		if(regPolygon.sprite.fit) {
 
-			this.ctx.save();
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
-		
-			for(var j = 0; j < vertSet.length; j++) {
-			  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
-			}
-		
-			this.ctx.closePath();
-
 			this.ctx.clip();
-
-			this.ctx.translate(regPolygon.x,regPolygon.y);
-			this.ctx.rotate(regPolygon.cycle);
 
 			var box = PhSim.BoundingBox.fromShape(regPolygon);
 
 			var h = img.height * (box.w/img.width);
 
 			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,box.w,h,0);
-			this.ctx.restore();	
+
 		}
 
-		else { 
-
-			this.ctx.save();
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
-		
-			for(var j = 0; j < vertSet.length; j++) {
-			  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
-			}
-		
-			this.ctx.closePath();
-
+		else {
+			
 			this.ctx.clip();
 
-			this.ctx.translate(regPolygon.x,regPolygon.y);
-			this.ctx.rotate(regPolygon.cycle);
+			var w = regPolygon.sprite.w || img.width;
+			var h = regPolygon.sprite.h || img.height;
 
-			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,regPolygon.sprite.w,regPolygon.sprite.h,0);
-			
-			this.ctx.restore();	
-	
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,w,h,0);
 		}
 
 	}
+
+	this.ctx.restore();	
 
 	this.unsetCtx();
 
