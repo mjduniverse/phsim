@@ -18,166 +18,173 @@ catch {
  * This property is used to define a simulation.
  * 
  * When PhSim.prototype.gotoSimulationIndex is used, it resets 
+ * 
+ * @function
  * @param {Number} i
  * @this PhSim
  * @memberof PhSim
  * @returns {Promise} - A promise that is fulfiled if the loading is successful.
- * @function
  * 
- *  
  */
 
 var gotoSimulationIndex = function (i) {
 
-	this.status = PhSim.statusCodes.INT;
-
-	var optionMap = new Map();  
-
 	var self = this;
-
-	this.firstSlUpdate = false;
-
-	var event = new PhSim.Events.PhSimEvent("slchange");
-
-	event.type = "slchange";
-
-	this.callEventClass("beforeslchange",this,event);
-
-	if(!this.noCamera) {
-		this.camera.translate(-this.camera.x,-this.camera.y);
-	}
-
-	if(this.ctx) {
-	    this.drawLoadingScreen();
-	}
-
-	this.simulation = this.simulations[i];
-	this.simOptions = this.simulations[i];
-
-	this.simulationIndex = i;
-
-	if(this.ctx) {
-		this.width = this.ctx.canvas.width;
-		this.height = this.ctx.canvas.height;
-	}
-	
-	this.paused = false;
-
-	var this_a = this;
-
-	this.matterJSWorld = Matter.World.create();
-
-	this.matterJSEngine = Matter.Engine.create({
-		world: this_a.matterJSWorld
-	});
-
-	this.dynTree = [];
-	this.objUniverse = [];
-	this.staticSprites = [];
-	this.staticAudio = [];
-	this.audioPlayers = 0;
-	this.simulationEventStack = new PhSim.EventStack();
-
-
-	if(this.sprites) {
-		this.staticSprites.concat(this.sprites);
-	}
-
-
-	if(this.simOptions && this.simOptions.world && this.simOptions.world.bg) {
-		this.bgFillStyle = this.simOptions.world.bg;
-	}
-
-	if(this.world && this.world && this.world.bg) {
-		this.bgFillStyle = this.world.bg;
-	}
-
-	if(this.simulations) {
-	
-		for(var L = 0; L < this.simOptions.layers.length; L++) {
-
-			this.dynTree.push([]);
-
-			for(var O = 0; O < this.simOptions.layers[L].objUniverse.length; O++) {
-
-				var o = this.simOptions.layers[L].objUniverse[O];
-
-				if(o.sprite) {
-					this.staticSprites.push(o.sprite);	
-				}
-				
-				if(o.noDyn) {
-
-					this.addObject(o,{
-						layer: L
-					});
-			
-				}
-
-				else {
-					
-					if(o instanceof PhSim.DynObject) {
-						this.addObject(o,{
-							layer: L
-						});
-					}
-
-					else {
-						var dynObject = new PhSim.DynObject(o);
-
-						this.addObject(dynObject,{
-							layer: L
-						});
-
-						optionMap.set(o,dynObject);
-					}
-
-				}
-			}
-
-			var a = new PhSim.Events.PhSimDynEvent();
-			this_a.callEventClass("matterJSLoad",this_a,a);
-
-		}
-
-	}
-
-	Matter.Events.on(this.matterJSEngine,"collisionStart",function(event) {
-		
-		var a = new PhSim.Events.PhSimDynEvent();
-		a.matterEvent = event;
-		this_a.callEventClass("collisionstart",this_a,a);
-
-	});
-
-	if(this.simOptions.game) {
-		this.lclGame = new PhSim.Game(this,this.simOptions.game);
-	}
-
-	if(this_a.simulation.widgets) {
-
-		for(var C = 0; C < this_a.simulation.widgets.length; C++) {
-			var a = this_a.simulation.widgets[C];
-			this_a.extractWidget(this_a,a);
-		}
-
-	}
-
-	this.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
 
 	var p = new Promise(function(resolve,reject){
 
-		if(self.phRender && self.staticSprites.length) {
-			self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(self.staticSprites,function() {
-				resolve();
-				self.status = PhSim.statusCodes.LOADED_SPRITES;
-			});
+		self.status = PhSim.statusCodes.INT;
+
+		var optionMap = new Map();  
+	
+		self.firstSlUpdate = false;
+	
+		var event = new PhSim.Events.PhSimEvent("slchange");
+	
+		event.type = "slchange";
+	
+		self.callEventClass("beforeslchange",self,event);
+	
+		if(!self.noCamera) {
+			self.camera.translate(-self.camera.x,-self.camera.y);
+		}
+	
+		if(self.ctx) {
+			self.drawLoadingScreen();
+		}
+	
+		self.simulation = self.simulations[i];
+		self.simOptions = self.simulations[i];
+	
+		self.simulationIndex = i;
+	
+		if(self.ctx) {
+			self.width = self.ctx.canvas.width;
+			self.height = self.ctx.canvas.height;
+		}
+		
+		self.paused = false;
+	
+		self.matterJSWorld = Matter.World.create();
+	
+		self.matterJSEngine = Matter.Engine.create({
+			world: self.matterJSWorld
+		});
+	
+		self.dynTree = [];
+		self.objUniverse = [];
+		self.staticSprites = [];
+		self.staticAudio = [];
+		self.audioPlayers = 0;
+		self.simulationEventStack = new PhSim.EventStack();
+	
+	
+		if(self.sprites) {
+			self.staticSprites.concat(self.sprites);
+		}
+	
+	
+		if(self.simOptions && self.simOptions.world && self.simOptions.world.bg) {
+			self.bgFillStyle = self.simOptions.world.bg;
+		}
+	
+		if(self.world && self.world && self.world.bg) {
+			self.bgFillStyle = self.world.bg;
+		}
+	
+		if(self.simulations) {
+		
+			for(var L = 0; L < self.simOptions.layers.length; L++) {
+	
+				self.dynTree.push([]);
+	
+				for(var O = 0; O < self.simOptions.layers[L].objUniverse.length; O++) {
+	
+					var o = self.simOptions.layers[L].objUniverse[O];
+	
+					if(o.sprite) {
+						self.staticSprites.push(o.sprite);	
+					}
+					
+					if(o.noDyn) {
+	
+						self.addObject(o,{
+							layer: L
+						});
+				
+					}
+	
+					else {
+						
+						if(o instanceof PhSim.DynObject) {
+							self.addObject(o,{
+								layer: L
+							});
+						}
+	
+						else {
+							var dynObject = new PhSim.DynObject(o);
+	
+							self.addObject(dynObject,{
+								layer: L
+							});
+	
+							optionMap.set(o,dynObject);
+						}
+	
+					}
+				}
+	
+				var a = new PhSim.Events.PhSimDynEvent();
+				self.callEventClass("matterJSLoad",self,a);
+	
+			}
+	
+		}
+	
+		Matter.Events.on(self.matterJSEngine,"collisionStart",function(event) {
+			
+			var a = new PhSim.Events.PhSimDynEvent();
+			a.matterEvent = event;
+			self.callEventClass("collisionstart",self,a);
+	
+		});
+	
+		if(self.simOptions.game) {
+			self.lclGame = new PhSim.Game(self,self.simOptions.game);
+		}
+	
+		if(self.simulation.widgets) {
+	
+			for(var C = 0; C < self.simulation.widgets.length; C++) {
+				var a = self.simulation.widgets[C];
+				self.extractWidget(self,a);
+			}
+	
 		}
 
-		else {
-			resolve();
-			self.status = PhSim.statusCodes.LOADED_SPRITES;
-		}
+		this.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
+
+		resolve();
+
+		
+	}).then(function(){
+
+		return new Promise(function(resolve,reject){
+
+			if(self.phRender && self.staticSprites.length) {
+				self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(self.staticSprites,function() {
+					resolve();
+					self.status = PhSim.statusCodes.LOADED_SPRITES;
+				});
+			}
+	
+			else {
+				resolve();
+				self.status = PhSim.statusCodes.LOADED_SPRITES;
+			}
+
+		})
 
 	}).then(function() {
 		return new Promise(function(resolve,reject){
@@ -196,7 +203,7 @@ var gotoSimulationIndex = function (i) {
 
 		});
 	}).then(function(){
-		this_a.init = true;
+		self.init = true;
 
 		self.status = PhSim.statusCodes.LOADED_SIMULATION;
 
