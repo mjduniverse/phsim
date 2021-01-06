@@ -138,9 +138,9 @@ PhRender.prototype.renderPolygon = function (path) {
 			this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
 		}
 
-		this.ctx.translate(centroid.x,centroid.y);
-
 		this.ctx.closePath();
+
+		this.ctx.translate(centroid.x,centroid.y);
 
 		if(path.sprite.repeat) {
 
@@ -492,8 +492,6 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 		this.ctx.imageSmoothingEnabled = regPolygon.sprite.smooth;
 
 		this.ctx.save();
-		this.ctx.translate(regPolygon.x,regPolygon.y);
-		this.ctx.rotate(regPolygon.cycle);
 
 		this.ctx.beginPath();
 
