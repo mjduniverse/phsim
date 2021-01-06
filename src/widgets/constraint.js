@@ -1,4 +1,6 @@
 const Vector = require("../tools/vector");
+const DynObject = require("../dynObject");
+const { Vector } = require("matter-js");
 
 /**
  * 
@@ -9,9 +11,10 @@ const Vector = require("../tools/vector");
  * @memberof PhSim.Widgets
  * @param {PhSim} phsim 
  * @param {Object} widget - Widget Options
- * @param {LOAddress|PhSim.DynObject} widget.objectA - Object A - First point.
- * @param {LOAddress|PhSim.DynObject} widget.objectB - Object B - Second Point
- * 
+ * @param {LOAddress|PhSim.DynObject} [widget.objectA] - Object A - First point.
+ * @param {LOAddress|PhSim.DynObject} [widget.objectB] - Object B - Second Point
+ * @param {Vector} [widget.pointA] - First point (see `widget.position` for more information)
+ * @param {Vector} [widget.pointB] - Second point (see `widget.position` for more information)
  * @param {"relative"|"absolute"} [widget.position = "absolute"] - Positions of points. 
  * 
  * If set to `"relative"`, then the rules for positioning a point is the following:
@@ -47,7 +50,7 @@ function constraint(phsim,widget) {
 
         if(widget.objectA) {
 
-            if(widget.objectA instanceof PhSim) {
+            if(widget.objectA instanceof DynObject) {
                 b.bodyA = widget.objectA.matter;
             }
     
@@ -68,7 +71,7 @@ function constraint(phsim,widget) {
         if(widget.objectB) {
             b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
     
-            if(widget.objectB instanceof PhSim) {
+            if(widget.objectB instanceof DynObject) {
                 b.bodyB = widget.objectB.matter;
             }
     
