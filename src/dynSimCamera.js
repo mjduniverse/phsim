@@ -1,3 +1,5 @@
+const Motion = require("./motion");
+
 /**
  * @constructor
  * @memberof PhSim
@@ -61,7 +63,7 @@ Camera.prototype.translate = function(dx,dy) {
 	this.dynSim.ctx.translate(dx,dy);
 
 	for(var i = 0; i < this.transformingObjects.length; i++) {
-		PhSim.Motion.translate(this.transformingObjects[i],dx,dy);
+		Motion.translate(this.transformingObjects[i],dx,dy);
 	}
 }
 

@@ -1,6 +1,5 @@
 const Vector = require("../tools/vector");
 const DynObject = require("../dynObject");
-const { Vector } = require("matter-js");
 
 /**
  * 

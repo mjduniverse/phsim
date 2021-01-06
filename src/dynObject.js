@@ -6,12 +6,14 @@ const EventStack = require("./events/eventStack");
 
 // Try to import matter.js as a commonJS module
 
-try {
-	const Matter = require("matter-js");
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = require("matter-js");
 }
 
 /**
@@ -33,8 +35,6 @@ catch {
 var DynObject = function(staticObject,matterBody) {
 
 	Object.assign(this,PhSimEventTarget);
-
-	var self = this;
 
 	Object.assign(this,JSON.parse(JSON.stringify(staticObject)));
 
@@ -141,9 +141,6 @@ DynObject.setLineWidth = function(dyn_object,lineWidth) {
 	dyn_object.lineWidth = lineWidth;
 }
 
-DynObject.setRegPolygonSideNumber = function(dyn_object,sides) {
-
-}
 
 /**
  * 
@@ -175,6 +172,7 @@ DynObject.flattenComposite = function(composite) {
 			}
 
 		}
+
 
 	}
 
@@ -271,6 +269,8 @@ DynObject.createMatterObject = function(staticObject) {
 
 	opts.isStatic = staticObject.locked;
 
+	var set;
+
 	if(typeof staticObject.density === "number") {
 		opts.density = staticObject.density;
 
@@ -305,12 +305,12 @@ DynObject.createMatterObject = function(staticObject) {
 
 
 	else if(staticObject.shape === "rectangle") {
-		var set = Vertices.rectangle(staticObject);
+		set = Vertices.rectangle(staticObject);
 		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 
 	else if(staticObject.shape === "regPolygon") {
-		var set = Vertices.regPolygon(staticObject);
+		set = Vertices.regPolygon(staticObject);
 		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 

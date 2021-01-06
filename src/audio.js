@@ -145,7 +145,7 @@ PhSim.prototype.setAudioVolByIndex = function(i,v) {
  */
 
 Audio.setAudioMuteByIndex = function(phsim,i) {
-	return phsim.audioArray.array[i].muted = v;
+	return phsim.audioArray.array[i].muted = true;
 }
 
 /**

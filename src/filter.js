@@ -78,8 +78,6 @@ PhSim.prototype.alert = function(options) {
 	alertBox.style.height = options.h + "px";
 	alertBox.style.fontSize = "20px";
 
-	var rect = alertBox.getBoundingClientRect();
-
 	var elmBox = this.canvas.getBoundingClientRect();
 
 	var alertBoxMsg = document.createElement("div");
