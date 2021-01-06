@@ -242,6 +242,7 @@ Game.prototype.end = function() {
 
 /**
  * Namespace for game widgets
+ * @mixin
  * 
  */
 
@@ -254,11 +255,13 @@ Game.Widgets = {
  * 
  * @param {PhSim.DynObject} dyn_object 
  * @param {Object} widget - Widget options
- * @param {Number} widget.value - Value of coin. If undefined, the value of the coin is 1.
+ * @param {Number} [widget.value] - Value of coin. If undefined, the value of the coin is 1.
  * @this PhSim
  */
 
 Game.Widgets.coin = function(dyn_object,widget) {
+
+	widget = widget || {};
 
 	var value = widget.value || 1;
 
@@ -271,7 +274,7 @@ Game.Widgets.coin = function(dyn_object,widget) {
 		var a = function() {
 
 			if(self.inSensorCollision(obj1) && self.lclGame) {
-				self.lclGame.setScore(self.lclGame.score + 1);
+				self.lclGame.setScore(self.lclGame.score + value);
 				self.off("collisionstart",a);	
 			}
 
@@ -286,53 +289,74 @@ Game.Widgets.coin = function(dyn_object,widget) {
 
 }
 
+/**
+ * Hazard Widget
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget
+ * @param {Number} [widget.damage] - Quantity of life lost. By default, it is equal to 1.
+ */
+
 Game.Widgets.hazard = function(dyn_object,widget) {
 
-var self = this;
+	widget = widget || {};
 
-var func = function() {
+	widget.damage = widget.damage || 1;
 
-	var obj1 = dyn_object;
+	var self = this;
 
-	var a = function() {
+	var func = function() {
 
-		if(self.inSensorCollision(obj1) && self.lclGame) {
-			self.lclGame.setLife(self.lclGame.life - 1);
-			self.off("collisionstart",a);
+		var obj1 = dyn_object;
+
+		var a = function() {
+
+			if(self.inSensorCollision(obj1) && self.lclGame) {
+				self.lclGame.setLife(self.lclGame.life - widget.damage);
+				self.off("collisionstart",a);
+			}
+
 		}
+
+		return a;
 
 	}
 
-	return a;
+	self.on("collisionstart",func());
 
 }
 
-self.on("collisionstart",func());
-
-}
+/**
+ * 
+ * @param {PhSim} dyn_object 
+ * @param {Object} [widget] - Widget configuration
+ * @param {Number} [widget.lives] - Lives to be gained.
+ */
 
 Game.Widgets.health = function(dyn_object,widget) {
 
-var self = this;
+	widget = widget || {};
+	widget.lives = widget.lives || 1;
 
-var func = function() {
+	var self = this;
 
-	var obj1 = dyn_object;
+	var func = function() {
 
-	var a = function() {
+		var obj1 = dyn_object;
 
-		if(self.inSensorCollision(obj1) && self.lclGame) {
-			self.lclGame.setLife(self.lclGame.life + 1);
-			self.off("collisionstart",a);	
+		var a = function() {
+
+			if(self.inSensorCollision(obj1) && self.lclGame) {
+				self.lclGame.setLife(self.lclGame.life + widget.lives);
+				self.off("collisionstart",a);	
+			}
+
 		}
+
+		return a;
 
 	}
 
-	return a;
-
-}
-
-self.on("collisionstart",func());
+	self.on("collisionstart",func());
 
 }
 
