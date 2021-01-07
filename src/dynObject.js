@@ -85,9 +85,30 @@ var DynObject = function(staticObject,matterBody) {
 	 * */
 
 	this.matter.plugin.dynObject = this;
+	
+	if(DynObject.keepInstances) {
+		DynObject.instances.push(this);
+	}
 
 }
 
+/**
+ * If set to `true`, all DynObject instances are put into the 
+ * {@link PhSim.DynObject.instances} array.
+ * 
+ * @memberof PhSim.DynObject
+ * @type {Boolean}
+ * @default false
+ */
+
+DynObject.keepInstances = false;
+
+/**
+ * Array of instances if {@link PhSim.DynObject.keepInstances} iu set to true
+ * @type {PhSim.DynObject[]}
+ */
+
+DynObject.instances = [];
 
 /**
  * Set color for dynObject.
