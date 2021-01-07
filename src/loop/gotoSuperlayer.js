@@ -1,3 +1,4 @@
+const DynObject = require("../dynObject");
 const PhSim = require("../index");
 
 // Try to import matter-js as a commonJS module
@@ -33,144 +34,133 @@ var gotoSimulationIndex = function (i) {
 
 	var self = this;
 
-	var p = new Promise(function(resolve){
+	return new Promise(function(resolve){
 
 		self.status = PhSim.statusCodes.INT;
 
 		var optionMap = new Map();  
-	
+
 		self.firstSlUpdate = false;
-	
+
 		var event = new PhSim.Events.PhSimEvent("slchange");
-	
+
 		event.type = "slchange";
-	
+
 		self.callEventClass("beforeslchange",self,event);
-	
+
 		if(!self.noCamera) {
 			self.camera.translate(-self.camera.x,-self.camera.y);
 		}
-	
+
 		if(self.ctx) {
 			self.drawLoadingScreen();
 		}
-	
+
 		self.simulation = self.simulations[i];
 		self.simOptions = self.simulations[i];
-	
+
 		self.simulationIndex = i;
-	
+
 		if(self.ctx) {
 			self.width = self.ctx.canvas.width;
 			self.height = self.ctx.canvas.height;
 		}
-		
+
 		self.paused = false;
-	
+
 		self.matterJSWorld = Matter.World.create();
-	
+
 		self.matterJSEngine = Matter.Engine.create({
 			world: self.matterJSWorld
 		});
-	
+
 		self.dynTree = [];
 		self.objUniverse = [];
 		self.staticSprites = [];
 		self.staticAudio = [];
 		self.audioPlayers = 0;
 		self.simulationEventStack = new PhSim.EventStack();
-	
-	
+
+
 		if(self.sprites) {
 			self.staticSprites.concat(self.sprites);
 		}
-	
-	
+
+
 		if(self.simOptions && self.simOptions.world && self.simOptions.world.bg) {
 			self.bgFillStyle = self.simOptions.world.bg;
 		}
-	
+
 		if(self.world && self.world && self.world.bg) {
 			self.bgFillStyle = self.world.bg;
 		}
-	
+
 		if(self.simulations) {
-		
-			for(var L = 0; L < self.simOptions.layers.length; L++) {
-	
+
+			for(let i = 0; i < self.simOptions.layers.length; i++) {
+
 				self.dynTree.push([]);
-	
-				for(var O = 0; O < self.simOptions.layers[L].objUniverse.length; O++) {
-	
-					var o = self.simOptions.layers[L].objUniverse[O];
-	
+
+				for(let j = 0; j < self.simOptions.layers[i].objUniverse.length; j++) {
+
+					var o = self.simOptions.layers[i].objUniverse[j];
+
 					if(o.sprite) {
 						self.staticSprites.push(o.sprite);	
 					}
 					
-					if(o.noDyn) {
-	
+					if(o instanceof DynObject && !o.noDyn) {
 						self.addObject(o,{
-							layer: L
+							layer: i
 						});
-				
 					}
-	
+
 					else {
-						
-						if(o instanceof PhSim.DynObject) {
-							self.addObject(o,{
-								layer: L
-							});
-						}
-	
-						else {
-							var dynObject = new PhSim.DynObject(o);
-	
-							self.addObject(dynObject,{
-								layer: L
-							});
-	
-							optionMap.set(o,dynObject);
-						}
-	
+						var dynObject = new DynObject(o);
+
+						self.addObject(dynObject,{
+							layer: i
+						});
+
+						optionMap.set(o,dynObject);
 					}
+
 				}
-	
+
 				var a = new PhSim.Events.PhSimDynEvent();
 				self.callEventClass("matterJSLoad",self,a);
-	
+
 			}
-	
+
 		}
-	
+
 		Matter.Events.on(self.matterJSEngine,"collisionStart",function(event) {
 			
 			var a = new PhSim.Events.PhSimDynEvent();
 			a.matterEvent = event;
 			self.callEventClass("collisionstart",self,a);
-	
+
 		});
-	
+
 		if(self.simOptions.game) {
 			self.lclGame = new PhSim.Game(self,self.simOptions.game);
 		}
-	
+
 		if(self.simulation.widgets) {
-	
+
 			for(var C = 0; C < self.simulation.widgets.length; C++) {
 				var a = self.simulation.widgets[C];
 				self.extractWidget(self,a);
 			}
-	
+
 		}
 
 		this.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
 
 		resolve();
 
-		
-	}).then(function(){
+	})
+	.then(function(){
 
 		return new Promise(function(resolve){
 
@@ -185,10 +175,12 @@ var gotoSimulationIndex = function (i) {
 				resolve();
 				self.status = PhSim.statusCodes.LOADED_SPRITES;
 			}
+	
+		});
 
-		})
-
-	}).then(function() {
+	})
+	.then(function() {
+		
 		return new Promise(function(resolve){
 
 			if(self.staticAudio.length) {
@@ -204,6 +196,7 @@ var gotoSimulationIndex = function (i) {
 			}
 
 		});
+		
 	}).then(function(){
 		self.init = true;
 
@@ -213,11 +206,10 @@ var gotoSimulationIndex = function (i) {
 	
 		self.callEventClass("load",self,e);
 
-	}).catch(function(){
-		
+	}).catch(function(e){
+		self.callEventClass("error",self,e);
+		throw e;
 	});
-
-	return p;
 
 }
 
