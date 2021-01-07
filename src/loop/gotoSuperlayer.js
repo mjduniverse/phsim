@@ -1,15 +1,15 @@
-const Centroid = require("../tools/centroid");
-const Vector = require("../tools/vector");
-
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = require("matter-js");
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = require("matter-js");
 }
+
 
 /**
  * Go to simulation in the composite simulation
@@ -31,7 +31,7 @@ var gotoSimulationIndex = function (i) {
 
 	var self = this;
 
-	var p = new Promise(function(resolve,reject){
+	var p = new Promise(function(resolve){
 
 		self.status = PhSim.statusCodes.INT;
 
@@ -170,7 +170,7 @@ var gotoSimulationIndex = function (i) {
 		
 	}).then(function(){
 
-		return new Promise(function(resolve,reject){
+		return new Promise(function(resolve){
 
 			if(self.phRender && self.staticSprites.length) {
 				self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(self.staticSprites,function() {
@@ -211,6 +211,8 @@ var gotoSimulationIndex = function (i) {
 	
 		self.callEventClass("load",self,e);
 
+	}).catch(function(){
+		
 	});
 
 	return p;
