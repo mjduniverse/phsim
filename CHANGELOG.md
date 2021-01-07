@@ -1,5 +1,9 @@
 ## 0.2.0-alpha (Unreleased)
 
+* Added `PhSim.prototype.getCollidingMatterBodies` function.
+
+* Fixing bug that makes objLink widget not work when simulation is reloaded.
+
 * Added ESLint to deveolpment dependencies.
 
 * Merged `./src/audio.js` and `./src/audioToggle.js`.
