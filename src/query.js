@@ -465,29 +465,42 @@ PhSim.prototype.pointObjArray = function(x,y) {
 
 PhSim.prototype.getCollisionList = function(dynObject) {
 
-	var z = [];
+	var a = [];
+
+	this.matterJSEngine.pairs.list.forEach(function(c){
+		if(c.bodyA.plugin.dynObject === dynObject || c.bodyB.plugin.dynObject === dynObject) {
+			var p = new PhSim.Events.PhSimCollision();
+			p.bodyA = c.bodyA.plugin.dynObject;
+			p.bodyB = c.bodyA.plugin.dynObject;
+			p.matter = c;
+			a.push(p);
+		}
+	});
+
+	return a;
+
+}
+
+PhSim.prototype.getCollidingMatterBodies = function(body) {
+
+	var a = [];
 
 	for(var i = 0; i < this.matterJSEngine.pairs.list.length; i++) {
-
-		var a = this.matterJSEngine.pairs.list[i];
-
-		if(a.bodyA.parent === a.bodyA && a.bodyB.parent === a.bodyB) {
-
-			if(a.bodyA.plugin.dynObject.id === dynObject.id || a.bodyB.plugin.dynObject.id === dynObject.id) {
-			
-				var o = new PhSim.Events.PhSimCollision();
-				o.bodyA = a.bodyA.plugin.dynObject;
-				o.bodyB = a.bodyB.plugin.dynObject;
-				o.matter = a;
-				z.push(o);
 		
-			}
+		var o = this.matterJSEngine.pairs.list[i];
 
+		if(o.bodyA === body) {
+			a.push(o.bodyB);
 		}
 
+		if(o.bodyB === body) {
+			a.push(o.bodyA);
+		}
+	
 	}
 
-	return z;
+	return a;
+
 }
 
 /**
@@ -620,7 +633,27 @@ PhSim.Query.getCollidingSensorObjects = function(phSim,dynObject) {
  */
 
 PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
-	return PhSim.Query.getCollidingSensorObjects(phSim,dynObject)
+	//return PhSim.Query.getCollidingSensorObjects(this,dynObject)
+
+	var a = this.getCollisionList(dynObject);
+	var b = []
+
+	for(var i = 0; i < a.length; i++) {
+
+		var dynCol = a[i]
+		var matterCol = dynCol.matter;
+
+		if(matterCol.bodyA.plugin.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyB)) {
+			b.push(dynCol.bodyB);
+		}
+
+		if(matterCol.bodyB.plugin.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyA)) {
+			b.push(dynCol.bodyA);		
+		}
+
+	}
+
+	return b;
 }
 
 /**
