@@ -1,3 +1,5 @@
+const PhSim = require("../index");
+
 // Try to import matter-js as a commonJS module
 
 var Matter;
@@ -187,7 +189,7 @@ var gotoSimulationIndex = function (i) {
 		})
 
 	}).then(function() {
-		return new Promise(function(resolve,reject){
+		return new Promise(function(resolve){
 
 			if(self.staticAudio.length) {
 				self.audioArray = new PhSim.Audio.AudioArray(self.staticAudio,function(){
