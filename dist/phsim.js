@@ -199,6 +199,21 @@ function PhSim(dynSimOptions = new PhSim.Static()) {
 
 	this.options = dynSimOptions;
 
+	/**
+	 * Debugging Configuration
+	 * @type {Object}
+	 */
+
+	this.debugging = this.debugging || {
+		logMouseMovePerformance: true
+	}
+
+	/**
+	 * Debugging data
+	 * @type {Object}
+	 */
+	
+	 this.debuggingData = {}
 
 	// Configure canvas
 
@@ -748,9 +763,30 @@ var DynObject = function(staticObject,matterBody) {
 	 * */
 
 	this.matter.plugin.dynObject = this;
+	
+	if(DynObject.keepInstances) {
+		DynObject.instances.push(this);
+	}
 
 }
 
+/**
+ * If set to `true`, all DynObject instances are put into the 
+ * {@link PhSim.DynObject.instances} array.
+ * 
+ * @memberof PhSim.DynObject
+ * @type {Boolean}
+ * @default false
+ */
+
+DynObject.keepInstances = false;
+
+/**
+ * Array of instances if {@link PhSim.DynObject.keepInstances} iu set to true
+ * @type {PhSim.DynObject[]}
+ */
+
+DynObject.instances = [];
 
 /**
  * Set color for dynObject.
@@ -5223,6 +5259,9 @@ PhSim.prototype.registerCanvasEvents = function() {
 	 */
 
 	this.dispatchMouseMove = function(e) {
+
+		var perform_i = performance.now()
+
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
@@ -5258,15 +5297,18 @@ PhSim.prototype.registerCanvasEvents = function() {
 			for(var i = 0; i < self.objUniverse.length; i++) {
 	
 				if(self.pointInObject(self.objUniverse[i],self.mouseX,self.mouseY)) {
-					self.objMouseArr.push(self.objUniverse[i])
+					self.objMouseArr.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmousemove",self.objUniverse[i],eventObj);
 				}
 	
 				if(!self.objMouseArr.includes(self.objUniverse[i]) && self.prevObjMouseArr.includes(self.objUniverse[i])) {
-					self.formerMouseObjs.push(self.objUniverse[i])
+					self.formerMouseObjs.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmouseover",self.objUniverse[i],eventObj);
 				}
 	
 				if(self.objMouseArr.includes(self.objUniverse[i]) && !self.prevObjMouseArr.includes(self.objUniverse[i])) {
-					self.newMouseObjs.push(self.objUniverse[i])
+					self.newMouseObjs.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmouseout",self.objUniverse[i],eventObj);
 				}
 	
 			}
@@ -5276,10 +5318,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 				eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
 
 				self.callEventClass("objmousemove",canvas,eventObj);
-
-				for(var j = 0; j < eventObj.dynArr.length; j++) {
-					eventObj.dynArr[j].callEventClass("objmousemove",eventObj.dynArr[j],eventObj);
-				}
 
 			}
 	
@@ -5291,10 +5329,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 				self.callEventClass("objmouseover",canvas,eventObj);
 
-				for(var k = 0; k < eventObj.newMouseObjs.length; k++) {
-					eventObj.newMouseObjs[k].callEventClass("objmouseover",eventObj.newMouseObjs[k],eventObj);
-				}
-
 			}
 	
 			if(self.formerMouseObjs && self.formerMouseObjs.length > 0) {
@@ -5304,10 +5338,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 				eventObj.target = eventObj.formerMouseObjs[eventObj.dynArr.length - 1];
 
 				self.callEventClass("objmouseout",canvas,eventObj);
-
-				for(var m = 0; m < eventObj.formerMouseObjs.length; m++) {
-					eventObj.formerMouseObjs[m].callEventClass("objmouseout",eventObj.formerMouseObjs[m],eventObj);
-				}
 
 			}
 		}
@@ -5319,6 +5349,22 @@ PhSim.prototype.registerCanvasEvents = function() {
 		self.callEventClass("mousemove",canvas,eventObj);
 	
 		//console.log(eventObj);
+
+		if(self.debugging.logMouseMovePerformance) {
+
+			var perform_f = performance.now() - perform_i;
+			
+			self.debuggingData.mouseMovePerformance = self.debuggingData.mouseMovePerformance || [];
+			
+			self.debuggingData.mouseMovePerformance.push({
+				delta: perform_f,
+				perform_i: perform_i,
+				x: eventObj.x,
+				y: eventObj.y
+			});
+
+		}
+
 	}
 
 	this.canvas.addEventListener("mousemove",this.dispatchMouseMove);
@@ -5874,29 +5920,42 @@ PhSim.prototype.pointObjArray = function(x,y) {
 
 PhSim.prototype.getCollisionList = function(dynObject) {
 
-	var z = [];
+	var a = [];
+
+	this.matterJSEngine.pairs.list.forEach(function(c){
+		if(c.bodyA.plugin.dynObject === dynObject || c.bodyB.plugin.dynObject === dynObject) {
+			var p = new PhSim.Events.PhSimCollision();
+			p.bodyA = c.bodyA.plugin.dynObject;
+			p.bodyB = c.bodyA.plugin.dynObject;
+			p.matter = c;
+			a.push(p);
+		}
+	});
+
+	return a;
+
+}
+
+PhSim.prototype.getCollidingMatterBodies = function(body) {
+
+	var a = [];
 
 	for(var i = 0; i < this.matterJSEngine.pairs.list.length; i++) {
-
-		var a = this.matterJSEngine.pairs.list[i];
-
-		if(a.bodyA.parent === a.bodyA && a.bodyB.parent === a.bodyB) {
-
-			if(a.bodyA.plugin.dynObject.id === dynObject.id || a.bodyB.plugin.dynObject.id === dynObject.id) {
-			
-				var o = new PhSim.Events.PhSimCollision();
-				o.bodyA = a.bodyA.plugin.dynObject;
-				o.bodyB = a.bodyB.plugin.dynObject;
-				o.matter = a;
-				z.push(o);
 		
-			}
+		var o = this.matterJSEngine.pairs.list[i];
 
+		if(o.bodyA === body) {
+			a.push(o.bodyB);
 		}
 
+		if(o.bodyB === body) {
+			a.push(o.bodyA);
+		}
+	
 	}
 
-	return z;
+	return a;
+
 }
 
 /**
@@ -6029,7 +6088,27 @@ PhSim.Query.getCollidingSensorObjects = function(phSim,dynObject) {
  */
 
 PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
-	return PhSim.Query.getCollidingSensorObjects(phSim,dynObject)
+	//return PhSim.Query.getCollidingSensorObjects(this,dynObject)
+
+	var a = this.getCollisionList(dynObject);
+	var b = []
+
+	for(var i = 0; i < a.length; i++) {
+
+		var dynCol = a[i]
+		var matterCol = dynCol.matter;
+
+		if(matterCol.bodyA.plugin.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyB)) {
+			b.push(dynCol.bodyB);
+		}
+
+		if(matterCol.bodyB.plugin.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyA)) {
+			b.push(dynCol.bodyA);		
+		}
+
+	}
+
+	return b;
 }
 
 /**
@@ -6286,6 +6365,7 @@ PhSim.prototype.exit = function() {
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const DynObject = __webpack_require__(2);
 const PhSim = __webpack_require__(0);
 
 // Try to import matter-js as a commonJS module
@@ -6321,144 +6401,133 @@ var gotoSimulationIndex = function (i) {
 
 	var self = this;
 
-	var p = new Promise(function(resolve){
+	return new Promise(function(resolve){
 
 		self.status = PhSim.statusCodes.INT;
 
 		var optionMap = new Map();  
-	
+
 		self.firstSlUpdate = false;
-	
+
 		var event = new PhSim.Events.PhSimEvent("slchange");
-	
+
 		event.type = "slchange";
-	
+
 		self.callEventClass("beforeslchange",self,event);
-	
+
 		if(!self.noCamera) {
 			self.camera.translate(-self.camera.x,-self.camera.y);
 		}
-	
+
 		if(self.ctx) {
 			self.drawLoadingScreen();
 		}
-	
+
 		self.simulation = self.simulations[i];
 		self.simOptions = self.simulations[i];
-	
+
 		self.simulationIndex = i;
-	
+
 		if(self.ctx) {
 			self.width = self.ctx.canvas.width;
 			self.height = self.ctx.canvas.height;
 		}
-		
+
 		self.paused = false;
-	
+
 		self.matterJSWorld = Matter.World.create();
-	
+
 		self.matterJSEngine = Matter.Engine.create({
 			world: self.matterJSWorld
 		});
-	
+
 		self.dynTree = [];
 		self.objUniverse = [];
 		self.staticSprites = [];
 		self.staticAudio = [];
 		self.audioPlayers = 0;
 		self.simulationEventStack = new PhSim.EventStack();
-	
-	
+
+
 		if(self.sprites) {
 			self.staticSprites.concat(self.sprites);
 		}
-	
-	
+
+
 		if(self.simOptions && self.simOptions.world && self.simOptions.world.bg) {
 			self.bgFillStyle = self.simOptions.world.bg;
 		}
-	
+
 		if(self.world && self.world && self.world.bg) {
 			self.bgFillStyle = self.world.bg;
 		}
-	
+
 		if(self.simulations) {
-		
-			for(var L = 0; L < self.simOptions.layers.length; L++) {
-	
+
+			for(let i = 0; i < self.simOptions.layers.length; i++) {
+
 				self.dynTree.push([]);
-	
-				for(var O = 0; O < self.simOptions.layers[L].objUniverse.length; O++) {
-	
-					var o = self.simOptions.layers[L].objUniverse[O];
-	
+
+				for(let j = 0; j < self.simOptions.layers[i].objUniverse.length; j++) {
+
+					var o = self.simOptions.layers[i].objUniverse[j];
+
 					if(o.sprite) {
 						self.staticSprites.push(o.sprite);	
 					}
 					
-					if(o.noDyn) {
-	
+					if(o instanceof DynObject && !o.noDyn) {
 						self.addObject(o,{
-							layer: L
+							layer: i
 						});
-				
 					}
-	
+
 					else {
-						
-						if(o instanceof PhSim.DynObject) {
-							self.addObject(o,{
-								layer: L
-							});
-						}
-	
-						else {
-							var dynObject = new PhSim.DynObject(o);
-	
-							self.addObject(dynObject,{
-								layer: L
-							});
-	
-							optionMap.set(o,dynObject);
-						}
-	
+						var dynObject = new DynObject(o);
+
+						self.addObject(dynObject,{
+							layer: i
+						});
+
+						optionMap.set(o,dynObject);
 					}
+
 				}
-	
+
 				var a = new PhSim.Events.PhSimDynEvent();
 				self.callEventClass("matterJSLoad",self,a);
-	
+
 			}
-	
+
 		}
-	
+
 		Matter.Events.on(self.matterJSEngine,"collisionStart",function(event) {
 			
 			var a = new PhSim.Events.PhSimDynEvent();
 			a.matterEvent = event;
 			self.callEventClass("collisionstart",self,a);
-	
+
 		});
-	
+
 		if(self.simOptions.game) {
 			self.lclGame = new PhSim.Game(self,self.simOptions.game);
 		}
-	
+
 		if(self.simulation.widgets) {
-	
+
 			for(var C = 0; C < self.simulation.widgets.length; C++) {
 				var a = self.simulation.widgets[C];
 				self.extractWidget(self,a);
 			}
-	
+
 		}
 
 		this.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
 
 		resolve();
 
-		
-	}).then(function(){
+	})
+	.then(function(){
 
 		return new Promise(function(resolve){
 
@@ -6473,10 +6542,12 @@ var gotoSimulationIndex = function (i) {
 				resolve();
 				self.status = PhSim.statusCodes.LOADED_SPRITES;
 			}
+	
+		});
 
-		})
-
-	}).then(function() {
+	})
+	.then(function() {
+		
 		return new Promise(function(resolve){
 
 			if(self.staticAudio.length) {
@@ -6492,6 +6563,7 @@ var gotoSimulationIndex = function (i) {
 			}
 
 		});
+		
 	}).then(function(){
 		self.init = true;
 
@@ -6501,11 +6573,10 @@ var gotoSimulationIndex = function (i) {
 	
 		self.callEventClass("load",self,e);
 
-	}).catch(function(){
-		
+	}).catch(function(e){
+		self.callEventClass("error",self,e);
+		throw e;
 	});
-
-	return p;
 
 }
 
@@ -7687,6 +7758,8 @@ PhSim.Widgets.objLink = function(dyn_object,widget) {
     
         var f = self.createWFunction(dyn_object,eventFunc,widget);
 
+    },{
+        slEvent: true
     });
 
 }

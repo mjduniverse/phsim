@@ -212,15 +212,18 @@ PhSim.prototype.registerCanvasEvents = function() {
 			for(var i = 0; i < self.objUniverse.length; i++) {
 	
 				if(self.pointInObject(self.objUniverse[i],self.mouseX,self.mouseY)) {
-					self.objMouseArr.push(self.objUniverse[i])
+					self.objMouseArr.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmousemove",self.objUniverse[i],eventObj);
 				}
 	
 				if(!self.objMouseArr.includes(self.objUniverse[i]) && self.prevObjMouseArr.includes(self.objUniverse[i])) {
-					self.formerMouseObjs.push(self.objUniverse[i])
+					self.formerMouseObjs.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmouseover",self.objUniverse[i],eventObj);
 				}
 	
 				if(self.objMouseArr.includes(self.objUniverse[i]) && !self.prevObjMouseArr.includes(self.objUniverse[i])) {
-					self.newMouseObjs.push(self.objUniverse[i])
+					self.newMouseObjs.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmouseout",self.objUniverse[i],eventObj);
 				}
 	
 			}
@@ -230,10 +233,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 				eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
 
 				self.callEventClass("objmousemove",canvas,eventObj);
-
-				for(var j = 0; j < eventObj.dynArr.length; j++) {
-					eventObj.dynArr[j].callEventClass("objmousemove",eventObj.dynArr[j],eventObj);
-				}
 
 			}
 	
@@ -245,10 +244,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 				self.callEventClass("objmouseover",canvas,eventObj);
 
-				for(var k = 0; k < eventObj.newMouseObjs.length; k++) {
-					eventObj.newMouseObjs[k].callEventClass("objmouseover",eventObj.newMouseObjs[k],eventObj);
-				}
-
 			}
 	
 			if(self.formerMouseObjs && self.formerMouseObjs.length > 0) {
@@ -258,10 +253,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 				eventObj.target = eventObj.formerMouseObjs[eventObj.dynArr.length - 1];
 
 				self.callEventClass("objmouseout",canvas,eventObj);
-
-				for(var m = 0; m < eventObj.formerMouseObjs.length; m++) {
-					eventObj.formerMouseObjs[m].callEventClass("objmouseout",eventObj.formerMouseObjs[m],eventObj);
-				}
 
 			}
 		}
