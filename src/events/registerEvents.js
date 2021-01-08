@@ -174,6 +174,9 @@ PhSim.prototype.registerCanvasEvents = function() {
 	 */
 
 	this.dispatchMouseMove = function(e) {
+
+		var perform_i = performance.now()
+
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
@@ -270,6 +273,22 @@ PhSim.prototype.registerCanvasEvents = function() {
 		self.callEventClass("mousemove",canvas,eventObj);
 	
 		//console.log(eventObj);
+
+		if(self.debugging.logMouseMovePerformance) {
+
+			var perform_f = performance.now() - perform_i;
+			
+			self.debuggingData.mouseMovePerformance = self.debuggingData.mouseMovePerformance || [];
+			
+			self.debuggingData.mouseMovePerformance.push({
+				delta: perform_f,
+				perform_i: perform_i,
+				x: eventObj.x,
+				y: eventObj.y
+			});
+
+		}
+
 	}
 
 	this.canvas.addEventListener("mousemove",this.dispatchMouseMove);
