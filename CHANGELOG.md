@@ -1,5 +1,7 @@
 ## 0.2.0-alpha (Unreleased)
 
+* Optimized mouse events in such a way that they are faster.
+
 * Added `PhSim.prototype.getCollidingMatterBodies` function.
 
 * Fixing bug that makes objLink widget not work when simulation is reloaded.
