@@ -108,6 +108,21 @@ function PhSim(dynSimOptions = new PhSim.Static()) {
 
 	this.options = dynSimOptions;
 
+	/**
+	 * Debugging Configuration
+	 * @type {Object}
+	 */
+
+	this.debugging = this.debugging || {
+		logMouseMovePerformance: true
+	}
+
+	/**
+	 * Debugging data
+	 * @type {Object}
+	 */
+	
+	 this.debuggingData = {}
 
 	// Configure canvas
 
