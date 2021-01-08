@@ -14,7 +14,7 @@ PhSim.prototype.play = function() {
 
 	var self = this;
 
-	return new Promise(function(resolve,reject){
+	return new Promise(function(resolve){
 		self.paused = false;
 		self.intervalLoop = setInterval(self.loopFunction.bind(self),self.delta);
 		resolve(self);
@@ -32,7 +32,7 @@ PhSim.prototype.pause = function() {
 
 	var self = this;
 
-	return new Promise(function(resolve,reject){
+	return new Promise(function(resolve){
 		clearInterval(self.intervalLoop);
 		self.paused = true;
 		resolve(self);
@@ -86,7 +86,7 @@ PhSim.prototype.exitSl = function() {
 
 	var self = this;
 
-	return new Promise(function(resolve,reject){
+	return new Promise(function(resolve){
 		self.callEventClass("beforeslchange",self,new PhSim.Events.PhSimEvent("beforeslchange"));
 		self.paused = false;
 		clearInterval(self.intervalLoop);
@@ -106,7 +106,7 @@ PhSim.prototype.exit = function() {
 
 	var self = this;
 
-	return new Promise(function(resolve,reject){
+	return new Promise(function(resolve){
 
 		// Remove references to avoid memory leak
 

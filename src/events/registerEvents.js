@@ -94,7 +94,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.ctx.canvas;
-		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX
 		eventObj.y = self.mouseY
@@ -138,7 +137,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 	this.dispatchClick = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.ctx.canvas;
-		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX
 		eventObj.y = self.mouseY
@@ -176,6 +174,9 @@ PhSim.prototype.registerCanvasEvents = function() {
 	 */
 
 	this.dispatchMouseMove = function(e) {
+
+		var perform_i = performance.now()
+
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.ctx.canvas;
 		var rect = canvas.getBoundingClientRect();
@@ -208,18 +209,21 @@ PhSim.prototype.registerCanvasEvents = function() {
 	
 		if(self.init) {
 	
-			for(i = 0; i < self.objUniverse.length; i++) {
+			for(var i = 0; i < self.objUniverse.length; i++) {
 	
 				if(self.pointInObject(self.objUniverse[i],self.mouseX,self.mouseY)) {
-					self.objMouseArr.push(self.objUniverse[i])
+					self.objMouseArr.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmousemove",self.objUniverse[i],eventObj);
 				}
 	
 				if(!self.objMouseArr.includes(self.objUniverse[i]) && self.prevObjMouseArr.includes(self.objUniverse[i])) {
-					self.formerMouseObjs.push(self.objUniverse[i])
+					self.formerMouseObjs.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmouseover",self.objUniverse[i],eventObj);
 				}
 	
 				if(self.objMouseArr.includes(self.objUniverse[i]) && !self.prevObjMouseArr.includes(self.objUniverse[i])) {
-					self.newMouseObjs.push(self.objUniverse[i])
+					self.newMouseObjs.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmouseout",self.objUniverse[i],eventObj);
 				}
 	
 			}
@@ -229,10 +233,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 				eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
 
 				self.callEventClass("objmousemove",canvas,eventObj);
-
-				for(var i = 0; i < eventObj.dynArr.length; i++) {
-					eventObj.dynArr[i].callEventClass("objmousemove",eventObj.dynArr[i],eventObj);
-				}
 
 			}
 	
@@ -244,10 +244,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 
 				self.callEventClass("objmouseover",canvas,eventObj);
 
-				for(var i = 0; i < eventObj.newMouseObjs.length; i++) {
-					eventObj.newMouseObjs[i].callEventClass("objmouseover",eventObj.newMouseObjs[i],eventObj);
-				}
-
 			}
 	
 			if(self.formerMouseObjs && self.formerMouseObjs.length > 0) {
@@ -257,10 +253,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 				eventObj.target = eventObj.formerMouseObjs[eventObj.dynArr.length - 1];
 
 				self.callEventClass("objmouseout",canvas,eventObj);
-
-				for(var i = 0; i < eventObj.formerMouseObjs.length; i++) {
-					eventObj.formerMouseObjs[i].callEventClass("objmouseout",eventObj.formerMouseObjs[i],eventObj);
-				}
 
 			}
 		}
@@ -272,6 +264,22 @@ PhSim.prototype.registerCanvasEvents = function() {
 		self.callEventClass("mousemove",canvas,eventObj);
 	
 		//console.log(eventObj);
+
+		if(self.debugging.logMouseMovePerformance) {
+
+			var perform_f = performance.now() - perform_i;
+			
+			self.debuggingData.mouseMovePerformance = self.debuggingData.mouseMovePerformance || [];
+			
+			self.debuggingData.mouseMovePerformance.push({
+				delta: perform_f,
+				perform_i: perform_i,
+				x: eventObj.x,
+				y: eventObj.y
+			});
+
+		}
+
 	}
 
 	this.canvas.addEventListener("mousemove",this.dispatchMouseMove);
@@ -279,7 +287,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 	this.dispatchMouseUp = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.ctx.canvas;
-		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX
 		eventObj.y = self.mouseY
@@ -308,7 +315,6 @@ PhSim.prototype.registerCanvasEvents = function() {
 	self.dispatchMouseOut = function(e) {
 		var eventObj = new PhSim.Events.PhSimMouseEvent();
 		var canvas = self.ctx.canvas;
-		var rect = canvas.getBoundingClientRect();
 		eventObj.domEvent = e;
 		eventObj.x =  self.mouseX
 		eventObj.y = self.mouseY

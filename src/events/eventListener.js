@@ -1,9 +1,9 @@
+const PhSim = require("../index");
+
 /**
  * @mixin
  * @memberof PhSim
  */
-
-const EventStack = require("./eventStack");
 
 const PhSimEventTarget = {}
 
@@ -39,7 +39,7 @@ PhSimEventTarget.on = function(eventStr,call,options = {}) {
 		if(options === true) {
 			if(options.once) {
 	
-				var f = function(e) {
+				var f = function() {
 					this.off(eventStr,call)
 					this.off(eventStr,f)
 				}
@@ -66,14 +66,16 @@ PhSimEventTarget.on = function(eventStr,call,options = {}) {
 
 
 PhSimEventTarget.off = function(eventStr,call) {
+
+	var callIndex;
 	
 	if(this.eventStack[eventStr] && this.eventStack[eventStr].includes(call)) {
-		var callIndex = this.eventStack[eventStr].indexOf(call);
+		callIndex = this.eventStack[eventStr].indexOf(call);
 		this.eventStack[eventStr].splice(callIndex,1);
 	}
 
 	if(this.simulationEventStack[eventStr] && this.simulationEventStack[eventStr].includes(call)) {
-		var callIndex = this.simulationEventStack[eventStr].indexOf(call);
+		callIndex = this.simulationEventStack[eventStr].indexOf(call);
 		this.simulationEventStack[eventStr].splice(callIndex,1);
 	}
 
@@ -86,11 +88,11 @@ PhSimEventTarget.off = function(eventStr,call) {
 
 PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
 
-	var self = this;
+	var func;
 
 	if(this.eventStack[eventStr]) {
 		for(var i = 0; i < this.eventStack[eventStr].length; i++) {
-			var func = this.eventStack[eventStr][i]
+			func = this.eventStack[eventStr][i]
 			eventArg.func = func;
 			func.call(thisArg,eventArg);
 
@@ -100,20 +102,14 @@ PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
 	if(this instanceof PhSim) {
 
 		if(this.simulationEventStack[eventStr]) {
-			for(var i = 0; i < this.simulationEventStack[eventStr].length; i++) {
+			for(var j = 0; j < this.simulationEventStack[eventStr].length; j++) {
 	
-				var func = this.simulationEventStack[eventStr][i]
+				func = this.simulationEventStack[eventStr][i]
 				eventArg.func = func;
 				func.call(thisArg,eventArg);
 	
 			}
 		}
-
-		//this.forAllObjects(function(o){
-			//if(typeof o.callEventClass === "function") {
-				//o.callEventClass(eventStr,thisArg,eventArg);
-			//}
-		//})
 
 	}
 	

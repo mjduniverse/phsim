@@ -47,6 +47,8 @@ PhSim.Widgets.objLink = function(dyn_object,widget) {
     
         var f = self.createWFunction(dyn_object,eventFunc,widget);
 
+    },{
+        slEvent: true
     });
 
 }

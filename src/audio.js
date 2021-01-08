@@ -1,3 +1,5 @@
+const PhSim = require(".");
+
 /**
  * @namespace
  * @memberof PhSim
@@ -52,6 +54,134 @@ Audio.AudioArray = function(p_audio,onload) {
 
 	}
 
+}
+
+/**
+ * Play audio by index.
+ * Alternative function: {@link PhSim#playAudioByIndex}
+ * 
+ * @function 
+ * @param {PhSim} phsim - PhSim instance.
+ * @param {Number} i - Index in audio array.
+ * @returns {Promise} - Promise that is fulfilled when the audio is played. 
+ */
+
+Audio.playAudioByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].play();
+}
+
+/**
+ * Play audio by index
+ * Alternative function: {@link PhSim.Audio#playAudioByIndex}
+ * 
+ * @function 
+ * @param {PhSim} phsim - PhSim instance.
+ * @param {Number} i - Index in audio array.
+ * @returns {Promise} - Promise that is fulfilled when the audio is played.  
+ */
+
+PhSim.prototype.playAudioByIndex = function(i) {
+	Audio.playAudioByIndex(this,i);
+};
+
+/**
+ * Pause audio by index.
+ * Alternative function: {@link PhSim#pauseAudioByIndex}
+ * @function
+ * @param {PhSim} phsim - PhSim instance.
+ * @param {Number} i 
+ */
+
+Audio.pauseAudioByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].pause();
+}
+
+/**
+ * Pause audio by index.
+ * Alternative function: {@link PhSim.Audio#pauseAudioByIndex}
+ * @function
+ * @param {Number} i 
+ */
+
+PhSim.prototype.pauseAudioByIndex = function(i) {
+	return Audio.pauseAudioByIndex(this,i);
+}
+
+/**
+ * Set volume by index
+ * Alternative function: {@link PhSim#setAudioVolByIndex}
+ * @function
+ * @param {PhSim} phsim - PhSim instance
+ * @param {Number} i - Index
+ * @param {Number} v - Volume
+ */
+
+Audio.setAudioVolByIndex = function(phsim,i,v) {
+	return phsim.audioArray.array[i].volume = v;
+}
+
+/**
+ * Set volume by index
+ * Alternative function: {@link PhSim.Audio#setAudioVolByIndex}
+ * @function
+ * @param {Number} i - Index
+ * @param {Number} v - Volume
+ */
+
+PhSim.prototype.setAudioVolByIndex = function(i,v) {
+	return Audio.setAudioVolByIndex(this,i,v);
+}
+
+
+/**
+ * 
+ * Mute the `i`th element of the audio array.
+ * 
+ * Alternative function: {@link PhSim#setAudioMuteByIndex}
+ * 
+ * @function
+ * @param {Number} i
+ * @param {PhSim} phsim - PhSim instance 
+ */
+
+Audio.setAudioMuteByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].muted = true;
+}
+
+/**
+ * 
+ * Mute the `i`th element of the audio array.
+ * 
+ * Alternative function: {@link PhSim.Audio#setAudioMuteByIndex}
+ * 
+ * @function
+ * @param {PhSim} phsim - PhSim instance 
+ */
+
+PhSim.prototype.setAudioMuteByIndex = function(i) {
+	return Audio.setAudioMuteByIndex(this,i);
+}
+
+/**
+ * @function
+ * @param {PhSIm} phsim - PhSim instance
+ * @param {Number} i - Index number
+ * @returns {Boolean} - True if paused, false otherwise.
+ */
+
+
+Audio.toggleAudioByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].muted = !phsim.audioArray.array[i].muted;
+}
+
+/**
+ * @function
+ * @param {Number} i
+ * @returns {Boolean} - True if paused, false otherwise.
+ */
+
+PhSim.prototype.toggleAudioByIndex = function(i) {
+	return Audio.toggleAudioByIndex(this,i);
 }
 
 module.exports = Audio;

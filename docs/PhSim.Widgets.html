@@ -61,7 +61,7 @@
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-Creating PhSim Simulation.html">Creating PhSim Simulation</a></li><li><a href="tutorial-Dynamic Objects.html">Dynamic Objects</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li>
+					<li><a href="tutorial-Constraints.html">Constraints</a></li><li><a href="tutorial-Creating PhSim Simulation.html">Creating PhSim Simulation</a></li><li><a href="tutorial-Dynamic Objects.html">Dynamic Objects</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li>
 				</ul>
 			</li>
 			
@@ -834,6 +834,335 @@ the simulation.</p>
 		<ul class="dummy">
 			<li>
 				<a href="widgets_clone.js.html">widgets/clone.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".constraint"><span class="type-signature">&lt;static> </span>constraint(phsim, widget)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Constraint Widget</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>phsim</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PhSim.html">PhSim</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>widget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>objectA</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#LOAddress">LOAddress</a></span>
+|
+
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Object A - First point.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>objectB</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#LOAddress">LOAddress</a></span>
+|
+
+<span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Object B - Second Point</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>position</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">"relative"</span>
+|
+
+<span class="param-type">"absolute"</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "absolute"
+                
+                </td>
+            
+
+            <td class="description last"><p>Positions of points.</p>
+<p>If set to <code>&quot;relative&quot;</code>, then the rules for positioning a point is the following:</p>
+<ul>
+<li>
+<p>If <code>widget.objectA</code> is set, then <code>widget.pointA</code> defines the offset from the
+centroid of <code>widget.objectA</code>. Otherwise, the point is set to a point in the phsim space.</p>
+</li>
+<li>
+<p>If <code>widget.objectB</code> is set, then <code>widget.pointB</code> defines the offset from the centroid
+of <code>widget.objectB</code>. Otherwise, the point is set to a point in the phsim space.</p>
+</li>
+<li>
+<p>If one is familar with Matter.js, then the rules are simular to rules of making a
+constraint are simular to those in Matter.js.</p>
+</li>
+</ul>
+<p>If set to <code>&quot;absolute&quot;</code>, then the rules for positioning a point is that the points
+are set to points in space. This is the default value.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="widgets_constraint.js.html">widgets/constraint.js</a>
 			</li>
 		</ul>
 	</dd>
@@ -4594,7 +4923,7 @@ If semi-unlocked, the object is semi-locked.</p>
             
 <hr>
 <dt>
-    <h4 class="name" id=".wFunction"><span class="type-signature">&lt;static> </span>wFunction(dyn_object, widget)</h4>
+    <h4 class="name" id=".wFunction"><span class="type-signature">&lt;static> </span>wFunction(o, widget)</h4>
     
     
 </dt>
@@ -4637,13 +4966,16 @@ If semi-unlocked, the object is semi-locked.</p>
 
         <tr>
             
-                <td class="name"><code>dyn_object</code></td>
+                <td class="name"><code>o</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type"><a href="PhSim.DynObject.html">PhSim.DynObject</a></span>
+|
+
+<span class="param-type"><a href="PhSim.html">PhSim</a></span>
 
 
 
@@ -4654,7 +4986,7 @@ If semi-unlocked, the object is semi-locked.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>Target object or simulation</p></td>
         </tr>
 
     
@@ -4678,7 +5010,7 @@ If semi-unlocked, the object is semi-locked.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>wFunction options</p></td>
         </tr>
 
     
@@ -4805,7 +5137,7 @@ If semi-unlocked, the object is semi-locked.</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2020-12-27T22:45:58-06:00
+		on 2021-01-03T14:50:54-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

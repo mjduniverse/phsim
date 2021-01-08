@@ -1,3 +1,4 @@
+const { ObjLoops } = require(".");
 const DynObject = require("./dynObject");
 const Vector = require("./tools/vector");
 
@@ -68,7 +69,16 @@ PhSim.Query.getSpecialRectanglePoints = function(rectangle) {
  */
 
 PhSim.prototype.getStatusStr = function() {
-	return PhSim.statusStruct[this.status];
+	return PhSim.Query.getStatusStr(this);
+}
+
+/**
+ * Get the status string of a PhSim instance.
+ * @param {PhSim} dynObject 
+ */
+
+PhSim.Query.getStatusStr = function(phSim) {
+	return PhSim.statusStruct[phSim.status];
 }
 
 /**
@@ -154,7 +164,7 @@ PhSim.prototype.getStatic = function(dynObject) {
 }
 
 /**
- * Get object by name
+ * Get object by name in PhSim simulation
  * 
  * @function
  * @param {String} str - String for the name
@@ -163,13 +173,65 @@ PhSim.prototype.getStatic = function(dynObject) {
 
 PhSim.prototype.getObjectByName = function(str) {
 
-	for(var i = 0; i < this.objUniverse.length; i++) {
-		if(this.objUniverse[i].name === str) {
-			return this.objUniverse[i];
-		}
-	}
+
 
 	return null;
+
+}
+
+/**
+ * Get Object By Name
+ * @param {Simulation|Layer|PhSimObject[]} o 
+ * @param {string} str - Name of Object
+ */
+
+PhSim.Query.getObjectByName = function(o,str) {
+	
+	if(Array.isArray(o)) {
+		for(var i = 0; i < o.length; i++) {
+			if(o.name === str) {
+				return o[i];
+			}
+		}
+	}
+	
+	// Get object by name in static composite simulation object
+
+	else if(Array.isArray(o.simulations)) {
+
+		var x;
+
+		ObjLoops.global(o,function(p){
+			if(p.name === str) {
+				x = p;
+			}
+		}) 
+
+		return x;
+	}
+
+	// Get object by name in simulation object with layers
+
+
+	else if(Array.isArray(o.layers)) {
+
+		var x;
+
+		ObjLoops.layer(o,function(p){
+			if(p.name === str) {
+				x = p;
+			}
+		}) 
+
+		return x;
+
+	}
+
+	// Get object by name in simulation object with objUniverse
+
+	else if(Array.isArray(o.objUniverse)) {
+		PhSim.Query.getObjectByName(o.objUniverse,str); 
+	}
 
 }
 
@@ -403,29 +465,42 @@ PhSim.prototype.pointObjArray = function(x,y) {
 
 PhSim.prototype.getCollisionList = function(dynObject) {
 
-	var z = [];
+	var a = [];
+
+	this.matterJSEngine.pairs.list.forEach(function(c){
+		if(c.bodyA.plugin.dynObject === dynObject || c.bodyB.plugin.dynObject === dynObject) {
+			var p = new PhSim.Events.PhSimCollision();
+			p.bodyA = c.bodyA.plugin.dynObject;
+			p.bodyB = c.bodyA.plugin.dynObject;
+			p.matter = c;
+			a.push(p);
+		}
+	});
+
+	return a;
+
+}
+
+PhSim.prototype.getCollidingMatterBodies = function(body) {
+
+	var a = [];
 
 	for(var i = 0; i < this.matterJSEngine.pairs.list.length; i++) {
-
-		var a = this.matterJSEngine.pairs.list[i];
-
-		if(a.bodyA.parent === a.bodyA && a.bodyB.parent === a.bodyB) {
-
-			if(a.bodyA.plugin.dynObject.id === dynObject.id || a.bodyB.plugin.dynObject.id === dynObject.id) {
-			
-				var o = new PhSim.Events.PhSimCollision;
-				o.bodyA = a.bodyA.plugin.dynObject;
-				o.bodyB = a.bodyB.plugin.dynObject;
-				o.matter = a;
-				z.push(o);
 		
-			}
+		var o = this.matterJSEngine.pairs.list[i];
 
+		if(o.bodyA === body) {
+			a.push(o.bodyB);
 		}
 
+		if(o.bodyB === body) {
+			a.push(o.bodyA);
+		}
+	
 	}
 
-	return z;
+	return a;
+
 }
 
 /**
@@ -494,6 +569,14 @@ PhSim.Query.sameSensorClasses = function(dynObjectA,dynObjectB) {
 	return PhSim.Query.intersectionExists(PhSim.Query.getSensorClasses(dynObjectA),PhSim.Query.getSensorClasses(dynObjectB));
 }
 
+/**
+ * Sees if `array1` and `array2` share at least one element.
+ * 
+ * @param {Array} array1 
+ * @param {Array} array2
+ * @returns {Boolean} 
+ */
+
 PhSim.Query.intersectionExists = function(array1,array2) {
 
 	for(var i = 0; i < array1.length; i++) {
@@ -508,7 +591,41 @@ PhSim.Query.intersectionExists = function(array1,array2) {
 
 /**
  * 
- * Get objects colliding some object that share the same 
+ * Get objects colliding some object that share the same sensor classes.
+ * 
+ * @function
+ * @param {PhSim} phSim - PhSim instance
+ * @param {PhSim.DynObject} dynObject - Object to check for colliding sensor objects
+ * @returns {PhSim.DynObject[]} 
+ */
+
+PhSim.Query.getCollidingSensorObjects = function(phSim,dynObject) {
+
+	var a = phSim.getCollisionList(dynObject);
+	var b = []
+
+	for(var i = 0; i < a.length; i++) {
+
+		var dynCol = a[i]
+		var matterCol = dynCol.matter;
+
+		if(matterCol.bodyA.plugin.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyB)) {
+			b.push(dynCol.bodyB);
+		}
+
+		if(matterCol.bodyB.plugin.dynObject.id === dynObject.id && PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyA)) {
+			b.push(dynCol.bodyA);		
+		}
+
+	}
+
+	return b;
+}
+
+/**
+ * 
+ * Get objects colliding some object that share the same sensor classes.
+ * 
  * 
  * @function
  * @param {PhSim.DynObject} dynObject - Object to check for colliding sensor objects
@@ -516,7 +633,8 @@ PhSim.Query.intersectionExists = function(array1,array2) {
  */
 
 PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
-	
+	//return PhSim.Query.getCollidingSensorObjects(this,dynObject)
+
 	var a = this.getCollisionList(dynObject);
 	var b = []
 
@@ -536,7 +654,6 @@ PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
 	}
 
 	return b;
-
 }
 
 /**

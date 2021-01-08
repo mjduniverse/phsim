@@ -1,3 +1,5 @@
+const Centroid = require("./tools/centroid");
+
 /** 
  * 
  * PhRender constructor
@@ -122,48 +124,33 @@ PhRender.prototype.renderPolygon = function (path) {
 
 		var img = this.spriteImgObj[path.sprite.src];
 
-		var centroid = findCentroidOfPath(path);
+		var centroid = Centroid.polygon(path);
 
 		this.ctx.imageSmoothingEnabled = path.sprite.smooth;
 
+		this.ctx.save();
+
+		this.ctx.beginPath();
+
+		this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
+
+		for(var j = 0; j < path.verts.length; j++) {
+			this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
+		}
+
+		this.ctx.closePath();
+
+		this.ctx.translate(centroid.x,centroid.y);
+
 		if(path.sprite.repeat) {
 
-			this.ctx.save();
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
-
-			for(var j = 0; j < path.verts.length; j++) {
-				this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
-			}
-		
-
-			this.ctx.translate(centroid.x,centroid.y);
-			//this.ctx.rotate(circle.cycle);
-			this.ctx.scale(path.sprite.scale,path.sprite.scale);
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
 
-			this.ctx.closePath();
-
 			this.ctx.fill();
-			this.ctx.restore();	
 		}
 
-		if(path.sprite.fit) {
-
-			this.ctx.save();
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
-
-			for(var j = 0; j < path.verts.length; j++) {
-				this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
-			}
-
-			this.ctx.closePath();
+		else if(path.sprite.fit) {
 
 			this.ctx.clip();
 
@@ -172,16 +159,22 @@ PhRender.prototype.renderPolygon = function (path) {
 			var h = img.height * (box.w/img.width);
 
 			this.renderSpriteByCenter(path.sprite.src,centroid.x,centroid.y,box.w,h,0);
-
-			this.ctx.restore();	
-
 		}
 
 		else {
-			this.renderSpriteByCenter(path.sprite.src,centroid.x,centroid.y,img.width,img.height,0);
+
+			this.ctx.clip();
+
+			var w = path.sprite.w || img.width;
+			var h = path.sprite.h || img.height;
+
+			this.renderSpriteByCenter(path.sprite.src,0,0,w,h,0);
+
 		}
 
 	}
+
+	this.ctx.restore();	
 
 	this.unsetCtx();
 	
@@ -283,27 +276,28 @@ PhRender.prototype.renderCircle = function (circle) {
 
 	if(circle.sprite && circle.sprite.src) {
 
+		/**
+		 * 
+		 * @type {HTMLImageElement}
+		 */
+
 		var img = this.spriteImgObj[circle.sprite.src];
 
 		this.ctx.imageSmoothingEnabled = circle.sprite.smooth;
 
+		this.ctx.save();
+		this.ctx.translate(circle.x,circle.y);
+		this.ctx.rotate(circle.cycle);
+		this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
+
 		if(circle.sprite.repeat) {
-			this.ctx.save();
-			this.ctx.translate(circle.x,circle.y);
-			this.ctx.rotate(circle.cycle);
-			this.ctx.scale(circle.sprite.scale,circle.sprite.scale);
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
-			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
-			this.ctx.fill();
-			this.ctx.restore();	
+			this.ctx.fill();	
 		}
 
-		if(circle.sprite.fit) {
-			this.ctx.save();
-			this.ctx.translate(circle.x,circle.y);
-			this.ctx.rotate(circle.cycle);
-			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
+		else if(circle.sprite.fit) {
+
 			this.ctx.clip();
 			var box = PhSim.BoundingBox.fromShape(circle);
 
@@ -313,11 +307,18 @@ PhRender.prototype.renderCircle = function (circle) {
 			this.ctx.restore();	
 		}
 
-		else { 
-			this.renderSpriteByCenter(circle.sprite.src,circle.x,circle.y,circle.cycle);
+		else {
+
+			var w = circle.sprite.w || img.width;
+			var h = circle.sprite.h || img.height;
+
+			this.ctx.clip(); 
+			this.renderSpriteByCenter(circle.sprite.src,0,0,w,h,0);
 		}
 
 	}
+
+	this.ctx.restore();
 
 	this.unsetCtx();
 
@@ -367,36 +368,36 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 
 		this.ctx.imageSmoothingEnabled = rectangle.sprite.smooth;
 
+		this.ctx.save();
+		this.ctx.translate(c.x,c.y);
+		this.ctx.rotate(rectangle.cycle);
+		this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
+
 		if(rectangle.sprite.repeat) {
-			this.ctx.save();
-			this.ctx.translate(c.x,c.y);
-			this.ctx.rotate(rectangle.cycle);
+	
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
-			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
 			this.ctx.fill();
 			this.ctx.restore();	
 		}
 
 		if(rectangle.sprite.fit) {
-			this.ctx.save();
-			this.ctx.translate(c.x,c.y);
-			this.ctx.rotate(rectangle.cycle);
-			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
+
 			this.ctx.clip();
 
 			var h = img.height * (rectangle.w/img.width);
 
 			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.w,h,0);
-			this.ctx.restore();	
 		}
 
 		else { 
-			this.renderSpriteByCenter(rectangle.sprite.src,c.x,c.y,img.w,img.h,rectangle.cycle);
+			this.ctx.clip();
+			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.sprite.w,rectangle.h,0);
 		}
 
 	}
 
+	this.ctx.restore();	
 	this.unsetCtx();
 
 }
@@ -490,60 +491,52 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 		this.ctx.imageSmoothingEnabled = regPolygon.sprite.smooth;
 
+		this.ctx.save();
+
+		this.ctx.beginPath();
+
+		this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
+	
+		for(var j = 0; j < vertSet.length; j++) {
+		  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
+		}
+	
+		this.ctx.closePath();
+
+		this.ctx.translate(regPolygon.x,regPolygon.y);
+		this.ctx.rotate(regPolygon.cycle);
+
 		if(regPolygon.sprite.repeat) {
-			this.ctx.save();
-			this.ctx.translate(regPolygon.x,regPolygon.y);
-			this.ctx.rotate(regPolygon.cycle);
-			this.ctx.scale(regPolygon.sprite.scale,regPolygon.sprite.scale);
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
-		
-			for(var j = 0; j < vertSet.length; j++) {
-			  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
-			}
-		
-			this.ctx.closePath();
-
 			this.ctx.fill();
-			this.ctx.restore();	
 		}
 
 		if(regPolygon.sprite.fit) {
 
-			this.ctx.save();
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
-		
-			for(var j = 0; j < vertSet.length; j++) {
-			  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
-			}
-		
-			this.ctx.closePath();
-
 			this.ctx.clip();
-
-			this.ctx.translate(regPolygon.x,regPolygon.y);
-			this.ctx.rotate(regPolygon.cycle);
 
 			var box = PhSim.BoundingBox.fromShape(regPolygon);
 
 			var h = img.height * (box.w/img.width);
 
 			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,box.w,h,0);
-			this.ctx.restore();	
+
 		}
 
-		else { 
-			this.renderSpriteByCenter(regPolygon.sprite.src,regPolygon.x,regPolygon.y,img.width,img.height,regPolygon.cycle);
+		else {
+			
+			this.ctx.clip();
+
+			var w = regPolygon.sprite.w || img.width;
+			var h = regPolygon.sprite.h || img.height;
+
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,w,h,0);
 		}
 
 	}
+
+	this.ctx.restore();	
 
 	this.unsetCtx();
 

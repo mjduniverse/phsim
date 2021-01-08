@@ -15,6 +15,7 @@
     "poly-decomp": "^0.3.0"
   },
   "devDependencies": {
+    "eslint": "^7.17.0",
     "ink-docstrap": "^1.3.2",
     "jsdoc": "^3.6.6",
     "minami": "^1.2.3",
@@ -28,7 +29,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx webpack && npm run minify",
     "generate-docs": "jsdoc src -c jsdoc.json --verbose -r",
-    "minify": "terser ./dist/phsim.js -o ./dist/phsim.min.js"
+    "minify": "terser ./dist/phsim.js -o ./dist/phsim.min.js",
+    "lint": "./node_modules/.bin/eslint src"
   },
   "keywords": [
     "phsim",

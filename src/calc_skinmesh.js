@@ -1,3 +1,13 @@
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = require("matter-js");
+}
+
 /**
  * 
  * Calculate DynObject skinmesh
@@ -8,14 +18,6 @@
  */
 
 // Try to import matter.js as a commonJS module
-
-try {
-	const Matter = require("matter-js");
-}
-
-catch {
-
-}
 
 var calc_skinmesh = function(dynObject) {
 
