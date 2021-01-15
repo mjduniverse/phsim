@@ -1,12 +1,17 @@
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = require("matter-js");
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = require("matter-js");
 }
+
+const PhSim = require("../index");
+const Motion = require("../motion");
 
 /**
  * Create circular constraint
@@ -36,7 +41,7 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 	this.on("afterupdate",function(){
 		var newAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x) - relAngle;
-		PhSim.Motion.setAngle(dynObject,newAngle);
+		Motion.setAngle(dynObject,newAngle);
 	});
 
 

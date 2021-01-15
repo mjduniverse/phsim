@@ -1,13 +1,18 @@
+const Centroid = require("./centroid");
+const Vector = require("./vector");
+
 const Vertices = {}
 
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = require("matter-js");
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = require("matter-js");
 }
 
 /**
@@ -29,7 +34,7 @@ Vertices.regPolygon = function(regularPolygon) {
 	for(var i = 0; i < regularPolygon.sides; i++) {
 		var x = regularPolygon.x + Math.cos(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
 		var y = regularPolygon.y + Math.sin(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
-		a.push(new PhSim.Vector(x,y));
+		a.push(new Vector(x,y));
 	}
 
 	return a;
@@ -77,7 +82,7 @@ Vertices.rectangle = function(rectangle) {
 	];
 
 	if(rectangle.cycle) {
-		Matter.Vertices.rotate(a, rectangle.cycle, PhSim.Centroid.rectangle(rectangle));
+		Matter.Vertices.rotate(a, rectangle.cycle, Centroid.rectangle(rectangle));
 	}
 
 	return a;
@@ -97,7 +102,7 @@ Vertices.rectangle = function(rectangle) {
 Vertices.getRectangleCorners = function(rectangle) {
 
 
-	var a = PhSim.Vertices.rectangle(rectangle)
+	var a = Vertices.rectangle(rectangle)
 
 	
 	var z = {

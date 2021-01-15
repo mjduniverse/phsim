@@ -1,11 +1,16 @@
+const Motion = require("../motion");
+const PhSim = require("../index");
+
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = require("matter-js");
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = require("matter-js");
 }
 
 /**
@@ -16,15 +21,11 @@ catch {
  * @param {*} widget 
  */
 
-PhSim.Widgets.draggable = function(dyn_object,widget) {
+PhSim.Widgets.draggable = function(dyn_object) {
 
     var self = this;
     
-    var func = function(e) {
-
-        var change = false;
-        var __ismoving = true;
-        var constraint = null;
+    var func = function() {
 
         // Displacement vector between mouse and centroid of object when the mouse is pushed downwards.
 
@@ -50,7 +51,7 @@ PhSim.Widgets.draggable = function(dyn_object,widget) {
 
         var __onbeforeupdate = function() {
             Matter.Body.setVelocity(dyn_object.matter,{x:0,y:0});
-            PhSim.Motion.setPosition(dyn_object,mV);
+            Motion.setPosition(dyn_object,mV);
         }
 
         var __onmousedown = function(e) {

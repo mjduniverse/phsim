@@ -143,14 +143,12 @@ PhSim.prototype.addLocalMagicalWord = function(name,call) {
 
 PhSim.prototype.processVar = function(str) {
 
-	var str = str;
-
 	var magicWordKeys = Object.keys(PhSim.MagicWords);
 
-	for(var i = 0; i < magicWordKeys.length; i++) {
+	for(let i = 0; i < magicWordKeys.length; i++) {
 
-		var magicWord = magicWordKeys[i];
-		var mgkWordRegex = new RegExp("{" + magicWord + "}","g");
+		let magicWord = magicWordKeys[i];
+		let mgkWordRegex = new RegExp("{" + magicWord + "}","g");
 
 		if(str.search(mgkWordRegex) !== -1) {
 
@@ -159,13 +157,13 @@ PhSim.prototype.processVar = function(str) {
 
 	}
 
-	var a = Object.keys(this.vars);
+	let a = Object.keys(this.vars);
 
-	for(var i = 0; i < a.length; i++) {
+	for(let i = 0; i < a.length; i++) {
 
-		var v = "\\$\\{" + a[i] + "\\}";
-		var regex = new RegExp(v,"g");
-		var s = str.search(regex);
+		let v = "\\$\\{" + a[i] + "\\}";
+		let regex = new RegExp(v,"g");
+		let s = str.search(regex);
 
 		if(s !== -1) {
 			str = str.replace(regex,this.vars[ a[i] ]);

@@ -1,15 +1,16 @@
 const DynObject = require("./dynObject");
-const PhSim = require(".");
 const Centroid = require("./tools/centroid");
 
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = require("matter-js");
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = require("matter-js");
 }
 
 /**
@@ -72,7 +73,7 @@ Motion.translate = function(o,translationVector) {
 	if(!o.locked) {
 
 		if(o.shape === "polygon") {
-			for(var i = 0; i < o.verts.length; i++) {
+			for(let i = 0; i < o.verts.length; i++) {
 				o.verts[i].x = o.verts[i].x + translationVector.x;
 				o.verts[i].y = o.verts[i].y + translationVector.y;
 			}
@@ -102,6 +103,8 @@ Motion.translate = function(o,translationVector) {
 
 Motion.setPosition = function(o,position) {
 
+	var c;
+
 	if(!o.locked) {
 
 		if(o.type === "circle" || o.type === "regPolygon") {
@@ -110,14 +113,14 @@ Motion.setPosition = function(o,position) {
 		}
 
 		if(o.shape === "rectangle") {
-			var c = Centroid.rectangle(o);
+			c = Centroid.rectangle(o);
 			o.x = (o.x - c.x) + position.x;
 			o.y = (o.y - c.y) + position.y;
 		}
 
 		if(o.shape === "polygon") {
 
-			var c = Centroid.polygon(dynObject)
+			c = Centroid.polygon(o)
 
 			for(var i = 0; i < o.verts.length; i++) {
 				o.verts[i].x = (o.verts[i].x - c.x) + position.x;

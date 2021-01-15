@@ -33,7 +33,7 @@ Sprites.renderSprite = function(ctx,sprite) {
 
 Sprites.renderGlobalSprites = function(ctx,simulation) {
 
-	for(i = 0; i < simulation.sprites.length; i++) {
+	for(let i = 0; i < simulation.sprites.length; i++) {
 		Sprites.renderSprite(ctx,simulation.sprites[i]);
 	}
 
@@ -169,7 +169,7 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 
 			self.loaded_n++;
 
-			if(self.loaded_n = self.length) {
+			if(self.loaded_n === self.length) {
 				onload();
 			}
 		})
@@ -219,11 +219,9 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 
 		else if(typeof staticObj === "object" && typeof staticObj.src === "string") {
 
-			var img = document.createElement("img");
+			let img = document.createElement("img");
 
-			var self = this;
-
-			var f = function() {
+			let f = function() {
 
 				self.static[staticObj.src] = staticObj;
 				self[staticObj.src] = img;
@@ -245,11 +243,9 @@ Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function(
 
 		else if(typeof staticObj === "string") {
 
-			var img = document.createElement("img");
+			let img = document.createElement("img");
 
-			var self = this;
-
-			var f = function() {
+			let f = function() {
 
 				self[staticObj] = img;
 				self.urls.push(staticObj);

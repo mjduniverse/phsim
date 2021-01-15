@@ -1,3 +1,5 @@
+const Vector = require("./vector");
+
 /**
  * Namespace for functions that get the centroid (the center) of a {@link PhSimObject}.
  * @memberof PhSim
@@ -58,7 +60,7 @@ Centroid.rectangle = function(rectangle) {
 
 Centroid.polygon = function(a) {
 		
-	var v = new PhSim.Vector(0,0);
+	var v = new Vector(0,0);
 	
 	for(var j = 0; j < a.verts.length; j++) { 
 		v.x += a.verts[j].x;

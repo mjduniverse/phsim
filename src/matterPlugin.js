@@ -3,12 +3,14 @@ const PhSim = require(".");
 
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = require("matter-js");
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = require("matter-js");
 }
 
 /**
@@ -42,42 +44,6 @@ const matterPlugin = {
     },
 
     /**
-     * Matter namespace for matter.js bodies.
-     * @namespace
-     */
-
-    Body: {
-
-        /**
-         *  
-         * @param {Object} body 
-         */
-
-        init: function(options) {
-            if(options.plugin && options.plugin.dynObject) {
-
-            }
-        }
-
-    },
-
-    Bodies: {
-
-        circle: function(x, y, radius, options) {
-            
-        },
-
-        rectangle: function() {
-
-        },
-
-        fromVertices: function() {
-
-        },
-
-    },
-
-    /**
      * Detector patch for Matter.js.
      * 
      * 
@@ -97,25 +63,27 @@ const matterPlugin = {
 
                 var bodyA = this[i].bodyA;
                 var bodyB = this[i].bodyB;
+                var c_classesA;
+                var c_classesB;
 
                 if(bodyA.parent === bodyA) {
                     if(bodyA.plugin.dynObject instanceof DynObject) {
-                        var c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.dynObject);
+                        c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.dynObject);
                     }
                 }
                 
                 else {
-                    var c_classesA = PhSim.Query.getCollisionClasses(bodyA.parent.plugin.dynObject);
+                    c_classesA = PhSim.Query.getCollisionClasses(bodyA.parent.plugin.dynObject);
                 }
 
                 if(bodyB.parent === bodyB) {
                     if(bodyB.plugin.dynObject instanceof DynObject) {
-                        var c_classesB = PhSim.Query.getCollisionClasses(bodyB.plugin.dynObject);
+                        c_classesB = PhSim.Query.getCollisionClasses(bodyB.plugin.dynObject);
                     }    
                 }
 
                 else {
-                    var c_classesB = PhSim.Query.getCollisionClasses(bodyB.parent.plugin.dynObject);                    
+                    c_classesB = PhSim.Query.getCollisionClasses(bodyB.parent.plugin.dynObject);                    
                 }
 
                 if(c_classesA.length > 0 && c_classesB.length > 0) {

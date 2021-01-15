@@ -1,3 +1,5 @@
+const PhSim = require("../index");
+
 /**
  * 
  * The `setColor` widget changes the color of an object.
@@ -7,26 +9,16 @@
  * @param {PhSim.DynObject} dyn_object - Dynamic Object that will have it's color changed.
  * @param {WFunctionOptions} widget - Widget Options
  * @param {String} widget.color - The new color of the object.
+ *
  */
 
 PhSim.Widgets.setColor = function(dyn_object,widget) {
 
-    var self = this;
-
-    var closure = function() {
-        
-        var color = widget.color;
-        var obj = dyn_object;
-
-        var f = function() {
-            PhSim.DynObject.setColor(obj,color);
-        }
-
-        return f;
-
+    var f = function() {
+        PhSim.DynObject.setColor(dyn_object,widget.color);
     }
 
-    var f = this.createWFunction(dyn_object,closure(),widget);
+    this.createWFunction(dyn_object,f,widget);
 }
 
 /**
@@ -41,8 +33,6 @@ PhSim.Widgets.setColor = function(dyn_object,widget) {
     
 PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
 
-    var self = this;
-
     var closure = function() {
 
         var color = widget.color
@@ -56,7 +46,7 @@ PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
 
     }
 
-    var f = this.createWFunction(dyn_object,closure(),widget);
+    this.createWFunction(dyn_object,closure(),widget);
 }
 
 /**
@@ -73,11 +63,9 @@ PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
         
 PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
 
-    var self = this;
-
     var f = function(){
         PhSim.DynObject.setLineWidth(dyn_object,widget.width);
     }
 
-    var f = this.createWFunction(dyn_object,f,widget);
+    this.createWFunction(dyn_object,f,widget);
 }

@@ -147,7 +147,7 @@ Static.Gradient = function() {
 
 Static.lclGradient = function() {
 	this.src = null;
-	this.limits = new PhSim.Static.GradientLimits(x0,y0,x1,y1);
+	this.limits = new PhSim.Static.GradientLimits(arguments[0],arguments[1],arguments[2],arguments[3]);
 	this.type = "linear";
 }
 
@@ -205,7 +205,7 @@ Static.Polygon = function(verts) {
  * @constructor
  */
 
-Static.Circle = function(x = null,y = null,r = null) {
+Static.Circle = function(x,y,r) {
 
 	/**
 	 * Boolean indicating a circle
@@ -219,21 +219,21 @@ Static.Circle = function(x = null,y = null,r = null) {
 	 * @type {Number}
 	 */
 
-	this.x = null;
+	this.x = x;
 
 	/**
 	 * y-coordinate of the center
 	 * @type {Number}
 	 */
 
-	this.y = null;
+	this.y = y;
 
 	/**
 	 * Radius of the circle
 	 * @type {Number}
 	 */
 
-	this.radius = null
+	this.radius = r
 
 	/**
 	 * Angle of the circle
@@ -532,7 +532,7 @@ Static.Simulation = function() {
  */
 
 Static.LO = function(L,O) {
-	L.layers[0].objUniverse
+	L.layers[O].objUniverse
 }
 
 /**
@@ -546,7 +546,11 @@ Static.LO = function(L,O) {
  */
 
 Static.SLO = function(S,L,O) {
-
+	return {
+		S: S,
+		L: L,
+		O: O
+	}
 }
 
  /**

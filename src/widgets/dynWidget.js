@@ -1,13 +1,14 @@
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = require("matter-js");
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = require("matter-js");
 }
-
 
 // Set Angle to mouse.
 
@@ -20,8 +21,6 @@ PhSim.prototype.connectDynObjects = function(parent,child) {
 
 	Matter.Body.setStatic(child,true);
 
-	var self = this;
-	
 	var f = function() {
 
 		var v = {

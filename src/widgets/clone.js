@@ -56,6 +56,8 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
     var self = this;
 
+    var getFunction;
+
     var o = {
         velocity: widget.vector
     }
@@ -64,7 +66,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
     if(widget.trigger === "time") {
     
-        var getFunction = function() {
+        getFunction = function() {
 
             var time = widget.time;
             var maxN = widget.maxN;
@@ -73,7 +75,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
             if(Number.isInteger(maxN)) {
 
-                func = function(e) {
+                func = function() {
 
                     if(func.__n === maxN) {
                         clearInterval(func.__interN);
@@ -94,7 +96,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
             else {
 
-                func = function(e) {
+                func = function() {
                     if(!self.paused) {
                         self.cloneObject(dyn_object,o);
                     }
@@ -120,10 +122,9 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
     if(widget.trigger === "key") {
 
-        var getFunction = function() {
+        getFunction = function() {
 
             var kc = widget.key;
-            var vc = widget.vector;
 
             var cloneByKeyFunc = function(e) {
                 if(e.key === kc) {

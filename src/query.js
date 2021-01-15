@@ -1,17 +1,17 @@
 const { ObjLoops } = require(".");
-const DynObject = require("./dynObject");
 const Vector = require("./tools/vector");
+const PhSim = require("./index");
 
-// Try to import matter-js as a commonJS module
+var Matter;
 
-try {
-	const Matter = require("matter-js");
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
+else {
+	Matter = require("matter-js");
+}
 	
-}
-
 /**
  * @namespace
  * @memberof PhSim
@@ -112,17 +112,17 @@ PhSim.prototype.getUniversalObjArray = function() {
 	
 	var array = []
 	
-	for(var i = 0; i < this.matterJSWorld.composites.length; i++) {
+	for(let i = 0; i < this.matterJSWorld.composites.length; i++) {
 		
 		var a = this.matterJSWorld.composites[i].bodies;
 
-		for(var j = 0; j < a.length; j++) {
+		for(let j = 0; j < a.length; j++) {
 			array.push(a[j]);
 		}
 
 	}
 
-	for(var i = 0; i < this.matterJSWorld.bodies.length; i++) {
+	for(let i = 0; i < this.matterJSWorld.bodies.length; i++) {
 		array.push(this.matterJSWorld.bodies[i]);
 	}
 
@@ -173,9 +173,11 @@ PhSim.prototype.getStatic = function(dynObject) {
 
 PhSim.prototype.getObjectByName = function(str) {
 
-
-
-	return null;
+	for(var i = 0; i < this.objUniverse.length; i++) {
+		if(this.objUniverse[i].name === str) {
+			return this.objUniverse[i];
+		}
+	}
 
 }
 
@@ -186,6 +188,8 @@ PhSim.prototype.getObjectByName = function(str) {
  */
 
 PhSim.Query.getObjectByName = function(o,str) {
+
+	var x;
 	
 	if(Array.isArray(o)) {
 		for(var i = 0; i < o.length; i++) {
@@ -198,8 +202,6 @@ PhSim.Query.getObjectByName = function(o,str) {
 	// Get object by name in static composite simulation object
 
 	else if(Array.isArray(o.simulations)) {
-
-		var x;
 
 		ObjLoops.global(o,function(p){
 			if(p.name === str) {
@@ -214,8 +216,6 @@ PhSim.Query.getObjectByName = function(o,str) {
 
 
 	else if(Array.isArray(o.layers)) {
-
-		var x;
 
 		ObjLoops.layer(o,function(p){
 			if(p.name === str) {

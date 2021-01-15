@@ -1,3 +1,5 @@
+const PhSim = require("../index");
+
 /**
  * 
  * The `transformCameraByObj` widget transforms the camera by an object.

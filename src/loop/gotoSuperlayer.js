@@ -127,8 +127,8 @@ var gotoSimulationIndex = function (i) {
 
 				}
 
-				var a = new PhSim.Events.PhSimDynEvent();
-				self.callEventClass("matterJSLoad",self,a);
+				var phSimDynEvent = new PhSim.Events.PhSimDynEvent();
+				self.callEventClass("matterJSLoad",self,phSimDynEvent);
 
 			}
 
@@ -149,8 +149,8 @@ var gotoSimulationIndex = function (i) {
 		if(self.simulation.widgets) {
 
 			for(var C = 0; C < self.simulation.widgets.length; C++) {
-				var a = self.simulation.widgets[C];
-				self.extractWidget(self,a);
+				var widget = self.simulation.widgets[C];
+				self.extractWidget(self,widget);
 			}
 
 		}

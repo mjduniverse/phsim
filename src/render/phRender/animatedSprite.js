@@ -1,3 +1,5 @@
+const PhSim = require("../../index");
+
 PhSim.AnimatedSprite = function(dynObject) {
 
     /**
@@ -29,9 +31,5 @@ PhSim.AnimatedSprite.prototype.loopFunction = function() {
 }
 
 PhSim.AnimatedSprite.prototype.play = function() {
-    
-    var self = this;
-
     this.loopRef = setInterval(this.loopFunction);
-
 }

@@ -1,3 +1,5 @@
+const Static = require("../objects");
+
 /**
  * 
  * Get Rectangle by diagonal with points (x1,y1) and (x2,y2);
@@ -18,7 +20,7 @@ var diagRect = function(x1,y1,x2,y2) {
 	var w = x2 - x1;
 	var h = y2 - y1;
 
-    return new PhSim.Static.Rectangle(x1,y1,w,h);
+    return new Static.Rectangle(x1,y1,w,h);
     
  }
 

@@ -38,15 +38,8 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 		}
 	
 		if(currentObj.shape === "rectangle") {
-			
-			var v = {
-				"x": currentObj.matter.position.x - currentObj.matter.positionPrev.x,
-				"y": currentObj.matter.position.y - currentObj.matter.positionPrev.y 
-			}
-	
 			currentObj.x = currentObj.matter.position.x - currentObj.w * 0.5
 			currentObj.y = currentObj.matter.position.y - currentObj.h * 0.5
-	
 		}
 	
 		if(currentObj.shape === "circle" || currentObj.shape === "regPolygon") {

@@ -211,7 +211,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		if(options.key) {
 		
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				if( e.key.match( new RegExp("^" + options.key + "$","i") ) ) {
 					wFunction(e);
 				}
@@ -221,25 +221,21 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		else {
 
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				wFunction(e);
 			}
 
 		}
 
-		wFunction._ref = f;
 		wFunction._eventclass = "keydown";
 		
 	}
 
 	else if(options.trigger === "sensor" || options.trigger === "sensor_global") {
 
-		var self = this;
-		var f;
-
 		if(options.trigger === "sensor") {
 			
-			f = function(e) {
+			wFunction._ref = function(e) {
 
 				var m = self.inSensorCollision(thisRef)
 	
@@ -251,23 +247,21 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		}
 
 		else {
-			f = function(e) {
+			wFunction._ref = function(e) {
 				wFunction(e);
 			}
 		}
 
-		wFunction._ref = f;
 		wFunction._eventclass = "collisionstart";
 
 	}
 
 	else if(options.trigger === "update") {
 		
-		var f = function() {
+		wFunction._ref = function() {
 			wFunction();
 		}
 
-		wFunction._ref = f;
 		wFunction._eventclass = "beforeupdate";
 
 	}
@@ -277,7 +271,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		var f;
 
 		if(options.trigger === "objclick") {
-			f = function(e) {
+			wFunction._ref = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
 					wFunction(e);
 				}
@@ -285,20 +279,19 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		}
 
 		else {
-			f = function(e) {
+			wFunction._ref = function(e) {
 				wFunction(e);
 			}
 		}
 
 		wFunction._eventclass = "objclick";
-		wFunction._ref = f;
 
 	}
 
 	else if(options.trigger === "objmousedown" || options.trigger === "objmousedown_global") {
 
 		if(options.trigger === "objmousedown") {
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
 					wFunction(e);
 				}
@@ -307,23 +300,21 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 
 		else {
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				wFunction(e);
 			}
 		}
 
 		wFunction._eventclass = "objmousedown";
-		wFunction._ref = f;
 
 	}
 
 	else if(options.trigger === "firstslupdate") {
 		
-		var f = function(e) {
+		wFunction._ref = function(e) {
 			wFunction(e)
 		}
 
-		wFunction._ref = f;
 		wFunction._eventclass = "firstslupdate";
 
 
@@ -332,7 +323,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	else if(options.trigger === "objmouseup" || options.trigger === "objmouseup_global") {
 
 		if(options.trigger === "objmouseup") {
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
 					wFunction(e);
 				}
@@ -340,13 +331,12 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		}
 
 		else {
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				wFunction(e);
 			}
 		}
 
 		wFunction._eventclass = "objmouseup";
-		wFunction._ref = f;
 
 	}
 
@@ -363,12 +353,11 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 	else if(options.trigger === "afterslchange") {
 
-		var f = function(e) {
+		wFunction._ref = function(e) {
 			wFunction(e);
 		}
 
 		wFunction._eventclass = "afterslchange";
-		wFunction._ref = f;
 
 	}
 
@@ -376,30 +365,32 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		var getFunction = function() {
 
+			var f;
+
 			if(Number.isInteger(options.maxN)) {
 
-				func = function(e) {
+				f = function() {
 
-					if(func.__n === options.maxN) {
-						clearInterval(func.__interN);
+					if(f.__n === options.maxN) {
+						clearInterval(f.__interN);
 					}
 
 					else {
 						if(!self.paused) {
 							wFunction();
-							func.__n++;
+							f.__n++;
 						}
 					}
 
 				}
 
-				func.__n = 0;
+				f.__n = 0;
 
 			}
 
 			else {
 
-				func = function(e) {
+				f = function() {
 					if(!self.paused) {
 						wFunction();
 					}
@@ -408,10 +399,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			}
 
 
-			func.__phtime = options.time;
-			func.__interN = null;
+			f.__phtime = options.time;
+			f.__interN = null;
 
-			return func;
+			return f;
 
 		}
 
@@ -440,7 +431,13 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		wFunction._eventclass = options.trigger;
 	}
 
+	if(typeof wFunction._ref === "function") {
+		wFunction._ref._wFunction = wFunction;
+	}
+
 	if(typeof wFunction._eventclass === "string") {
+
+		wFunction._listener = wFunction._ref;
 		
 		self.on(wFunction._eventclass,wFunction._ref,{
 			"slEvent": true
@@ -469,10 +466,6 @@ PhSim.prototype.disableWFunction = function(o) {
 
 	if(typeof o._eventclass === "string") {
 		this.off(o._eventclass,o._ref);
-	}
-
-	else if(o._options.trigger === "time") {
-		clearInterval(o._ref)
 	}
 
 	else if(o._options.trigger === "time") {

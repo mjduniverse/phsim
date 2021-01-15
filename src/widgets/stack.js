@@ -1,3 +1,5 @@
+const PhSim = require("../index");
+
 /**
  * 
  * @param {DynSimObject} o 
@@ -18,9 +20,9 @@ PhSim.Widgets.stack = function(o,w) {
 
     var a = [];
 
-    for(var i = 1; i <= w.rows; i++) {
+    for(let i = 1; i <= w.rows; i++) {
 
-        var new_o = this.cloneObject(o);
+        let new_o = this.cloneObject(o);
 
         PhSim.Motion.transform(new_o,{
             x: w.rowDist * i,
@@ -32,9 +34,9 @@ PhSim.Widgets.stack = function(o,w) {
     }
 
 
-    for(var i = 1; i <= w.columns; i++) {
+    for(let i = 1; i <= w.columns; i++) {
 
-        var new_o = this.cloneObject(o);
+        let new_o = this.cloneObject(o);
 
         PhSim.Motion.transform(new_o,{
             x: 0,

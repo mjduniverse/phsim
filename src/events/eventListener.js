@@ -91,7 +91,7 @@ PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
 	var func;
 
 	if(this.eventStack[eventStr]) {
-		for(var i = 0; i < this.eventStack[eventStr].length; i++) {
+		for(let i = 0; i < this.eventStack[eventStr].length; i++) {
 			func = this.eventStack[eventStr][i]
 			eventArg.func = func;
 			func.call(thisArg,eventArg);
@@ -102,9 +102,9 @@ PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
 	if(this instanceof PhSim) {
 
 		if(this.simulationEventStack[eventStr]) {
-			for(var j = 0; j < this.simulationEventStack[eventStr].length; j++) {
+			for(let j = 0; j < this.simulationEventStack[eventStr].length; j++) {
 	
-				func = this.simulationEventStack[eventStr][i]
+				func = this.simulationEventStack[eventStr][j]
 				eventArg.func = func;
 				func.call(thisArg,eventArg);
 	

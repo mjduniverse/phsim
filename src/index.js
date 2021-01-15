@@ -87,10 +87,6 @@ function PhSim(dynSimOptions = new PhSim.Static()) {
 		this.simulations[0].layers[0].objUniverse = [];
 	}
 
-	if(!typeof Matter === "object") {
-		throw "PhSim requires matter.js."
-	}
-
 	if(typeof dynSimOptions.wFunctions === "object") {
 		this.wFunctions = dynSimOptions.wFunctions
 	}
@@ -98,7 +94,7 @@ function PhSim(dynSimOptions = new PhSim.Static()) {
 	// Register Plugin
 	
 	if(!dynSimOptions.noUse) {
-	    Matter.use(PhSim.matterPlugin);
+		Matter.use(PhSim.matterPlugin);
 	}
 
 	/**
@@ -122,7 +118,7 @@ function PhSim(dynSimOptions = new PhSim.Static()) {
 	 * @type {Object}
 	 */
 	
-	 this.debuggingData = {}
+	this.debuggingData = {}
 
 	// Configure canvas
 

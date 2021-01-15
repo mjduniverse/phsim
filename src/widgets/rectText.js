@@ -1,3 +1,5 @@
+const PhSim = require("../index");
+
 /**
  * Widget that sets the {@link PhSim.DynObject#rectTextWidget} as true.
  * @function
