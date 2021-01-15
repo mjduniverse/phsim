@@ -440,7 +440,13 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		wFunction._eventclass = options.trigger;
 	}
 
+	if(typeof wFunction._ref === "function") {
+		wFunction._ref._wFunction = wFunction;
+	}
+
 	if(typeof wFunction._eventclass === "string") {
+
+		wFunction._listener = wFunction._ref;
 		
 		self.on(wFunction._eventclass,wFunction._ref,{
 			"slEvent": true
