@@ -2,12 +2,14 @@ const PhSim = require(".");
 
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = require("matter-js");
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = require("matter-js");
 }
 
 /*
@@ -127,7 +129,7 @@ PhSim.Widgets.playAudio = function(dyn_object,widget) {
         self.playAudioByIndex(i);
     }
 
-    var r = this.createWFunction(dyn_object,f,widget);
+    this.createWFunction(dyn_object,f,widget);
 
     this.audioPlayers++;
 }

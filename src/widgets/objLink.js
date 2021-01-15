@@ -1,3 +1,5 @@
+const DynObject = require("../dynObject")
+const PhSim = require("../index");
 /**
  * 
  * Call ObjLink functions
@@ -6,7 +8,6 @@
  * @param {PhSim.DynObject} dynObject 
  */
 
-const DynObject = require("../dynObject");
 
 PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 	for(var i = 0; i < dynObject.objLinkFunctions.length; i++) {
@@ -28,24 +29,24 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 PhSim.Widgets.objLink = function(dyn_object,widget) {
 
     var self = this;
-    
+    var targetObj;
     var widgetO = widget;
 
     this.on("load",function(){
 
         if(typeof widget.target.L === "number" && typeof widget.target.O === "number") {
-            var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
+            targetObj = self.LO(widgetO.target.L,widgetO.target.O);
         }
 
         else if(widget.target instanceof DynObject) {
-            var targetObj = widget.target;     
+            targetObj = widget.target;     
         }
     
         var eventFunc = function(){
             self.callObjLinkFunctions(targetObj);
         } 
     
-        var f = self.createWFunction(dyn_object,eventFunc,widget);
+        self.createWFunction(dyn_object,eventFunc,widget);
 
     },{
         slEvent: true

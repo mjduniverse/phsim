@@ -1,13 +1,18 @@
+const Motion = require("../motion");
+const Vector = require("../tools/vector");
+const PhSim = require("../index");
+
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = require("matter-js");
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = require("matter-js");
 }
-
 /**
  * 
  * The `elevator` widget makes objects go back and forth within some range.
@@ -29,16 +34,14 @@ catch {
 
 PhSim.Widgets.elevator = function(dyn_object,widget) {
             
-    var self = this;
-    
     var func = function() {
     
         var bounding = widget.bounding;
 
         var obj = dyn_object;
-        var relVec = PhSim.Vector.subtract(widget.pointB,widget.pointA);
+        var relVec = Vector.subtract(widget.pointB,widget.pointA);
         
-        var u = PhSim.Vector.unitVector(relVec);
+        var u = Vector.unitVector(relVec);
         
         var ax;
         var ay;
@@ -98,7 +101,7 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
         var inRange = function() {
 
         if( cond_f() ) {
-        PhSim.Motion.translate(obj,PhSim.Vector.scale(u,1));
+        Motion.translate(obj,Vector.scale(u,1));
                 reversable = true;
         }
           
@@ -115,7 +118,7 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
                 }
 
                 else {
-                    PhSim.Motion.translate(obj,PhSim.Vector.scale(u,1));
+                    Motion.translate(obj,Vector.scale(u,1));
                 }
             
             }

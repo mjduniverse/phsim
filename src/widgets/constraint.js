@@ -1,6 +1,18 @@
 const Vector = require("../tools/vector");
 const DynObject = require("../dynObject");
 
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = require("matter-js");
+}
+
 /**
  * 
  * 
@@ -60,7 +72,7 @@ function constraint(phsim,widget) {
                 }
     
                 else {
-                    b.bodyA = optionMap.get(widget.objectA).matter;
+                    b.bodyA = phsim.optionMap.get(widget.objectA).matter;
                 }
     
             }
@@ -81,7 +93,7 @@ function constraint(phsim,widget) {
                 }
     
                 else {
-                    b.bodyB = optionMap.get(widget.objectB).matter;
+                    b.bodyB = phsim.optionMap.get(widget.objectB).matter;
                 }
     
             }
@@ -113,7 +125,7 @@ function constraint(phsim,widget) {
 
     }
 
-    if(positon === "relative") {
+    if(position === "relative") {
         b.pointA = widget.pointA;
         b.pointB = widget.pointB;
         b.bodyA = widget.objectA.plugin.dynObject;

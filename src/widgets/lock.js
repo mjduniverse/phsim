@@ -1,11 +1,13 @@
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = require("matter-js");
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = require("matter-js");
 }
 
 const PhSim = require("..");

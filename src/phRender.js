@@ -1,4 +1,7 @@
+const Gradients = require("./gradient");
+const BoundingBox = require("./tools/boundingBox");
 const Centroid = require("./tools/centroid");
+const Vertices = require("./tools/vertex");
 
 /** 
  * 
@@ -105,6 +108,9 @@ PhRender.prototype.unsetCtx = function() {
 
 PhRender.prototype.renderPolygon = function (path) {
 
+	var w;
+	var h;
+
 	this.setCtx(path);
 
 	this.ctx.beginPath();
@@ -112,7 +118,7 @@ PhRender.prototype.renderPolygon = function (path) {
 	this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
 
 	for(var j = 0; j < path.verts.length; j++) {
-	  this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
+		this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
 	}
 
 	this.ctx.closePath();
@@ -134,7 +140,7 @@ PhRender.prototype.renderPolygon = function (path) {
 
 		this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
 
-		for(var j = 0; j < path.verts.length; j++) {
+		for(let j = 0; j < path.verts.length; j++) {
 			this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
 		}
 
@@ -154,9 +160,9 @@ PhRender.prototype.renderPolygon = function (path) {
 
 			this.ctx.clip();
 
-			var box = PhSim.BoundingBox.fromShape(path);
+			var box = BoundingBox.fromShape(path);
 
-			var h = img.height * (box.w/img.width);
+			h = img.height * (box.w/img.width);
 
 			this.renderSpriteByCenter(path.sprite.src,centroid.x,centroid.y,box.w,h,0);
 		}
@@ -165,8 +171,8 @@ PhRender.prototype.renderPolygon = function (path) {
 
 			this.ctx.clip();
 
-			var w = path.sprite.w || img.width;
-			var h = path.sprite.h || img.height;
+			w = path.sprite.w || img.width;
+			h = path.sprite.h || img.height;
 
 			this.renderSpriteByCenter(path.sprite.src,0,0,w,h,0);
 
@@ -212,37 +218,6 @@ PhRender.prototype.renderSpriteByCenter = function(url,x,y,w,h,a) {
 	this.ctx.restore();
 }
 
-/**
- * @function
- * @param {Object} constraint 
- */
-
-PhRender.prototype.renderConstraint = function (constraint) {
-
-	var path = SLO(constraint.object.S, constraint.object.L, constraint.object.O);
-
-	this.ctx.save();
-
-	this.ctx.globalAlpha = 0.5
-	this.ctx.strokeStyle = "black";
-
-	this.ctx.arc(constraint.point.x, constraint.point.y, 10, 0, 2 * Math.PI);
-	this.ctx.stroke();
-
-	this.ctx.arc(constraint.relativeEndPoint.x + findCentroidOfPath(path).x , constraint.relativeEndPoint.y + findCentroidOfPath(path).y, 10, 0, 2 * Math.PI);
-	this.ctx.stroke();
-
-	this.ctx.setLineDash([10,10]);
-
-	this.ctx.moveTo(constraint.point.x, constraint.point.y);
-	this.ctx.lineTo(constraint.relativeEndPoint.x + findCentroidOfPath(path).x, constraint.relativeEndPoint.y + findCentroidOfPath(path).y);
-	this.ctx.stroke();
-
-	this.ctx.restore();
-
-}
-
-
 
 /**
  * 
@@ -253,6 +228,9 @@ PhRender.prototype.renderConstraint = function (constraint) {
  */
 
 PhRender.prototype.renderCircle = function (circle) {
+
+	var w;
+	var h;
 	
 	this.setCtx(circle);
 
@@ -267,7 +245,7 @@ PhRender.prototype.renderCircle = function (circle) {
 		this.ctx.save();
 		this.ctx.translate(circle.x,circle.y);
 		this.ctx.rotate(circle.cycle);
-		this.ctx.fillStyle = PhSim.Gradients.extractGradient(this.ctx,circle.gradient);
+		this.ctx.fillStyle = Gradients.extractGradient(this.ctx,circle.gradient);
 		this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
 		this.ctx.fill();
 		this.ctx.restore();	
@@ -299,9 +277,9 @@ PhRender.prototype.renderCircle = function (circle) {
 		else if(circle.sprite.fit) {
 
 			this.ctx.clip();
-			var box = PhSim.BoundingBox.fromShape(circle);
+			var box = BoundingBox.fromShape(circle);
 
-			var h = img.height * (box.w/img.width);
+			h = img.height * (box.w/img.width);
 
 			this.renderSpriteByCenter(circle.sprite.src,0,0,box.w,h);
 			this.ctx.restore();	
@@ -309,8 +287,8 @@ PhRender.prototype.renderCircle = function (circle) {
 
 		else {
 
-			var w = circle.sprite.w || img.width;
-			var h = circle.sprite.h || img.height;
+			w = circle.sprite.w || img.width;
+			h = circle.sprite.h || img.height;
 
 			this.ctx.clip(); 
 			this.renderSpriteByCenter(circle.sprite.src,0,0,w,h,0);
@@ -336,7 +314,7 @@ PhRender.prototype.renderCircle = function (circle) {
 
 PhRender.prototype.renderRectangle = function(rectangle) {
 
-	var c = PhSim.Centroid.rectangle(rectangle);
+	var c = Centroid.rectangle(rectangle);
 
 	var x = -rectangle.w * 0.5;
 	var y = -rectangle.h * 0.5;
@@ -351,7 +329,7 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 	this.ctx.fill();
 
 	if(rectangle.widgets) {
-		for(var i = 0; i < rectangle.widgets.length; i++) {
+		for(let i = 0; i < rectangle.widgets.length; i++) {
 			if(rectangle.widgets[i].type === "rectText") {
 				this.rectText(rectangle.widgets[i],x,y,rectangle.w,rectangle.h,0);
 			}
@@ -465,7 +443,7 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 
 PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
-	var vertSet = PhSim.Vertices.regPolygon(regPolygon);
+	var vertSet = Vertices.regPolygon(regPolygon);
 	
 	this.setCtx(regPolygon);
 
@@ -473,8 +451,8 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 	this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
 
-	for(var j = 0; j < vertSet.length; j++) {
-	  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
+	for(let j = 0; j < vertSet.length; j++) {
+		this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
 	}
 
 	this.ctx.closePath();
@@ -497,8 +475,8 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 		this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
 	
-		for(var j = 0; j < vertSet.length; j++) {
-		  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
+		for(let j = 0; j < vertSet.length; j++) {
+			this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
 		}
 	
 		this.ctx.closePath();
@@ -516,9 +494,9 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 			this.ctx.clip();
 
-			var box = PhSim.BoundingBox.fromShape(regPolygon);
+			let box = BoundingBox.fromShape(regPolygon);
 
-			var h = img.height * (box.w/img.width);
+			let h = img.height * (box.w/img.width);
 
 			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,box.w,h,0);
 
@@ -528,8 +506,8 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 			
 			this.ctx.clip();
 
-			var w = regPolygon.sprite.w || img.width;
-			var h = regPolygon.sprite.h || img.height;
+			let w = regPolygon.sprite.w || img.width;
+			let h = regPolygon.sprite.h || img.height;
 
 			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,w,h,0);
 		}
@@ -630,7 +608,7 @@ PhRender.prototype.dynamicSkeleton = function(object) {
 
 		this.ctx.moveTo(object.matter.vertices.x, object.matter.vertices.y);
 
-		for(var j = 0; j < object.matter.vertices.length; j++) {
+		for(let j = 0; j < object.matter.vertices.length; j++) {
 			this.ctx.lineTo(object.matter.vertices[j].x, object.matter.vertices[j].y);
 		}
 
@@ -664,7 +642,7 @@ PhRender.prototype.dynamicSkeleton_center = function(object) {
 
 		this.ctx.moveTo(object.matter.vertices.x - object.matter.position.x, object.matter.vertices.y - object.matter.position.y);
 
-		for(var j = 0; j < object.matter.vertices.length; j++) {
+		for(let j = 0; j < object.matter.vertices.length; j++) {
 			this.ctx.lineTo(object.matter.vertices[j].x - object.matter.position.x, object.matter.vertices[j].y - object.matter.position.y);
 		}
 
@@ -743,7 +721,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 	
 				this.ctx.clip();
 	
-				var box = PhSim.BoundingBox.fromShape(dynObject);
+				var box = BoundingBox.fromShape(dynObject);
 	
 				var h = img.height * (box.w/img.width);
 	
@@ -790,9 +768,9 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
  * @param {*} L 
  */
 
-PhRender.prototype.dynamicDrawLayer = function(L) {
+PhRender.prototype.dynamicDrawLayer = function(L,sim,simulationI) {
 	
-	for(var i = 0; i < sim.simulations[simulationI].layers[L].length; i++) {
+	for(let i = 0; i < sim.simulations[simulationI].layers[L].length; i++) {
 		this.dynamicRenderDraw(L,i);
 	}
 

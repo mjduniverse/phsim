@@ -266,11 +266,7 @@ Vector.vectorToArray = function(vertex,ray1,ray2) {
 	ray2.x = ray2.x - vertex.x;
 	ray2.y = ray2.y - vertex.y;
 
-	var ratio = calc_dot_product(ray1.x,ray1.y,ray2.x,ray2.y);
-
-	var angle = Math.acos(ratio);
-
-	return angle;
+	return Math.acos(Vector.dotProduct(ray1,ray2));
 
 }
 

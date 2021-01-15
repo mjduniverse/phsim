@@ -1,3 +1,5 @@
+const PhSim = require("../index");
+
 /**
  * 
  * The deleteSelf widget makes an object delete itself from the simulation.

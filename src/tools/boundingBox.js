@@ -1,4 +1,6 @@
+const diagRect = require("./diagRect");
 const Static = require("../objects");
+const Vertices = require("./vertex");
 
 /**
  * Get bounding box from an array of vectors.
@@ -11,7 +13,7 @@ const Static = require("../objects");
 
 const BoundingBox = function(verts) {
 
-	var verts = Object.assign([],verts);
+	verts = Object.assign([],verts);
 
 	verts.sort(function(a,b){
 		return a.x - b.x;
@@ -60,11 +62,11 @@ BoundingBox.fromShape = function(object) {
 	}
 
 	if(object.shape === "regPolygon") {
-		return new BoundingBox(PhSim.Vertices.regPolygon(object));
+		return new BoundingBox(Vertices.regPolygon(object));
 	}
 
 	if(object.shape === "rectangle") {
-		return new BoundingBox(PhSim.Vertices.rectangle(object,true));
+		return new BoundingBox(Vertices.rectangle(object,true));
 	}
 
 	if(object.shape === "circle") {
@@ -74,7 +76,7 @@ BoundingBox.fromShape = function(object) {
 		var bx = object.x + object.radius;
 		var by = object.y + object.radius;
 
-		return PhSim.diagRect(ax,ay,bx,by,0);
+		return diagRect(ax,ay,bx,by,0);
 	}
 
 	if(object.composite) {
@@ -82,7 +84,7 @@ BoundingBox.fromShape = function(object) {
 		var a = [];
 
 		for(var i = 0; i < object.objUniverse.length; i++) {
-			a.push( PhSim.Vertices.rectangle( this.getStaticBoundingBox(object.objUniverse[i]) ) );
+			a.push( Vertices.rectangle( this.getStaticBoundingBox(object.objUniverse[i]) ) );
 		}
 
 		a = a.flat(Infinity);

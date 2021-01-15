@@ -1,4 +1,5 @@
 const Motion = require("../motion");
+const PhSim = require("../index");
 
 /** 
  * 
@@ -15,8 +16,6 @@ const Motion = require("../motion");
 
 PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 
-	var self = this;
-	
 	if(mode === "force") {
 		return function() {
 			return Motion.applyForce(dyn_object,dyn_object.matter.position,motion);
@@ -130,12 +129,14 @@ PhSim.Widgets.position = function(dynObject,widget) {
 
 PhSim.Widgets.rotation = function(dynObject,widget) {
 
+	var f;
+
     if(widget.circularConstraintRotation) {
-        var f = this.createMotionFunction("circular_constraint_rotation",dynObject,widget.cycle);
+        f = this.createMotionFunction("circular_constraint_rotation",dynObject,widget.cycle);
     }
 
     else {
-        var f = this.createMotionFunction("rotation",dynObject,widget.cycle);
+		f = this.createMotionFunction("rotation",dynObject,widget.cycle);
     }
     
     this.createWFunction(dynObject,f,widget);
@@ -151,12 +152,14 @@ PhSim.Widgets.rotation = function(dynObject,widget) {
 
 PhSim.Widgets.setAngle = function(dynObject,widget) {
 
+	var f;
+
     if(widget.circularConstraintRotation) {
-        var f = this.createMotionFunction("circular_constraint_setAngle",dynObject,widget.cycle);
+        f = this.createMotionFunction("circular_constraint_setAngle",dynObject,widget.cycle);
     }
 
     else {
-        var f = this.createMotionFunction("setAngle",dynObject,widget.cycle);
+		f = this.createMotionFunction("setAngle",dynObject,widget.cycle);
     }
     
     this.createWFunction(dynObject,f,widget);
@@ -175,6 +178,6 @@ PhSim.Widgets.force = function(dyn_object,widget) {
 
     var f = this.createMotionFunction("force",dyn_object,widget.vector);
 
-    this.createWFunction(dynObject,f,widget);
+    this.createWFunction(dyn_object,f,widget);
     
 }
