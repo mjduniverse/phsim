@@ -1,5 +1,7 @@
 ## 0.2.0-alpha (Unreleased)
 
+* Removed bug that made only the first element of event stack arrays execute.
+
 * Optimized mouse events in such a way that they are faster.
 
 * Added `PhSim.prototype.getCollidingMatterBodies` function.

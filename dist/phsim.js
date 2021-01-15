@@ -2383,7 +2383,7 @@ PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
 	var func;
 
 	if(this.eventStack[eventStr]) {
-		for(var i = 0; i < this.eventStack[eventStr].length; i++) {
+		for(let i = 0; i < this.eventStack[eventStr].length; i++) {
 			func = this.eventStack[eventStr][i]
 			eventArg.func = func;
 			func.call(thisArg,eventArg);
@@ -2394,9 +2394,9 @@ PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
 	if(this instanceof PhSim) {
 
 		if(this.simulationEventStack[eventStr]) {
-			for(var j = 0; j < this.simulationEventStack[eventStr].length; j++) {
+			for(let j = 0; j < this.simulationEventStack[eventStr].length; j++) {
 	
-				func = this.simulationEventStack[eventStr][i]
+				func = this.simulationEventStack[eventStr][j]
 				eventArg.func = func;
 				func.call(thisArg,eventArg);
 	
@@ -8521,26 +8521,16 @@ PhSim.Widgets.transformCameraByObj = function(dyn_object) {
  * @param {PhSim.DynObject} dyn_object - Dynamic Object that will have it's color changed.
  * @param {WFunctionOptions} widget - Widget Options
  * @param {String} widget.color - The new color of the object.
+ *
  */
 
 PhSim.Widgets.setColor = function(dyn_object,widget) {
 
-    var self = this;
-
-    var closure = function() {
-        
-        var color = widget.color;
-        var obj = dyn_object;
-
-        var f = function() {
-            PhSim.DynObject.setColor(obj,color);
-        }
-
-        return f;
-
+    var f = function() {
+        PhSim.DynObject.setColor(dyn_object,widget.color);
     }
 
-    var f = this.createWFunction(dyn_object,closure(),widget);
+    this.createWFunction(dyn_object,f,widget);
 }
 
 /**
