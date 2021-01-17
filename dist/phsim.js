@@ -185,7 +185,7 @@ function PhSim(dynSimOptions = new PhSim.Static()) {
 	// Register Plugin
 	
 	if(!dynSimOptions.noUse) {
-	    Matter.use(PhSim.matterPlugin);
+		Matter.use(PhSim.matterPlugin);
 	}
 
 	/**
@@ -209,7 +209,7 @@ function PhSim(dynSimOptions = new PhSim.Static()) {
 	 * @type {Object}
 	 */
 	
-	 this.debuggingData = {}
+	this.debuggingData = {}
 
 	// Configure canvas
 
@@ -561,7 +561,7 @@ if(true) {
     module.exports = PhSim;
 }
 
-PhSim.Static = __webpack_require__(7 );
+PhSim.Static = __webpack_require__(5 );
 
 __webpack_require__(14 );
 
@@ -586,9 +586,9 @@ PhSim.Sprites = __webpack_require__(16);
 PhSim.Audio = __webpack_require__(17);
 PhSim.Vector = __webpack_require__(3);
 PhSim.diagRect = __webpack_require__(12);
-PhSim.Vertices = __webpack_require__(5);
+PhSim.Vertices = __webpack_require__(6);
 
-PhSim.Centroid = __webpack_require__(6);
+PhSim.Centroid = __webpack_require__(7);
 
 // Bounding box functions
 
@@ -672,9 +672,9 @@ module.exports = require("matter-js");
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(7);
+const Static = __webpack_require__(5);
 const PhSim = __webpack_require__(0);
-const Vertices = __webpack_require__(5);
+const Vertices = __webpack_require__(6);
 const PhSimEventTarget = __webpack_require__(8);
 const EventStack = __webpack_require__(9);
 
@@ -1300,11 +1300,7 @@ Vector.vectorToArray = function(vertex,ray1,ray2) {
 	ray2.x = ray2.x - vertex.x;
 	ray2.y = ray2.y - vertex.y;
 
-	var ratio = calc_dot_product(ray1.x,ray1.y,ray2.x,ray2.y);
-
-	var angle = Math.acos(ratio);
-
-	return angle;
+	return Math.acos(Vector.dotProduct(ray1,ray2));
 
 }
 
@@ -1315,7 +1311,7 @@ module.exports = Vector;
 /***/ (function(module, exports, __webpack_require__) {
 
 const DynObject = __webpack_require__(2);
-const Centroid = __webpack_require__(6);
+const Centroid = __webpack_require__(7);
 
 // Try to import matter-js as a commonJS module
 
@@ -1436,7 +1432,7 @@ Motion.setPosition = function(o,position) {
 
 		if(o.shape === "polygon") {
 
-			c = Centroid.polygon(dynObject)
+			c = Centroid.polygon(o)
 
 			for(var i = 0; i < o.verts.length; i++) {
 				o.verts[i].x = (o.verts[i].x - c.x) + position.x;
@@ -1510,217 +1506,6 @@ module.exports = Motion;
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Centroid = __webpack_require__(6);
-const Vector = __webpack_require__(3);
-
-const Vertices = {}
-
-// Try to import matter-js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = __webpack_require__(1);
-}
-
-/**
- * 
- * Get vertices for a static object representing a regular polygon.
- * 
- * @function
- * @param {PhSim.Static.RegPolygon} regularPolygon - The Static Regular Polygon Object
- * @returns {PhSim.Vector[]}
- * 
- */
-
-Vertices.regPolygon = function(regularPolygon) {
-
-	var a = []
-	
-	var firstAngle = (2*Math.PI)/regularPolygon.sides;
-
-	for(var i = 0; i < regularPolygon.sides; i++) {
-		var x = regularPolygon.x + Math.cos(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
-		var y = regularPolygon.y + Math.sin(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
-		a.push(new Vector(x,y));
-	}
-
-	return a;
-
-}
-
-
-/**
- * 
- * Get vertices for a rectangle
- * 
- * @function
- * @param {PhSim.Static.Rectangle} rectangle
- * @returns {Object[]} 
- */
-
-Vertices.rectangle = function(rectangle) {
-
-	var a = [
-
-			{
-				"x": rectangle.x,
-				"y": rectangle.y,
-				"topLeft": true
-			},
-	
-			{
-				"x": rectangle.x + rectangle.w,
-				"y": rectangle.y,
-				"topRight": true
-			},
-
-			{
-				"x": rectangle.x + rectangle.w,
-				"y": rectangle.y + rectangle.h,
-				"bottomRight": true
-			},
-	
-			{
-				"x": rectangle.x,
-				"y": rectangle.y + rectangle.h,
-				"bottomLeft": true
-			}
-	
-	];
-
-	if(rectangle.cycle) {
-		Matter.Vertices.rotate(a, rectangle.cycle, Centroid.rectangle(rectangle));
-	}
-
-	return a;
-
-}
-
-/**
- * 
- * Get rectangle corners
- * 
- * @function
- * @param {PhSim.Static.Rectangle} rectangle 
- * @returns {Object}
- */
-
-
-Vertices.getRectangleCorners = function(rectangle) {
-
-
-	var a = Vertices.rectangle(rectangle)
-
-	
-	var z = {
-
-		"topLeft": a[0],
-
-		"topRight": a[1],
-
-		"bottomLeft": a[3],
-
-		"bottomRight": a[2]
-
-	}
-
-	return z;
-
-}
-
-module.exports = Vertices;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Vector = __webpack_require__(3);
-
-/**
- * Namespace for functions that get the centroid (the center) of a {@link PhSimObject}.
- * @memberof PhSim
- * @namespace
- */
-
-const Centroid = {}
-
-/**
- * Get centroid of any shape.
- * If it is a circle or a regPolygon, then `o` is returned because the properties `x` and
- * `y` already define the centroid of the object.
- * 
- * @param {PhSimObject} o 
- * @returns {Vector}
- */
-
-Centroid.shape = function(o) {
-	
-	if(o.shape === "rectangle") {
-		return Centroid.rectangle(o);
-	}
-
-	if(o.shape === "polygon") {
-		return Centroid.polygon(o)
-	}
-
-	if(o.shape === "circle" || o.shape === "regPolygon") {
-		return o;
-	}
-
-}
-
-/**
- * 
- * Get centroid of a rectangle
- * 
- * @function
- * @param {PhSim.Static.Rectangle} rectangle
- * @returns {Vector}
- *  
- */
-
-Centroid.rectangle = function(rectangle) {
-	return {
-		"x": rectangle.x + 0.5 * rectangle.w,
-		"y": rectangle.y + 0.5 * rectangle.h
-	}
-}
-
-
-/** 
- * Find Centroid of a polygon
- * @function
- * @param {Polygon} a - Path
- * @returns {Vector}
- */
-
-Centroid.polygon = function(a) {
-		
-	var v = new Vector(0,0);
-	
-	for(var j = 0; j < a.verts.length; j++) { 
-		v.x += a.verts[j].x;
-		v.y += a.verts[j].y;
-	}
-	
-	v.x = (1/a.verts.length) * v.x;
-	v.y = (1/a.verts.length) * v.y;
-	
-	return v;
-
-}
-
-module.exports = Centroid;
-
-/***/ }),
-/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -2297,6 +2082,217 @@ Static.SLO = function(S,L,O) {
 module.exports = Static;
 
 /***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Centroid = __webpack_require__(7);
+const Vector = __webpack_require__(3);
+
+const Vertices = {}
+
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(1);
+}
+
+/**
+ * 
+ * Get vertices for a static object representing a regular polygon.
+ * 
+ * @function
+ * @param {PhSim.Static.RegPolygon} regularPolygon - The Static Regular Polygon Object
+ * @returns {PhSim.Vector[]}
+ * 
+ */
+
+Vertices.regPolygon = function(regularPolygon) {
+
+	var a = []
+	
+	var firstAngle = (2*Math.PI)/regularPolygon.sides;
+
+	for(var i = 0; i < regularPolygon.sides; i++) {
+		var x = regularPolygon.x + Math.cos(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
+		var y = regularPolygon.y + Math.sin(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
+		a.push(new Vector(x,y));
+	}
+
+	return a;
+
+}
+
+
+/**
+ * 
+ * Get vertices for a rectangle
+ * 
+ * @function
+ * @param {PhSim.Static.Rectangle} rectangle
+ * @returns {Object[]} 
+ */
+
+Vertices.rectangle = function(rectangle) {
+
+	var a = [
+
+			{
+				"x": rectangle.x,
+				"y": rectangle.y,
+				"topLeft": true
+			},
+	
+			{
+				"x": rectangle.x + rectangle.w,
+				"y": rectangle.y,
+				"topRight": true
+			},
+
+			{
+				"x": rectangle.x + rectangle.w,
+				"y": rectangle.y + rectangle.h,
+				"bottomRight": true
+			},
+	
+			{
+				"x": rectangle.x,
+				"y": rectangle.y + rectangle.h,
+				"bottomLeft": true
+			}
+	
+	];
+
+	if(rectangle.cycle) {
+		Matter.Vertices.rotate(a, rectangle.cycle, Centroid.rectangle(rectangle));
+	}
+
+	return a;
+
+}
+
+/**
+ * 
+ * Get rectangle corners
+ * 
+ * @function
+ * @param {PhSim.Static.Rectangle} rectangle 
+ * @returns {Object}
+ */
+
+
+Vertices.getRectangleCorners = function(rectangle) {
+
+
+	var a = Vertices.rectangle(rectangle)
+
+	
+	var z = {
+
+		"topLeft": a[0],
+
+		"topRight": a[1],
+
+		"bottomLeft": a[3],
+
+		"bottomRight": a[2]
+
+	}
+
+	return z;
+
+}
+
+module.exports = Vertices;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Vector = __webpack_require__(3);
+
+/**
+ * Namespace for functions that get the centroid (the center) of a {@link PhSimObject}.
+ * @memberof PhSim
+ * @namespace
+ */
+
+const Centroid = {}
+
+/**
+ * Get centroid of any shape.
+ * If it is a circle or a regPolygon, then `o` is returned because the properties `x` and
+ * `y` already define the centroid of the object.
+ * 
+ * @param {PhSimObject} o 
+ * @returns {Vector}
+ */
+
+Centroid.shape = function(o) {
+	
+	if(o.shape === "rectangle") {
+		return Centroid.rectangle(o);
+	}
+
+	if(o.shape === "polygon") {
+		return Centroid.polygon(o)
+	}
+
+	if(o.shape === "circle" || o.shape === "regPolygon") {
+		return o;
+	}
+
+}
+
+/**
+ * 
+ * Get centroid of a rectangle
+ * 
+ * @function
+ * @param {PhSim.Static.Rectangle} rectangle
+ * @returns {Vector}
+ *  
+ */
+
+Centroid.rectangle = function(rectangle) {
+	return {
+		"x": rectangle.x + 0.5 * rectangle.w,
+		"y": rectangle.y + 0.5 * rectangle.h
+	}
+}
+
+
+/** 
+ * Find Centroid of a polygon
+ * @function
+ * @param {Polygon} a - Path
+ * @returns {Vector}
+ */
+
+Centroid.polygon = function(a) {
+		
+	var v = new Vector(0,0);
+	
+	for(var j = 0; j < a.verts.length; j++) { 
+		v.x += a.verts[j].x;
+		v.y += a.verts[j].y;
+	}
+	
+	v.x = (1/a.verts.length) * v.x;
+	v.y = (1/a.verts.length) * v.y;
+	
+	return v;
+
+}
+
+module.exports = Centroid;
+
+/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2666,8 +2662,8 @@ module.exports = Gradients;
 /***/ (function(module, exports, __webpack_require__) {
 
 const diagRect = __webpack_require__(12);
-const Static = __webpack_require__(7);
-const Vertices = __webpack_require__(5);
+const Static = __webpack_require__(5);
+const Vertices = __webpack_require__(6);
 
 /**
  * Get bounding box from an array of vectors.
@@ -2680,7 +2676,7 @@ const Vertices = __webpack_require__(5);
 
 const BoundingBox = function(verts) {
 
-	var verts = Object.assign([],verts);
+	verts = Object.assign([],verts);
 
 	verts.sort(function(a,b){
 		return a.x - b.x;
@@ -2765,7 +2761,9 @@ module.exports = BoundingBox;
 
 /***/ }),
 /* 12 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+const Static = __webpack_require__(5);
 
 /**
  * 
@@ -2787,7 +2785,7 @@ var diagRect = function(x1,y1,x2,y2) {
 	var w = x2 - x1;
 	var h = y2 - y1;
 
-    return new PhSim.Static.Rectangle(x1,y1,w,h);
+    return new Static.Rectangle(x1,y1,w,h);
     
  }
 
@@ -3176,6 +3174,16 @@ const PhSim = __webpack_require__(0);
 
 // Try to import matter-js as a commonJS module
 
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(1);
+}
+
 /**
  * Object that registers PhSim as a Matter.js plugin.
  * The modified matter.js object is stored in {@link Matter}
@@ -3205,27 +3213,6 @@ const matterPlugin = {
         //});
 
     },
-
-    /**
-     * Matter namespace for matter.js bodies.
-     * @namespace
-     */
-
-    Body: {
-
-        /**
-         *  
-         * @param {Object} body 
-         */
-
-        init: function(options) {
-            if(options.plugin && options.plugin.dynObject) {
-
-            }
-        }
-
-    },
-
 
     /**
      * Detector patch for Matter.js.
@@ -3300,8 +3287,8 @@ Matter.Plugin.register(PhSim.matterPlugin);
 
 const Gradients = __webpack_require__(10);
 const BoundingBox = __webpack_require__(11);
-const Centroid = __webpack_require__(6);
-const Vertices = __webpack_require__(5);
+const Centroid = __webpack_require__(7);
+const Vertices = __webpack_require__(6);
 
 /** 
  * 
@@ -3418,7 +3405,7 @@ PhRender.prototype.renderPolygon = function (path) {
 	this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
 
 	for(var j = 0; j < path.verts.length; j++) {
-	  this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
+		this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
 	}
 
 	this.ctx.closePath();
@@ -3659,7 +3646,7 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 			this.ctx.restore();	
 		}
 
-		if(rectangle.sprite.fit) {
+		else if(rectangle.sprite.fit) {
 
 			this.ctx.clip();
 
@@ -3751,8 +3738,8 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 	this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
 
-	for(var j = 0; j < vertSet.length; j++) {
-	  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
+	for(let j = 0; j < vertSet.length; j++) {
+		this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
 	}
 
 	this.ctx.closePath();
@@ -3775,8 +3762,8 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 		this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
 	
-		for(var j = 0; j < vertSet.length; j++) {
-		  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
+		for(let j = 0; j < vertSet.length; j++) {
+			this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
 		}
 	
 		this.ctx.closePath();
@@ -3794,9 +3781,9 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 			this.ctx.clip();
 
-			var box = BoundingBox.fromShape(regPolygon);
+			let box = BoundingBox.fromShape(regPolygon);
 
-			var h = img.height * (box.w/img.width);
+			let h = img.height * (box.w/img.width);
 
 			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,box.w,h,0);
 
@@ -3806,8 +3793,8 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 			
 			this.ctx.clip();
 
-			var w = regPolygon.sprite.w || img.width;
-			var h = regPolygon.sprite.h || img.height;
+			let w = regPolygon.sprite.w || img.width;
+			let h = regPolygon.sprite.h || img.height;
 
 			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,w,h,0);
 		}
@@ -3908,7 +3895,7 @@ PhRender.prototype.dynamicSkeleton = function(object) {
 
 		this.ctx.moveTo(object.matter.vertices.x, object.matter.vertices.y);
 
-		for(var j = 0; j < object.matter.vertices.length; j++) {
+		for(let j = 0; j < object.matter.vertices.length; j++) {
 			this.ctx.lineTo(object.matter.vertices[j].x, object.matter.vertices[j].y);
 		}
 
@@ -3942,7 +3929,7 @@ PhRender.prototype.dynamicSkeleton_center = function(object) {
 
 		this.ctx.moveTo(object.matter.vertices.x - object.matter.position.x, object.matter.vertices.y - object.matter.position.y);
 
-		for(var j = 0; j < object.matter.vertices.length; j++) {
+		for(let j = 0; j < object.matter.vertices.length; j++) {
 			this.ctx.lineTo(object.matter.vertices[j].x - object.matter.position.x, object.matter.vertices[j].y - object.matter.position.y);
 		}
 
@@ -4005,7 +3992,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 				this.ctx.restore();
 			}
 
-			if(dynObject.sprite.fit) {
+			else if(dynObject.sprite.fit) {
 
 				this.ctx.save();
 	
@@ -4068,9 +4055,9 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
  * @param {*} L 
  */
 
-PhRender.prototype.dynamicDrawLayer = function(L) {
+PhRender.prototype.dynamicDrawLayer = function(L,sim,simulationI) {
 	
-	for(var i = 0; i < sim.simulations[simulationI].layers[L].length; i++) {
+	for(let i = 0; i < sim.simulations[simulationI].layers[L].length; i++) {
 		this.dynamicRenderDraw(L,i);
 	}
 
@@ -5451,20 +5438,19 @@ PhSim.prototype.deregisterKeyEvents = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 const { ObjLoops } = __webpack_require__(0);
-const DynObject = __webpack_require__(2);
 const Vector = __webpack_require__(3);
 const PhSim = __webpack_require__(0);
 
-// Try to import matter-js as a commonJS module
+var Matter;
 
-try {
-	const Matter = __webpack_require__(1);
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
+else {
+	Matter = __webpack_require__(1);
+}
 	
-}
-
 /**
  * @namespace
  * @memberof PhSim
@@ -5565,17 +5551,17 @@ PhSim.prototype.getUniversalObjArray = function() {
 	
 	var array = []
 	
-	for(var i = 0; i < this.matterJSWorld.composites.length; i++) {
+	for(let i = 0; i < this.matterJSWorld.composites.length; i++) {
 		
 		var a = this.matterJSWorld.composites[i].bodies;
 
-		for(var j = 0; j < a.length; j++) {
+		for(let j = 0; j < a.length; j++) {
 			array.push(a[j]);
 		}
 
 	}
 
-	for(var i = 0; i < this.matterJSWorld.bodies.length; i++) {
+	for(let i = 0; i < this.matterJSWorld.bodies.length; i++) {
 		array.push(this.matterJSWorld.bodies[i]);
 	}
 
@@ -5626,9 +5612,11 @@ PhSim.prototype.getStatic = function(dynObject) {
 
 PhSim.prototype.getObjectByName = function(str) {
 
-
-
-	return null;
+	for(var i = 0; i < this.objUniverse.length; i++) {
+		if(this.objUniverse[i].name === str) {
+			return this.objUniverse[i];
+		}
+	}
 
 }
 
@@ -5639,6 +5627,8 @@ PhSim.prototype.getObjectByName = function(str) {
  */
 
 PhSim.Query.getObjectByName = function(o,str) {
+
+	var x;
 	
 	if(Array.isArray(o)) {
 		for(var i = 0; i < o.length; i++) {
@@ -5651,8 +5641,6 @@ PhSim.Query.getObjectByName = function(o,str) {
 	// Get object by name in static composite simulation object
 
 	else if(Array.isArray(o.simulations)) {
-
-		var x;
 
 		ObjLoops.global(o,function(p){
 			if(p.name === str) {
@@ -5667,8 +5655,6 @@ PhSim.Query.getObjectByName = function(o,str) {
 
 
 	else if(Array.isArray(o.layers)) {
-
-		var x;
 
 		ObjLoops.layer(o,function(p){
 			if(p.name === str) {
@@ -6588,13 +6574,16 @@ const PhSim = __webpack_require__(0);
 
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = __webpack_require__(1);
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = __webpack_require__(1);
 }
+
 
 /**
  * Assign PhRender to PhSim simulation
@@ -6925,12 +6914,14 @@ const PhSim = __webpack_require__(0);
 
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = __webpack_require__(1);
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = __webpack_require__(1);
 }
 
 /*
@@ -7050,7 +7041,7 @@ PhSim.Widgets.playAudio = function(dyn_object,widget) {
         self.playAudioByIndex(i);
     }
 
-    var r = this.createWFunction(dyn_object,f,widget);
+    this.createWFunction(dyn_object,f,widget);
 
     this.audioPlayers++;
 }
@@ -7073,13 +7064,18 @@ PhSim.Widgets.noRotation = function(dyn_object) {
 
 // Try to import matter-js as a commonJS module
 
-try {
-	const Matter = __webpack_require__(1);
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
-	
+else {
+	Matter = __webpack_require__(1);
 }
+
+const PhSim = __webpack_require__(0);
+const Motion = __webpack_require__(4);
 
 /**
  * Create circular constraint
@@ -7109,7 +7105,7 @@ PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
 
 	this.on("afterupdate",function(){
 		var newAngle = Math.atan2(y - dynObject.matter.position.y,x - dynObject.matter.position.x) - relAngle;
-		PhSim.Motion.setAngle(dynObject,newAngle);
+		Motion.setAngle(dynObject,newAngle);
 	});
 
 
@@ -7203,6 +7199,8 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
     var self = this;
 
+    var getFunction;
+
     var o = {
         velocity: widget.vector
     }
@@ -7211,7 +7209,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
     if(widget.trigger === "time") {
     
-        var getFunction = function() {
+        getFunction = function() {
 
             var time = widget.time;
             var maxN = widget.maxN;
@@ -7220,7 +7218,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
             if(Number.isInteger(maxN)) {
 
-                func = function(e) {
+                func = function() {
 
                     if(func.__n === maxN) {
                         clearInterval(func.__interN);
@@ -7241,7 +7239,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
             else {
 
-                func = function(e) {
+                func = function() {
                     if(!self.paused) {
                         self.cloneObject(dyn_object,o);
                     }
@@ -7267,10 +7265,9 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 
     if(widget.trigger === "key") {
 
-        var getFunction = function() {
+        getFunction = function() {
 
             var kc = widget.key;
-            var vc = widget.vector;
 
             var cloneByKeyFunc = function(e) {
                 if(e.key === kc) {
@@ -7293,6 +7290,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 /***/ (function(module, exports, __webpack_require__) {
 
 const Motion = __webpack_require__(4);
+const PhSim = __webpack_require__(0);
 
 // Try to import matter-js as a commonJS module
 
@@ -7314,11 +7312,11 @@ else {
  * @param {*} widget 
  */
 
-PhSim.Widgets.draggable = function(dyn_object,widget) {
+PhSim.Widgets.draggable = function(dyn_object) {
 
     var self = this;
     
-    var func = function(e) {
+    var func = function() {
 
         // Displacement vector between mouse and centroid of object when the mouse is pushed downwards.
 
@@ -7622,7 +7620,7 @@ PhSim.Widgets.rotation = function(dynObject,widget) {
     }
 
     else {
-    	f = this.createMotionFunction("rotation",dynObject,widget.cycle);
+		f = this.createMotionFunction("rotation",dynObject,widget.cycle);
     }
     
     this.createWFunction(dynObject,f,widget);
@@ -7638,12 +7636,14 @@ PhSim.Widgets.rotation = function(dynObject,widget) {
 
 PhSim.Widgets.setAngle = function(dynObject,widget) {
 
+	var f;
+
     if(widget.circularConstraintRotation) {
-        var f = this.createMotionFunction("circular_constraint_setAngle",dynObject,widget.cycle);
+        f = this.createMotionFunction("circular_constraint_setAngle",dynObject,widget.cycle);
     }
 
     else {
-        var f = this.createMotionFunction("setAngle",dynObject,widget.cycle);
+		f = this.createMotionFunction("setAngle",dynObject,widget.cycle);
     }
     
     this.createWFunction(dynObject,f,widget);
@@ -7662,7 +7662,7 @@ PhSim.Widgets.force = function(dyn_object,widget) {
 
     var f = this.createMotionFunction("force",dyn_object,widget.vector);
 
-    this.createWFunction(dynObject,f,widget);
+    this.createWFunction(dyn_object,f,widget);
     
 }
 
@@ -7701,17 +7701,17 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 PhSim.Widgets.objLink = function(dyn_object,widget) {
 
     var self = this;
-    
+    var targetObj;
     var widgetO = widget;
 
     this.on("load",function(){
 
         if(typeof widget.target.L === "number" && typeof widget.target.O === "number") {
-            var targetObj = self.LO(widgetO.target.L,widgetO.target.O);
+            targetObj = self.LO(widgetO.target.L,widgetO.target.O);
         }
 
         else if(widget.target instanceof DynObject) {
-            var targetObj = widget.target;     
+            targetObj = widget.target;     
         }
     
         var eventFunc = function(){
@@ -7918,10 +7918,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	 * @type {WFunction}
 	 */
 
-    var wFunction = function(e) {
+    var wFunction = function(event) {
 
 		try {
-			return wFunctionBody.apply(thisRef,e);
+			return wFunctionBody.apply(thisRef,event);
 		}
 
 		catch(e) {
@@ -7964,8 +7964,6 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	}
 
 	else if(options.trigger === "sensor" || options.trigger === "sensor_global") {
-
-		var self = this;
 
 		if(options.trigger === "sensor") {
 			
@@ -8099,30 +8097,32 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		var getFunction = function() {
 
+			var fn;
+
 			if(Number.isInteger(options.maxN)) {
 
-				func = function(e) {
+				fn = function() {
 
-					if(func.__n === options.maxN) {
-						clearInterval(func.__interN);
+					if(fn.__n === options.maxN) {
+						clearInterval(fn.__interN);
 					}
 
 					else {
 						if(!self.paused) {
 							wFunction();
-							func.__n++;
+							fn.__n++;
 						}
 					}
 
 				}
 
-				func.__n = 0;
+				fn.__n = 0;
 
 			}
 
 			else {
 
-				func = function(e) {
+				fn = function() {
 					if(!self.paused) {
 						wFunction();
 					}
@@ -8131,10 +8131,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			}
 
 
-			func.__phtime = options.time;
-			func.__interN = null;
+			fn.__phtime = options.time;
+			fn.__interN = null;
 
-			return func;
+			return fn;
 
 		}
 
@@ -8204,10 +8204,6 @@ PhSim.prototype.disableWFunction = function(o) {
 		clearInterval(o._ref)
 	}
 
-	else if(o._options.trigger === "time") {
-		clearInterval(o._ref)
-	}
-
 	else if(o._options.trigger === "objlink") {
 		var i = o._thisRef.objLinkFunctions.indexOf(o)
 		o._thisRef.objLinkFunctions.splice(i,1);
@@ -8241,6 +8237,7 @@ PhSim.prototype.wFunctionNames = {}
 
 const Motion = __webpack_require__(4);
 const Vector = __webpack_require__(3);
+const PhSim = __webpack_require__(0);
 
 // Try to import matter-js as a commonJS module
 
@@ -8274,8 +8271,6 @@ else {
 
 PhSim.Widgets.elevator = function(dyn_object,widget) {
             
-    var self = this;
-    
     var func = function() {
     
         var bounding = widget.bounding;
@@ -8540,8 +8535,6 @@ PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
         
 PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
 
-    var self = this;
-
     var f = function(){
         PhSim.DynObject.setLineWidth(dyn_object,widget.width);
     }
@@ -8551,7 +8544,9 @@ PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
 
 /***/ }),
 /* 45 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+const PhSim = __webpack_require__(0);
 
 /**
  * 
@@ -8638,6 +8633,18 @@ PhSim.Widgets.stack = function(o,w) {
 const Vector = __webpack_require__(3);
 const DynObject = __webpack_require__(2);
 
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(1);
+}
+
 /**
  * 
  * 
@@ -8697,7 +8704,7 @@ function constraint(phsim,widget) {
                 }
     
                 else {
-                    b.bodyA = optionMap.get(widget.objectA).matter;
+                    b.bodyA = phsim.optionMap.get(widget.objectA).matter;
                 }
     
             }
@@ -8718,7 +8725,7 @@ function constraint(phsim,widget) {
                 }
     
                 else {
-                    b.bodyB = optionMap.get(widget.objectB).matter;
+                    b.bodyB = phsim.optionMap.get(widget.objectB).matter;
                 }
     
             }
@@ -8750,7 +8757,7 @@ function constraint(phsim,widget) {
 
     }
 
-    if(positon === "relative") {
+    if(position === "relative") {
         b.pointA = widget.pointA;
         b.pointB = widget.pointB;
         b.bodyA = widget.objectA.plugin.dynObject;
@@ -8969,14 +8976,12 @@ PhSim.prototype.addLocalMagicalWord = function(name,call) {
 
 PhSim.prototype.processVar = function(str) {
 
-	var str = str;
-
 	var magicWordKeys = Object.keys(PhSim.MagicWords);
 
-	for(var i = 0; i < magicWordKeys.length; i++) {
+	for(let i = 0; i < magicWordKeys.length; i++) {
 
-		var magicWord = magicWordKeys[i];
-		var mgkWordRegex = new RegExp("{" + magicWord + "}","g");
+		let magicWord = magicWordKeys[i];
+		let mgkWordRegex = new RegExp("{" + magicWord + "}","g");
 
 		if(str.search(mgkWordRegex) !== -1) {
 
@@ -8985,13 +8990,13 @@ PhSim.prototype.processVar = function(str) {
 
 	}
 
-	var a = Object.keys(this.vars);
+	let a = Object.keys(this.vars);
 
-	for(var i = 0; i < a.length; i++) {
+	for(let i = 0; i < a.length; i++) {
 
-		var v = "\\$\\{" + a[i] + "\\}";
-		var regex = new RegExp(v,"g");
-		var s = str.search(regex);
+		let v = "\\$\\{" + a[i] + "\\}";
+		let regex = new RegExp(v,"g");
+		let s = str.search(regex);
 
 		if(s !== -1) {
 			str = str.replace(regex,this.vars[ a[i] ]);
