@@ -359,7 +359,7 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 			this.ctx.restore();	
 		}
 
-		if(rectangle.sprite.fit) {
+		else if(rectangle.sprite.fit) {
 
 			this.ctx.clip();
 
@@ -705,7 +705,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 				this.ctx.restore();
 			}
 
-			if(dynObject.sprite.fit) {
+			else if(dynObject.sprite.fit) {
 
 				this.ctx.save();
 	

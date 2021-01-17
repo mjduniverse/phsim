@@ -186,10 +186,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	 * @type {WFunction}
 	 */
 
-    var wFunction = function(e) {
+    var wFunction = function(event) {
 
 		try {
-			return wFunctionBody.apply(thisRef,e);
+			return wFunctionBody.apply(thisRef,event);
 		}
 
 		catch(e) {
@@ -365,32 +365,32 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		var getFunction = function() {
 
-			var f;
+			var fn;
 
 			if(Number.isInteger(options.maxN)) {
 
-				f = function() {
+				fn = function() {
 
-					if(f.__n === options.maxN) {
-						clearInterval(f.__interN);
+					if(fn.__n === options.maxN) {
+						clearInterval(fn.__interN);
 					}
 
 					else {
 						if(!self.paused) {
 							wFunction();
-							f.__n++;
+							fn.__n++;
 						}
 					}
 
 				}
 
-				f.__n = 0;
+				fn.__n = 0;
 
 			}
 
 			else {
 
-				f = function() {
+				fn = function() {
 					if(!self.paused) {
 						wFunction();
 					}
@@ -399,10 +399,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			}
 
 
-			f.__phtime = options.time;
-			f.__interN = null;
+			fn.__phtime = options.time;
+			fn.__interN = null;
 
-			return f;
+			return fn;
 
 		}
 
