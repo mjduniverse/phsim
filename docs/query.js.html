@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="matterPlugin.Body.html">matterPlugin.Body</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
+					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
 				</ul>
 			</li>
 			
@@ -48,6 +48,13 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Audio.AudioArray.html">PhSim.Audio.AudioArray</a></li><li><a href="PhSim.BoundingBox.html">PhSim.BoundingBox</a></li><li><a href="PhSim.Camera.html">PhSim.Camera</a></li><li><a href="PhSim.DynObject.html">PhSim.DynObject</a></li><li><a href="PhSim.Events.PhSimCollision.html">PhSim.Events.PhSimCollision</a></li><li><a href="PhSim.Events.PhSimDynEvent.html">PhSim.Events.PhSimDynEvent</a></li><li><a href="PhSim.Events.PhSimEvent.html">PhSim.Events.PhSimEvent</a></li><li><a href="PhSim.Events.PhSimEventKey.html">PhSim.Events.PhSimEventKey</a></li><li><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></li><li><a href="PhSim.EventStack.html">PhSim.EventStack</a></li><li><a href="PhSim.Game.html">PhSim.Game</a></li><li><a href="PhSim.Game.Options.html">PhSim.Game.Options</a></li><li><a href="PhSim.PhRender.html">PhSim.PhRender</a></li><li><a href="PhSim.Sprites.spriteImgObj.html">PhSim.Sprites.spriteImgObj</a></li><li><a href="PhSim.Static.html">PhSim.Static</a></li><li><a href="PhSim.Static.Camera.html">PhSim.Static.Camera</a></li><li><a href="PhSim.Static.Circle.html">PhSim.Static.Circle</a></li><li><a href="PhSim.Static.Gradient.html">PhSim.Static.Gradient</a></li><li><a href="PhSim.Static.GradientLimits.html">PhSim.Static.GradientLimits</a></li><li><a href="PhSim.Static.GradientStop.html">PhSim.Static.GradientStop</a></li><li><a href="PhSim.Static.Layer.html">PhSim.Static.Layer</a></li><li><a href="PhSim.Static.Polygon.html">PhSim.Static.Polygon</a></li><li><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></li><li><a href="PhSim.Static.RegPolygon.html">PhSim.Static.RegPolygon</a></li><li><a href="PhSim.Static.SimBox.html">PhSim.Static.SimBox</a></li><li><a href="PhSim.Static.Simulation.html">PhSim.Static.Simulation</a></li><li><a href="PhSim.Vector.html">PhSim.Vector</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="mixins.list.html" class="dropdown-toggle" data-toggle="dropdown">Mixins<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="PhSim.Game.Widgets.html">PhSim.Game.Widgets</a></li><li><a href="PhSim.PhSimEventTarget.html">PhSim.PhSimEventTarget</a></li>
 				</ul>
 			</li>
 			
@@ -68,7 +75,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#DynObject">DynObject</a></li>
+					<li><a href="global.html">Global</a></li>
 				</ul>
 			</li>
 			
@@ -112,19 +119,20 @@
 <section>
     <article>
         <pre
-            class="sunlight-highlight-javascript ">const DynObject = require("./dynObject");
+            class="sunlight-highlight-javascript ">const { ObjLoops } = require(".");
 const Vector = require("./tools/vector");
+const PhSim = require("./index");
 
-// Try to import matter-js as a commonJS module
+var Matter;
 
-try {
-	const Matter = require("matter-js");
+if(typeof window === "object") {
+	Matter = window.Matter;
 }
 
-catch {
+else {
+	Matter = require("matter-js");
+}
 	
-}
-
 /**
  * @namespace
  * @memberof PhSim
@@ -182,7 +190,16 @@ PhSim.Query.getSpecialRectanglePoints = function(rectangle) {
  */
 
 PhSim.prototype.getStatusStr = function() {
-	return PhSim.statusStruct[this.status];
+	return PhSim.Query.getStatusStr(this);
+}
+
+/**
+ * Get the status string of a PhSim instance.
+ * @param {PhSim} dynObject 
+ */
+
+PhSim.Query.getStatusStr = function(phSim) {
+	return PhSim.statusStruct[phSim.status];
 }
 
 /**
@@ -216,17 +233,17 @@ PhSim.prototype.getUniversalObjArray = function() {
 	
 	var array = []
 	
-	for(var i = 0; i &lt; this.matterJSWorld.composites.length; i++) {
+	for(let i = 0; i &lt; this.matterJSWorld.composites.length; i++) {
 		
 		var a = this.matterJSWorld.composites[i].bodies;
 
-		for(var j = 0; j &lt; a.length; j++) {
+		for(let j = 0; j &lt; a.length; j++) {
 			array.push(a[j]);
 		}
 
 	}
 
-	for(var i = 0; i &lt; this.matterJSWorld.bodies.length; i++) {
+	for(let i = 0; i &lt; this.matterJSWorld.bodies.length; i++) {
 		array.push(this.matterJSWorld.bodies[i]);
 	}
 
@@ -268,7 +285,7 @@ PhSim.prototype.getStatic = function(dynObject) {
 }
 
 /**
- * Get object by name
+ * Get object by name in PhSim simulation
  * 
  * @function
  * @param {String} str - String for the name
@@ -283,7 +300,59 @@ PhSim.prototype.getObjectByName = function(str) {
 		}
 	}
 
-	return null;
+}
+
+/**
+ * Get Object By Name
+ * @param {Simulation|Layer|PhSimObject[]} o 
+ * @param {string} str - Name of Object
+ */
+
+PhSim.Query.getObjectByName = function(o,str) {
+
+	var x;
+	
+	if(Array.isArray(o)) {
+		for(var i = 0; i &lt; o.length; i++) {
+			if(o.name === str) {
+				return o[i];
+			}
+		}
+	}
+	
+	// Get object by name in static composite simulation object
+
+	else if(Array.isArray(o.simulations)) {
+
+		ObjLoops.global(o,function(p){
+			if(p.name === str) {
+				x = p;
+			}
+		}) 
+
+		return x;
+	}
+
+	// Get object by name in simulation object with layers
+
+
+	else if(Array.isArray(o.layers)) {
+
+		ObjLoops.layer(o,function(p){
+			if(p.name === str) {
+				x = p;
+			}
+		}) 
+
+		return x;
+
+	}
+
+	// Get object by name in simulation object with objUniverse
+
+	else if(Array.isArray(o.objUniverse)) {
+		PhSim.Query.getObjectByName(o.objUniverse,str); 
+	}
 
 }
 
@@ -517,29 +586,42 @@ PhSim.prototype.pointObjArray = function(x,y) {
 
 PhSim.prototype.getCollisionList = function(dynObject) {
 
-	var z = [];
+	var a = [];
+
+	this.matterJSEngine.pairs.list.forEach(function(c){
+		if(c.bodyA.plugin.dynObject === dynObject || c.bodyB.plugin.dynObject === dynObject) {
+			var p = new PhSim.Events.PhSimCollision();
+			p.bodyA = c.bodyA.plugin.dynObject;
+			p.bodyB = c.bodyA.plugin.dynObject;
+			p.matter = c;
+			a.push(p);
+		}
+	});
+
+	return a;
+
+}
+
+PhSim.prototype.getCollidingMatterBodies = function(body) {
+
+	var a = [];
 
 	for(var i = 0; i &lt; this.matterJSEngine.pairs.list.length; i++) {
-
-		var a = this.matterJSEngine.pairs.list[i];
-
-		if(a.bodyA.parent === a.bodyA &amp;&amp; a.bodyB.parent === a.bodyB) {
-
-			if(a.bodyA.plugin.dynObject.id === dynObject.id || a.bodyB.plugin.dynObject.id === dynObject.id) {
-			
-				var o = new PhSim.Events.PhSimCollision;
-				o.bodyA = a.bodyA.plugin.dynObject;
-				o.bodyB = a.bodyB.plugin.dynObject;
-				o.matter = a;
-				z.push(o);
 		
-			}
+		var o = this.matterJSEngine.pairs.list[i];
 
+		if(o.bodyA === body) {
+			a.push(o.bodyB);
 		}
 
+		if(o.bodyB === body) {
+			a.push(o.bodyA);
+		}
+	
 	}
 
-	return z;
+	return a;
+
 }
 
 /**
@@ -608,6 +690,14 @@ PhSim.Query.sameSensorClasses = function(dynObjectA,dynObjectB) {
 	return PhSim.Query.intersectionExists(PhSim.Query.getSensorClasses(dynObjectA),PhSim.Query.getSensorClasses(dynObjectB));
 }
 
+/**
+ * Sees if `array1` and `array2` share at least one element.
+ * 
+ * @param {Array} array1 
+ * @param {Array} array2
+ * @returns {Boolean} 
+ */
+
 PhSim.Query.intersectionExists = function(array1,array2) {
 
 	for(var i = 0; i &lt; array1.length; i++) {
@@ -622,7 +712,41 @@ PhSim.Query.intersectionExists = function(array1,array2) {
 
 /**
  * 
- * Get objects colliding some object that share the same 
+ * Get objects colliding some object that share the same sensor classes.
+ * 
+ * @function
+ * @param {PhSim} phSim - PhSim instance
+ * @param {PhSim.DynObject} dynObject - Object to check for colliding sensor objects
+ * @returns {PhSim.DynObject[]} 
+ */
+
+PhSim.Query.getCollidingSensorObjects = function(phSim,dynObject) {
+
+	var a = phSim.getCollisionList(dynObject);
+	var b = []
+
+	for(var i = 0; i &lt; a.length; i++) {
+
+		var dynCol = a[i]
+		var matterCol = dynCol.matter;
+
+		if(matterCol.bodyA.plugin.dynObject.id === dynObject.id &amp;&amp; PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyB)) {
+			b.push(dynCol.bodyB);
+		}
+
+		if(matterCol.bodyB.plugin.dynObject.id === dynObject.id &amp;&amp; PhSim.Query.sameSensorClasses(dynObject,dynCol.bodyA)) {
+			b.push(dynCol.bodyA);		
+		}
+
+	}
+
+	return b;
+}
+
+/**
+ * 
+ * Get objects colliding some object that share the same sensor classes.
+ * 
  * 
  * @function
  * @param {PhSim.DynObject} dynObject - Object to check for colliding sensor objects
@@ -630,7 +754,8 @@ PhSim.Query.intersectionExists = function(array1,array2) {
  */
 
 PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
-	
+	//return PhSim.Query.getCollidingSensorObjects(this,dynObject)
+
 	var a = this.getCollisionList(dynObject);
 	var b = []
 
@@ -650,7 +775,6 @@ PhSim.prototype.getCollidingSensorObjects = function(dynObject) {
 	}
 
 	return b;
-
 }
 
 /**
@@ -779,7 +903,7 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2021-01-03T14:50:53-06:00
+		on 2021-01-19T16:51:40-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

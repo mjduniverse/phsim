@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>PhSim Source: matterPlugin.js</title>
+	<title>PhSim Mixin: PhSimEventTarget</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -109,130 +109,723 @@
 <div class="row">
 
 	
-	<div class="col-md-12">
+	<div class="col-md-8">
 	
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: matterPlugin.js</h1>
-    
+	<h1 class="page-title">Mixin: PhSimEventTarget</h1>
 <section>
-    <article>
-        <pre
-            class="sunlight-highlight-javascript ">const DynObject = require("./dynObject");
-const PhSim = require(".");
 
-// Try to import matter-js as a commonJS module
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="PhSim.html">PhSim</a>.</span>
+        
+        PhSimEventTarget
+        </h2>
+        
+    
+</header>
 
-var Matter;
 
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
+<article>
+    <div class="container-overview">
+    
+        
 
-else {
-	Matter = require("matter-js");
-}
+        
+<dl class="details">
+    
 
-/**
- * Object that registers PhSim as a Matter.js plugin.
- * The modified matter.js object is stored in {@link Matter}
- * @namespace
- * 
- */
+	
 
-const matterPlugin = {
+	
 
-    name: "phsim",
+	
 
-    version: "0.1.0",
+    
 
-    /**
-     * Installation function for plugin
-     * @param {Matter} matter 
-     */
+    
 
-    install: function(matter) {
+    
 
-        matter.after('Detector.collisions',function(){
-            matterPlugin.Detector.collisions.call(this,arguments);
-        });
+    
 
-        //matter.after('Body.create',function(options){
-          //  matterPlugin.Body.init(options)
-        //});
+	
 
-    },
+	
 
-    /**
-     * Detector patch for Matter.js.
-     * 
-     * 
-     */
+	
 
-    Detector: {
+	
 
-        /**
-         * Matter.Detector.collisions patch for Matter.js.
-         * This modifies the function for checking collisions in Matter.js.
-         * @function 
-         */
+	
 
-        collisions: function() {
 
-            for(var i = 0; i &lt; this.length; i++) {
 
-                var bodyA = this[i].bodyA;
-                var bodyB = this[i].bodyB;
-                var c_classesA;
-                var c_classesB;
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="events_eventListener.js.html">events/eventListener.js</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-                if(bodyA.parent === bodyA) {
-                    if(bodyA.plugin.dynObject instanceof DynObject) {
-                        c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.dynObject);
-                    }
-                }
+	
+
+	
+
+	
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id=".callEventClass"><span class="type-signature">&lt;static> </span>callEventClass(event)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
                 
-                else {
-                    c_classesA = PhSim.Query.getCollisionClasses(bodyA.parent.plugin.dynObject);
-                }
-
-                if(bodyB.parent === bodyB) {
-                    if(bodyB.plugin.dynObject instanceof DynObject) {
-                        c_classesB = PhSim.Query.getCollisionClasses(bodyB.plugin.dynObject);
-                    }    
-                }
-
-                else {
-                    c_classesB = PhSim.Query.getCollisionClasses(bodyB.parent.plugin.dynObject);                    
-                }
-
-                if(c_classesA.length > 0 &amp;&amp; c_classesB.length > 0) {
-                    if(!PhSim.Query.intersectionExists(c_classesA,c_classesB)) {
-
-                        this.splice(this.indexOf(this[i]),1);
-
-                        // Reset index to zero to make sure all collisions
-                        // that have no collision classes in common get removed
-
-                        i = 0;
-                    }
-                }
+<span class="param-type"><a href="PhSim.Events.PhSimEvent.html">PhSim.Events.PhSimEvent</a></span>
 
 
-            }
 
-        }
-    }
+            
+            </td>
 
-}
+            
 
-PhSim.matterPlugin = matterPlugin;
+            
 
-Matter.Plugin.register(PhSim.matterPlugin); </pre>
-    </article>
+            <td class="description last"><p>Event Object</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="events_eventListener.js.html">events/eventListener.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".off"><span class="type-signature">&lt;static> </span>off(eventStr, call)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventStr</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>call</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#PhSimEventCall">PhSimEventCall</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="events_eventListener.js.html">events/eventListener.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".on"><span class="type-signature">&lt;static> </span>on(eventStr, call [, options])</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Used to add events to a PhSim simulation</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventStr</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>String representing the event.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>call</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#PhSimEventCall">PhSimEventCall</a></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Function to run when event is executed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last"><p>Event Listener Options.</p>
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>once</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If true, the function is executed only once.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>slEvent</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If true, the event will be removed when the simulation changes</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="events_eventListener.js.html">events/eventListener.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
 </section>
-
 
 
 
@@ -242,6 +835,10 @@ Matter.Plugin.register(PhSim.matterPlugin); </pre>
 
 	<div class="clearfix"></div>
 
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
 	
 
 </div>
@@ -274,7 +871,7 @@ Matter.Plugin.register(PhSim.matterPlugin); </pre>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2021-01-19T16:51:40-06:00
+		on 2021-01-19T16:51:41-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

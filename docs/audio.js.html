@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="matterPlugin.Body.html">matterPlugin.Body</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
+					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
 				</ul>
 			</li>
 			
@@ -48,6 +48,13 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Audio.AudioArray.html">PhSim.Audio.AudioArray</a></li><li><a href="PhSim.BoundingBox.html">PhSim.BoundingBox</a></li><li><a href="PhSim.Camera.html">PhSim.Camera</a></li><li><a href="PhSim.DynObject.html">PhSim.DynObject</a></li><li><a href="PhSim.Events.PhSimCollision.html">PhSim.Events.PhSimCollision</a></li><li><a href="PhSim.Events.PhSimDynEvent.html">PhSim.Events.PhSimDynEvent</a></li><li><a href="PhSim.Events.PhSimEvent.html">PhSim.Events.PhSimEvent</a></li><li><a href="PhSim.Events.PhSimEventKey.html">PhSim.Events.PhSimEventKey</a></li><li><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></li><li><a href="PhSim.EventStack.html">PhSim.EventStack</a></li><li><a href="PhSim.Game.html">PhSim.Game</a></li><li><a href="PhSim.Game.Options.html">PhSim.Game.Options</a></li><li><a href="PhSim.PhRender.html">PhSim.PhRender</a></li><li><a href="PhSim.Sprites.spriteImgObj.html">PhSim.Sprites.spriteImgObj</a></li><li><a href="PhSim.Static.html">PhSim.Static</a></li><li><a href="PhSim.Static.Camera.html">PhSim.Static.Camera</a></li><li><a href="PhSim.Static.Circle.html">PhSim.Static.Circle</a></li><li><a href="PhSim.Static.Gradient.html">PhSim.Static.Gradient</a></li><li><a href="PhSim.Static.GradientLimits.html">PhSim.Static.GradientLimits</a></li><li><a href="PhSim.Static.GradientStop.html">PhSim.Static.GradientStop</a></li><li><a href="PhSim.Static.Layer.html">PhSim.Static.Layer</a></li><li><a href="PhSim.Static.Polygon.html">PhSim.Static.Polygon</a></li><li><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></li><li><a href="PhSim.Static.RegPolygon.html">PhSim.Static.RegPolygon</a></li><li><a href="PhSim.Static.SimBox.html">PhSim.Static.SimBox</a></li><li><a href="PhSim.Static.Simulation.html">PhSim.Static.Simulation</a></li><li><a href="PhSim.Vector.html">PhSim.Vector</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="mixins.list.html" class="dropdown-toggle" data-toggle="dropdown">Mixins<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="PhSim.Game.Widgets.html">PhSim.Game.Widgets</a></li><li><a href="PhSim.PhSimEventTarget.html">PhSim.PhSimEventTarget</a></li>
 				</ul>
 			</li>
 			
@@ -68,7 +75,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#DynObject">DynObject</a></li>
+					<li><a href="global.html">Global</a></li>
 				</ul>
 			</li>
 			
@@ -112,7 +119,9 @@
 <section>
     <article>
         <pre
-            class="sunlight-highlight-javascript ">/**
+            class="sunlight-highlight-javascript ">const PhSim = require(".");
+
+/**
  * @namespace
  * @memberof PhSim
  */
@@ -168,6 +177,134 @@ Audio.AudioArray = function(p_audio,onload) {
 
 }
 
+/**
+ * Play audio by index.
+ * Alternative function: {@link PhSim#playAudioByIndex}
+ * 
+ * @function 
+ * @param {PhSim} phsim - PhSim instance.
+ * @param {Number} i - Index in audio array.
+ * @returns {Promise} - Promise that is fulfilled when the audio is played. 
+ */
+
+Audio.playAudioByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].play();
+}
+
+/**
+ * Play audio by index
+ * Alternative function: {@link PhSim.Audio#playAudioByIndex}
+ * 
+ * @function 
+ * @param {PhSim} phsim - PhSim instance.
+ * @param {Number} i - Index in audio array.
+ * @returns {Promise} - Promise that is fulfilled when the audio is played.  
+ */
+
+PhSim.prototype.playAudioByIndex = function(i) {
+	Audio.playAudioByIndex(this,i);
+};
+
+/**
+ * Pause audio by index.
+ * Alternative function: {@link PhSim#pauseAudioByIndex}
+ * @function
+ * @param {PhSim} phsim - PhSim instance.
+ * @param {Number} i 
+ */
+
+Audio.pauseAudioByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].pause();
+}
+
+/**
+ * Pause audio by index.
+ * Alternative function: {@link PhSim.Audio#pauseAudioByIndex}
+ * @function
+ * @param {Number} i 
+ */
+
+PhSim.prototype.pauseAudioByIndex = function(i) {
+	return Audio.pauseAudioByIndex(this,i);
+}
+
+/**
+ * Set volume by index
+ * Alternative function: {@link PhSim#setAudioVolByIndex}
+ * @function
+ * @param {PhSim} phsim - PhSim instance
+ * @param {Number} i - Index
+ * @param {Number} v - Volume
+ */
+
+Audio.setAudioVolByIndex = function(phsim,i,v) {
+	return phsim.audioArray.array[i].volume = v;
+}
+
+/**
+ * Set volume by index
+ * Alternative function: {@link PhSim.Audio#setAudioVolByIndex}
+ * @function
+ * @param {Number} i - Index
+ * @param {Number} v - Volume
+ */
+
+PhSim.prototype.setAudioVolByIndex = function(i,v) {
+	return Audio.setAudioVolByIndex(this,i,v);
+}
+
+
+/**
+ * 
+ * Mute the `i`th element of the audio array.
+ * 
+ * Alternative function: {@link PhSim#setAudioMuteByIndex}
+ * 
+ * @function
+ * @param {Number} i
+ * @param {PhSim} phsim - PhSim instance 
+ */
+
+Audio.setAudioMuteByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].muted = true;
+}
+
+/**
+ * 
+ * Mute the `i`th element of the audio array.
+ * 
+ * Alternative function: {@link PhSim.Audio#setAudioMuteByIndex}
+ * 
+ * @function
+ * @param {PhSim} phsim - PhSim instance 
+ */
+
+PhSim.prototype.setAudioMuteByIndex = function(i) {
+	return Audio.setAudioMuteByIndex(this,i);
+}
+
+/**
+ * @function
+ * @param {PhSIm} phsim - PhSim instance
+ * @param {Number} i - Index number
+ * @returns {Boolean} - True if paused, false otherwise.
+ */
+
+
+Audio.toggleAudioByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].muted = !phsim.audioArray.array[i].muted;
+}
+
+/**
+ * @function
+ * @param {Number} i
+ * @returns {Boolean} - True if paused, false otherwise.
+ */
+
+PhSim.prototype.toggleAudioByIndex = function(i) {
+	return Audio.toggleAudioByIndex(this,i);
+}
+
 module.exports = Audio;</pre>
     </article>
 </section>
@@ -213,7 +350,7 @@ module.exports = Audio;</pre>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2021-01-03T14:50:53-06:00
+		on 2021-01-19T16:51:40-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

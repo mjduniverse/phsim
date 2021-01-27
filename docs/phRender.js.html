@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="matterPlugin.Body.html">matterPlugin.Body</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
+					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
 				</ul>
 			</li>
 			
@@ -48,6 +48,13 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Audio.AudioArray.html">PhSim.Audio.AudioArray</a></li><li><a href="PhSim.BoundingBox.html">PhSim.BoundingBox</a></li><li><a href="PhSim.Camera.html">PhSim.Camera</a></li><li><a href="PhSim.DynObject.html">PhSim.DynObject</a></li><li><a href="PhSim.Events.PhSimCollision.html">PhSim.Events.PhSimCollision</a></li><li><a href="PhSim.Events.PhSimDynEvent.html">PhSim.Events.PhSimDynEvent</a></li><li><a href="PhSim.Events.PhSimEvent.html">PhSim.Events.PhSimEvent</a></li><li><a href="PhSim.Events.PhSimEventKey.html">PhSim.Events.PhSimEventKey</a></li><li><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></li><li><a href="PhSim.EventStack.html">PhSim.EventStack</a></li><li><a href="PhSim.Game.html">PhSim.Game</a></li><li><a href="PhSim.Game.Options.html">PhSim.Game.Options</a></li><li><a href="PhSim.PhRender.html">PhSim.PhRender</a></li><li><a href="PhSim.Sprites.spriteImgObj.html">PhSim.Sprites.spriteImgObj</a></li><li><a href="PhSim.Static.html">PhSim.Static</a></li><li><a href="PhSim.Static.Camera.html">PhSim.Static.Camera</a></li><li><a href="PhSim.Static.Circle.html">PhSim.Static.Circle</a></li><li><a href="PhSim.Static.Gradient.html">PhSim.Static.Gradient</a></li><li><a href="PhSim.Static.GradientLimits.html">PhSim.Static.GradientLimits</a></li><li><a href="PhSim.Static.GradientStop.html">PhSim.Static.GradientStop</a></li><li><a href="PhSim.Static.Layer.html">PhSim.Static.Layer</a></li><li><a href="PhSim.Static.Polygon.html">PhSim.Static.Polygon</a></li><li><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></li><li><a href="PhSim.Static.RegPolygon.html">PhSim.Static.RegPolygon</a></li><li><a href="PhSim.Static.SimBox.html">PhSim.Static.SimBox</a></li><li><a href="PhSim.Static.Simulation.html">PhSim.Static.Simulation</a></li><li><a href="PhSim.Vector.html">PhSim.Vector</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="mixins.list.html" class="dropdown-toggle" data-toggle="dropdown">Mixins<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="PhSim.Game.Widgets.html">PhSim.Game.Widgets</a></li><li><a href="PhSim.PhSimEventTarget.html">PhSim.PhSimEventTarget</a></li>
 				</ul>
 			</li>
 			
@@ -68,7 +75,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#DynObject">DynObject</a></li>
+					<li><a href="global.html">Global</a></li>
 				</ul>
 			</li>
 			
@@ -112,7 +119,12 @@
 <section>
     <article>
         <pre
-            class="sunlight-highlight-javascript ">/** 
+            class="sunlight-highlight-javascript ">const Gradients = require("./gradient");
+const BoundingBox = require("./tools/boundingBox");
+const Centroid = require("./tools/centroid");
+const Vertices = require("./tools/vertex");
+
+/** 
  * 
  * PhRender constructor
  * PhRender is the rendering engine for PhSim.
@@ -217,6 +229,9 @@ PhRender.prototype.unsetCtx = function() {
 
 PhRender.prototype.renderPolygon = function (path) {
 
+	var w;
+	var h;
+
 	this.setCtx(path);
 
 	this.ctx.beginPath();
@@ -224,7 +239,7 @@ PhRender.prototype.renderPolygon = function (path) {
 	this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
 
 	for(var j = 0; j &lt; path.verts.length; j++) {
-	  this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
+		this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
 	}
 
 	this.ctx.closePath();
@@ -236,66 +251,57 @@ PhRender.prototype.renderPolygon = function (path) {
 
 		var img = this.spriteImgObj[path.sprite.src];
 
-		var centroid = findCentroidOfPath(path);
+		var centroid = Centroid.polygon(path);
 
 		this.ctx.imageSmoothingEnabled = path.sprite.smooth;
 
+		this.ctx.save();
+
+		this.ctx.beginPath();
+
+		this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
+
+		for(let j = 0; j &lt; path.verts.length; j++) {
+			this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
+		}
+
+		this.ctx.closePath();
+
+		this.ctx.translate(centroid.x,centroid.y);
+
 		if(path.sprite.repeat) {
 
-			this.ctx.save();
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
-
-			for(var j = 0; j &lt; path.verts.length; j++) {
-				this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
-			}
-		
-
-			this.ctx.translate(centroid.x,centroid.y);
-			//this.ctx.rotate(circle.cycle);
-			this.ctx.scale(path.sprite.scale,path.sprite.scale);
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
 
-			this.ctx.closePath();
-
 			this.ctx.fill();
-			this.ctx.restore();	
 		}
 
-		if(path.sprite.fit) {
-
-			this.ctx.save();
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(path.verts[0].x, path.verts[0].y);
-
-			for(var j = 0; j &lt; path.verts.length; j++) {
-				this.ctx.lineTo(path.verts[j].x, path.verts[j].y);
-			}
-
-			this.ctx.closePath();
+		else if(path.sprite.fit) {
 
 			this.ctx.clip();
 
-			var box = PhSim.BoundingBox.fromShape(path);
+			var box = BoundingBox.fromShape(path);
 
-			var h = img.height * (box.w/img.width);
+			h = img.height * (box.w/img.width);
 
 			this.renderSpriteByCenter(path.sprite.src,centroid.x,centroid.y,box.w,h,0);
-
-			this.ctx.restore();	
-
 		}
 
 		else {
-			this.renderSpriteByCenter(path.sprite.src,centroid.x,centroid.y,img.width,img.height,0);
+
+			this.ctx.clip();
+
+			w = path.sprite.w || img.width;
+			h = path.sprite.h || img.height;
+
+			this.renderSpriteByCenter(path.sprite.src,0,0,w,h,0);
+
 		}
 
 	}
+
+	this.ctx.restore();	
 
 	this.unsetCtx();
 	
@@ -333,37 +339,6 @@ PhRender.prototype.renderSpriteByCenter = function(url,x,y,w,h,a) {
 	this.ctx.restore();
 }
 
-/**
- * @function
- * @param {Object} constraint 
- */
-
-PhRender.prototype.renderConstraint = function (constraint) {
-
-	var path = SLO(constraint.object.S, constraint.object.L, constraint.object.O);
-
-	this.ctx.save();
-
-	this.ctx.globalAlpha = 0.5
-	this.ctx.strokeStyle = "black";
-
-	this.ctx.arc(constraint.point.x, constraint.point.y, 10, 0, 2 * Math.PI);
-	this.ctx.stroke();
-
-	this.ctx.arc(constraint.relativeEndPoint.x + findCentroidOfPath(path).x , constraint.relativeEndPoint.y + findCentroidOfPath(path).y, 10, 0, 2 * Math.PI);
-	this.ctx.stroke();
-
-	this.ctx.setLineDash([10,10]);
-
-	this.ctx.moveTo(constraint.point.x, constraint.point.y);
-	this.ctx.lineTo(constraint.relativeEndPoint.x + findCentroidOfPath(path).x, constraint.relativeEndPoint.y + findCentroidOfPath(path).y);
-	this.ctx.stroke();
-
-	this.ctx.restore();
-
-}
-
-
 
 /**
  * 
@@ -374,6 +349,9 @@ PhRender.prototype.renderConstraint = function (constraint) {
  */
 
 PhRender.prototype.renderCircle = function (circle) {
+
+	var w;
+	var h;
 	
 	this.setCtx(circle);
 
@@ -388,7 +366,7 @@ PhRender.prototype.renderCircle = function (circle) {
 		this.ctx.save();
 		this.ctx.translate(circle.x,circle.y);
 		this.ctx.rotate(circle.cycle);
-		this.ctx.fillStyle = PhSim.Gradients.extractGradient(this.ctx,circle.gradient);
+		this.ctx.fillStyle = Gradients.extractGradient(this.ctx,circle.gradient);
 		this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
 		this.ctx.fill();
 		this.ctx.restore();	
@@ -397,41 +375,49 @@ PhRender.prototype.renderCircle = function (circle) {
 
 	if(circle.sprite &amp;&amp; circle.sprite.src) {
 
+		/**
+		 * 
+		 * @type {HTMLImageElement}
+		 */
+
 		var img = this.spriteImgObj[circle.sprite.src];
 
 		this.ctx.imageSmoothingEnabled = circle.sprite.smooth;
 
+		this.ctx.save();
+		this.ctx.translate(circle.x,circle.y);
+		this.ctx.rotate(circle.cycle);
+		this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
+
 		if(circle.sprite.repeat) {
-			this.ctx.save();
-			this.ctx.translate(circle.x,circle.y);
-			this.ctx.rotate(circle.cycle);
-			this.ctx.scale(circle.sprite.scale,circle.sprite.scale);
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
-			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
-			this.ctx.fill();
-			this.ctx.restore();	
+			this.ctx.fill();	
 		}
 
-		if(circle.sprite.fit) {
-			this.ctx.save();
-			this.ctx.translate(circle.x,circle.y);
-			this.ctx.rotate(circle.cycle);
-			this.ctx.arc(0,0,circle.radius,0,2*Math.PI);
-			this.ctx.clip();
-			var box = PhSim.BoundingBox.fromShape(circle);
+		else if(circle.sprite.fit) {
 
-			var h = img.height * (box.w/img.width);
+			this.ctx.clip();
+			var box = BoundingBox.fromShape(circle);
+
+			h = img.height * (box.w/img.width);
 
 			this.renderSpriteByCenter(circle.sprite.src,0,0,box.w,h);
 			this.ctx.restore();	
 		}
 
-		else { 
-			this.renderSpriteByCenter(circle.sprite.src,circle.x,circle.y,circle.cycle);
+		else {
+
+			w = circle.sprite.w || img.width;
+			h = circle.sprite.h || img.height;
+
+			this.ctx.clip(); 
+			this.renderSpriteByCenter(circle.sprite.src,0,0,w,h,0);
 		}
 
 	}
+
+	this.ctx.restore();
 
 	this.unsetCtx();
 
@@ -449,7 +435,7 @@ PhRender.prototype.renderCircle = function (circle) {
 
 PhRender.prototype.renderRectangle = function(rectangle) {
 
-	var c = PhSim.Centroid.rectangle(rectangle);
+	var c = Centroid.rectangle(rectangle);
 
 	var x = -rectangle.w * 0.5;
 	var y = -rectangle.h * 0.5;
@@ -464,7 +450,7 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 	this.ctx.fill();
 
 	if(rectangle.widgets) {
-		for(var i = 0; i &lt; rectangle.widgets.length; i++) {
+		for(let i = 0; i &lt; rectangle.widgets.length; i++) {
 			if(rectangle.widgets[i].type === "rectText") {
 				this.rectText(rectangle.widgets[i],x,y,rectangle.w,rectangle.h,0);
 			}
@@ -481,36 +467,36 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 
 		this.ctx.imageSmoothingEnabled = rectangle.sprite.smooth;
 
+		this.ctx.save();
+		this.ctx.translate(c.x,c.y);
+		this.ctx.rotate(rectangle.cycle);
+		this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
+
 		if(rectangle.sprite.repeat) {
-			this.ctx.save();
-			this.ctx.translate(c.x,c.y);
-			this.ctx.rotate(rectangle.cycle);
+	
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
-			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
 			this.ctx.fill();
 			this.ctx.restore();	
 		}
 
-		if(rectangle.sprite.fit) {
-			this.ctx.save();
-			this.ctx.translate(c.x,c.y);
-			this.ctx.rotate(rectangle.cycle);
-			this.ctx.rect(-rectangle.w * 0.5,-rectangle.h * 0.5,rectangle.w,rectangle.h);
+		else if(rectangle.sprite.fit) {
+
 			this.ctx.clip();
 
 			var h = img.height * (rectangle.w/img.width);
 
 			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.w,h,0);
-			this.ctx.restore();	
 		}
 
 		else { 
-			this.renderSpriteByCenter(rectangle.sprite.src,c.x,c.y,img.w,img.h,rectangle.cycle);
+			this.ctx.clip();
+			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.sprite.w,rectangle.h,0);
 		}
 
 	}
 
+	this.ctx.restore();	
 	this.unsetCtx();
 
 }
@@ -578,7 +564,7 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 
 PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
-	var vertSet = PhSim.Vertices.regPolygon(regPolygon);
+	var vertSet = Vertices.regPolygon(regPolygon);
 	
 	this.setCtx(regPolygon);
 
@@ -586,8 +572,8 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 	this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
 
-	for(var j = 0; j &lt; vertSet.length; j++) {
-	  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
+	for(let j = 0; j &lt; vertSet.length; j++) {
+		this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
 	}
 
 	this.ctx.closePath();
@@ -604,60 +590,52 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 		this.ctx.imageSmoothingEnabled = regPolygon.sprite.smooth;
 
+		this.ctx.save();
+
+		this.ctx.beginPath();
+
+		this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
+	
+		for(let j = 0; j &lt; vertSet.length; j++) {
+			this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
+		}
+	
+		this.ctx.closePath();
+
+		this.ctx.translate(regPolygon.x,regPolygon.y);
+		this.ctx.rotate(regPolygon.cycle);
+
 		if(regPolygon.sprite.repeat) {
-			this.ctx.save();
-			this.ctx.translate(regPolygon.x,regPolygon.y);
-			this.ctx.rotate(regPolygon.cycle);
-			this.ctx.scale(regPolygon.sprite.scale,regPolygon.sprite.scale);
 			var pattern = this.ctx.createPattern(img,"repeat");
 			this.ctx.fillStyle = pattern;
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
-		
-			for(var j = 0; j &lt; vertSet.length; j++) {
-			  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
-			}
-		
-			this.ctx.closePath();
-
 			this.ctx.fill();
-			this.ctx.restore();	
 		}
 
 		if(regPolygon.sprite.fit) {
 
-			this.ctx.save();
-
-			this.ctx.beginPath();
-
-			this.ctx.moveTo(vertSet[0].x, vertSet[0].y);
-		
-			for(var j = 0; j &lt; vertSet.length; j++) {
-			  this.ctx.lineTo(vertSet[j].x, vertSet[j].y);
-			}
-		
-			this.ctx.closePath();
-
 			this.ctx.clip();
 
-			this.ctx.translate(regPolygon.x,regPolygon.y);
-			this.ctx.rotate(regPolygon.cycle);
+			let box = BoundingBox.fromShape(regPolygon);
 
-			var box = PhSim.BoundingBox.fromShape(regPolygon);
-
-			var h = img.height * (box.w/img.width);
+			let h = img.height * (box.w/img.width);
 
 			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,box.w,h,0);
-			this.ctx.restore();	
+
 		}
 
-		else { 
-			this.renderSpriteByCenter(regPolygon.sprite.src,regPolygon.x,regPolygon.y,img.width,img.height,regPolygon.cycle);
+		else {
+			
+			this.ctx.clip();
+
+			let w = regPolygon.sprite.w || img.width;
+			let h = regPolygon.sprite.h || img.height;
+
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,w,h,0);
 		}
 
 	}
+
+	this.ctx.restore();	
 
 	this.unsetCtx();
 
@@ -751,7 +729,7 @@ PhRender.prototype.dynamicSkeleton = function(object) {
 
 		this.ctx.moveTo(object.matter.vertices.x, object.matter.vertices.y);
 
-		for(var j = 0; j &lt; object.matter.vertices.length; j++) {
+		for(let j = 0; j &lt; object.matter.vertices.length; j++) {
 			this.ctx.lineTo(object.matter.vertices[j].x, object.matter.vertices[j].y);
 		}
 
@@ -785,7 +763,7 @@ PhRender.prototype.dynamicSkeleton_center = function(object) {
 
 		this.ctx.moveTo(object.matter.vertices.x - object.matter.position.x, object.matter.vertices.y - object.matter.position.y);
 
-		for(var j = 0; j &lt; object.matter.vertices.length; j++) {
+		for(let j = 0; j &lt; object.matter.vertices.length; j++) {
 			this.ctx.lineTo(object.matter.vertices[j].x - object.matter.position.x, object.matter.vertices[j].y - object.matter.position.y);
 		}
 
@@ -848,7 +826,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 				this.ctx.restore();
 			}
 
-			if(dynObject.sprite.fit) {
+			else if(dynObject.sprite.fit) {
 
 				this.ctx.save();
 	
@@ -864,7 +842,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 	
 				this.ctx.clip();
 	
-				var box = PhSim.BoundingBox.fromShape(dynObject);
+				var box = BoundingBox.fromShape(dynObject);
 	
 				var h = img.height * (box.w/img.width);
 	
@@ -911,9 +889,9 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
  * @param {*} L 
  */
 
-PhRender.prototype.dynamicDrawLayer = function(L) {
+PhRender.prototype.dynamicDrawLayer = function(L,sim,simulationI) {
 	
-	for(var i = 0; i &lt; sim.simulations[simulationI].layers[L].length; i++) {
+	for(let i = 0; i &lt; sim.simulations[simulationI].layers[L].length; i++) {
 		this.dynamicRenderDraw(L,i);
 	}
 
@@ -964,7 +942,7 @@ module.exports = PhRender;</pre>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2021-01-03T14:50:53-06:00
+		on 2021-01-19T16:51:40-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

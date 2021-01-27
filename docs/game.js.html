@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="matterPlugin.Body.html">matterPlugin.Body</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
+					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
 				</ul>
 			</li>
 			
@@ -48,6 +48,13 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Audio.AudioArray.html">PhSim.Audio.AudioArray</a></li><li><a href="PhSim.BoundingBox.html">PhSim.BoundingBox</a></li><li><a href="PhSim.Camera.html">PhSim.Camera</a></li><li><a href="PhSim.DynObject.html">PhSim.DynObject</a></li><li><a href="PhSim.Events.PhSimCollision.html">PhSim.Events.PhSimCollision</a></li><li><a href="PhSim.Events.PhSimDynEvent.html">PhSim.Events.PhSimDynEvent</a></li><li><a href="PhSim.Events.PhSimEvent.html">PhSim.Events.PhSimEvent</a></li><li><a href="PhSim.Events.PhSimEventKey.html">PhSim.Events.PhSimEventKey</a></li><li><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></li><li><a href="PhSim.EventStack.html">PhSim.EventStack</a></li><li><a href="PhSim.Game.html">PhSim.Game</a></li><li><a href="PhSim.Game.Options.html">PhSim.Game.Options</a></li><li><a href="PhSim.PhRender.html">PhSim.PhRender</a></li><li><a href="PhSim.Sprites.spriteImgObj.html">PhSim.Sprites.spriteImgObj</a></li><li><a href="PhSim.Static.html">PhSim.Static</a></li><li><a href="PhSim.Static.Camera.html">PhSim.Static.Camera</a></li><li><a href="PhSim.Static.Circle.html">PhSim.Static.Circle</a></li><li><a href="PhSim.Static.Gradient.html">PhSim.Static.Gradient</a></li><li><a href="PhSim.Static.GradientLimits.html">PhSim.Static.GradientLimits</a></li><li><a href="PhSim.Static.GradientStop.html">PhSim.Static.GradientStop</a></li><li><a href="PhSim.Static.Layer.html">PhSim.Static.Layer</a></li><li><a href="PhSim.Static.Polygon.html">PhSim.Static.Polygon</a></li><li><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></li><li><a href="PhSim.Static.RegPolygon.html">PhSim.Static.RegPolygon</a></li><li><a href="PhSim.Static.SimBox.html">PhSim.Static.SimBox</a></li><li><a href="PhSim.Static.Simulation.html">PhSim.Static.Simulation</a></li><li><a href="PhSim.Vector.html">PhSim.Vector</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="mixins.list.html" class="dropdown-toggle" data-toggle="dropdown">Mixins<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="PhSim.Game.Widgets.html">PhSim.Game.Widgets</a></li><li><a href="PhSim.PhSimEventTarget.html">PhSim.PhSimEventTarget</a></li>
 				</ul>
 			</li>
 			
@@ -68,7 +75,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#DynObject">DynObject</a></li>
+					<li><a href="global.html">Global</a></li>
 				</ul>
 			</li>
 			
@@ -356,6 +363,7 @@ Game.prototype.end = function() {
 
 /**
  * Namespace for game widgets
+ * @mixin
  * 
  */
 
@@ -368,11 +376,13 @@ Game.Widgets = {
  * 
  * @param {PhSim.DynObject} dyn_object 
  * @param {Object} widget - Widget options
- * @param {Number} widget.value - Value of coin. If undefined, the value of the coin is 1.
+ * @param {Number} [widget.value] - Value of coin. If undefined, the value of the coin is 1.
  * @this PhSim
  */
 
 Game.Widgets.coin = function(dyn_object,widget) {
+
+	widget = widget || {};
 
 	var value = widget.value || 1;
 
@@ -385,7 +395,7 @@ Game.Widgets.coin = function(dyn_object,widget) {
 		var a = function() {
 
 			if(self.inSensorCollision(obj1) &amp;&amp; self.lclGame) {
-				self.lclGame.setScore(self.lclGame.score + 1);
+				self.lclGame.setScore(self.lclGame.score + value);
 				self.off("collisionstart",a);	
 			}
 
@@ -400,53 +410,74 @@ Game.Widgets.coin = function(dyn_object,widget) {
 
 }
 
+/**
+ * Hazard Widget
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget
+ * @param {Number} [widget.damage] - Quantity of life lost. By default, it is equal to 1.
+ */
+
 Game.Widgets.hazard = function(dyn_object,widget) {
 
-var self = this;
+	widget = widget || {};
 
-var func = function() {
+	widget.damage = widget.damage || 1;
 
-	var obj1 = dyn_object;
+	var self = this;
 
-	var a = function() {
+	var func = function() {
 
-		if(self.inSensorCollision(obj1) &amp;&amp; self.lclGame) {
-			self.lclGame.setLife(self.lclGame.life - 1);
-			self.off("collisionstart",a);
+		var obj1 = dyn_object;
+
+		var a = function() {
+
+			if(self.inSensorCollision(obj1) &amp;&amp; self.lclGame) {
+				self.lclGame.setLife(self.lclGame.life - widget.damage);
+				self.off("collisionstart",a);
+			}
+
 		}
+
+		return a;
 
 	}
 
-	return a;
+	self.on("collisionstart",func());
 
 }
 
-self.on("collisionstart",func());
-
-}
+/**
+ * 
+ * @param {PhSim} dyn_object 
+ * @param {Object} [widget] - Widget configuration
+ * @param {Number} [widget.lives] - Lives to be gained.
+ */
 
 Game.Widgets.health = function(dyn_object,widget) {
 
-var self = this;
+	widget = widget || {};
+	widget.lives = widget.lives || 1;
 
-var func = function() {
+	var self = this;
 
-	var obj1 = dyn_object;
+	var func = function() {
 
-	var a = function() {
+		var obj1 = dyn_object;
 
-		if(self.inSensorCollision(obj1) &amp;&amp; self.lclGame) {
-			self.lclGame.setLife(self.lclGame.life + 1);
-			self.off("collisionstart",a);	
+		var a = function() {
+
+			if(self.inSensorCollision(obj1) &amp;&amp; self.lclGame) {
+				self.lclGame.setLife(self.lclGame.life + widget.lives);
+				self.off("collisionstart",a);	
+			}
+
 		}
+
+		return a;
 
 	}
 
-	return a;
-
-}
-
-self.on("collisionstart",func());
+	self.on("collisionstart",func());
 
 }
 
@@ -500,7 +531,7 @@ module.exports = Game;</pre>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2021-01-03T14:50:53-06:00
+		on 2021-01-19T16:51:40-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

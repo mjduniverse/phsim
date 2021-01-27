@@ -3454,7 +3454,7 @@ PhRender.prototype.renderPolygon = function (path) {
 			this.renderSpriteByCenter(path.sprite.src,centroid.x,centroid.y,box.w,h,0);
 		}
 
-		else if(typeof path.sprite.w === "number" && typeof path.sprite.h) {
+		else if(typeof path.sprite.w === "number" && typeof path.sprite.h === "number") {
 
 			this.ctx.clip();
 
@@ -3463,6 +3463,29 @@ PhRender.prototype.renderPolygon = function (path) {
 
 			this.renderSpriteByCenter(path.sprite.src,0,0,w,h,0);
 
+		}
+
+		else if(typeof path.sprite.w !== "number" && typeof path.sprite.h === "number") {
+			
+		    this.ctx.clip();
+
+			let w = (img.width/img.height) * path.sprite.h;
+
+			this.renderSpriteByCenter(path.sprite.src,0,0,w,path.sprite.h,0);
+		}
+
+		else if(typeof path.sprite.w === "number" && typeof path.sprite.h !== "number") {
+			
+			this.ctx.clip();
+
+			let h = (img.height/img.width) * path.sprite.w;
+			
+			this.renderSpriteByCenter(path.sprite.src,0,0,path.sprite.w,h,0);
+		}
+
+		else if(typeof path.sprite.w !== "number" && typeof path.sprite.h !== "number") {
+			this.ctx.clip();
+			this.renderSpriteByCenter(path.sprite.src,0,0,img.width,img.height,0);
 		}
 
 	}
@@ -3572,13 +3595,36 @@ PhRender.prototype.renderCircle = function (circle) {
 			this.ctx.restore();	
 		}
 
-		else if(typeof rectangle.sprite.w === "number" && typeof rectangle.sprite.h === "number") {
+		else if(typeof circle.sprite.w === "number" && typeof circle.sprite.h === "number") {
 
 			w = circle.sprite.w || img.width;
 			h = circle.sprite.h || img.height;
 
 			this.ctx.clip(); 
 			this.renderSpriteByCenter(circle.sprite.src,0,0,w,h,0);
+		}
+
+		else if(typeof circle.sprite.w !== "number" && typeof circle.sprite.h === "number") {
+			
+		    this.ctx.clip();
+
+			let w = (img.width/img.height) * circle.sprite.h;
+
+			this.renderSpriteByCenter(circle.sprite.src,0,0,w,circle.sprite.h,0);
+		}
+
+		else if(typeof circle.sprite.w === "number" && typeof circle.sprite.h !== "number") {
+			
+			this.ctx.clip();
+
+			let h = (img.height/img.width) * circle.sprite.w;
+			
+			this.renderSpriteByCenter(circle.sprite.src,0,0,circle.sprite.w,h,0);
+		}
+
+		else if(typeof circle.sprite.w !== "number" && typeof circle.sprite.h !== "number") {
+			this.ctx.clip();
+			this.renderSpriteByCenter(circle.sprite.src,0,0,img.width,img.height,0);
 		}
 
 	}
@@ -3680,6 +3726,7 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 		}
 
 		else if(typeof rectangle.sprite.w !== "number" && typeof rectangle.sprite.h !== "number") {
+			this.ctx.clip();
 			this.renderSpriteByCenter(rectangle.sprite.src,0,0,img.width,img.height,0);
 		}
 
@@ -3812,7 +3859,7 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 		}
 
-		else if(typeof path.sprite.w === "number" && typeof path.sprite.h === "number") {
+		else if(typeof regPolygon.sprite.w === "number" && typeof regPolygon.sprite.h === "number") {
 			
 			this.ctx.clip();
 
@@ -3822,9 +3869,27 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,w,h,0);
 		}
 
-		else if(typeof path.sprite.w === "number" && !typeof path.sprite.h === "number") {
-			let w = img.width/img.height * regPolygon.sprite.h;
+        else if(typeof regPolygon.sprite.w !== "number" && typeof regPolygon.sprite.h === "number") {
+			
+		    this.ctx.clip();
+
+			let w = (img.width/img.height) * regPolygon.sprite.h;
+
 			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,w,regPolygon.sprite.h,0);
+		}
+
+		else if(typeof regPolygon.sprite.w === "number" && typeof regPolygon.sprite.h !== "number") {
+			
+			this.ctx.clip();
+
+			let h = (img.height/img.width) * regPolygon.sprite.w;
+			
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,regPolygon.sprite.w,h,0);
+		}
+
+		else if(typeof regPolygon.sprite.w !== "number" && typeof regPolygon.sprite.h !== "number") {
+			this.ctx.clip();
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,img.width,img.height,0);
 		}
 
 	}

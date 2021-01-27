@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>PhSim Source: matterPlugin.js</title>
+	<title>PhSim Mixins</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -109,130 +109,594 @@
 <div class="row">
 
 	
-	<div class="col-md-12">
+	<div class="col-md-8">
 	
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: matterPlugin.js</h1>
-    
+	<h1 class="page-title">Mixins</h1>
 <section>
-    <article>
-        <pre
-            class="sunlight-highlight-javascript ">const DynObject = require("./dynObject");
-const PhSim = require(".");
 
-// Try to import matter-js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = require("matter-js");
-}
-
-/**
- * Object that registers PhSim as a Matter.js plugin.
- * The modified matter.js object is stored in {@link Matter}
- * @namespace
- * 
- */
-
-const matterPlugin = {
-
-    name: "phsim",
-
-    version: "0.1.0",
-
-    /**
-     * Installation function for plugin
-     * @param {Matter} matter 
-     */
-
-    install: function(matter) {
-
-        matter.after('Detector.collisions',function(){
-            matterPlugin.Detector.collisions.call(this,arguments);
-        });
-
-        //matter.after('Body.create',function(options){
-          //  matterPlugin.Body.init(options)
-        //});
-
-    },
-
-    /**
-     * Detector patch for Matter.js.
-     * 
-     * 
-     */
-
-    Detector: {
-
-        /**
-         * Matter.Detector.collisions patch for Matter.js.
-         * This modifies the function for checking collisions in Matter.js.
-         * @function 
-         */
-
-        collisions: function() {
-
-            for(var i = 0; i &lt; this.length; i++) {
-
-                var bodyA = this[i].bodyA;
-                var bodyB = this[i].bodyB;
-                var c_classesA;
-                var c_classesB;
-
-                if(bodyA.parent === bodyA) {
-                    if(bodyA.plugin.dynObject instanceof DynObject) {
-                        c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.dynObject);
-                    }
-                }
-                
-                else {
-                    c_classesA = PhSim.Query.getCollisionClasses(bodyA.parent.plugin.dynObject);
-                }
-
-                if(bodyB.parent === bodyB) {
-                    if(bodyB.plugin.dynObject instanceof DynObject) {
-                        c_classesB = PhSim.Query.getCollisionClasses(bodyB.plugin.dynObject);
-                    }    
-                }
-
-                else {
-                    c_classesB = PhSim.Query.getCollisionClasses(bodyB.parent.plugin.dynObject);                    
-                }
-
-                if(c_classesA.length > 0 &amp;&amp; c_classesB.length > 0) {
-                    if(!PhSim.Query.intersectionExists(c_classesA,c_classesB)) {
-
-                        this.splice(this.indexOf(this[i]),1);
-
-                        // Reset index to zero to make sure all collisions
-                        // that have no collision classes in common get removed
-
-                        i = 0;
-                    }
-                }
+<header>
+    
+        <h2>
+        
+        </h2>
+        
+    
+</header>
 
 
-            }
+<article>
+    <div class="container-overview">
+    
+        
 
-        }
-    }
+        
+<dl class="details">
+    
 
-}
+	
 
-PhSim.matterPlugin = matterPlugin;
+	
 
-Matter.Plugin.register(PhSim.matterPlugin); </pre>
-    </article>
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="PhSim.html">PhSim</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Audio.AudioArray.html">AudioArray</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.BoundingBox.html">BoundingBox</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Camera.html">Camera</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.DynObject.html">DynObject</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Events.PhSimCollision.html">PhSimCollision</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Events.PhSimDynEvent.html">PhSimDynEvent</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Events.PhSimEvent.html">PhSimEvent</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Events.PhSimEventKey.html">PhSimEventKey</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Events.PhSimMouseEvent.html">PhSimMouseEvent</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.EventStack.html">EventStack</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Game.html">Game</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Game.Options.html">Options</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.PhRender.html">PhRender</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Sprites.spriteImgObj.html">spriteImgObj</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.html">Static</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.Camera.html">Camera</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.Circle.html">Circle</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.Gradient.html">Gradient</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.GradientLimits.html">GradientLimits</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.GradientStop.html">GradientStop</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.Layer.html">Layer</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.Polygon.html">Polygon</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.Rectangle.html">Rectangle</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.RegPolygon.html">RegPolygon</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.SimBox.html">SimBox</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Static.Simulation.html">Simulation</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.Vector.html">Vector</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Mixins</h3>
+
+        <dl>
+            <dt><a href="PhSim.Game.Widgets.html">Widgets</a></dt>
+            <dd></dd>
+        
+            <dt><a href="PhSim.PhSimEventTarget.html">PhSimEventTarget</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Namespaces</h3>
+
+        <dl>
+            <dt><a href="namespaces.html#matterPlugin"><a href="matterPlugin.html">matterPlugin</a></a></dt>
+            <dd></dd>
+        
+            <dt><a href="namespaces.html#PhSim.Audio"><a href="PhSim.Audio.html">Audio</a></a></dt>
+            <dd></dd>
+        
+            <dt><a href="namespaces.html#PhSim.Centroid"><a href="PhSim.Centroid.html">Centroid</a></a></dt>
+            <dd></dd>
+        
+            <dt><a href="namespaces.html#PhSim.Events"><a href="PhSim.Events.html">Events</a></a></dt>
+            <dd></dd>
+        
+            <dt><a href="namespaces.html#PhSim.Gradients"><a href="PhSim.Gradients.html">Gradients</a></a></dt>
+            <dd></dd>
+        
+            <dt><a href="namespaces.html#PhSim.Motion"><a href="PhSim.Motion.html">Motion</a></a></dt>
+            <dd></dd>
+        
+            <dt><a href="namespaces.html#PhSim.ObjLoops"><a href="PhSim.ObjLoops.html">ObjLoops</a></a></dt>
+            <dd></dd>
+        
+            <dt><a href="namespaces.html#PhSim.Query"><a href="PhSim.Query.html">Query</a></a></dt>
+            <dd></dd>
+        
+            <dt><a href="namespaces.html#PhSim.Sprites"><a href="PhSim.Sprites.html">Sprites</a></a></dt>
+            <dd></dd>
+        
+            <dt><a href="namespaces.html#PhSim.statusCodes"><a href="PhSim.statusCodes.html">statusCodes</a></a></dt>
+            <dd></dd>
+        
+            <dt><a href="namespaces.html#PhSim.Widgets"><a href="PhSim.Widgets.html">Widgets</a></a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Events</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="event:mousedown">mousedown</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>PhSim <code>mousedown</code> event.</p>
+    </div>
+    
+
+    
+
+    
+        <h5>Type: 
+<span class="param-type"><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></span>
+
+
+</h5>
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="events_registerEvents.js.html">events/registerEvents.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="event:mousemove">mousemove</h4>
+    
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="events_registerEvents.js.html">events/registerEvents.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="event:objmousedown">objmousedown</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Event fired whenever the mouse is pressed down on an object.</p>
+    </div>
+    
+
+    
+
+    
+        <h5>Type: 
+<span class="param-type"><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></span>
+
+
+</h5>
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="events_eventObjects.js.html">events/eventObjects.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="event:objmouseup">objmouseup</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Event fired whenever the mouse is let go of while over an object</p>
+    </div>
+    
+
+    
+
+    
+        <h5>Type: 
+<span class="param-type"><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></span>
+
+
+</h5>
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="events_eventObjects.js.html">events/eventObjects.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
+    
+</article>
+
 </section>
-
 
 
 
@@ -242,6 +706,10 @@ Matter.Plugin.register(PhSim.matterPlugin); </pre>
 
 	<div class="clearfix"></div>
 
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
 	
 
 </div>

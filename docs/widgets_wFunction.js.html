@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="matterPlugin.Body.html">matterPlugin.Body</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
+					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
 				</ul>
 			</li>
 			
@@ -48,6 +48,13 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Audio.AudioArray.html">PhSim.Audio.AudioArray</a></li><li><a href="PhSim.BoundingBox.html">PhSim.BoundingBox</a></li><li><a href="PhSim.Camera.html">PhSim.Camera</a></li><li><a href="PhSim.DynObject.html">PhSim.DynObject</a></li><li><a href="PhSim.Events.PhSimCollision.html">PhSim.Events.PhSimCollision</a></li><li><a href="PhSim.Events.PhSimDynEvent.html">PhSim.Events.PhSimDynEvent</a></li><li><a href="PhSim.Events.PhSimEvent.html">PhSim.Events.PhSimEvent</a></li><li><a href="PhSim.Events.PhSimEventKey.html">PhSim.Events.PhSimEventKey</a></li><li><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></li><li><a href="PhSim.EventStack.html">PhSim.EventStack</a></li><li><a href="PhSim.Game.html">PhSim.Game</a></li><li><a href="PhSim.Game.Options.html">PhSim.Game.Options</a></li><li><a href="PhSim.PhRender.html">PhSim.PhRender</a></li><li><a href="PhSim.Sprites.spriteImgObj.html">PhSim.Sprites.spriteImgObj</a></li><li><a href="PhSim.Static.html">PhSim.Static</a></li><li><a href="PhSim.Static.Camera.html">PhSim.Static.Camera</a></li><li><a href="PhSim.Static.Circle.html">PhSim.Static.Circle</a></li><li><a href="PhSim.Static.Gradient.html">PhSim.Static.Gradient</a></li><li><a href="PhSim.Static.GradientLimits.html">PhSim.Static.GradientLimits</a></li><li><a href="PhSim.Static.GradientStop.html">PhSim.Static.GradientStop</a></li><li><a href="PhSim.Static.Layer.html">PhSim.Static.Layer</a></li><li><a href="PhSim.Static.Polygon.html">PhSim.Static.Polygon</a></li><li><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></li><li><a href="PhSim.Static.RegPolygon.html">PhSim.Static.RegPolygon</a></li><li><a href="PhSim.Static.SimBox.html">PhSim.Static.SimBox</a></li><li><a href="PhSim.Static.Simulation.html">PhSim.Static.Simulation</a></li><li><a href="PhSim.Vector.html">PhSim.Vector</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="mixins.list.html" class="dropdown-toggle" data-toggle="dropdown">Mixins<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="PhSim.Game.Widgets.html">PhSim.Game.Widgets</a></li><li><a href="PhSim.PhSimEventTarget.html">PhSim.PhSimEventTarget</a></li>
 				</ul>
 			</li>
 			
@@ -68,7 +75,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#DynObject">DynObject</a></li>
+					<li><a href="global.html">Global</a></li>
 				</ul>
 			</li>
 			
@@ -300,10 +307,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	 * @type {WFunction}
 	 */
 
-    var wFunction = function(e) {
+    var wFunction = function(event) {
 
 		try {
-			return wFunctionBody.apply(thisRef,e);
+			return wFunctionBody.apply(thisRef,event);
 		}
 
 		catch(e) {
@@ -325,7 +332,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		if(options.key) {
 		
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				if( e.key.match( new RegExp("^" + options.key + "$","i") ) ) {
 					wFunction(e);
 				}
@@ -335,25 +342,21 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		else {
 
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				wFunction(e);
 			}
 
 		}
 
-		wFunction._ref = f;
 		wFunction._eventclass = "keydown";
 		
 	}
 
 	else if(options.trigger === "sensor" || options.trigger === "sensor_global") {
 
-		var self = this;
-		var f;
-
 		if(options.trigger === "sensor") {
 			
-			f = function(e) {
+			wFunction._ref = function(e) {
 
 				var m = self.inSensorCollision(thisRef)
 	
@@ -365,23 +368,21 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		}
 
 		else {
-			f = function(e) {
+			wFunction._ref = function(e) {
 				wFunction(e);
 			}
 		}
 
-		wFunction._ref = f;
 		wFunction._eventclass = "collisionstart";
 
 	}
 
 	else if(options.trigger === "update") {
 		
-		var f = function() {
+		wFunction._ref = function() {
 			wFunction();
 		}
 
-		wFunction._ref = f;
 		wFunction._eventclass = "beforeupdate";
 
 	}
@@ -391,7 +392,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		var f;
 
 		if(options.trigger === "objclick") {
-			f = function(e) {
+			wFunction._ref = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
 					wFunction(e);
 				}
@@ -399,20 +400,19 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		}
 
 		else {
-			f = function(e) {
+			wFunction._ref = function(e) {
 				wFunction(e);
 			}
 		}
 
 		wFunction._eventclass = "objclick";
-		wFunction._ref = f;
 
 	}
 
 	else if(options.trigger === "objmousedown" || options.trigger === "objmousedown_global") {
 
 		if(options.trigger === "objmousedown") {
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
 					wFunction(e);
 				}
@@ -421,23 +421,21 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 
 		else {
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				wFunction(e);
 			}
 		}
 
 		wFunction._eventclass = "objmousedown";
-		wFunction._ref = f;
 
 	}
 
 	else if(options.trigger === "firstslupdate") {
 		
-		var f = function(e) {
+		wFunction._ref = function(e) {
 			wFunction(e)
 		}
 
-		wFunction._ref = f;
 		wFunction._eventclass = "firstslupdate";
 
 
@@ -446,7 +444,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	else if(options.trigger === "objmouseup" || options.trigger === "objmouseup_global") {
 
 		if(options.trigger === "objmouseup") {
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				if(self.objMouseArr[self.objMouseArr.length - 1] === thisRef) {
 					wFunction(e);
 				}
@@ -454,13 +452,12 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		}
 
 		else {
-			var f = function(e) {
+			wFunction._ref = function(e) {
 				wFunction(e);
 			}
 		}
 
 		wFunction._eventclass = "objmouseup";
-		wFunction._ref = f;
 
 	}
 
@@ -477,12 +474,11 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 	else if(options.trigger === "afterslchange") {
 
-		var f = function(e) {
+		wFunction._ref = function(e) {
 			wFunction(e);
 		}
 
 		wFunction._eventclass = "afterslchange";
-		wFunction._ref = f;
 
 	}
 
@@ -490,30 +486,32 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 		var getFunction = function() {
 
+			var fn;
+
 			if(Number.isInteger(options.maxN)) {
 
-				func = function(e) {
+				fn = function() {
 
-					if(func.__n === options.maxN) {
-						clearInterval(func.__interN);
+					if(fn.__n === options.maxN) {
+						clearInterval(fn.__interN);
 					}
 
 					else {
 						if(!self.paused) {
 							wFunction();
-							func.__n++;
+							fn.__n++;
 						}
 					}
 
 				}
 
-				func.__n = 0;
+				fn.__n = 0;
 
 			}
 
 			else {
 
-				func = function(e) {
+				fn = function() {
 					if(!self.paused) {
 						wFunction();
 					}
@@ -522,10 +520,10 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 			}
 
 
-			func.__phtime = options.time;
-			func.__interN = null;
+			fn.__phtime = options.time;
+			fn.__interN = null;
 
-			return func;
+			return fn;
 
 		}
 
@@ -554,7 +552,13 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 		wFunction._eventclass = options.trigger;
 	}
 
+	if(typeof wFunction._ref === "function") {
+		wFunction._ref._wFunction = wFunction;
+	}
+
 	if(typeof wFunction._eventclass === "string") {
+
+		wFunction._listener = wFunction._ref;
 		
 		self.on(wFunction._eventclass,wFunction._ref,{
 			"slEvent": true
@@ -583,10 +587,6 @@ PhSim.prototype.disableWFunction = function(o) {
 
 	if(typeof o._eventclass === "string") {
 		this.off(o._eventclass,o._ref);
-	}
-
-	else if(o._options.trigger === "time") {
-		clearInterval(o._ref)
 	}
 
 	else if(o._options.trigger === "time") {
@@ -663,7 +663,7 @@ PhSim.prototype.wFunctionNames = {}</pre>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2021-01-03T14:50:53-06:00
+		on 2021-01-19T16:51:40-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
