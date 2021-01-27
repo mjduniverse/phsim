@@ -77,6 +77,7 @@ var gotoSimulationIndex = function (i) {
 		self.dynTree = [];
 		self.objUniverse = [];
 		self.staticSprites = [];
+		self.spriteUrls = new Set();
 		self.staticAudio = [];
 		self.audioPlayers = 0;
 		self.simulationEventStack = new PhSim.EventStack();
@@ -106,7 +107,8 @@ var gotoSimulationIndex = function (i) {
 					var o = self.simOptions.layers[i].objUniverse[j];
 
 					if(o.sprite) {
-						self.staticSprites.push(o.sprite);	
+						self.staticSprites.push(o.sprite);
+						self.spriteUrls.add(o.sprite.src);	
 					}
 					
 					if(o instanceof DynObject && !o.noDyn) {
@@ -150,12 +152,17 @@ var gotoSimulationIndex = function (i) {
 
 			for(var C = 0; C < self.simulation.widgets.length; C++) {
 				var widget = self.simulation.widgets[C];
+
+				if(widget.type === "setImgSrc") {
+					this.spriteUrls.add(widget.src);
+				}
+
 				self.extractWidget(self,widget);
 			}
 
 		}
 
-		this.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
+		self.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
 
 		resolve();
 
@@ -165,15 +172,15 @@ var gotoSimulationIndex = function (i) {
 		return new Promise(function(resolve){
 
 			if(self.phRender && self.staticSprites.length) {
-				self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(self.staticSprites,function() {
-					resolve();
+				self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(Array.from(self.spriteUrls.values()),function() {
 					self.status = PhSim.statusCodes.LOADED_SPRITES;
+					resolve();
 				});
 			}
 	
 			else {
-				resolve();
 				self.status = PhSim.statusCodes.LOADED_SPRITES;
+				resolve();
 			}
 	
 		});
