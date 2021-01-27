@@ -60,8 +60,8 @@ Sprites.circularSpriteRenderCanvas = function(ctx,canvas,angle) {
  * The `spriteImgObj` class is used to store catche for sprites.
  * 
  * @constructor
- * @param {Sprites.Sprite[]} sprites 
- * @param {Function} onload 
+ * @param {String[]} sprites - An array of strings representing sources
+ * @param {Function} onload - A function that is executed when all of the images are loaded.
  */
 
 Sprites.spriteImgObj = function(sprites,onload = function() {}) {
@@ -146,7 +146,35 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 		enumerable: false,
 		value: [],
 		writable: true
-	})
+	});
+
+	/**
+	 * 
+	 * Image List
+	 * 
+	 * @type {Array}
+	 * @name PhSim.Sprites.spriteImgObj#urls
+	 */
+
+	Object.defineProperty(this,"img",{
+		enumerable: false,
+		value: [],
+		writable: true
+	});
+
+	/**
+	 * 
+	 * Image List
+	 * 
+	 * @type {Array}
+	 * @name PhSim.Sprites.spriteImgObj#urls
+	 */
+
+	Object.defineProperty(this,"loadedImg",{
+		enumerable: false,
+		value: [],
+		writable: true
+	});
 
 	/**
 	 * 
@@ -166,10 +194,7 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 
 	for(var i = 0; i < sprites.length; i++) {
 		self.addSprite(sprites[i],function(){
-
-			self.loaded_n++;
-
-			if(self.loaded_n === self.length) {
+			if(self.loadedImg.length === self.img.length) {
 				onload();
 			}
 		})
@@ -182,90 +207,56 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 
 }
 
-Sprites.spriteImgObj.prototype.getBlobs = function() {
-
-
-
-}
-
 /**
  * 
  * Add sprite to the Sprite Image Array.
  * 
  * @function
  * @this Sprites.spriteImgObj
- * @param {Sprites.Sprite|PhSim.Sprite.Sprite[]} staticObj - This could be a sprite or an array of sprites
+ * 
+ * @param {string|Object} src - Source of sprite. If ```src``` is a string representing 
+ * a url, then the image added has its source as ```src```. If ```src``` is an object, 
+ * then the source is ```src.src```. This means that any object with an ```src``` property
+ * can be added.
+ * 
  * @param {Function} [onload] - a function that is executed when the image loads.
+ * 
+ * @returns {Image}
  */
 
-Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function() {} ) {
-	
+Sprites.spriteImgObj.prototype.addSprite = function(src,onload = function() {} ) {
+
+	// Insuring that the sprite src stays a string.
+
+	if(typeof src === "object" && typeof src.src === "string") {
+		src = src.src;
+	}
+
 	var self = this;
-	
-	if(Array.isArray(staticObj)) {
-		for(var i = 0; i < staticObj.length; i++) {
-			this.addSprite(staticObj[i]);
-		}
+
+	let img = document.createElement("img");
+
+	let f = function() {
+
+		self[src] = img;
+		self.urls.push(src);
+		self.loadedImg.push(this);
+		self.length++;
+
+		onload();
+
+		img.removeEventListener("load",f);
+
 	}
 
-	else {
+	img.addEventListener("load",f);
 
-		if(staticObj instanceof HTMLImageElement) {
-			self.static[staticObj.src] = staticObj;
-			self[staticObj.src] = staticObj;
-			self.urls.push(self.src);
-			onload();
-		}
+	this.img.push(img);
 
-		else if(typeof staticObj === "object" && typeof staticObj.src === "string") {
+	img.src = src;
 
-			let img = document.createElement("img");
+	return img;
 
-			let f = function() {
-
-				self.static[staticObj.src] = staticObj;
-				self[staticObj.src] = img;
-				self.urls.push(staticObj.src);
-			
-				self.length++;
-
-				onload();
-
-				img.removeEventListener("load",f);
-
-			}
-
-			img.addEventListener("load",f);
-
-			img.src = staticObj.src;
-			
-		}
-
-		else if(typeof staticObj === "string") {
-
-			let img = document.createElement("img");
-
-			let f = function() {
-
-				self[staticObj] = img;
-				self.urls.push(staticObj);
-			
-				self.length++;
-
-				onload();
-
-				img.removeEventListener("load",f);
-
-			}
-
-			img.addEventListener("load",f);
-
-			img.src = staticObj;
-
-		}
-	}
-
-	
 }
 
 module.exports = Sprites;
