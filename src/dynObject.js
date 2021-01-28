@@ -73,6 +73,14 @@ var DynObject = function(staticObject,matterBody) {
 	this.phSim;
 
 	/**
+	 * Boolean that makes a dynamic object not collide with anything.
+	 * @type {boolean}
+	 * @default false
+	 */
+
+	this.noCollision = options.noCollision || false;
+
+	/**
  	 * Object containing array functions to be called.
  	 * @type {PhSim.EventStack}
  	 */
@@ -80,12 +88,12 @@ var DynObject = function(staticObject,matterBody) {
 	this.eventStack = new EventStack();
 
 	/** 
-	 * Refernce of DynObj in matter object 
+	 * Reference of DynObject in matter object 
 	 * @type {PhSim.DynObject}
 	 * */
 
 	this.matter.plugin.dynObject = this;
-	
+
 	if(DynObject.keepInstances) {
 		DynObject.instances.push(this);
 	}
@@ -94,7 +102,9 @@ var DynObject = function(staticObject,matterBody) {
 
 /**
  * If set to `true`, all DynObject instances are put into the 
- * {@link PhSim.DynObject.instances} array.
+ * {@link PhSim.DynObject.instances} array. By default, this is `false`.
+ * Do not use unless you want to risk memory leaks. This is primarily for debugging 
+ * purposes.
  * 
  * @memberof PhSim.DynObject
  * @type {Boolean}
@@ -104,7 +114,7 @@ var DynObject = function(staticObject,matterBody) {
 DynObject.keepInstances = false;
 
 /**
- * Array of instances if {@link PhSim.DynObject.keepInstances} iu set to true
+ * Array of instances if {@link PhSim.DynObject.keepInstances} is set to true
  * @type {PhSim.DynObject[]}
  */
 
@@ -286,9 +296,7 @@ DynObject.createMatterObject = function(staticObject) {
 
 	opts.label = staticObject.name || "Untitled Object";
 
-	opts.isStatic = staticObject.semiLocked;
-
-	opts.isStatic = staticObject.locked;
+	opts.isStatic = staticObject.locked || staticObject.semiLocked;
 
 	var set;
 
