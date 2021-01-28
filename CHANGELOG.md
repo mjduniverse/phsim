@@ -1,5 +1,9 @@
 ## 0.2.0-alpha (Unreleased)
 
+* Added ```transformAgainstCamera``` widget, which makes the object appear to stay in place when the camera moves. It works by moving in the opposite direction of the camera.
+
+* Added ```setImgSrc``` widget.
+
 * Removed bug that made only the first element of event stack arrays execute.
 
 * Optimized mouse events in such a way that they are faster.
