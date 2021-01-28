@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="matterPlugin.Body.html">matterPlugin.Body</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
+					<li><a href="matterPlugin.html">matterPlugin</a></li><li><a href="PhSim.Audio.html">PhSim.Audio</a></li><li><a href="PhSim.Centroid.html">PhSim.Centroid</a></li><li><a href="PhSim.Events.html">PhSim.Events</a></li><li><a href="PhSim.Gradients.html">PhSim.Gradients</a></li><li><a href="PhSim.Motion.html">PhSim.Motion</a></li><li><a href="PhSim.ObjLoops.html">PhSim.ObjLoops</a></li><li><a href="PhSim.Query.html">PhSim.Query</a></li><li><a href="PhSim.Sprites.html">PhSim.Sprites</a></li><li><a href="PhSim.statusCodes.html">PhSim.statusCodes</a></li><li><a href="PhSim.Widgets.html">PhSim.Widgets</a></li>
 				</ul>
 			</li>
 			
@@ -48,6 +48,13 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="PhSim.html">PhSim</a></li><li><a href="PhSim.Audio.AudioArray.html">PhSim.Audio.AudioArray</a></li><li><a href="PhSim.BoundingBox.html">PhSim.BoundingBox</a></li><li><a href="PhSim.Camera.html">PhSim.Camera</a></li><li><a href="PhSim.DynObject.html">PhSim.DynObject</a></li><li><a href="PhSim.Events.PhSimCollision.html">PhSim.Events.PhSimCollision</a></li><li><a href="PhSim.Events.PhSimDynEvent.html">PhSim.Events.PhSimDynEvent</a></li><li><a href="PhSim.Events.PhSimEvent.html">PhSim.Events.PhSimEvent</a></li><li><a href="PhSim.Events.PhSimEventKey.html">PhSim.Events.PhSimEventKey</a></li><li><a href="PhSim.Events.PhSimMouseEvent.html">PhSim.Events.PhSimMouseEvent</a></li><li><a href="PhSim.EventStack.html">PhSim.EventStack</a></li><li><a href="PhSim.Game.html">PhSim.Game</a></li><li><a href="PhSim.Game.Options.html">PhSim.Game.Options</a></li><li><a href="PhSim.PhRender.html">PhSim.PhRender</a></li><li><a href="PhSim.Sprites.spriteImgObj.html">PhSim.Sprites.spriteImgObj</a></li><li><a href="PhSim.Static.html">PhSim.Static</a></li><li><a href="PhSim.Static.Camera.html">PhSim.Static.Camera</a></li><li><a href="PhSim.Static.Circle.html">PhSim.Static.Circle</a></li><li><a href="PhSim.Static.Gradient.html">PhSim.Static.Gradient</a></li><li><a href="PhSim.Static.GradientLimits.html">PhSim.Static.GradientLimits</a></li><li><a href="PhSim.Static.GradientStop.html">PhSim.Static.GradientStop</a></li><li><a href="PhSim.Static.Layer.html">PhSim.Static.Layer</a></li><li><a href="PhSim.Static.Polygon.html">PhSim.Static.Polygon</a></li><li><a href="PhSim.Static.Rectangle.html">PhSim.Static.Rectangle</a></li><li><a href="PhSim.Static.RegPolygon.html">PhSim.Static.RegPolygon</a></li><li><a href="PhSim.Static.SimBox.html">PhSim.Static.SimBox</a></li><li><a href="PhSim.Static.Simulation.html">PhSim.Static.Simulation</a></li><li><a href="PhSim.Vector.html">PhSim.Vector</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="mixins.list.html" class="dropdown-toggle" data-toggle="dropdown">Mixins<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="PhSim.Game.Widgets.html">PhSim.Game.Widgets</a></li><li><a href="PhSim.PhSimEventTarget.html">PhSim.PhSimEventTarget</a></li>
 				</ul>
 			</li>
 			
@@ -68,7 +75,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#DynObject">DynObject</a></li>
+					<li><a href="global.html">Global</a></li>
 				</ul>
 			</li>
 			
@@ -113,6 +120,19 @@
     <article>
         <pre
             class="sunlight-highlight-javascript ">const Vector = require("../tools/vector");
+const DynObject = require("../dynObject");
+
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = require("matter-js");
+}
 
 /**
  * 
@@ -122,10 +142,11 @@
  * @function
  * @memberof PhSim.Widgets
  * @param {PhSim} phsim 
- * @param {Object} widget
- * @param {LOAddress|PhSim.DynObject} widget.objectA - Object A - First point.
- * @param {LOAddress|PhSim.DynObject} widget.objectB - Object B - Second Point
- * 
+ * @param {Object} widget - Widget Options
+ * @param {LOAddress|PhSim.DynObject} [widget.objectA] - Object A - First point.
+ * @param {LOAddress|PhSim.DynObject} [widget.objectB] - Object B - Second Point
+ * @param {Vector} [widget.pointA] - First point (see `widget.position` for more information)
+ * @param {Vector} [widget.pointB] - Second point (see `widget.position` for more information)
  * @param {"relative"|"absolute"} [widget.position = "absolute"] - Positions of points. 
  * 
  * If set to `"relative"`, then the rules for positioning a point is the following:
@@ -136,7 +157,7 @@
  * * If `widget.objectB` is set, then `widget.pointB` defines the offset from the centroid
  * of `widget.objectB`. Otherwise, the point is set to a point in the phsim space.
  * 
- * * If one is familar with Matter.js, then the rules are simular to rules of making a 
+ * Note: If one is familar with Matter.js, then the rules are simular to rules of making a 
  * constraint are simular to those in Matter.js.
  * 
  * If set to `"absolute"`, then the rules for positioning a point is that the points 
@@ -161,7 +182,7 @@ function constraint(phsim,widget) {
 
         if(widget.objectA) {
 
-            if(widget.objectA instanceof PhSim) {
+            if(widget.objectA instanceof DynObject) {
                 b.bodyA = widget.objectA.matter;
             }
     
@@ -172,7 +193,7 @@ function constraint(phsim,widget) {
                 }
     
                 else {
-                    b.bodyA = optionMap.get(widget.objectA).matter;
+                    b.bodyA = phsim.optionMap.get(widget.objectA).matter;
                 }
     
             }
@@ -182,7 +203,7 @@ function constraint(phsim,widget) {
         if(widget.objectB) {
             b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
     
-            if(widget.objectB instanceof PhSim) {
+            if(widget.objectB instanceof DynObject) {
                 b.bodyB = widget.objectB.matter;
             }
     
@@ -193,7 +214,7 @@ function constraint(phsim,widget) {
                 }
     
                 else {
-                    b.bodyB = optionMap.get(widget.objectB).matter;
+                    b.bodyB = phsim.optionMap.get(widget.objectB).matter;
                 }
     
             }
@@ -225,7 +246,7 @@ function constraint(phsim,widget) {
 
     }
 
-    if(positon === "relative") {
+    if(position === "relative") {
         b.pointA = widget.pointA;
         b.pointB = widget.pointB;
         b.bodyA = widget.objectA.plugin.dynObject;
@@ -283,7 +304,7 @@ module.exports = constraint;</pre>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2021-01-03T14:50:53-06:00
+		on 2021-01-19T16:51:40-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

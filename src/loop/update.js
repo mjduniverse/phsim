@@ -64,9 +64,14 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 
 }
 
+/**
+ * The loopFunction is a function that is executed over and over again. It is responsible
+ * for providing the simulation loop.
+ */
+
 PhSim.prototype.loopFunction = function() {
 
-	if(this.paused === false) {
+	if(this.paused === false && this.status === PhSim.statusCodes.LOADED_SIMULATION) {
 
 		var beforeUpdateEvent = new PhSim.Events.PhSimDynEvent()
 

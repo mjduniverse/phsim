@@ -108,6 +108,10 @@ require("./widgets/stack.js");
 
 PhSim.Widgets.constraint = require("./widgets/constraint.js");
 
+PhSim.Widgets.setImgSrc = require("./widgets/setImgSrc.js");
+
+PhSim.Widgets.transformAgainstCamera = require("./widgets/transformAgainstCamera.js");
+
 /**
  * PlayAudio Widget
  * 

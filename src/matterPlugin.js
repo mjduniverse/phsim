@@ -66,6 +66,10 @@ const matterPlugin = {
                 var c_classesA;
                 var c_classesB;
 
+                if(bodyA.plugin.dynObject.noCollision || bodyB.plugin.dynObject.noCollision) {
+                    this.splice(this.indexOf(this[i]),1);
+                }
+
                 if(bodyA.parent === bodyA) {
                     if(bodyA.plugin.dynObject instanceof DynObject) {
                         c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.dynObject);

@@ -624,12 +624,12 @@ PhSim.Gradients = __webpack_require__(10);
 
 __webpack_require__(33);
 
-PhSim.calc_skinmesh = __webpack_require__(48);
+PhSim.calc_skinmesh = __webpack_require__(50);
 
-__webpack_require__(49);
-__webpack_require__(50);
+__webpack_require__(51);
+__webpack_require__(52);
 
-PhSim.ObjLoops = __webpack_require__(51);
+PhSim.ObjLoops = __webpack_require__(53);
 
 
 /**
@@ -747,6 +747,14 @@ var DynObject = function(staticObject,matterBody) {
 	this.phSim;
 
 	/**
+	 * Boolean that makes a dynamic object not collide with anything.
+	 * @type {boolean}
+	 * @default false
+	 */
+
+	this.noCollision = options.noCollision || false;
+
+	/**
  	 * Object containing array functions to be called.
  	 * @type {PhSim.EventStack}
  	 */
@@ -754,12 +762,12 @@ var DynObject = function(staticObject,matterBody) {
 	this.eventStack = new EventStack();
 
 	/** 
-	 * Refernce of DynObj in matter object 
+	 * Reference of DynObject in matter object 
 	 * @type {PhSim.DynObject}
 	 * */
 
 	this.matter.plugin.dynObject = this;
-	
+
 	if(DynObject.keepInstances) {
 		DynObject.instances.push(this);
 	}
@@ -768,7 +776,9 @@ var DynObject = function(staticObject,matterBody) {
 
 /**
  * If set to `true`, all DynObject instances are put into the 
- * {@link PhSim.DynObject.instances} array.
+ * {@link PhSim.DynObject.instances} array. By default, this is `false`.
+ * Do not use unless you want to risk memory leaks. This is primarily for debugging 
+ * purposes.
  * 
  * @memberof PhSim.DynObject
  * @type {Boolean}
@@ -778,7 +788,7 @@ var DynObject = function(staticObject,matterBody) {
 DynObject.keepInstances = false;
 
 /**
- * Array of instances if {@link PhSim.DynObject.keepInstances} iu set to true
+ * Array of instances if {@link PhSim.DynObject.keepInstances} is set to true
  * @type {PhSim.DynObject[]}
  */
 
@@ -960,9 +970,7 @@ DynObject.createMatterObject = function(staticObject) {
 
 	opts.label = staticObject.name || "Untitled Object";
 
-	opts.isStatic = staticObject.semiLocked;
-
-	opts.isStatic = staticObject.locked;
+	opts.isStatic = staticObject.locked || staticObject.semiLocked;
 
 	var set;
 
@@ -3237,6 +3245,10 @@ const matterPlugin = {
                 var c_classesA;
                 var c_classesB;
 
+                if(bodyA.plugin.dynObject.noCollision || bodyB.plugin.dynObject.noCollision) {
+                    this.splice(this.indexOf(this[i]),1);
+                }
+
                 if(bodyA.parent === bodyA) {
                     if(bodyA.plugin.dynObject instanceof DynObject) {
                         c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.dynObject);
@@ -3454,7 +3466,7 @@ PhRender.prototype.renderPolygon = function (path) {
 			this.renderSpriteByCenter(path.sprite.src,centroid.x,centroid.y,box.w,h,0);
 		}
 
-		else {
+		else if(typeof path.sprite.w === "number" && typeof path.sprite.h === "number") {
 
 			this.ctx.clip();
 
@@ -3463,6 +3475,29 @@ PhRender.prototype.renderPolygon = function (path) {
 
 			this.renderSpriteByCenter(path.sprite.src,0,0,w,h,0);
 
+		}
+
+		else if(typeof path.sprite.w !== "number" && typeof path.sprite.h === "number") {
+			
+		    this.ctx.clip();
+
+			let w = (img.width/img.height) * path.sprite.h;
+
+			this.renderSpriteByCenter(path.sprite.src,0,0,w,path.sprite.h,0);
+		}
+
+		else if(typeof path.sprite.w === "number" && typeof path.sprite.h !== "number") {
+			
+			this.ctx.clip();
+
+			let h = (img.height/img.width) * path.sprite.w;
+			
+			this.renderSpriteByCenter(path.sprite.src,0,0,path.sprite.w,h,0);
+		}
+
+		else if(typeof path.sprite.w !== "number" && typeof path.sprite.h !== "number") {
+			this.ctx.clip();
+			this.renderSpriteByCenter(path.sprite.src,0,0,img.width,img.height,0);
 		}
 
 	}
@@ -3572,13 +3607,36 @@ PhRender.prototype.renderCircle = function (circle) {
 			this.ctx.restore();	
 		}
 
-		else {
+		else if(typeof circle.sprite.w === "number" && typeof circle.sprite.h === "number") {
 
 			w = circle.sprite.w || img.width;
 			h = circle.sprite.h || img.height;
 
 			this.ctx.clip(); 
 			this.renderSpriteByCenter(circle.sprite.src,0,0,w,h,0);
+		}
+
+		else if(typeof circle.sprite.w !== "number" && typeof circle.sprite.h === "number") {
+			
+		    this.ctx.clip();
+
+			let w = (img.width/img.height) * circle.sprite.h;
+
+			this.renderSpriteByCenter(circle.sprite.src,0,0,w,circle.sprite.h,0);
+		}
+
+		else if(typeof circle.sprite.w === "number" && typeof circle.sprite.h !== "number") {
+			
+			this.ctx.clip();
+
+			let h = (img.height/img.width) * circle.sprite.w;
+			
+			this.renderSpriteByCenter(circle.sprite.src,0,0,circle.sprite.w,h,0);
+		}
+
+		else if(typeof circle.sprite.w !== "number" && typeof circle.sprite.h !== "number") {
+			this.ctx.clip();
+			this.renderSpriteByCenter(circle.sprite.src,0,0,img.width,img.height,0);
 		}
 
 	}
@@ -3627,7 +3685,7 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 	this.ctx.translate(-c.x,-c.y);
 
 
-	if(rectangle.sprite && rectangle.sprite.src) {
+	if(typeof rectangle.sprite === "object" && typeof rectangle.sprite.src === "string") {
 
 		var img = this.spriteImgObj[rectangle.sprite.src];
 
@@ -3650,14 +3708,38 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 
 			this.ctx.clip();
 
-			var h = img.height * (rectangle.w/img.width);
+			let h = img.height * (rectangle.w/img.width);
 
 			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.w,h,0);
 		}
 
-		else { 
+		else if(typeof rectangle.sprite.w === "number" && typeof rectangle.sprite.h === "number") { 
+			
 			this.ctx.clip();
-			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.sprite.w,rectangle.h,0);
+			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.sprite.w,rectangle.sprite.h,0);
+		}
+
+		else if(typeof rectangle.sprite.w !== "number" && typeof rectangle.sprite.h === "number") {
+			
+			this.ctx.clip();
+
+			let w = (img.width/img.height) * rectangle.sprite.h;
+
+			this.renderSpriteByCenter(rectangle.sprite.src,0,0,w,rectangle.sprite.h,0);
+		}
+
+		else if(typeof rectangle.sprite.w === "number" && typeof rectangle.sprite.h !== "number") {
+			
+			this.ctx.clip();
+
+			let h = (img.height/img.width) * rectangle.sprite.w;
+			
+			this.renderSpriteByCenter(rectangle.sprite.src,0,0,rectangle.sprite.w,h,0);
+		}
+
+		else if(typeof rectangle.sprite.w !== "number" && typeof rectangle.sprite.h !== "number") {
+			this.ctx.clip();
+			this.renderSpriteByCenter(rectangle.sprite.src,0,0,img.width,img.height,0);
 		}
 
 	}
@@ -3789,14 +3871,37 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 		}
 
-		else {
+		else if(typeof regPolygon.sprite.w === "number" && typeof regPolygon.sprite.h === "number") {
 			
 			this.ctx.clip();
 
-			let w = regPolygon.sprite.w || img.width;
-			let h = regPolygon.sprite.h || img.height;
+			let w = regPolygon.sprite.w;
+			let h = regPolygon.sprite.h;
 
 			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,w,h,0);
+		}
+
+        else if(typeof regPolygon.sprite.w !== "number" && typeof regPolygon.sprite.h === "number") {
+			
+		    this.ctx.clip();
+
+			let w = (img.width/img.height) * regPolygon.sprite.h;
+
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,w,regPolygon.sprite.h,0);
+		}
+
+		else if(typeof regPolygon.sprite.w === "number" && typeof regPolygon.sprite.h !== "number") {
+			
+			this.ctx.clip();
+
+			let h = (img.height/img.width) * regPolygon.sprite.w;
+			
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,regPolygon.sprite.w,h,0);
+		}
+
+		else if(typeof regPolygon.sprite.w !== "number" && typeof regPolygon.sprite.h !== "number") {
+			this.ctx.clip();
+			this.renderSpriteByCenter(regPolygon.sprite.src,0,0,img.width,img.height,0);
 		}
 
 	}
@@ -4131,8 +4236,8 @@ Sprites.circularSpriteRenderCanvas = function(ctx,canvas,angle) {
  * The `spriteImgObj` class is used to store catche for sprites.
  * 
  * @constructor
- * @param {Sprites.Sprite[]} sprites 
- * @param {Function} onload 
+ * @param {String[]} sprites - An array of strings representing sources
+ * @param {Function} onload - A function that is executed when all of the images are loaded.
  */
 
 Sprites.spriteImgObj = function(sprites,onload = function() {}) {
@@ -4217,7 +4322,35 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 		enumerable: false,
 		value: [],
 		writable: true
-	})
+	});
+
+	/**
+	 * 
+	 * Image List
+	 * 
+	 * @type {Array}
+	 * @name PhSim.Sprites.spriteImgObj#urls
+	 */
+
+	Object.defineProperty(this,"img",{
+		enumerable: false,
+		value: [],
+		writable: true
+	});
+
+	/**
+	 * 
+	 * Image List
+	 * 
+	 * @type {Array}
+	 * @name PhSim.Sprites.spriteImgObj#urls
+	 */
+
+	Object.defineProperty(this,"loadedImg",{
+		enumerable: false,
+		value: [],
+		writable: true
+	});
 
 	/**
 	 * 
@@ -4237,10 +4370,7 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 
 	for(var i = 0; i < sprites.length; i++) {
 		self.addSprite(sprites[i],function(){
-
-			self.loaded_n++;
-
-			if(self.loaded_n === self.length) {
+			if(self.loadedImg.length === self.img.length) {
 				onload();
 			}
 		})
@@ -4253,90 +4383,56 @@ Sprites.spriteImgObj = function(sprites,onload = function() {}) {
 
 }
 
-Sprites.spriteImgObj.prototype.getBlobs = function() {
-
-
-
-}
-
 /**
  * 
  * Add sprite to the Sprite Image Array.
  * 
  * @function
  * @this Sprites.spriteImgObj
- * @param {Sprites.Sprite|PhSim.Sprite.Sprite[]} staticObj - This could be a sprite or an array of sprites
+ * 
+ * @param {string|Object} src - Source of sprite. If ```src``` is a string representing 
+ * a url, then the image added has its source as ```src```. If ```src``` is an object, 
+ * then the source is ```src.src```. This means that any object with an ```src``` property
+ * can be added.
+ * 
  * @param {Function} [onload] - a function that is executed when the image loads.
+ * 
+ * @returns {Image}
  */
 
-Sprites.spriteImgObj.prototype.addSprite = function(staticObj,onload = function() {} ) {
-	
+Sprites.spriteImgObj.prototype.addSprite = function(src,onload = function() {} ) {
+
+	// Insuring that the sprite src stays a string.
+
+	if(typeof src === "object" && typeof src.src === "string") {
+		src = src.src;
+	}
+
 	var self = this;
-	
-	if(Array.isArray(staticObj)) {
-		for(var i = 0; i < staticObj.length; i++) {
-			this.addSprite(staticObj[i]);
-		}
+
+	let img = document.createElement("img");
+
+	let f = function() {
+
+		self[src] = img;
+		self.urls.push(src);
+		self.loadedImg.push(this);
+		self.length++;
+
+		onload();
+
+		img.removeEventListener("load",f);
+
 	}
 
-	else {
+	img.addEventListener("load",f);
 
-		if(staticObj instanceof HTMLImageElement) {
-			self.static[staticObj.src] = staticObj;
-			self[staticObj.src] = staticObj;
-			self.urls.push(self.src);
-			onload();
-		}
+	this.img.push(img);
 
-		else if(typeof staticObj === "object" && typeof staticObj.src === "string") {
+	img.src = src;
 
-			let img = document.createElement("img");
+	return img;
 
-			let f = function() {
-
-				self.static[staticObj.src] = staticObj;
-				self[staticObj.src] = img;
-				self.urls.push(staticObj.src);
-			
-				self.length++;
-
-				onload();
-
-				img.removeEventListener("load",f);
-
-			}
-
-			img.addEventListener("load",f);
-
-			img.src = staticObj.src;
-			
-		}
-
-		else if(typeof staticObj === "string") {
-
-			let img = document.createElement("img");
-
-			let f = function() {
-
-				self[staticObj] = img;
-				self.urls.push(staticObj);
-			
-				self.length++;
-
-				onload();
-
-				img.removeEventListener("load",f);
-
-			}
-
-			img.addEventListener("load",f);
-
-			img.src = staticObj;
-
-		}
-	}
-
-	
 }
 
 module.exports = Sprites;
@@ -6428,6 +6524,7 @@ var gotoSimulationIndex = function (i) {
 		self.dynTree = [];
 		self.objUniverse = [];
 		self.staticSprites = [];
+		self.spriteUrls = new Set();
 		self.staticAudio = [];
 		self.audioPlayers = 0;
 		self.simulationEventStack = new PhSim.EventStack();
@@ -6457,7 +6554,8 @@ var gotoSimulationIndex = function (i) {
 					var o = self.simOptions.layers[i].objUniverse[j];
 
 					if(o.sprite) {
-						self.staticSprites.push(o.sprite);	
+						self.staticSprites.push(o.sprite);
+						self.spriteUrls.add(o.sprite.src);	
 					}
 					
 					if(o instanceof DynObject && !o.noDyn) {
@@ -6501,12 +6599,17 @@ var gotoSimulationIndex = function (i) {
 
 			for(var C = 0; C < self.simulation.widgets.length; C++) {
 				var widget = self.simulation.widgets[C];
+
+				if(widget.type === "setImgSrc") {
+					this.spriteUrls.add(widget.src);
+				}
+
 				self.extractWidget(self,widget);
 			}
 
 		}
 
-		this.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
+		self.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
 
 		resolve();
 
@@ -6516,15 +6619,15 @@ var gotoSimulationIndex = function (i) {
 		return new Promise(function(resolve){
 
 			if(self.phRender && self.staticSprites.length) {
-				self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(self.staticSprites,function() {
-					resolve();
+				self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(Array.from(self.spriteUrls.values()),function() {
 					self.status = PhSim.statusCodes.LOADED_SPRITES;
+					resolve();
 				});
 			}
 	
 			else {
-				resolve();
 				self.status = PhSim.statusCodes.LOADED_SPRITES;
+				resolve();
 			}
 	
 		});
@@ -6686,9 +6789,14 @@ PhSim.prototype.updateDynObj = function(currentObj) {
 
 }
 
+/**
+ * The loopFunction is a function that is executed over and over again. It is responsible
+ * for providing the simulation loop.
+ */
+
 PhSim.prototype.loopFunction = function() {
 
-	if(this.paused === false) {
+	if(this.paused === false && this.status === PhSim.statusCodes.LOADED_SIMULATION) {
 
 		var beforeUpdateEvent = new PhSim.Events.PhSimDynEvent()
 
@@ -6829,6 +6937,7 @@ PhSim.prototype.extractWidget = function(dyn_object,widget) {
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const Vector = __webpack_require__(3)
 const Motion = __webpack_require__(4);
 
 /**
@@ -6888,13 +6997,25 @@ Camera.prototype.zoomIn = function(scaleFactor) {
 	this.dynSim.ctx.scale(scaleFactor,scaleFactor);
 }
 
+/**
+ * Translate camera by the vector `(dx,dy)`.
+ * 
+ * @param {Number} dx - Amount to transform camera in `x` direction.
+ * @param {Number} dy - Amount to transform camera in `y` direction.
+ * 
+ */
+
 Camera.prototype.translate = function(dx,dy) {
+
+	dx = dx || 0
+	dy = dy || 0
+
 	this.x = this.x + dx;
 	this.y = this.y + dy;
 	this.dynSim.ctx.translate(dx,dy);
 
 	for(var i = 0; i < this.transformingObjects.length; i++) {
-		Motion.translate(this.transformingObjects[i],dx,dy);
+		Motion.translate(this.transformingObjects[i],new Vector(-dx,-dy));
 	}
 }
 
@@ -7020,6 +7141,10 @@ __webpack_require__(46);
 
 PhSim.Widgets.constraint = __webpack_require__(47);
 
+PhSim.Widgets.setImgSrc = __webpack_require__(48);
+
+PhSim.Widgets.transformAgainstCamera = __webpack_require__(49);
+
 /**
  * PlayAudio Widget
  * 
@@ -7082,11 +7207,14 @@ const Motion = __webpack_require__(4);
  * 
  * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {Number} x 
- * @param {Number} y 
+ * @param {Number} [x] - x position of vector.
+ * @param {Number} [y] - y position of vector.
  */
 
 PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
+
+	x = x || dynObject.matter.position.x;
+	y = y || dynObject.matter.position.y;
 	
 	var c = Matter.Constraint.create({
 		
@@ -8456,7 +8584,7 @@ PhSim.Widgets.transformCameraByObj = function(dyn_object) {
     
     var self = this;
 
-    this.on("afterupdate",function(){
+    this.on("beforeupdate",function(){
         var dx = dyn_object.matter.position.x - dyn_object.matter.positionPrev.x;
         var dy = dyn_object.matter.position.y - dyn_object.matter.positionPrev.y;
         self.camera.translate(-dx,-dy);
@@ -8774,6 +8902,46 @@ module.exports = constraint;
 
 /***/ }),
 /* 48 */
+/***/ (function(module, exports) {
+
+/**
+ * Widget for changing image sources for sprites.
+ * 
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Object} widget - Widget Object
+ * @param {String} widget.src - New Source
+ * @this PhSim
+ */
+
+function setImgSrc(dynObject,widget) {
+
+    var f = function(){
+        dynObject.sprite.src = widget.src;
+    }
+
+    this.createWFunction(dynObject,f,widget);
+}
+
+module.exports = setImgSrc;
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports) {
+
+/**
+ * Widget to transform object by camera.
+ * @param {Object} dynObject 
+ * @this PhSim
+ */
+
+function transformAgainstCamera(o) {
+    this.camera.transformingObjects.push(o)
+}
+
+module.exports = transformAgainstCamera;
+
+/***/ }),
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Matter;
@@ -8822,13 +8990,13 @@ var calc_skinmesh = function(dynObject) {
 module.exports = calc_skinmesh;
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -9008,7 +9176,7 @@ PhSim.prototype.processVar = function(str) {
 }
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);

@@ -18,11 +18,14 @@ const Motion = require("../motion");
  * 
  * @function
  * @param {PhSim.DynObject} dynObject 
- * @param {Number} x 
- * @param {Number} y 
+ * @param {Number} [x] - x position of vector.
+ * @param {Number} [y] - y position of vector.
  */
 
 PhSim.prototype.createCircularConstraint = function(dynObject,x,y) {
+
+	x = x || dynObject.matter.position.x;
+	y = y || dynObject.matter.position.y;
 	
 	var c = Matter.Constraint.create({
 		
