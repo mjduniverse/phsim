@@ -1,3 +1,4 @@
+const Vector = require("./tools/vector.js")
 const Motion = require("./motion");
 
 /**
@@ -57,13 +58,25 @@ Camera.prototype.zoomIn = function(scaleFactor) {
 	this.dynSim.ctx.scale(scaleFactor,scaleFactor);
 }
 
+/**
+ * Translate camera by the vector `(dx,dy)`.
+ * 
+ * @param {Number} dx - Amount to transform camera in `x` direction.
+ * @param {Number} dy - Amount to transform camera in `y` direction.
+ * 
+ */
+
 Camera.prototype.translate = function(dx,dy) {
+
+	dx = dx || 0
+	dy = dy || 0
+
 	this.x = this.x + dx;
 	this.y = this.y + dy;
 	this.dynSim.ctx.translate(dx,dy);
 
 	for(var i = 0; i < this.transformingObjects.length; i++) {
-		Motion.translate(this.transformingObjects[i],dx,dy);
+		Motion.translate(this.transformingObjects[i],new Vector(-dx,-dy));
 	}
 }
 
