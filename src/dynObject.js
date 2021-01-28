@@ -78,7 +78,7 @@ var DynObject = function(staticObject,matterBody) {
 	 * @default false
 	 */
 
-	this.noCollision = options.noCollision || false;
+	this.noCollision = staticObject.noCollision || false;
 
 	/**
  	 * Object containing array functions to be called.
