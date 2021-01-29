@@ -109,6 +109,13 @@ var DynObject = function(staticObject,matterBody) {
 
 	this.id = DynObject.nextId;
 	DynObject.nextId++;
+
+	/**
+	 * Custom properties that can be added by the user to extend the DynObject.
+	 * @type {Object}
+	 */
+
+	this.data = this.data || {}
 	
 	/**
 	 * Reference to parent simulation
