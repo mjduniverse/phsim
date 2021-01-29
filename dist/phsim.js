@@ -710,13 +710,58 @@ var DynObject = function(staticObject,matterBody) {
 
 	Object.assign(this,PhSimEventTarget);
 
-	Object.assign(this,JSON.parse(JSON.stringify(staticObject)));
+	Object.assign(this,PhSim.Query.deepClone(staticObject));
+
+	/**
+	 * DynObject name
+	 * @type {String}
+	 */
+
+	this.name = staticObject.name;
+
+	/**
+	 * DynObject type
+	 * @type {"circle" | "polygon" | "rectangle" | "regPolygon"}
+	 * 
+	 */
+
+	this.type = staticObject.type;
+
+	// Apply Shape Specific Constructor
+
+	if(this.type === "circle") {
+		Static.Circle.apply(this,staticObject.x,staticObject.y,staticObject.r);
+	}
+
+	if(this.type === "regPolygon") {
+		Static.RegPolygon.apply(this,staticObject.x,staticObject.y,staticObject.radius,staticObject.sides)
+	}
+
+	if(this.type === "rectangle") {
+		Static.Rectangle.apply(this,staticObject.x,staticObject.y,staticObject.w,staticObject.h);
+	}
+
+	if(this.type === "polygon") {
+		Static.Polygon.apply(this,staticObject.verts);
+	}
+
+	this.widgets = staticObject.widgets;
+
+	/**
+	 * Matter Body
+	 * @type {Object}
+	 */
 
 	this.matter = matterBody || PhSim.DynObject.createMatterObject(staticObject);
 
 	if(staticObject.shape === "polygon") {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
 	}
+
+	/**
+	 * Inital angle of object
+	 * @type {Number}
+	 */
 
 	this.firstCycle = staticObject.cycle || 0;
 
@@ -786,6 +831,13 @@ var DynObject = function(staticObject,matterBody) {
  */
 
 DynObject.keepInstances = false;
+
+/**
+ * If set to true, the `staticObject` is cloned before Object.assign is applied to 
+ * the DynObject to clone it.
+ */
+
+DynObject.deepCloneStaticObject = false;
 
 /**
  * Array of instances if {@link PhSim.DynObject.keepInstances} is set to true
@@ -8581,12 +8633,21 @@ const PhSim = __webpack_require__(0);
 
 
 PhSim.Widgets.transformCameraByObj = function(dyn_object) {
-    
     var self = this;
 
+    var dx;
+    var dy;
+
     this.on("beforeupdate",function(){
-        var dx = dyn_object.matter.position.x - dyn_object.matter.positionPrev.x;
-        var dy = dyn_object.matter.position.y - dyn_object.matter.positionPrev.y;
+        dx = dyn_object.matter.position.x;
+        dy = dyn_object.matter.position.y;
+    },{
+        "slEvent": true
+    });
+
+    this.on("afterupdate",function(){
+        dx = dyn_object.matter.position.x - dx;
+        dy = dyn_object.matter.position.y - dy;
         self.camera.translate(-dx,-dy);
     },{
         "slEvent": true
