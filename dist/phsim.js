@@ -783,6 +783,13 @@ var DynObject = function(staticObject,matterBody) {
 
 	this.id = DynObject.nextId;
 	DynObject.nextId++;
+
+	/**
+	 * Custom properties that can be added by the user to extend the DynObject.
+	 * @type {Object}
+	 */
+
+	this.data = this.data || {}
 	
 	/**
 	 * Reference to parent simulation
@@ -7178,7 +7185,7 @@ __webpack_require__(36);
 
 const Game = __webpack_require__(13);
 
-Object.assign(PhSim.Widgets,Game);
+Object.assign(PhSim.Widgets,Game.Widgets);
 
 __webpack_require__(37);
 __webpack_require__(38);
