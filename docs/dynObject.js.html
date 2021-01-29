@@ -68,14 +68,14 @@
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-Constraints.html">Constraints</a></li><li><a href="tutorial-Creating PhSim Simulation.html">Creating PhSim Simulation</a></li><li><a href="tutorial-Dynamic Objects.html">Dynamic Objects</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li>
+					<li><a href="tutorial-Adding Sprites.html">Adding Sprites</a></li><li><a href="tutorial-Constraints.html">Constraints</a></li><li><a href="tutorial-Creating PhSim Simulation.html">Creating PhSim Simulation</a></li><li><a href="tutorial-Dynamic Objects.html">Dynamic Objects</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html">Global</a></li>
+					<li><a href="global.html#setImgSrc">setImgSrc</a></li><li><a href="global.html#transformAgainstCamera">transformAgainstCamera</a></li>
 				</ul>
 			</li>
 			
@@ -157,13 +157,58 @@ var DynObject = function(staticObject,matterBody) {
 
 	Object.assign(this,PhSimEventTarget);
 
-	Object.assign(this,JSON.parse(JSON.stringify(staticObject)));
+	Object.assign(this,PhSim.Query.deepClone(staticObject));
+
+	/**
+	 * DynObject name
+	 * @type {String}
+	 */
+
+	this.name = staticObject.name;
+
+	/**
+	 * DynObject type
+	 * @type {"circle" | "polygon" | "rectangle" | "regPolygon"}
+	 * 
+	 */
+
+	this.type = staticObject.type;
+
+	// Apply Shape Specific Constructor
+
+	if(this.type === "circle") {
+		Static.Circle.apply(this,staticObject.x,staticObject.y,staticObject.r);
+	}
+
+	if(this.type === "regPolygon") {
+		Static.RegPolygon.apply(this,staticObject.x,staticObject.y,staticObject.radius,staticObject.sides)
+	}
+
+	if(this.type === "rectangle") {
+		Static.Rectangle.apply(this,staticObject.x,staticObject.y,staticObject.w,staticObject.h);
+	}
+
+	if(this.type === "polygon") {
+		Static.Polygon.apply(this,staticObject.verts);
+	}
+
+	this.widgets = staticObject.widgets;
+
+	/**
+	 * Matter Body
+	 * @type {Object}
+	 */
 
 	this.matter = matterBody || PhSim.DynObject.createMatterObject(staticObject);
 
 	if(staticObject.shape === "polygon") {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
 	}
+
+	/**
+	 * Inital angle of object
+	 * @type {Number}
+	 */
 
 	this.firstCycle = staticObject.cycle || 0;
 
@@ -185,6 +230,13 @@ var DynObject = function(staticObject,matterBody) {
 
 	this.id = DynObject.nextId;
 	DynObject.nextId++;
+
+	/**
+	 * Custom properties that can be added by the user to extend the DynObject.
+	 * @type {Object}
+	 */
+
+	this.data = this.data || {}
 	
 	/**
 	 * Reference to parent simulation
@@ -194,6 +246,14 @@ var DynObject = function(staticObject,matterBody) {
 	this.phSim;
 
 	/**
+	 * Boolean that makes a dynamic object not collide with anything.
+	 * @type {boolean}
+	 * @default false
+	 */
+
+	this.noCollision = staticObject.noCollision || false;
+
+	/**
  	 * Object containing array functions to be called.
  	 * @type {PhSim.EventStack}
  	 */
@@ -201,12 +261,12 @@ var DynObject = function(staticObject,matterBody) {
 	this.eventStack = new EventStack();
 
 	/** 
-	 * Refernce of DynObj in matter object 
+	 * Reference of DynObject in matter object 
 	 * @type {PhSim.DynObject}
 	 * */
 
 	this.matter.plugin.dynObject = this;
-	
+
 	if(DynObject.keepInstances) {
 		DynObject.instances.push(this);
 	}
@@ -215,7 +275,9 @@ var DynObject = function(staticObject,matterBody) {
 
 /**
  * If set to `true`, all DynObject instances are put into the 
- * {@link PhSim.DynObject.instances} array.
+ * {@link PhSim.DynObject.instances} array. By default, this is `false`.
+ * Do not use unless you want to risk memory leaks. This is primarily for debugging 
+ * purposes.
  * 
  * @memberof PhSim.DynObject
  * @type {Boolean}
@@ -225,7 +287,14 @@ var DynObject = function(staticObject,matterBody) {
 DynObject.keepInstances = false;
 
 /**
- * Array of instances if {@link PhSim.DynObject.keepInstances} iu set to true
+ * If set to true, the `staticObject` is cloned before Object.assign is applied to 
+ * the DynObject to clone it.
+ */
+
+DynObject.deepCloneStaticObject = false;
+
+/**
+ * Array of instances if {@link PhSim.DynObject.keepInstances} is set to true
  * @type {PhSim.DynObject[]}
  */
 
@@ -407,9 +476,7 @@ DynObject.createMatterObject = function(staticObject) {
 
 	opts.label = staticObject.name || "Untitled Object";
 
-	opts.isStatic = staticObject.semiLocked;
-
-	opts.isStatic = staticObject.locked;
+	opts.isStatic = staticObject.locked || staticObject.semiLocked;
 
 	var set;
 
@@ -518,7 +585,7 @@ module.exports = DynObject;</pre>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2021-01-19T16:51:40-06:00
+		on 2021-01-29T12:56:36-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

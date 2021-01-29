@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>PhSim Source: widgets/rectText.js</title>
+	<title>PhSim Source: widgets/transformAgainstCamera.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -114,32 +114,22 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: widgets/rectText.js</h1>
+		<h1 class="page-title">Source: widgets/transformAgainstCamera.js</h1>
     
 <section>
     <article>
         <pre
-            class="sunlight-highlight-javascript ">const PhSim = require("../index");
-
-/**
- * Widget that sets the {@link PhSim.DynObject#rectTextWidget} as true.
- * @function
- * @param {PhSim.DynObject} dyn_object 
+            class="sunlight-highlight-javascript ">/**
+ * Widget to transform object by camera.
+ * @param {Object} dynObject 
+ * @this PhSim
  */
 
-PhSim.Widgets.rectText = function(dyn_object) {
+function transformAgainstCamera(o) {
+    this.camera.transformingObjects.push(o)
+}
 
-    /**
-     * 
-     * RectText widget enabler.
-     * 
-     * @type {Boolean}
-     * @memberof PhSim.DynObject
-     */
-
-    dyn_object.rectTextWidget === true;
-}    
-</pre>
+module.exports = transformAgainstCamera;</pre>
     </article>
 </section>
 

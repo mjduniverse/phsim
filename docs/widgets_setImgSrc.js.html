@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>PhSim Source: widgets/rectText.js</title>
+	<title>PhSim Source: widgets/setImgSrc.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -114,32 +114,30 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: widgets/rectText.js</h1>
+		<h1 class="page-title">Source: widgets/setImgSrc.js</h1>
     
 <section>
     <article>
         <pre
-            class="sunlight-highlight-javascript ">const PhSim = require("../index");
-
-/**
- * Widget that sets the {@link PhSim.DynObject#rectTextWidget} as true.
- * @function
- * @param {PhSim.DynObject} dyn_object 
+            class="sunlight-highlight-javascript ">/**
+ * Widget for changing image sources for sprites.
+ * 
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Object} widget - Widget Object
+ * @param {String} widget.src - New Source
+ * @this PhSim
  */
 
-PhSim.Widgets.rectText = function(dyn_object) {
+function setImgSrc(dynObject,widget) {
 
-    /**
-     * 
-     * RectText widget enabler.
-     * 
-     * @type {Boolean}
-     * @memberof PhSim.DynObject
-     */
+    var f = function(){
+        dynObject.sprite.src = widget.src;
+    }
 
-    dyn_object.rectTextWidget === true;
-}    
-</pre>
+    this.createWFunction(dynObject,f,widget);
+}
+
+module.exports = setImgSrc;</pre>
     </article>
 </section>
 
