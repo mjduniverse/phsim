@@ -68,14 +68,14 @@
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-Constraints.html">Constraints</a></li><li><a href="tutorial-Creating PhSim Simulation.html">Creating PhSim Simulation</a></li><li><a href="tutorial-Dynamic Objects.html">Dynamic Objects</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li>
+					<li><a href="tutorial-Adding Sprites.html">Adding Sprites</a></li><li><a href="tutorial-Constraints.html">Constraints</a></li><li><a href="tutorial-Creating PhSim Simulation.html">Creating PhSim Simulation</a></li><li><a href="tutorial-Dynamic Objects.html">Dynamic Objects</a></li><li><a href="tutorial-Widget Functions.html">Widget Functions</a></li><li><a href="tutorial-Widgets.html">Widgets</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html">Global</a></li>
+					<li><a href="global.html#setImgSrc">setImgSrc</a></li><li><a href="global.html#transformAgainstCamera">transformAgainstCamera</a></li>
 				</ul>
 			</li>
 			
@@ -418,6 +418,76 @@
         <dl>
             
 <hr>
+<dt class="name" id=".deepCloneStaticObject">
+    <h4 id=".deepCloneStaticObject"><span class="type-signature">&lt;static> </span>deepCloneStaticObject<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>If set to true, the <code>staticObject</code> is cloned before Object.assign is applied to
+the DynObject to clone it.</p>
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="dynObject.js.html">dynObject.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
 <dt class="name" id=".DynObject.keepInstances">
     <h4 id=".DynObject.keepInstances"><span class="type-signature">&lt;static> </span>DynObject.keepInstances<span class="type-signature"> :Boolean</span></h4>
 
@@ -427,7 +497,9 @@
     
     <div class="description">
         <p>If set to <code>true</code>, all DynObject instances are put into the
-<a href="PhSim.DynObject.html#.instances">PhSim.DynObject.instances</a> array.</p>
+<a href="PhSim.DynObject.html#.instances">PhSim.DynObject.instances</a> array. By default, this is <code>false</code>.
+Do not use unless you want to risk memory leaks. This is primarily for debugging
+purposes.</p>
     </div>
     
 
@@ -514,7 +586,7 @@
 <dd>
     
     <div class="description">
-        <p>Array of instances if PhSim.DynObject.keepInstances iu set to true</p>
+        <p>Array of instances if PhSim.DynObject.keepInstances is set to true</p>
     </div>
     
 
@@ -669,6 +741,86 @@
         
             
 <hr>
+<dt class="name" id="data">
+    <h4 id="data"><span class="type-signature"></span>data<span class="type-signature"> :Object</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Custom properties that can be added by the user to extend the DynObject.</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="dynObject.js.html">dynObject.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
 <dt class="name" id="eventStack">
     <h4 id="eventStack"><span class="type-signature"></span>eventStack<span class="type-signature"> :<a href="PhSim.EventStack.html">PhSim.EventStack</a></span></h4>
 
@@ -687,6 +839,86 @@
             <li>
                 
 <span class="param-type"><a href="PhSim.EventStack.html">PhSim.EventStack</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="dynObject.js.html">dynObject.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="firstCycle">
+    <h4 id="firstCycle"><span class="type-signature"></span>firstCycle<span class="type-signature"> :Number</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Inital angle of object</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Number</span>
 
 
 
@@ -829,6 +1061,253 @@
         
             
 <hr>
+<dt class="name" id="matter">
+    <h4 id="matter"><span class="type-signature"></span>matter<span class="type-signature"> :Object</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Matter Body</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="dynObject.js.html">dynObject.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="name">
+    <h4 id="name"><span class="type-signature"></span>name<span class="type-signature"> :String</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>DynObject name</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="dynObject.js.html">dynObject.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="noCollision">
+    <h4 id="noCollision"><span class="type-signature"></span>noCollision<span class="type-signature"> :boolean</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Boolean that makes a dynamic object not collide with anything.</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">boolean</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
+	<dd class="tag-default">
+		<ul class="dummy">
+			<li>false</li>
+		</ul>
+	</dd>
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="dynObject.js.html">dynObject.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
 <dt class="name" id="phSim">
     <h4 id="phSim"><span class="type-signature"></span>phSim<span class="type-signature"> :null|<a href="PhSim.html">PhSim</a></span></h4>
 
@@ -930,6 +1409,95 @@
             <li>
                 
 <span class="param-type"><a href="global.html#StaticObject">StaticObject</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="dynObject.js.html">dynObject.js</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="type">
+    <h4 id="type"><span class="type-signature"></span>type<span class="type-signature"> :"circle"|"polygon"|"rectangle"|"regPolygon"</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>DynObject type</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">"circle"</span>
+|
+
+<span class="param-type">"polygon"</span>
+|
+
+<span class="param-type">"rectangle"</span>
+|
+
+<span class="param-type">"regPolygon"</span>
 
 
 
@@ -3661,7 +4229,7 @@ This can be done alternatively by setting <code>dynObject.fillStyle</code> direc
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a>
 	
-		on 2021-01-19T16:51:41-06:00
+		on 2021-01-29T12:56:37-06:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

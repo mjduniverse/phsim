@@ -1,4 +1,4 @@
-## 0.2.0-alpha (Unreleased)
+## 0.2.0-alpha (2021-1-29)
 
 * Added .data property to DynObjects.
 
