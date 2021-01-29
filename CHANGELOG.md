@@ -1,5 +1,9 @@
 ## 0.2.0-alpha (Unreleased)
 
+* Added .data property to DynObjects.
+
+* Fixed a bug that makes the object go outside the camera at times whenever the ```transformCameraByObj``` is in use.
+
 * Added ```transformAgainstCamera``` widget, which makes the object appear to stay in place when the camera moves. It works by moving in the opposite direction of the camera.
 
 * Added ```setImgSrc``` widget.

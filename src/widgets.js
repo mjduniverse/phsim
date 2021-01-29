@@ -93,7 +93,7 @@ require("./widgets/draggable.js");
 
 const Game = require("./game");
 
-Object.assign(PhSim.Widgets,Game);
+Object.assign(PhSim.Widgets,Game.Widgets);
 
 require("./widgets/lock.js");
 require("./widgets/motion.js");

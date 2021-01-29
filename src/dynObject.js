@@ -36,13 +36,58 @@ var DynObject = function(staticObject,matterBody) {
 
 	Object.assign(this,PhSimEventTarget);
 
-	Object.assign(this,JSON.parse(JSON.stringify(staticObject)));
+	Object.assign(this,PhSim.Query.deepClone(staticObject));
+
+	/**
+	 * DynObject name
+	 * @type {String}
+	 */
+
+	this.name = staticObject.name;
+
+	/**
+	 * DynObject type
+	 * @type {"circle" | "polygon" | "rectangle" | "regPolygon"}
+	 * 
+	 */
+
+	this.type = staticObject.type;
+
+	// Apply Shape Specific Constructor
+
+	if(this.type === "circle") {
+		Static.Circle.apply(this,staticObject.x,staticObject.y,staticObject.r);
+	}
+
+	if(this.type === "regPolygon") {
+		Static.RegPolygon.apply(this,staticObject.x,staticObject.y,staticObject.radius,staticObject.sides)
+	}
+
+	if(this.type === "rectangle") {
+		Static.Rectangle.apply(this,staticObject.x,staticObject.y,staticObject.w,staticObject.h);
+	}
+
+	if(this.type === "polygon") {
+		Static.Polygon.apply(this,staticObject.verts);
+	}
+
+	this.widgets = staticObject.widgets;
+
+	/**
+	 * Matter Body
+	 * @type {Object}
+	 */
 
 	this.matter = matterBody || PhSim.DynObject.createMatterObject(staticObject);
 
 	if(staticObject.shape === "polygon") {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
 	}
+
+	/**
+	 * Inital angle of object
+	 * @type {Number}
+	 */
 
 	this.firstCycle = staticObject.cycle || 0;
 
@@ -64,6 +109,13 @@ var DynObject = function(staticObject,matterBody) {
 
 	this.id = DynObject.nextId;
 	DynObject.nextId++;
+
+	/**
+	 * Custom properties that can be added by the user to extend the DynObject.
+	 * @type {Object}
+	 */
+
+	this.data = this.data || {}
 	
 	/**
 	 * Reference to parent simulation
@@ -78,7 +130,7 @@ var DynObject = function(staticObject,matterBody) {
 	 * @default false
 	 */
 
-	this.noCollision = options.noCollision || false;
+	this.noCollision = staticObject.noCollision || false;
 
 	/**
  	 * Object containing array functions to be called.
@@ -112,6 +164,13 @@ var DynObject = function(staticObject,matterBody) {
  */
 
 DynObject.keepInstances = false;
+
+/**
+ * If set to true, the `staticObject` is cloned before Object.assign is applied to 
+ * the DynObject to clone it.
+ */
+
+DynObject.deepCloneStaticObject = false;
 
 /**
  * Array of instances if {@link PhSim.DynObject.keepInstances} is set to true

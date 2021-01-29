@@ -11,12 +11,21 @@ const PhSim = require("../index");
 
 
 PhSim.Widgets.transformCameraByObj = function(dyn_object) {
-    
     var self = this;
 
+    var dx;
+    var dy;
+
     this.on("beforeupdate",function(){
-        var dx = dyn_object.matter.position.x - dyn_object.matter.positionPrev.x;
-        var dy = dyn_object.matter.position.y - dyn_object.matter.positionPrev.y;
+        dx = dyn_object.matter.position.x;
+        dy = dyn_object.matter.position.y;
+    },{
+        "slEvent": true
+    });
+
+    this.on("afterupdate",function(){
+        dx = dyn_object.matter.position.x - dx;
+        dy = dyn_object.matter.position.y - dy;
         self.camera.translate(-dx,-dy);
     },{
         "slEvent": true
