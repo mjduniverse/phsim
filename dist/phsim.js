@@ -3852,11 +3852,19 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 	if(this.dynSim) {
 		content = this.dynSim.processVar(content);
 	}
+	
+	var lineHeight = this.ctx.measureText("M").width
 
-	this.ctx.fillText(content,0,0);
+	var lines = content.split("\n");
 
-	if(text.lineWidth) {
-		this.ctx.strokeText(content,0,0);
+	for(let i = 0; i < lines.length; i++) {
+
+		this.ctx.fillText(lines[i],0,lineHeight * i);
+
+		if(text.lineWidth) {
+			this.ctx.strokeText(lines[i],0,lineHeight * i);
+		}
+
 	}
 
 	this.ctx.restore();
