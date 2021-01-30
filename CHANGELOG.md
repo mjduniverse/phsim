@@ -1,3 +1,7 @@
+## 0.2.2-alpha (2021-1-30)
+
+* Fixed error that breaks rectText widget if ```text.content``` is undefined and ```text``` is an object.
+
 ## 0.2.1-alpha (2021-1-29)
 
 * Fixed rectText widget by making it have black text as default. Before this patch, text with undefined colors did not display.
