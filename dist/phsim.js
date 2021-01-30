@@ -3834,7 +3834,7 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 	this.ctx.rect(0,0,w,h);
 	this.ctx.clip();
 	this.ctx.textAlign = "left";
-	this.ctx.fillStyle = text.fill;
+	this.ctx.fillStyle = text.fill || "#000000";
 
 	// Reset Line Width
 
@@ -3844,16 +3844,16 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 		this.ctx.lineWidth = text.lineWidth;
 	}
 
-	this.ctx.strokeStyle = text.borderColor
+	this.ctx.strokeStyle = text.borderColor || "#000000";
 	this.ctx.font = text.size + "px " + text.font;
 	this.ctx.textBaseline = "top";
-	var content = text.content;
+	var content = text.content || "";
 
 	if(this.dynSim) {
 		content = this.dynSim.processVar(content);
 	}
-	
-	var lineHeight = this.ctx.measureText("M").width
+
+	var lineHeight = text.lineHeight || this.ctx.measureText("M").width;
 
 	var lines = content.split("\n");
 

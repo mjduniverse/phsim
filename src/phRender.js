@@ -489,7 +489,7 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 	this.ctx.strokeStyle = text.borderColor || "#000000";
 	this.ctx.font = text.size + "px " + text.font;
 	this.ctx.textBaseline = "top";
-	var content = text.content;
+	var content = text.content || "";
 
 	if(this.dynSim) {
 		content = this.dynSim.processVar(content);
