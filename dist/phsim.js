@@ -3107,6 +3107,7 @@ Game.prototype.end = function() {
 
 /**
  * Namespace for game widgets
+ * @name PhSim.Game.Widgets
  * @mixin
  * 
  */
@@ -3117,7 +3118,8 @@ Game.Widgets = {
 
 /**
  * Coin widget. Works if game widget is enabled. If not enabled, it throws an exception.
- * 
+ * @function
+ * @memberof PhSim.Game.Widgets
  * @param {PhSim.DynObject} dyn_object 
  * @param {Object} widget - Widget options
  * @param {Number} [widget.value] - Value of coin. If undefined, the value of the coin is 1.
@@ -3156,6 +3158,8 @@ Game.Widgets.coin = function(dyn_object,widget) {
 
 /**
  * Hazard Widget
+ * @function
+ * @memberof PhSim.Game.Widgets
  * @param {PhSim.DynObject} dyn_object 
  * @param {Object} widget
  * @param {Number} [widget.damage] - Quantity of life lost. By default, it is equal to 1.
@@ -3191,7 +3195,8 @@ Game.Widgets.hazard = function(dyn_object,widget) {
 }
 
 /**
- * 
+ * @function
+ * @memberof PhSim.Game.Widgets
  * @param {PhSim} dyn_object 
  * @param {Object} [widget] - Widget configuration
  * @param {Number} [widget.lives] - Lives to be gained.
@@ -3834,7 +3839,7 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 	this.ctx.rect(0,0,w,h);
 	this.ctx.clip();
 	this.ctx.textAlign = "left";
-	this.ctx.fillStyle = text.fill;
+	this.ctx.fillStyle = text.fill || "#000000";
 
 	// Reset Line Width
 
@@ -3844,7 +3849,7 @@ PhRender.prototype.rectText = function(text,x,y,w,h,a) {
 		this.ctx.lineWidth = text.lineWidth;
 	}
 
-	this.ctx.strokeStyle = text.borderColor
+	this.ctx.strokeStyle = text.borderColor || "#000000";
 	this.ctx.font = text.size + "px " + text.font;
 	this.ctx.textBaseline = "top";
 	var content = text.content;

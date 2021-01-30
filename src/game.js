@@ -242,6 +242,7 @@ Game.prototype.end = function() {
 
 /**
  * Namespace for game widgets
+ * @name PhSim.Game.Widgets
  * @mixin
  * 
  */
@@ -252,7 +253,8 @@ Game.Widgets = {
 
 /**
  * Coin widget. Works if game widget is enabled. If not enabled, it throws an exception.
- * 
+ * @function
+ * @memberof PhSim.Game.Widgets
  * @param {PhSim.DynObject} dyn_object 
  * @param {Object} widget - Widget options
  * @param {Number} [widget.value] - Value of coin. If undefined, the value of the coin is 1.
@@ -291,6 +293,8 @@ Game.Widgets.coin = function(dyn_object,widget) {
 
 /**
  * Hazard Widget
+ * @function
+ * @memberof PhSim.Game.Widgets
  * @param {PhSim.DynObject} dyn_object 
  * @param {Object} widget
  * @param {Number} [widget.damage] - Quantity of life lost. By default, it is equal to 1.
@@ -326,7 +330,8 @@ Game.Widgets.hazard = function(dyn_object,widget) {
 }
 
 /**
- * 
+ * @function
+ * @memberof PhSim.Game.Widgets
  * @param {PhSim} dyn_object 
  * @param {Object} [widget] - Widget configuration
  * @param {Number} [widget.lives] - Lives to be gained.
