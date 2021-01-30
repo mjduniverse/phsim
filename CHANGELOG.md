@@ -1,6 +1,6 @@
 ## 0.2.2-alpha (2021-1-30)
 
-* Fixed error that breaks rectText widget if ```text.content``` is undefined and ```text``` is an object.
+* Fixed error that breaks rectText widget if ```text.content``` is undefined and ```text``` is an object (where `rectText` is the first argument of the `PhSim.PhRender.prototype.rectText` function).
 
 ## 0.2.1-alpha (2021-1-29)
 
