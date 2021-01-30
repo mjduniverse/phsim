@@ -1,5 +1,11 @@
 ## 0.3.0-alpha (Unreleased)
 
+* Added multi-line support for ```rectText``` widget.
+
+## 0.2.1-alpha (2021-1-29)
+
+* Fixed rectText widget by making it have black text as default. Before this patch, text with undefined colors did not display.
+
 ## 0.2.0-alpha (2021-1-29)
 
 * Added .data property to DynObjects.
