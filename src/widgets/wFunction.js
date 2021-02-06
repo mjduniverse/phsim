@@ -188,13 +188,17 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
     var wFunction = function(event) {
 
-		try {
-			return wFunctionBody.apply(thisRef,event);
-		}
+		if(wFunction.wFunction_enabled) {
 
-		catch(e) {
-			self.callEventClass("wfunctionerror",self,e);
-			console.error(e);
+			try {
+				return wFunctionBody.apply(thisRef,event);
+			}
+
+			catch(e) {
+				self.callEventClass("wfunctionerror",self,e);
+				console.error(e);
+			}
+
 		}
 
 	}
@@ -202,6 +206,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	wFunction._options = options;
 	wFunction._bodyFunction = wFunctionBody;
 	wFunction._thisRef = thisRef;
+	wFunction.wFunction_enabled = options.enabled || true;
 	
 	if(options._name) {
 		self.wFunctionNames[options._name] = wFunction;
