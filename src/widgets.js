@@ -30,42 +30,8 @@ PhSim.Constraints.Static.Constraint = function() {
 	this.type = "constraint";
 }
 
-PhSim.prototype.getWidgetByName = function(nameStr) {
-	for(var i = 0; i < this.objUniverse.length; i++) {
-		this.objUniverse[i].getWidgetByName(nameStr);
-	}
-}
-
 PhSim.prototype.widgets = {};
 
-/**
- * Widget Object
- * @param {Function} onextraction 
- */
-
-PhSim.Widget = function(onextraction) {
-	this.onextraction = onextraction;
-}
-
-/**
- * 
- * @param {PhSimObject} o 
- */
-
-PhSim.Widget.defineByBoolean = function(o) {
-
-	Object.keys(PhSim.Widgets).forEach(function(p){
-		if(o[p]) {
-			o.type = p;
-		}
-	})
-
-	
-}
-
-PhSim.Widget.WidgetOptions = function(type) {
-	this.type = type;
-}
 
 /**
  * @typedef {WFunctionOptions|Object} WidgetOptions
@@ -80,11 +46,6 @@ PhSim.Widget.WidgetOptions = function(type) {
  */
 
 PhSim.Widgets = {};
-
-PhSim.Query.chkWidgetType = function() {
-	
-}
-
 
 require("./widgets/circularConstraint.js");
 require("./widgets/clone.js");
