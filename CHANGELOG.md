@@ -1,6 +1,16 @@
 ## 0.3.0-alpha (Unreleased)
 
+* Added ```PhSim.Query.overlaps``` method. This checks if two objects overlap.
+
+* Added ```PhSim.Vertices.inscribedRegPolygonCircle```, ```PhSim.Vertices.inscribedMatterCirclePolygon```, ```PhSim.Vertices.object``` functions.
+
 * Added multi-line support for ```rectText``` widget.
+
+* Added `wFunction_enabled` property to wFunctions.
+
+## 0.2.2-alpha (2021-1-30)
+
+* Fixed error that breaks rectText widget if ```text.content``` is undefined and ```text``` is an object (where `rectText` is the first argument of the `PhSim.PhRender.prototype.rectText` function).
 
 ## 0.2.1-alpha (2021-1-29)
 
