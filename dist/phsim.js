@@ -563,7 +563,7 @@ if(true) {
 
 PhSim.Static = __webpack_require__(5 );
 
-__webpack_require__(14 );
+__webpack_require__(15 );
 
 PhSim.EventStack = __webpack_require__(9 );
 
@@ -581,9 +581,11 @@ PhSim.prototype.eventStack = new PhSim.EventStack();
 
 PhSim.prototype.simulationEventStack = new PhSim.EventStack();
 
-PhSim.PhRender = __webpack_require__(15);
-PhSim.Sprites = __webpack_require__(16);
-PhSim.Audio = __webpack_require__(17);
+PhSim.prototype.getWidgetByName = __webpack_require__(16);
+
+PhSim.PhRender = __webpack_require__(17);
+PhSim.Sprites = __webpack_require__(18);
+PhSim.Audio = __webpack_require__(19);
 PhSim.Vector = __webpack_require__(3);
 PhSim.diagRect = __webpack_require__(12);
 PhSim.Vertices = __webpack_require__(6);
@@ -594,42 +596,44 @@ PhSim.Centroid = __webpack_require__(7);
 
 PhSim.BoundingBox = __webpack_require__(11);
 PhSim.DynObject = __webpack_require__(2);
-PhSim.Events = __webpack_require__(18);
+PhSim.Events = __webpack_require__(20);
 
-__webpack_require__(19);
-__webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
 __webpack_require__(23);
 __webpack_require__(24);
+__webpack_require__(25);
+__webpack_require__(26);
 
 PhSim.PhSimEventTarget =  __webpack_require__(8);
 
 Object.assign(PhSim.prototype,PhSim.PhSimEventTarget);
 
-__webpack_require__(25);
-__webpack_require__(26);
 __webpack_require__(27);
+__webpack_require__(28);
+__webpack_require__(29);
 
-PhSim.prototype.gotoSimulationIndex = __webpack_require__(28);
+PhSim.prototype.gotoSimulationIndex = __webpack_require__(30);
 PhSim.Motion = __webpack_require__(4);
 
-__webpack_require__(29);
-__webpack_require__(30);
 __webpack_require__(31);
+__webpack_require__(32);
+__webpack_require__(33);
 
-PhSim.Camera = __webpack_require__(32);
+PhSim.Camera = __webpack_require__(34);
 PhSim.Game = __webpack_require__(13);
 PhSim.Gradients = __webpack_require__(10);
 
-__webpack_require__(33);
+PhSim.Widget = __webpack_require__(14);
 
-PhSim.calc_skinmesh = __webpack_require__(50);
+__webpack_require__(35);
 
-__webpack_require__(51);
-__webpack_require__(52);
+PhSim.calc_skinmesh = __webpack_require__(52);
 
-PhSim.ObjLoops = __webpack_require__(53);
+__webpack_require__(53);
+__webpack_require__(54);
+
+PhSim.ObjLoops = __webpack_require__(55);
 
 
 /**
@@ -2152,6 +2156,7 @@ module.exports = Static;
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const Static = __webpack_require__(5);
 const Centroid = __webpack_require__(7);
 const Vector = __webpack_require__(3);
 
@@ -2272,6 +2277,53 @@ Vertices.getRectangleCorners = function(rectangle) {
 	}
 
 	return z;
+
+}
+
+/**
+ * Get vertices for regular polygon inscribed in circle.
+ * @param {Circle} circle 
+ * @param {Number} sides 
+ */
+
+Vertices.inscribedRegPolygonCircle = function(circle,sides) {
+	return new Static.RegPolygon(circle.x,circle.y,circle.radius,sides);
+}
+
+/**
+ * Returns the vertices for a regular polygon inscribed in the circle. It has 25 sides.
+ * This is meant to create a regular polygon that is used to create Matter.js circles.
+ * 
+ * @param {Circle} circle 
+ * 
+ */
+
+Vertices.inscribedMatterCirclePolygon = function(circle) {
+	return Vertices.inscribedRegPolygonCircle(circle,25);
+}
+
+/**
+ * Get verticles of PhSim objects
+ * @param {*} o 
+ */
+
+Vertices.object = function(o) {
+
+	if(o.shape === "rectangle") {
+		return Vertices.rectangle(o);
+	}
+
+	if(o.shape === "regPolygon") {
+		return Vertices.regPolygon(o);
+	}
+
+	if(o.shape === "polygon") {
+		return o.verts;
+	}
+
+	if(o.shape === "circle") {
+		return Vertices.inscribedMatterCirclePolygon(o);
+	}
 
 }
 
@@ -3236,6 +3288,108 @@ module.exports = Game;
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const PhSim = __webpack_require__(0);
+const DynObject = __webpack_require__(2);
+const PhSimEventTarget = __webpack_require__(8);
+
+/**
+ * Dynamic Widget Object
+ * @param {Object} options 
+ */
+
+const Widget = function(target,options) {
+
+	/**
+	 * Thing to be affected by the widget.
+	 * @type {PhSim|PhSim.DynObject}
+	 */
+
+	this.target = target;
+
+	Object.assign(this,options);
+	Object.assign(this,PhSimEventTarget);
+	this.enable();
+}
+
+Widget.prototype.eventStack = {
+	enable: [],
+	disable: [],
+	destroy: []
+}
+
+Widget.prototype.enable = function() {
+
+	if(typeof this.wFunction === "function") {
+		this.wFunction.wFunction_enabled = true;
+	}
+
+	this.callEventClass("enable",this,this);
+}
+
+/**
+ * Function for disabling widget
+ * @type {Function}
+ */
+
+Widget.prototype.disable = function() {
+
+	if(typeof this.wFunction === "function") {
+		this.wFunction.wFunction_enabled = false;
+	}
+
+	this.callEventClass("disable",this,this);
+}
+
+/**
+ * Function for destroying widget
+ * @type 
+ */
+
+
+Widget.prototype.destroy = function() {
+
+	if(typeof this.wFunction === "function") {
+
+		if(this.wFunction._thisRef instanceof DynObject) {
+			wFunction._thisRef.phsim.destroyWFunction(w.wFunction);
+		}
+
+		if(this.wFunction._thisRef instanceof PhSim) {
+			wFunction._thisRef.destroyWFunction(w.wFunction);	
+		}
+
+	}
+
+	this.callEventClass("destroy",this,this);
+}
+
+
+/**
+ * 
+ * @param {PhSimObject} o 
+ */
+
+Widget.defineByBoolean = function(o) {
+
+	Object.keys(Widgets).forEach(function(p){
+		if(o[p]) {
+			o.type = p;
+		}
+	})
+
+	
+}
+
+Widget.WidgetOptions = function(type) {
+	this.type = type;
+}
+
+module.exports = Widget;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
 const DynObject = __webpack_require__(2);
 const PhSim = __webpack_require__(0);
 
@@ -3353,7 +3507,25 @@ PhSim.matterPlugin = matterPlugin;
 Matter.Plugin.register(PhSim.matterPlugin); 
 
 /***/ }),
-/* 15 */
+/* 16 */
+/***/ (function(module, exports) {
+
+/**
+ * Get widget by name
+ * @memberof PhSim
+ * @param {String} nameStr 
+ */
+
+function getWidgetByName(nameStr) {
+	for(var i = 0; i < this.objUniverse.length; i++) {
+		this.objUniverse[i].getWidgetByName(nameStr);
+	}
+}
+
+module.exports = getWidgetByName;
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Gradients = __webpack_require__(10);
@@ -4238,7 +4410,7 @@ PhRender.prototype.dynamicDrawLayer = function(L,sim,simulationI) {
 module.exports = PhRender;
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /**
@@ -4505,7 +4677,7 @@ Sprites.spriteImgObj.prototype.addSprite = function(src,onload = function() {} )
 module.exports = Sprites;
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -4697,7 +4869,7 @@ PhSim.prototype.toggleAudioByIndex = function(i) {
 module.exports = Audio;
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /**
@@ -4794,7 +4966,7 @@ Events.PhSimCollision = function() {
 module.exports = Events;
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -4840,7 +5012,7 @@ PhSim.prototype.getObjectFromLOStr = function(str) {
 }
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -4923,7 +5095,7 @@ PhSim.prototype.configRender = function() {
 }
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -5039,7 +5211,7 @@ PhSim.prototype.alert = function(options) {
 }
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Try to import matter-js as a commonJS module
@@ -5221,13 +5393,13 @@ PhSim.prototype.renderAllCounters = function() {
 }
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -5597,12 +5769,13 @@ PhSim.prototype.deregisterKeyEvents = function() {
 }
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { ObjLoops } = __webpack_require__(0);
 const Vector = __webpack_require__(3);
 const PhSim = __webpack_require__(0);
+const Vertices = __webpack_require__(6);
 
 var Matter;
 
@@ -5939,6 +6112,27 @@ PhSim.Query.pointInVertsBorder = function(a,v,width) {
 	else {
 		return false;
 	}
+
+}
+
+/**
+ * 
+ * @param {*} dynObjectA 
+ * @param {*} dynObjectB 
+ */
+
+PhSim.Query.overlaps = function(dynObjectA,dynObjectB) {
+
+	var a = Vertices.object(dynObjectA);
+	var b = Vertices.object(dynObjectB);
+
+	for(var i = 0; i < a.length; i++) {
+		if(PhSim.Query.pointInVerts(b,a[i])) {
+			return true;
+		}
+	}
+
+	return false;
 
 }
 
@@ -6342,7 +6536,7 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -6371,7 +6565,7 @@ PhSim.prototype.applyGravitationalField = function() {
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -6509,7 +6703,7 @@ PhSim.prototype.exit = function() {
 }
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const DynObject = __webpack_require__(2);
@@ -6737,7 +6931,7 @@ var gotoSimulationIndex = function (i) {
 module.exports = gotoSimulationIndex;
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -6787,7 +6981,7 @@ PhSim.prototype.setRadius = function(dynObject,radius) {
 }
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -6931,7 +7125,7 @@ PhSim.prototype.loopFunction = function() {
 }
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -7001,7 +7195,7 @@ PhSim.prototype.extractWidget = function(dyn_object,widget) {
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Vector = __webpack_require__(3)
@@ -7095,7 +7289,7 @@ Camera.prototype.setPosition = function(x,y) {
 module.exports = Camera;
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -7130,42 +7324,8 @@ PhSim.Constraints.Static.Constraint = function() {
 	this.type = "constraint";
 }
 
-PhSim.prototype.getWidgetByName = function(nameStr) {
-	for(var i = 0; i < this.objUniverse.length; i++) {
-		this.objUniverse[i].getWidgetByName(nameStr);
-	}
-}
-
 PhSim.prototype.widgets = {};
 
-/**
- * Widget Object
- * @param {Function} onextraction 
- */
-
-PhSim.Widget = function(onextraction) {
-	this.onextraction = onextraction;
-}
-
-/**
- * 
- * @param {PhSimObject} o 
- */
-
-PhSim.Widget.defineByBoolean = function(o) {
-
-	Object.keys(PhSim.Widgets).forEach(function(p){
-		if(o[p]) {
-			o.type = p;
-		}
-	})
-
-	
-}
-
-PhSim.Widget.WidgetOptions = function(type) {
-	this.type = type;
-}
 
 /**
  * @typedef {WFunctionOptions|Object} WidgetOptions
@@ -7181,22 +7341,15 @@ PhSim.Widget.WidgetOptions = function(type) {
 
 PhSim.Widgets = {};
 
-PhSim.Query.chkWidgetType = function() {
-	
-}
-
-
-__webpack_require__(34);
-__webpack_require__(35);
 __webpack_require__(36);
+__webpack_require__(37);
+__webpack_require__(38);
 
 
 const Game = __webpack_require__(13);
 
 Object.assign(PhSim.Widgets,Game.Widgets);
 
-__webpack_require__(37);
-__webpack_require__(38);
 __webpack_require__(39);
 __webpack_require__(40);
 __webpack_require__(41);
@@ -7205,12 +7358,14 @@ __webpack_require__(43);
 __webpack_require__(44);
 __webpack_require__(45);
 __webpack_require__(46);
+__webpack_require__(47);
+__webpack_require__(48);
 
-PhSim.Widgets.constraint = __webpack_require__(47);
+PhSim.Widgets.constraint = __webpack_require__(49);
 
-PhSim.Widgets.setImgSrc = __webpack_require__(48);
+PhSim.Widgets.setImgSrc = __webpack_require__(50);
 
-PhSim.Widgets.transformAgainstCamera = __webpack_require__(49);
+PhSim.Widgets.transformAgainstCamera = __webpack_require__(51);
 
 /**
  * PlayAudio Widget
@@ -7250,8 +7405,23 @@ PhSim.Widgets.noRotation = function(dyn_object) {
     Matter.Body.setInertia(dyn_object.matter, Infinity)
 }
 
+/**
+ * Get Widget object by name
+ * @param {string} name 
+ */
+
+PhSim.prototype.getWidgetByName = function(name) {
+	for(var i = 0; i < this.objUniverse.length; i++) {
+		for(var j = 0; i < this.objUniverse[i].widgets.length; i++) {
+			if(this.objUniverse[i].widgets[j].name === name) {
+				return this.objUniverse[i].widgets[j];
+			}
+		}
+	}
+}
+
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Try to import matter-js as a commonJS module
@@ -7333,7 +7503,7 @@ PhSim.Widgets.circularConstraint = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -7481,7 +7651,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Motion = __webpack_require__(4);
@@ -7564,7 +7734,7 @@ PhSim.Widgets.draggable = function(dyn_object) {
 }
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Try to import matter-js as a commonJS module
@@ -7674,7 +7844,7 @@ PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Motion = __webpack_require__(4);
@@ -7862,7 +8032,7 @@ PhSim.Widgets.force = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const DynObject = __webpack_require__(2)
@@ -7922,7 +8092,7 @@ PhSim.Widgets.objLink = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { statusCodes } = __webpack_require__(0);
@@ -8115,13 +8285,17 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
     var wFunction = function(event) {
 
-		try {
-			return wFunctionBody.apply(thisRef,event);
-		}
+		if(wFunction.wFunction_enabled) {
 
-		catch(e) {
-			self.callEventClass("wfunctionerror",self,e);
-			console.error(e);
+			try {
+				return wFunctionBody.apply(thisRef,event);
+			}
+
+			catch(e) {
+				self.callEventClass("wfunctionerror",self,e);
+				console.error(e);
+			}
+
 		}
 
 	}
@@ -8129,7 +8303,8 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	wFunction._options = options;
 	wFunction._bodyFunction = wFunctionBody;
 	wFunction._thisRef = thisRef;
-	
+	wFunction.wFunction_enabled = options.enabled || true;
+
 	if(options._name) {
 		self.wFunctionNames[options._name] = wFunction;
 	}
@@ -8377,35 +8552,47 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 }
 
-
-
 /** 
  * 
  * Disable wFunction
  * 
  * @memberof PhSim
  * @function
- * @param {WFunction} o - Reference created by {@link PhSim#createWFunction}.
+ * @param {WFunction} wFunction - Reference created by {@link PhSim#createWFunction}.
  * 
 */
 
-PhSim.prototype.disableWFunction = function(o) {
+PhSim.prototype.disableWFunction = function(wFunction) {
+	wFunction.wFunction_enabled = false;
+}
 
-	if(typeof o._eventclass === "string") {
-		this.off(o._eventclass,o._ref);
+/**
+ * Make wFunction no longer be able to work.
+ * 
+ * @memberof PhSim
+ * @function
+ * @param {WFunction} wFunction - wFunction to destroy.
+ */
+
+PhSim.prototype.destroyWFunction = function(wFunction) {
+
+	this.disableWFunction(wFunction);
+
+	if(typeof wFunction._eventclass === "string") {
+		this.off(wFunction._eventclass,wFunction._ref);
 	}
 
-	else if(o._options.trigger === "time") {
-		clearInterval(o._ref)
+	else if(wFunction._options.trigger === "time") {
+		clearInterval(wFunction._ref)
 	}
 
-	else if(o._options.trigger === "objlink") {
-		var i = o._thisRef.objLinkFunctions.indexOf(o)
-		o._thisRef.objLinkFunctions.splice(i,1);
+	else if(wFunction._options.trigger === "objlink") {
+		var i = wFunction._thisRef.objLinkFunctions.indexOf(wFunction);
+		wFunction._thisRef.objLinkFunctions.splice(i,1);
 	}
 
-	if(o._name) {
-		delete this.wFunctionNames[o._name];
+	if(wFunction._name) {
+		delete this.wFunctionNames[wFunction._name];
 	}
 
 }
@@ -8427,7 +8614,7 @@ PhSim.Widgets.wFunction = function(o,widget) {
 PhSim.prototype.wFunctionNames = {}
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Motion = __webpack_require__(4);
@@ -8568,7 +8755,7 @@ PhSim.Widgets.elevator = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -8632,7 +8819,7 @@ PhSim.Widgets.keyboardControls = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -8671,10 +8858,11 @@ PhSim.Widgets.transformCameraByObj = function(dyn_object) {
 }
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
+const Widget = __webpack_require__(14)
 
 /**
  * 
@@ -8685,16 +8873,25 @@ const PhSim = __webpack_require__(0);
  * @param {PhSim.DynObject} dyn_object - Dynamic Object that will have it's color changed.
  * @param {WFunctionOptions} widget - Widget Options
  * @param {String} widget.color - The new color of the object.
- *
+ * @returns {PhSim.Widget}
  */
 
 PhSim.Widgets.setColor = function(dyn_object,widget) {
+
+    var self = this;
+
+    var w = new Widget(dynObject,widget);
 
     var f = function() {
         PhSim.DynObject.setColor(dyn_object,widget.color);
     }
 
-    this.createWFunction(dyn_object,f,widget);
+    w.wFunction = self.createWFunction(dyn_object,f,widget);
+
+    dyn_object.test1 = w;
+
+    return w;
+
 }
 
 /**
@@ -8705,9 +8902,13 @@ PhSim.Widgets.setColor = function(dyn_object,widget) {
  * @param {PhSim.DynObject} dyn_object 
  * @param {WFunctionOptions} widget - Widget properties.
  * @param {String} widget.color - The new color of the object border
+ * @returns {PhSim.Widget}
+ * 
  */
     
 PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
+
+    var w = new Widget(dyn_object,widget);
 
     var closure = function() {
 
@@ -8722,7 +8923,9 @@ PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
 
     }
 
-    this.createWFunction(dyn_object,closure(),widget);
+    w.wFunction = this.createWFunction(dyn_object,closure(),widget);
+
+    return w;
 }
 
 /**
@@ -8734,20 +8937,25 @@ PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
  * @param {PhSim.DynObject} dyn_object - The object to be affected.
  * @param {WFunctionOptions} widget - Widget options
  * @param {Number} widget.width - New line width
+ * @returns {PhSim.Widget}
  * 
  */
         
 PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
 
+    var w = new Widget(dyn_object,widget);
+
     var f = function(){
         PhSim.DynObject.setLineWidth(dyn_object,widget.width);
     }
 
-    this.createWFunction(dyn_object,f,widget);
+    w.wFunction = this.createWFunction(dyn_object,f,widget);
+
+    return w;
 }
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -8777,7 +8985,7 @@ PhSim.Widgets.deleteSelf = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -8831,7 +9039,7 @@ PhSim.Widgets.stack = function(o,w) {
 }
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Vector = __webpack_require__(3);
@@ -8977,7 +9185,7 @@ function constraint(phsim,widget) {
 module.exports = constraint;
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports) {
 
 /**
@@ -9001,7 +9209,7 @@ function setImgSrc(dynObject,widget) {
 module.exports = setImgSrc;
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports) {
 
 /**
@@ -9017,7 +9225,7 @@ function transformAgainstCamera(o) {
 module.exports = transformAgainstCamera;
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Matter;
@@ -9066,13 +9274,13 @@ var calc_skinmesh = function(dynObject) {
 module.exports = calc_skinmesh;
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -9252,7 +9460,7 @@ PhSim.prototype.processVar = function(str) {
 }
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);

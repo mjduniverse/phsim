@@ -1,3 +1,4 @@
+const Static = require("../objects");
 const Centroid = require("./centroid");
 const Vector = require("./vector");
 
@@ -118,6 +119,53 @@ Vertices.getRectangleCorners = function(rectangle) {
 	}
 
 	return z;
+
+}
+
+/**
+ * Get vertices for regular polygon inscribed in circle.
+ * @param {Circle} circle 
+ * @param {Number} sides 
+ */
+
+Vertices.inscribedRegPolygonCircle = function(circle,sides) {
+	return new Static.RegPolygon(circle.x,circle.y,circle.radius,sides);
+}
+
+/**
+ * Returns the vertices for a regular polygon inscribed in the circle. It has 25 sides.
+ * This is meant to create a regular polygon that is used to create Matter.js circles.
+ * 
+ * @param {Circle} circle 
+ * 
+ */
+
+Vertices.inscribedMatterCirclePolygon = function(circle) {
+	return Vertices.inscribedRegPolygonCircle(circle,25);
+}
+
+/**
+ * Get verticles of PhSim objects
+ * @param {*} o 
+ */
+
+Vertices.object = function(o) {
+
+	if(o.shape === "rectangle") {
+		return Vertices.rectangle(o);
+	}
+
+	if(o.shape === "regPolygon") {
+		return Vertices.regPolygon(o);
+	}
+
+	if(o.shape === "polygon") {
+		return o.verts;
+	}
+
+	if(o.shape === "circle") {
+		return Vertices.inscribedMatterCirclePolygon(o);
+	}
 
 }
 

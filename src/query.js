@@ -1,6 +1,7 @@
 const { ObjLoops } = require(".");
 const Vector = require("./tools/vector");
 const PhSim = require("./index");
+const Vertices = require("./tools/vertex");
 
 var Matter;
 
@@ -337,6 +338,27 @@ PhSim.Query.pointInVertsBorder = function(a,v,width) {
 	else {
 		return false;
 	}
+
+}
+
+/**
+ * 
+ * @param {*} dynObjectA 
+ * @param {*} dynObjectB 
+ */
+
+PhSim.Query.overlaps = function(dynObjectA,dynObjectB) {
+
+	var a = Vertices.object(dynObjectA);
+	var b = Vertices.object(dynObjectB);
+
+	for(var i = 0; i < a.length; i++) {
+		if(PhSim.Query.pointInVerts(b,a[i])) {
+			return true;
+		}
+	}
+
+	return false;
 
 }
 
