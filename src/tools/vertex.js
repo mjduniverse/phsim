@@ -160,11 +160,11 @@ Vertices.object = function(o) {
 	}
 
 	if(o.shape === "polygon") {
-		return o.shape.verts;
+		return o.verts;
 	}
 
 	if(o.shape === "circle") {
-
+		return Vertices.inscribedMatterCirclePolygon(o);
 	}
 
 }
