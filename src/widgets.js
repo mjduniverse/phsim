@@ -110,3 +110,18 @@ PhSim.Widgets.playAudio = function(dyn_object,widget) {
 PhSim.Widgets.noRotation = function(dyn_object) {
     Matter.Body.setInertia(dyn_object.matter, Infinity)
 }
+
+/**
+ * Get Widget object by name
+ * @param {string} name 
+ */
+
+PhSim.prototype.getWidgetByName = function(name) {
+	for(var i = 0; i < this.objUniverse.length; i++) {
+		for(var j = 0; i < this.objUniverse[i].widgets.length; i++) {
+			if(this.objUniverse[i].widgets[j].name === name) {
+				return this.objUniverse[i].widgets[j];
+			}
+		}
+	}
+}
