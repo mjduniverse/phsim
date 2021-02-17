@@ -207,7 +207,7 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 	wFunction._bodyFunction = wFunctionBody;
 	wFunction._thisRef = thisRef;
 	wFunction.wFunction_enabled = options.enabled || true;
-	
+
 	if(options._name) {
 		self.wFunctionNames[options._name] = wFunction;
 	}
@@ -455,35 +455,47 @@ PhSim.prototype.createWFunction = function(thisRef,wFunctionBody,options) {
 
 }
 
-
-
 /** 
  * 
  * Disable wFunction
  * 
  * @memberof PhSim
  * @function
- * @param {WFunction} o - Reference created by {@link PhSim#createWFunction}.
+ * @param {WFunction} wFunction - Reference created by {@link PhSim#createWFunction}.
  * 
 */
 
-PhSim.prototype.disableWFunction = function(o) {
+PhSim.prototype.disableWFunction = function(wFunction) {
+	wFunction.wFunction_enabled = false;
+}
 
-	if(typeof o._eventclass === "string") {
-		this.off(o._eventclass,o._ref);
+/**
+ * Make wFunction no longer be able to work.
+ * 
+ * @memberof PhSim
+ * @function
+ * @param {WFunction} wFunction - wFunction to destroy.
+ */
+
+PhSim.prototype.destroyWFunction = function(wFunction) {
+
+	this.disableWFunction(wFunction);
+
+	if(typeof wFunction._eventclass === "string") {
+		this.off(wFunction._eventclass,wFunction._ref);
 	}
 
-	else if(o._options.trigger === "time") {
-		clearInterval(o._ref)
+	else if(wFunction._options.trigger === "time") {
+		clearInterval(wFunction._ref)
 	}
 
-	else if(o._options.trigger === "objlink") {
-		var i = o._thisRef.objLinkFunctions.indexOf(o)
-		o._thisRef.objLinkFunctions.splice(i,1);
+	else if(wFunction._options.trigger === "objlink") {
+		var i = wFunction._thisRef.objLinkFunctions.indexOf(wFunction);
+		wFunction._thisRef.objLinkFunctions.splice(i,1);
 	}
 
-	if(o._name) {
-		delete this.wFunctionNames[o._name];
+	if(wFunction._name) {
+		delete this.wFunctionNames[wFunction._name];
 	}
 
 }
