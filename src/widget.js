@@ -1,19 +1,39 @@
+const PhSim = require(".");
+const DynObject = require("./dynObject");
+const PhSimEventTarget = require("./events/eventListener");
+
 /**
- * Widget Object
+ * Dynamic Widget Object
  * @param {Object} options 
  */
 
-const Widget = function(options) {
+const Widget = function(target,options) {
+
+	/**
+	 * Thing to be affected by the widget.
+	 * @type {PhSim|PhSim.DynObject}
+	 */
+
+	this.target = target;
+
 	Object.assign(this,options);
+	Object.assign(this,PhSimEventTarget);
+	this.enable();
 }
 
-/**
- * Function for enabling widget
- * @type {Function}
- */
+Widget.prototype.eventStack = {
+	enable: [],
+	disable: [],
+	destroy: []
+}
 
-Widget.enable = function() {
+Widget.prototype.enable = function() {
 
+	if(typeof this.wFunction === "function") {
+		this.wFunction.wFunction_enabled = true;
+	}
+
+	this.callEventClass("enable",this,this);
 }
 
 /**
@@ -21,8 +41,13 @@ Widget.enable = function() {
  * @type {Function}
  */
 
-Widget.disable = function() {
+Widget.prototype.disable = function() {
 
+	if(typeof this.wFunction === "function") {
+		this.wFunction.wFunction_enabled = false;
+	}
+
+	this.callEventClass("disable",this,this);
 }
 
 /**
@@ -31,9 +56,23 @@ Widget.disable = function() {
  */
 
 
-Widget.destroy = function() {
-	 
+Widget.prototype.destroy = function() {
+
+	if(typeof this.wFunction === "function") {
+
+		if(this.wFunction._thisRef instanceof DynObject) {
+			wFunction._thisRef.phsim.destroyWFunction(w.wFunction);
+		}
+
+		if(this.wFunction._thisRef instanceof PhSim) {
+			wFunction._thisRef.destroyWFunction(w.wFunction);	
+		}
+
+	}
+
+	this.callEventClass("destroy",this,this);
 }
+
 
 /**
  * 
