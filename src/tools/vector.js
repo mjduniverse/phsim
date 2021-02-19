@@ -125,6 +125,31 @@ Vector.scale = function(vector,scalar) {
 }
 
 /**
+ * Returns a new Vector object `vector` such that `vector.x === o.x` and 
+ * `vector.y === o.y`.
+ * 
+ * @function
+ * @param {Object} o
+ * @param {Number} o.x
+ * @param {Number} o.y 
+ * @returns {Vector} 
+ */
+
+Vector.extract = function(o) {
+	return new Vector(o.x,o.y);
+}
+
+/**
+ * Returns a vector equal in magnitude of `vector` but opposite in direction of `vector`.
+ * @param {Vector} vector 
+ * @returns {PhSim.Vector} -  The reversed vector.
+ */
+
+Vector.neg = function(vector) {
+	return new Vector(-vector.x,-vector.y);
+}
+
+/**
  * 
  * Divide a vector by a scalar
  * 
