@@ -1,4 +1,6 @@
 const PhSim = require("..");
+const Motion = require("../motion");
+const Vector = require("../tools/vector");
 
 // Try to import matter-js as a commonJS module
 
@@ -91,6 +93,21 @@ PhSim.prototype.loopFunction = function() {
 			this.updateTimeInterval = this.updateDate - this.prevDate;
 		}
 
+		for(let i = 0; i < this.objUniverse.length; i++) {
+
+			let currentObj = this.objUniverse[i];
+
+			if(typeof this.atmosphere === "number") {
+
+				let x = -this.matterJSWorld.gravity.x;
+				let y = -this.matterJSWorld.gravity.y;
+		
+				let b = Vector.scale(new Vector(x,y),currentObj.matter.area * this.matterJSWorld.gravity.scale * this.atmosphere);
+		
+				Motion.applyForce(currentObj,currentObj.matter.position,b);
+		
+			}
+		}
 
 		Matter.Engine.update(this.matterJSEngine,this.delta);
 
