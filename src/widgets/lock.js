@@ -11,6 +11,7 @@ else {
 }
 
 const PhSim = require("..");
+const Widget = require("../widget");
 
 /**
  * Set lock of the Dynamic Object
@@ -62,18 +63,15 @@ PhSim.Widgets.toggleLock = function(dyn_object,widget) {
 
     var self = this;
 
-    var closure = function() {
+    var w = new Widget(dyn_object,widget);
 
-        var o = dyn_object;
-
-        var f = function() {
-            self.toggleLock(o);
-        }
-
-        return f;
+    var f = function() {
+        self.toggleLock(dyn_object);
     }
 
-    this.createWFunction(dyn_object,closure(),widget);
+    w.wFunction = this.createWFunction(dyn_object,f,widget);
+
+    return w;
 }
 
 /**
@@ -90,16 +88,14 @@ PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
 
     var self = this;
 
-    var closure = function() {
+    var w = new Widget(dyn_object,widget);
 
-        var o = dyn_object;
-
-        var f = function() {
-            self.toggleSemiLock(o);
-        }
-
-        return f;
+    var f = function() {
+        self.toggleSemiLock(dyn_object);
     }
 
-    this.createWFunction(dyn_object,closure(),widget);
+    w.wFunction = this.createWFunction(dyn_object,f,widget);
+
+    return w;
+    
 }
