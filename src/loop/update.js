@@ -97,15 +97,19 @@ PhSim.prototype.loopFunction = function() {
 
 			let currentObj = this.objUniverse[i];
 
-			if(typeof this.atmosphere === "number") {
+			if(typeof this.atmosphere.density === "number") {
 
 				let x = -this.matterJSWorld.gravity.x;
 				let y = -this.matterJSWorld.gravity.y;
 		
-				let b = Vector.scale(new Vector(x,y),currentObj.matter.area * this.matterJSWorld.gravity.scale * this.atmosphere);
+				let b = Vector.scale(new Vector(x,y),currentObj.matter.area * this.matterJSWorld.gravity.scale * this.atmosphere.density);
 		
 				Motion.applyForce(currentObj,currentObj.matter.position,b);
 		
+			}
+
+			if(this.objUniverse[i].dragCoefficient) {
+
 			}
 		}
 
