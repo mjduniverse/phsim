@@ -561,11 +561,11 @@ if(true) {
     module.exports = PhSim;
 }
 
-PhSim.Static = __webpack_require__(5 );
+PhSim.Static = __webpack_require__(6 );
 
 __webpack_require__(15 );
 
-PhSim.EventStack = __webpack_require__(9 );
+PhSim.EventStack = __webpack_require__(10 );
 
 /**
  * Object containing array functions to be called.
@@ -587,14 +587,14 @@ PhSim.PhRender = __webpack_require__(17);
 PhSim.Sprites = __webpack_require__(18);
 PhSim.Audio = __webpack_require__(19);
 PhSim.Vector = __webpack_require__(3);
-PhSim.diagRect = __webpack_require__(12);
-PhSim.Vertices = __webpack_require__(6);
+PhSim.diagRect = __webpack_require__(13);
+PhSim.Vertices = __webpack_require__(7);
 
-PhSim.Centroid = __webpack_require__(7);
+PhSim.Centroid = __webpack_require__(8);
 
 // Bounding box functions
 
-PhSim.BoundingBox = __webpack_require__(11);
+PhSim.BoundingBox = __webpack_require__(12);
 PhSim.DynObject = __webpack_require__(2);
 PhSim.Events = __webpack_require__(20);
 
@@ -605,7 +605,7 @@ __webpack_require__(24);
 __webpack_require__(25);
 __webpack_require__(26);
 
-PhSim.PhSimEventTarget =  __webpack_require__(8);
+PhSim.PhSimEventTarget =  __webpack_require__(9);
 
 Object.assign(PhSim.prototype,PhSim.PhSimEventTarget);
 
@@ -621,10 +621,10 @@ __webpack_require__(32);
 __webpack_require__(33);
 
 PhSim.Camera = __webpack_require__(34);
-PhSim.Game = __webpack_require__(13);
-PhSim.Gradients = __webpack_require__(10);
+PhSim.Game = __webpack_require__(14);
+PhSim.Gradients = __webpack_require__(11);
 
-PhSim.Widget = __webpack_require__(14);
+PhSim.Widget = __webpack_require__(5);
 
 __webpack_require__(35);
 
@@ -676,11 +676,11 @@ module.exports = require("matter-js");
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(5);
+const Static = __webpack_require__(6);
 const PhSim = __webpack_require__(0);
-const Vertices = __webpack_require__(6);
-const PhSimEventTarget = __webpack_require__(8);
-const EventStack = __webpack_require__(9);
+const Vertices = __webpack_require__(7);
+const PhSimEventTarget = __webpack_require__(9);
+const EventStack = __webpack_require__(10);
 
 // Try to import matter.js as a commonJS module
 
@@ -1230,6 +1230,31 @@ Vector.scale = function(vector,scalar) {
 }
 
 /**
+ * Returns a new Vector object `vector` such that `vector.x === o.x` and 
+ * `vector.y === o.y`.
+ * 
+ * @function
+ * @param {Object} o
+ * @param {Number} o.x
+ * @param {Number} o.y 
+ * @returns {Vector} 
+ */
+
+Vector.extract = function(o) {
+	return new Vector(o.x,o.y);
+}
+
+/**
+ * Returns a vector equal in magnitude of `vector` but opposite in direction of `vector`.
+ * @param {Vector} vector 
+ * @returns {PhSim.Vector} -  The reversed vector.
+ */
+
+Vector.neg = function(vector) {
+	return new Vector(-vector.x,-vector.y);
+}
+
+/**
  * 
  * Divide a vector by a scalar
  * 
@@ -1382,7 +1407,7 @@ module.exports = Vector;
 /***/ (function(module, exports, __webpack_require__) {
 
 const DynObject = __webpack_require__(2);
-const Centroid = __webpack_require__(7);
+const Centroid = __webpack_require__(8);
 
 // Try to import matter-js as a commonJS module
 
@@ -1577,6 +1602,130 @@ module.exports = Motion;
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const PhSim = __webpack_require__(0);
+const DynObject = __webpack_require__(2);
+const PhSimEventTarget = __webpack_require__(9);
+
+/**
+ * Dynamic Widget Object
+ * @param {Object} options 
+ */
+
+const Widget = function(target,options) {
+
+	/**
+	 * Status of widget
+	 * @type {"enabled"|"disabled"|"destroyed"}
+	 */
+
+	this.status;
+
+	/**
+	 * Thing to be affected by the widget.
+	 * @type {PhSim|PhSim.DynObject}
+	 */
+
+	
+	this.target = target;
+
+	if(typeof options !== "undefined") {
+		Object.assign(this,options);
+	}
+
+	Object.assign(this,PhSimEventTarget);
+
+	this.enable();
+
+}
+
+Widget.prototype.eventStack = {
+	enable: [],
+	disable: [],
+	destroy: []
+}
+
+Widget.prototype.enable = function() {
+
+	if(typeof this.wFunction === "function") {
+		this.wFunction.wFunction_enabled = true;
+	}
+
+	this.callEventClass("enable",this,this);
+
+	this.status = "enabled";
+
+}
+
+/**
+ * Function for disabling widget
+ * @type {Function}
+ */
+
+Widget.prototype.disable = function() {
+
+	if(typeof this.wFunction === "function") {
+		this.wFunction.wFunction_enabled = false;
+	}
+
+	this.callEventClass("disable",this,this);
+
+	this.status = "disabled";
+
+}
+
+/**
+ * Function for destroying widget
+ * @type 
+ */
+
+
+Widget.prototype.destroy = function() {
+
+	if(typeof this.wFunction === "function") {
+
+		if(this.wFunction._thisRef instanceof DynObject) {
+			wFunction._thisRef.phsim.destroyWFunction(w.wFunction);
+		}
+
+		if(this.wFunction._thisRef instanceof PhSim) {
+			wFunction._thisRef.destroyWFunction(w.wFunction);	
+		}
+
+	}
+
+	this.callEventClass("destroy",this,this);
+
+	this.status = "destroyed";
+
+}
+
+
+/**
+ * 
+ * @param {PhSimObject} o 
+ */
+
+Widget.defineByBoolean = function(o) {
+
+	Object.keys(Widgets).forEach(function(p){
+		if(o[p]) {
+			o.type = p;
+		}
+	})
+
+	
+}
+
+Widget.WidgetOptions = function(type) {
+	this.type = type;
+}
+
+module.exports = Widget;
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -2153,11 +2302,11 @@ Static.SLO = function(S,L,O) {
 module.exports = Static;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(5);
-const Centroid = __webpack_require__(7);
+const Static = __webpack_require__(6);
+const Centroid = __webpack_require__(8);
 const Vector = __webpack_require__(3);
 
 const Vertices = {}
@@ -2330,7 +2479,7 @@ Vertices.object = function(o) {
 module.exports = Vertices;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Vector = __webpack_require__(3);
@@ -2412,7 +2561,7 @@ Centroid.polygon = function(a) {
 module.exports = Centroid;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
@@ -2535,7 +2684,7 @@ PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
 module.exports = PhSimEventTarget;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 /**
@@ -2744,7 +2893,7 @@ const EventStack = function() {
 module.exports = EventStack;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 
@@ -2777,12 +2926,12 @@ Gradients.extractGradient = function(ctx,jsObject) {
 module.exports = Gradients;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const diagRect = __webpack_require__(12);
-const Static = __webpack_require__(5);
-const Vertices = __webpack_require__(6);
+const diagRect = __webpack_require__(13);
+const Static = __webpack_require__(6);
+const Vertices = __webpack_require__(7);
 
 /**
  * Get bounding box from an array of vectors.
@@ -2879,10 +3028,10 @@ BoundingBox.fromShape = function(object) {
 module.exports = BoundingBox;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(5);
+const Static = __webpack_require__(6);
 
 /**
  * 
@@ -2912,7 +3061,7 @@ module.exports = diagRect;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -3285,108 +3434,6 @@ Game.Widgets.endGame = function(dyn_object,widget) {
 module.exports = Game;
 
 /***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-const DynObject = __webpack_require__(2);
-const PhSimEventTarget = __webpack_require__(8);
-
-/**
- * Dynamic Widget Object
- * @param {Object} options 
- */
-
-const Widget = function(target,options) {
-
-	/**
-	 * Thing to be affected by the widget.
-	 * @type {PhSim|PhSim.DynObject}
-	 */
-
-	this.target = target;
-
-	Object.assign(this,options);
-	Object.assign(this,PhSimEventTarget);
-	this.enable();
-}
-
-Widget.prototype.eventStack = {
-	enable: [],
-	disable: [],
-	destroy: []
-}
-
-Widget.prototype.enable = function() {
-
-	if(typeof this.wFunction === "function") {
-		this.wFunction.wFunction_enabled = true;
-	}
-
-	this.callEventClass("enable",this,this);
-}
-
-/**
- * Function for disabling widget
- * @type {Function}
- */
-
-Widget.prototype.disable = function() {
-
-	if(typeof this.wFunction === "function") {
-		this.wFunction.wFunction_enabled = false;
-	}
-
-	this.callEventClass("disable",this,this);
-}
-
-/**
- * Function for destroying widget
- * @type 
- */
-
-
-Widget.prototype.destroy = function() {
-
-	if(typeof this.wFunction === "function") {
-
-		if(this.wFunction._thisRef instanceof DynObject) {
-			wFunction._thisRef.phsim.destroyWFunction(w.wFunction);
-		}
-
-		if(this.wFunction._thisRef instanceof PhSim) {
-			wFunction._thisRef.destroyWFunction(w.wFunction);	
-		}
-
-	}
-
-	this.callEventClass("destroy",this,this);
-}
-
-
-/**
- * 
- * @param {PhSimObject} o 
- */
-
-Widget.defineByBoolean = function(o) {
-
-	Object.keys(Widgets).forEach(function(p){
-		if(o[p]) {
-			o.type = p;
-		}
-	})
-
-	
-}
-
-Widget.WidgetOptions = function(type) {
-	this.type = type;
-}
-
-module.exports = Widget;
-
-/***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3528,10 +3575,10 @@ module.exports = getWidgetByName;
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Gradients = __webpack_require__(10);
-const BoundingBox = __webpack_require__(11);
-const Centroid = __webpack_require__(7);
-const Vertices = __webpack_require__(6);
+const Gradients = __webpack_require__(11);
+const BoundingBox = __webpack_require__(12);
+const Centroid = __webpack_require__(8);
+const Vertices = __webpack_require__(7);
 
 /** 
  * 
@@ -5775,7 +5822,7 @@ PhSim.prototype.deregisterKeyEvents = function() {
 const { ObjLoops } = __webpack_require__(0);
 const Vector = __webpack_require__(3);
 const PhSim = __webpack_require__(0);
-const Vertices = __webpack_require__(6);
+const Vertices = __webpack_require__(7);
 
 var Matter;
 
@@ -6985,6 +7032,8 @@ PhSim.prototype.setRadius = function(dynObject,radius) {
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
+const Motion = __webpack_require__(4);
+const Vector = __webpack_require__(3);
 
 // Try to import matter-js as a commonJS module
 
@@ -7077,6 +7126,25 @@ PhSim.prototype.loopFunction = function() {
 			this.updateTimeInterval = this.updateDate - this.prevDate;
 		}
 
+		for(let i = 0; i < this.objUniverse.length; i++) {
+
+			let currentObj = this.objUniverse[i];
+
+			if(typeof this.atmosphere.density === "number") {
+
+				let x = -this.matterJSWorld.gravity.x;
+				let y = -this.matterJSWorld.gravity.y;
+		
+				let b = Vector.scale(new Vector(x,y),currentObj.matter.area * this.matterJSWorld.gravity.scale * this.atmosphere.density);
+		
+				Motion.applyForce(currentObj,currentObj.matter.position,b);
+		
+			}
+
+			if(this.objUniverse[i].dragCoefficient) {
+
+			}
+		}
 
 		Matter.Engine.update(this.matterJSEngine,this.delta);
 
@@ -7346,7 +7414,7 @@ __webpack_require__(37);
 __webpack_require__(38);
 
 
-const Game = __webpack_require__(13);
+const Game = __webpack_require__(14);
 
 Object.assign(PhSim.Widgets,Game.Widgets);
 
@@ -7507,6 +7575,7 @@ PhSim.Widgets.circularConstraint = function(dyn_object,widget) {
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
+const Widget = __webpack_require__(5);
 
 /**
  * 
@@ -7558,95 +7627,24 @@ PhSim.prototype.cloneObject = function(dynObject,options = {}) {
  * @function
  * @param {PhSim.DynObject} dyn_object 
  * @param {WFunctionOptions} widget - Options.
+ * @this PhSim
  */
 
 PhSim.Widgets.clone = function(dyn_object,widget) {
-
+ 
     var self = this;
 
-    var getFunction;
+    var w = new Widget(dyn_object,widget);
 
-    var o = {
-        velocity: widget.vector
-    }
-    
-    // Clone By Time
-
-    if(widget.trigger === "time") {
-    
-        getFunction = function() {
-
-            var time = widget.time;
-            var maxN = widget.maxN;
-
-            var func = null;
-
-            if(Number.isInteger(maxN)) {
-
-                func = function() {
-
-                    if(func.__n === maxN) {
-                        clearInterval(func.__interN);
-                    }
-
-                    else {
-                        if(!self.paused) {
-                            self.cloneObject(dyn_object,o);
-                            func.__n++;
-                        }
-                    }
-
-                }
-
-                func.__n = 0;
-
-            }
-
-            else {
-
-                func = function() {
-                    if(!self.paused) {
-                        self.cloneObject(dyn_object,o);
-                    }
-                }
-
-            }
-
-
-            func.__phtime = time;
-            func.__interN = null;
-
-            return func;
-
-        }
-
-        var refFunc = getFunction();
-
-        refFunc.__interN = setInterval(refFunc,refFunc.__phtime);
-
+    var f = function() {
+        self.cloneObject(dyn_object,{
+            velocity: widget.vector
+        });
     }
 
-    // Clone By Key
+    w.wFunction = this .createWFunction(dyn_object,f,widget);
 
-    if(widget.trigger === "key") {
-
-        getFunction = function() {
-
-            var kc = widget.key;
-
-            var cloneByKeyFunc = function(e) {
-                if(e.key === kc) {
-                    self.cloneObject(dyn_object,o);
-                }
-            }
-
-            return cloneByKeyFunc;
-
-        }
-
-        this.on("keydown",getFunction());
-
-    }
+    return w;
 
 }
 
@@ -7750,6 +7748,7 @@ else {
 }
 
 const PhSim = __webpack_require__(0);
+const Widget = __webpack_require__(5);
 
 /**
  * Set lock of the Dynamic Object
@@ -7801,18 +7800,15 @@ PhSim.Widgets.toggleLock = function(dyn_object,widget) {
 
     var self = this;
 
-    var closure = function() {
+    var w = new Widget(dyn_object,widget);
 
-        var o = dyn_object;
-
-        var f = function() {
-            self.toggleLock(o);
-        }
-
-        return f;
+    var f = function() {
+        self.toggleLock(dyn_object);
     }
 
-    this.createWFunction(dyn_object,closure(),widget);
+    w.wFunction = this.createWFunction(dyn_object,f,widget);
+
+    return w;
 }
 
 /**
@@ -7829,18 +7825,16 @@ PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
 
     var self = this;
 
-    var closure = function() {
+    var w = new Widget(dyn_object,widget);
 
-        var o = dyn_object;
-
-        var f = function() {
-            self.toggleSemiLock(o);
-        }
-
-        return f;
+    var f = function() {
+        self.toggleSemiLock(dyn_object);
     }
 
-    this.createWFunction(dyn_object,closure(),widget);
+    w.wFunction = this.createWFunction(dyn_object,f,widget);
+
+    return w;
+    
 }
 
 /***/ }),
@@ -8823,6 +8817,7 @@ PhSim.Widgets.keyboardControls = function(dyn_object,widget) {
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
+const Widget = __webpack_require__(5);
 
 /**
  * 
@@ -8835,25 +8830,49 @@ const PhSim = __webpack_require__(0);
 
 
 PhSim.Widgets.transformCameraByObj = function(dyn_object) {
+
+    var w = new Widget(dyn_object);
+
     var self = this;
 
     var dx;
     var dy;
 
-    this.on("beforeupdate",function(){
-        dx = dyn_object.matter.position.x;
-        dy = dyn_object.matter.position.y;
-    },{
+    // beforeUpdate
+
+    var beforeUpdate = function(){
+        if(w.status === "enabled") {
+            dx = dyn_object.matter.position.x;
+            dy = dyn_object.matter.position.y;
+        }
+    }
+
+    this.on("beforeupdate",beforeUpdate,{
         "slEvent": true
     });
 
-    this.on("afterupdate",function(){
-        dx = dyn_object.matter.position.x - dx;
-        dy = dyn_object.matter.position.y - dy;
-        self.camera.translate(-dx,-dy);
-    },{
+    // afterupdate
+
+    var afterUpdate = function(){
+        if(w.status === "enabled") {
+            dx = dyn_object.matter.position.x - dx;
+            dy = dyn_object.matter.position.y - dy;
+            self.camera.translate(-dx,-dy);
+        }
+    }
+
+    this.on("afterupdate",afterUpdate,{
         "slEvent": true
     });
+
+    // Widget Destruction
+
+    w.on("destoy",function(){
+        self.off("afterupdate",afterUpdate);
+        self.off("beforeupdate",beforeUpdate);
+    });
+
+    return w;
 
 }
 
@@ -8862,7 +8881,7 @@ PhSim.Widgets.transformCameraByObj = function(dyn_object) {
 /***/ (function(module, exports, __webpack_require__) {
 
 const PhSim = __webpack_require__(0);
-const Widget = __webpack_require__(14)
+const Widget = __webpack_require__(5)
 
 /**
  * 
@@ -8880,7 +8899,7 @@ PhSim.Widgets.setColor = function(dyn_object,widget) {
 
     var self = this;
 
-    var w = new Widget(dynObject,widget);
+    var w = new Widget(dyn_object,widget);
 
     var f = function() {
         PhSim.DynObject.setColor(dyn_object,widget.color);
@@ -9210,7 +9229,9 @@ module.exports = setImgSrc;
 
 /***/ }),
 /* 51 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+const Widget = __webpack_require__(5);
 
 /**
  * Widget to transform object by camera.
@@ -9218,8 +9239,25 @@ module.exports = setImgSrc;
  * @this PhSim
  */
 
+
 function transformAgainstCamera(o) {
-    this.camera.transformingObjects.push(o)
+
+    var self = this;
+
+    var w = new Widget(o);
+
+    this.camera.transformingObjects.push(o);
+
+    var destroy = function() {
+        var i = self.camera.transformingObjects.indexOf(o); 
+        self.camera.transformingObjects.splice(i,1);
+    }
+
+    w.on("destroy",destroy);
+    w.on("disable",destroy);
+
+    return w;
+
 }
 
 module.exports = transformAgainstCamera;
