@@ -10,15 +10,28 @@ const PhSimEventTarget = require("./events/eventListener");
 const Widget = function(target,options) {
 
 	/**
+	 * Status of widget
+	 * @type {"enabled"|"disabled"|"destroyed"}
+	 */
+
+	this.status;
+
+	/**
 	 * Thing to be affected by the widget.
 	 * @type {PhSim|PhSim.DynObject}
 	 */
 
+	
 	this.target = target;
 
-	Object.assign(this,options);
+	if(typeof options !== "undefined") {
+		Object.assign(this,options);
+	}
+
 	Object.assign(this,PhSimEventTarget);
+
 	this.enable();
+
 }
 
 Widget.prototype.eventStack = {
@@ -34,6 +47,9 @@ Widget.prototype.enable = function() {
 	}
 
 	this.callEventClass("enable",this,this);
+
+	this.status = "enabled";
+
 }
 
 /**
@@ -48,6 +64,9 @@ Widget.prototype.disable = function() {
 	}
 
 	this.callEventClass("disable",this,this);
+
+	this.status = "disabled";
+
 }
 
 /**
@@ -71,6 +90,9 @@ Widget.prototype.destroy = function() {
 	}
 
 	this.callEventClass("destroy",this,this);
+
+	this.status = "destroyed";
+
 }
 
 
