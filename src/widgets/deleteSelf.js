@@ -1,4 +1,5 @@
 const PhSim = require("../index");
+const Widget = require("../widget");
 
 /**
  * 
@@ -11,15 +12,17 @@ const PhSim = require("../index");
 
 PhSim.Widgets.deleteSelf = function(dyn_object,widget) {
 
+    var w = new Widget(dyn_object,widget);
+
     var self = this;
     
-    var ref;
-
     var f = function(){
         self.removeDynObj(dyn_object);
-        self.disableWFunction(ref);
+        self.disableWFunction(w.wFunction);
     }
 
-    ref = this.createWFunction(dyn_object,f,widget);
+    w.wFunction = this.createWFunction(dyn_object,f,widget);
+
+    return w;
 
 }
