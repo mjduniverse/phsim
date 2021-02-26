@@ -1,5 +1,6 @@
 const Motion = require("../motion");
 const PhSim = require("../index");
+const Widget = require("../widget");
 
 /** 
  * 
@@ -84,6 +85,7 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 		}
 	}
 
+
 	f.motionFunctionEnabled = true;
 
 	return f;
@@ -102,8 +104,15 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
  */
 
 PhSim.Widgets.velocity = function(dynObject,widget) {
+
+	var w = new Widget(dynObject,widget);
+
     var f = this.createMotionFunction("velocity",dynObject,widget.vector);
+
+	w.wFunction = f;
+
     this.createWFunction(dynObject,f,widget);
+
 }
 
 /**
@@ -118,7 +127,13 @@ PhSim.Widgets.velocity = function(dynObject,widget) {
  */
 
 PhSim.Widgets.translate = function(dynObject,widget) {
+
+	var w = new Widget(dynObject,widget);
+
     var f = this.createMotionFunction("translate",dynObject,widget.vector);
+	
+	w.wFunction = f;
+
     this.createWFunction(dynObject,f,widget);
 }
 
@@ -133,7 +148,12 @@ PhSim.Widgets.translate = function(dynObject,widget) {
  */
 
 PhSim.Widgets.position = function(dynObject,widget) {
+
+	var w = new Widget(dynObject,widget);
+
     var f = this.createMotionFunction("position",dynObject,widget.vector);
+	w.wFunction = f;
+
     this.createWFunction(dynObject,f,widget);
 }
 
