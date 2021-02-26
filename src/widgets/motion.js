@@ -7,7 +7,7 @@ const PhSim = require("../index");
  * 
  * @function
  * @param {"setAngle"|"force"|"velocity"|"translate"|"position"|"rotation"|"circular_constraint_rotation"} mode - The possible modes are "force","velocity","translate"
- * @param {dyn_object} dyn_object - The dynamic object to put in motion.
+ * @param {PhSim.DynObject} dyn_object - The dynamic object to put in motion.
  * @param {Vector|Number} motion - The vector or scalar that defines the motion.
  * @returns {Function} - A function that makes an object undergo some motion.
  * 
@@ -16,57 +16,77 @@ const PhSim = require("../index");
 
 PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 
+	var f;
+
 	if(mode === "force") {
-		return function() {
-			return Motion.applyForce(dyn_object,dyn_object.matter.position,motion);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.applyForce(dyn_object,dyn_object.matter.position,motion);
+			}
 		}
 	}
 
 	if(mode === "velocity") {
-		return function() {
-			return Motion.setVelocity(dyn_object,motion);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.setVelocity(dyn_object,motion);
+			}
 		}
 	}
 
 	if(mode === "translate") {
-		return function() {
-			return Motion.translate(dyn_object,motion);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.translate(dyn_object,motion);
+			}
 		}
 	}
 
 	if(mode === "position") {
-		return function() {
-			return Motion.setPosition(dyn_object,motion)
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.setPosition(dyn_object,motion)
+			}
 		}
 	}
 
 	if(mode === "rotation") {
-		return function() {
-			return Motion.rotate(dyn_object,motion,dyn_object.matter.position);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.rotate(dyn_object,motion,dyn_object.matter.position);
+			}
 		}
 	}
 
 	if(mode === "circular_constraint_rotation") {
-		return function() {
-			return Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+			}
 		}
 	}
 
 	if(mode === "setAngle") {
-		return function() {
-			return Motion.setAngle(dyn_object,motion);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.setAngle(dyn_object,motion);
+			}
 		}
 	}
 
 	if(mode === "circular_constraint_setAngle") {
-		return function() {
-			var a = Math.atan2(dyn_object.y - dyn_object.circularConstraintVector.y,dyn_object.x - dyn_object.circularConstraintVector.x)
-			Motion.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
-			Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				var a = Math.atan2(dyn_object.y - dyn_object.circularConstraintVector.y,dyn_object.x - dyn_object.circularConstraintVector.x)
+				Motion.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
+				Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+			}
 		}
 	}
 
-	return console.error("Parameter 'mode' must either be equal to the one of the following strings: 'force','velocity' or 'position'.");
+	f.motionFunctionEnabled = true;
+
+	return f;
 
 }
 
