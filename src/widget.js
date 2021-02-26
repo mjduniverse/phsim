@@ -44,6 +44,11 @@ Widget.prototype.enable = function() {
 
 	if(typeof this.wFunction === "function") {
 		this.wFunction.wFunction_enabled = true;
+
+		if(this.wFunction._bodyFunction.motionFunctionEnabled === false) {
+			this.wFunction._bodyFunction.motionFunctionEnabled = false;
+		}
+
 	}
 
 	this.callEventClass("enable",this,this);
@@ -60,7 +65,13 @@ Widget.prototype.enable = function() {
 Widget.prototype.disable = function() {
 
 	if(typeof this.wFunction === "function") {
+
 		this.wFunction.wFunction_enabled = false;
+
+		if(this.wFunction._bodyFunction.motionFunctionEnabled === true) {
+			this.wFunction._bodyFunction.motionFunctionEnabled = false;
+		}
+
 	}
 
 	this.callEventClass("disable",this,this);
