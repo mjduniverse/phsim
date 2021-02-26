@@ -511,6 +511,7 @@ require("./lo");
 require("./makeQuickly");
 require("./filter");
 require("./widgets/dynWidget");
+require("./objectMembership");
 require("./audioToggle");
 require("./events/registerEvents");
 
@@ -539,7 +540,6 @@ require("./widgets");
 
 PhSim.calc_skinmesh = require("./calc_skinmesh");
 
-require("./events/simpleEvent");
 require("./processVar");
 
 PhSim.ObjLoops = require("./objLoops");
