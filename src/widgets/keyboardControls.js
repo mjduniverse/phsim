@@ -1,4 +1,5 @@
 const PhSim = require("../index");
+const Motion = require("../motion");
 
 // Try to import matter-js as a commonJS module
 
@@ -31,19 +32,19 @@ PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
 
 	var f = function(event) {
 		if(event.code == "ArrowRight") {
-			Matter.Body.setVelocity(dynObj.matter, {x: keyboardControls.right, y: 0});
+			Motion.setVelocity(dynObj, {x: keyboardControls.right, y: 0});
 		}
 		
 		if(event.code == "ArrowUp") {
-			Matter.Body.setVelocity(dynObj.matter, {x: 0, y: -keyboardControls.up});
+			Motion.setVelocity(dynObj, {x: 0, y: -keyboardControls.up});
 		}
 		
 		if(event.code == "ArrowLeft") {
-			Matter.Body.setVelocity(dynObj.matter, {x: -keyboardControls.left, y: 0});
+			Motion.setVelocity(dynObj, {x: -keyboardControls.left, y: 0});
 		}
 		
 		if(event.code == "ArrowDown") {
-			Matter.Body.setVelocity(dynObj.matter, {x: 0, y: keyboardControls.down});
+			Motion.setVelocity(dynObj, {x: 0, y: keyboardControls.down});
 		}
 		
 	}
