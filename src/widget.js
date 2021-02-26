@@ -100,6 +100,8 @@ Widget.prototype.destroy = function() {
 
 	}
 
+	delete this.wFunction;
+
 	this.callEventClass("destroy",this,this);
 
 	this.status = "destroyed";
