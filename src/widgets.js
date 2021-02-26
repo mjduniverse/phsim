@@ -66,6 +66,7 @@ require("./widgets/transformCameraByObj");
 require("./widgets/setRenderProperties.js");
 require("./widgets/deleteSelf.js");
 require("./widgets/stack.js");
+require("./widgets/connectDynObjects");
 
 PhSim.Widgets.constraint = require("./widgets/constraint.js");
 

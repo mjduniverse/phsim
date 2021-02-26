@@ -10,15 +10,28 @@ const PhSimEventTarget = require("./events/eventListener");
 const Widget = function(target,options) {
 
 	/**
+	 * Status of widget
+	 * @type {"enabled"|"disabled"|"destroyed"}
+	 */
+
+	this.status;
+
+	/**
 	 * Thing to be affected by the widget.
 	 * @type {PhSim|PhSim.DynObject}
 	 */
 
+	
 	this.target = target;
 
-	Object.assign(this,options);
+	if(typeof options !== "undefined") {
+		Object.assign(this,options);
+	}
+
 	Object.assign(this,PhSimEventTarget);
+
 	this.enable();
+
 }
 
 Widget.prototype.eventStack = {
@@ -31,9 +44,17 @@ Widget.prototype.enable = function() {
 
 	if(typeof this.wFunction === "function") {
 		this.wFunction.wFunction_enabled = true;
+
+		if(this.wFunction._bodyFunction.motionFunctionEnabled === false) {
+			this.wFunction._bodyFunction.motionFunctionEnabled = false;
+		}
+
 	}
 
 	this.callEventClass("enable",this,this);
+
+	this.status = "enabled";
+
 }
 
 /**
@@ -44,10 +65,19 @@ Widget.prototype.enable = function() {
 Widget.prototype.disable = function() {
 
 	if(typeof this.wFunction === "function") {
+
 		this.wFunction.wFunction_enabled = false;
+
+		if(this.wFunction._bodyFunction.motionFunctionEnabled === true) {
+			this.wFunction._bodyFunction.motionFunctionEnabled = false;
+		}
+
 	}
 
 	this.callEventClass("disable",this,this);
+
+	this.status = "disabled";
+
 }
 
 /**
@@ -70,7 +100,12 @@ Widget.prototype.destroy = function() {
 
 	}
 
+	delete this.wFunction;
+
 	this.callEventClass("destroy",this,this);
+
+	this.status = "destroyed";
+
 }
 
 

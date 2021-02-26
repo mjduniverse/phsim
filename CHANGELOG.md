@@ -1,5 +1,10 @@
 ## 0.3.0-alpha (Unreleased)
 
+* `PhSim.Vector.neg` has been added. This creates a vector that is equal in length but opposite in direction of the original vector.
+
+* `PhSim.Vector.extract` has been added. This creates a new vector out of an object `o` that
+has properties `x` and `y`.
+
 * Added ```PhSim.Query.overlaps``` method. This checks if two objects overlap.
 
 * Added ```PhSim.Vertices.inscribedRegPolygonCircle```, ```PhSim.Vertices.inscribedMatterCirclePolygon```, ```PhSim.Vertices.object``` functions.

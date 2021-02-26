@@ -1,4 +1,5 @@
 const PhSim = require("..");
+const Widget = require("../widget");
 
 /**
  * 
@@ -50,94 +51,23 @@ PhSim.prototype.cloneObject = function(dynObject,options = {}) {
  * @function
  * @param {PhSim.DynObject} dyn_object 
  * @param {WFunctionOptions} widget - Options.
+ * @this PhSim
  */
 
 PhSim.Widgets.clone = function(dyn_object,widget) {
-
+ 
     var self = this;
 
-    var getFunction;
+    var w = new Widget(dyn_object,widget);
 
-    var o = {
-        velocity: widget.vector
-    }
-    
-    // Clone By Time
-
-    if(widget.trigger === "time") {
-    
-        getFunction = function() {
-
-            var time = widget.time;
-            var maxN = widget.maxN;
-
-            var func = null;
-
-            if(Number.isInteger(maxN)) {
-
-                func = function() {
-
-                    if(func.__n === maxN) {
-                        clearInterval(func.__interN);
-                    }
-
-                    else {
-                        if(!self.paused) {
-                            self.cloneObject(dyn_object,o);
-                            func.__n++;
-                        }
-                    }
-
-                }
-
-                func.__n = 0;
-
-            }
-
-            else {
-
-                func = function() {
-                    if(!self.paused) {
-                        self.cloneObject(dyn_object,o);
-                    }
-                }
-
-            }
-
-
-            func.__phtime = time;
-            func.__interN = null;
-
-            return func;
-
-        }
-
-        var refFunc = getFunction();
-
-        refFunc.__interN = setInterval(refFunc,refFunc.__phtime);
-
+    var f = function() {
+        self.cloneObject(dyn_object,{
+            velocity: widget.vector
+        });
     }
 
-    // Clone By Key
+    w.wFunction = this .createWFunction(dyn_object,f,widget);
 
-    if(widget.trigger === "key") {
-
-        getFunction = function() {
-
-            var kc = widget.key;
-
-            var cloneByKeyFunc = function(e) {
-                if(e.key === kc) {
-                    self.cloneObject(dyn_object,o);
-                }
-            }
-
-            return cloneByKeyFunc;
-
-        }
-
-        this.on("keydown",getFunction());
-
-    }
+    return w;
 
 }

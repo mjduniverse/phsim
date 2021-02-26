@@ -46,6 +46,14 @@ var DynObject = function(staticObject,matterBody) {
 	this.name = staticObject.name;
 
 	/**
+	 * Array of connected Dynamic Objects
+	 * @type {PhSim.DynObject[]}
+	 *
+	 */
+
+	this.connectedDynObjects = [];
+
+	/**
 	 * DynObject type
 	 * @type {"circle" | "polygon" | "rectangle" | "regPolygon"}
 	 * 

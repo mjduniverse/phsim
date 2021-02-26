@@ -17,7 +17,7 @@ PhSim.Widgets.setColor = function(dyn_object,widget) {
 
     var self = this;
 
-    var w = new Widget(dynObject,widget);
+    var w = new Widget(dyn_object,widget);
 
     var f = function() {
         PhSim.DynObject.setColor(dyn_object,widget.color);
