@@ -1,5 +1,6 @@
 const DynObject = require("../dynObject")
 const PhSim = require("../index");
+const Widget = require("../widget");
 /**
  * 
  * Call ObjLink functions
@@ -28,6 +29,8 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 
 PhSim.Widgets.objLink = function(dyn_object,widget) {
 
+    var w = new Widget(dyn_object,widget);
+
     var self = this;
     var targetObj;
     var widgetO = widget;
@@ -46,10 +49,12 @@ PhSim.Widgets.objLink = function(dyn_object,widget) {
             self.callObjLinkFunctions(targetObj);
         } 
     
-        self.createWFunction(dyn_object,eventFunc,widget);
+        w.wFunction = self.createWFunction(dyn_object,eventFunc,widget);
 
     },{
         slEvent: true
     });
-
+    
+    return w;
+    
 }
