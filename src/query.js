@@ -341,6 +341,39 @@ PhSim.Query.pointInVertsBorder = function(a,v,width) {
 
 }
 
+PhSim.Query.getMatterPartVertexByVertexPoint = function(dynObject,point,radius) {
+
+	radius = radius || 0;
+
+	for(let i = 0; i < dynObject.matter.parts.length; i++) {
+
+		let part = dynObject.matter.parts[i];
+
+		for(let j = 1; j < part.vertices.length; j++) {
+
+			if(radius) {
+				if(Vector.distance(part.vertices[j],point) < radius) {
+					return part.vertices[j];
+				}
+			}
+
+			else {
+
+				if(part.vertices[j].x === point.x && part.vertices[j].y === point.y) {
+					return part.vertices[j];
+				}
+
+			}	
+
+		}
+
+	}
+}
+
+PhSim.Query.getMatterPartByVertexPoint = function(dynObject,point,radius) {
+	return PhSim.Query.getMatterPartVertexByVertexPoint(dynObject,point,radius).body;
+}
+
 /**
  * 
  * @param {*} dynObjectA 
