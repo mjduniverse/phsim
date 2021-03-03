@@ -1,4 +1,5 @@
 const PhSim = require("..");
+const Motion = require("../motion");
 const Widget = require("../widget");
 
 /**
@@ -13,8 +14,12 @@ const Widget = require("../widget");
  */
 
 PhSim.prototype.cloneObject = function(dynObject,options = {}) {
+
+    var newObjStatic = Object.assign({},dynObject.static);
+
+    Motion.setPosition(newObjStatic,dynObject.matter.position);
     
-    var obj = new PhSim.DynObject(dynObject.static);
+    var obj = new PhSim.DynObject(newObjStatic);
     
     /**
      * Property telling if object is cloned.
@@ -66,7 +71,7 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
         });
     }
 
-    w.wFunction = this .createWFunction(dyn_object,f,widget);
+    w.wFunction = this.createWFunction(dyn_object,f,widget);
 
     return w;
 
