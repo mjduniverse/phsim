@@ -96,6 +96,20 @@ var gotoSimulationIndex = function (i) {
 			self.bgFillStyle = self.world.bg;
 		}
 
+		if(self.world) {
+
+			if(typeof self.world.grav === "number") {
+				self.matterJSWorld.gravity.y = self.world.grav;
+			}
+
+			if(typeof self.world.grav === "object" && typeof self.world.grav.x === "number" && typeof self.world.grav.y === "number") {
+				self.matterJSWorld.gravity.x = self.world.grav.x;
+				self.matterJSWorld.gravity.y = self.world.grav.y;
+			}
+
+
+		}
+
 		if(self.simulations) {
 
 			for(let i = 0; i < self.simOptions.layers.length; i++) {

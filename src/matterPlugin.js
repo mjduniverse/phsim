@@ -66,7 +66,7 @@ const matterPlugin = {
                 var c_classesA;
                 var c_classesB;
 
-                if(bodyA.plugin.dynObject.noCollision || bodyB.plugin.dynObject.noCollision) {
+                if( (bodyA.parent === bodyA && bodyA.plugin.dynObject.noCollision) || (bodyB.parent === bodyB && bodyB.plugin.dynObject.noCollision) ) {
                     this.splice(this.indexOf(this[i]),1);
                 }
 

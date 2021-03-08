@@ -97,7 +97,7 @@ PhSim.prototype.loopFunction = function() {
 
 			let currentObj = this.objUniverse[i];
 
-			if(typeof this.atmosphere.density === "number") {
+			if(typeof this.atmosphere === "object" && typeof this.atmosphere.density === "number") {
 
 				let x = -this.matterJSWorld.gravity.x;
 				let y = -this.matterJSWorld.gravity.y;

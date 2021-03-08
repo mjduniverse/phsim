@@ -1,92 +1,2166 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 1458:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+
+/**
+ * @namespace
+ * @memberof PhSim
+ */
+
+var Audio = {}
+
+/**
+ * @constructor
+ * @param {Object} p_audio - Static Audio Object
+ * @param {Function} onload 
+ */
+
+Audio.AudioArray = function(p_audio,onload) {
+
+	// force load function if audio list is empty
+	
+	this.array = [];
+	this.loaded_n = 0;
+	this.loaded = false;
+	this.onload = onload;
+
+	var self = this;
+
+	
+	if(p_audio.length === 0) {
+		self.loaded = true;
+		self.onload();
+	}
+
+	for(var i = 0; i < p_audio.length; i++) {
+
+		var audio = document.createElement("audio");
+
+		var f = function() {
+			self.loaded_n++;
+
+			if(self.array.length === self.loaded_n) {
+				self.loaded = true;
+				self.onload();
+				audio.removeEventListener("canplaythrough",f);
+			}
+
+		}
+
+		audio.addEventListener("canplaythrough",f)
+
+		audio.src = p_audio[i].src;
+		audio.loop = p_audio[i].loop
+
+		this.array.push(audio);
+
+	}
+
+}
+
+/**
+ * Play audio by index.
+ * Alternative function: {@link PhSim#playAudioByIndex}
+ * 
+ * @function 
+ * @param {PhSim} phsim - PhSim instance.
+ * @param {Number} i - Index in audio array.
+ * @returns {Promise} - Promise that is fulfilled when the audio is played. 
+ */
+
+Audio.playAudioByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].play();
+}
+
+/**
+ * Play audio by index
+ * Alternative function: {@link PhSim.Audio#playAudioByIndex}
+ * 
+ * @function 
+ * @param {PhSim} phsim - PhSim instance.
+ * @param {Number} i - Index in audio array.
+ * @returns {Promise} - Promise that is fulfilled when the audio is played.  
+ */
+
+PhSim.prototype.playAudioByIndex = function(i) {
+	Audio.playAudioByIndex(this,i);
+};
+
+/**
+ * Pause audio by index.
+ * Alternative function: {@link PhSim#pauseAudioByIndex}
+ * @function
+ * @param {PhSim} phsim - PhSim instance.
+ * @param {Number} i 
+ */
+
+Audio.pauseAudioByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].pause();
+}
+
+/**
+ * Pause audio by index.
+ * Alternative function: {@link PhSim.Audio#pauseAudioByIndex}
+ * @function
+ * @param {Number} i 
+ */
+
+PhSim.prototype.pauseAudioByIndex = function(i) {
+	return Audio.pauseAudioByIndex(this,i);
+}
+
+/**
+ * Set volume by index
+ * Alternative function: {@link PhSim#setAudioVolByIndex}
+ * @function
+ * @param {PhSim} phsim - PhSim instance
+ * @param {Number} i - Index
+ * @param {Number} v - Volume
+ */
+
+Audio.setAudioVolByIndex = function(phsim,i,v) {
+	return phsim.audioArray.array[i].volume = v;
+}
+
+/**
+ * Set volume by index
+ * Alternative function: {@link PhSim.Audio#setAudioVolByIndex}
+ * @function
+ * @param {Number} i - Index
+ * @param {Number} v - Volume
+ */
+
+PhSim.prototype.setAudioVolByIndex = function(i,v) {
+	return Audio.setAudioVolByIndex(this,i,v);
+}
+
+
+/**
+ * 
+ * Mute the `i`th element of the audio array.
+ * 
+ * Alternative function: {@link PhSim#setAudioMuteByIndex}
+ * 
+ * @function
+ * @param {Number} i
+ * @param {PhSim} phsim - PhSim instance 
+ */
+
+Audio.setAudioMuteByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].muted = true;
+}
+
+/**
+ * 
+ * Mute the `i`th element of the audio array.
+ * 
+ * Alternative function: {@link PhSim.Audio#setAudioMuteByIndex}
+ * 
+ * @function
+ * @param {PhSim} phsim - PhSim instance 
+ */
+
+PhSim.prototype.setAudioMuteByIndex = function(i) {
+	return Audio.setAudioMuteByIndex(this,i);
+}
+
+/**
+ * @function
+ * @param {PhSIm} phsim - PhSim instance
+ * @param {Number} i - Index number
+ * @returns {Boolean} - True if paused, false otherwise.
+ */
+
+
+Audio.toggleAudioByIndex = function(phsim,i) {
+	return phsim.audioArray.array[i].muted = !phsim.audioArray.array[i].muted;
+}
+
+/**
+ * @function
+ * @param {Number} i
+ * @returns {Boolean} - True if paused, false otherwise.
+ */
+
+PhSim.prototype.toggleAudioByIndex = function(i) {
+	return Audio.toggleAudioByIndex(this,i);
+}
+
+module.exports = Audio;
+
+/***/ }),
+
+/***/ 3499:
+/***/ (() => {
+
+
+
+/***/ }),
+
+/***/ 1800:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(8054);
+}
+
+/**
+ * 
+ * Calculate DynObject skinmesh
+ * 
+ * @function
+ * @memberof PhSim
+ * @param {PhSim.DynObject} dynObject 
+ */
+
+// Try to import matter.js as a commonJS module
+
+var calc_skinmesh = function(dynObject) {
+
+	/** Vector defining transformation */
+	
+	dynObject.transformVector = {
+		x: (dynObject.matter.position.x - dynObject.matter.positionPrev.x),
+		y: (dynObject.matter.position.y - dynObject.matter.positionPrev.y),
+	}
+
+	/** Number defining rotation */
+
+	var transformAngle = dynObject.matter.angle - dynObject.matter.anglePrev 
+
+	Matter.Vertices.translate(dynObject.skinmesh,Matter.Vertices.centre(dynObject.skinmesh),-1);
+	Matter.Vertices.rotate(dynObject.skinmesh,transformAngle,{x: 0, y: 0});
+	Matter.Vertices.translate(dynObject.skinmesh,dynObject.matter.position,1);
+
+	dynObject.verts = dynObject.skinmesh;
+	dynObject.verts = dynObject.skinmesh;
+
+}
+
+module.exports = calc_skinmesh;
+
+/***/ }),
+
+/***/ 390:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const Static = __webpack_require__(2094);
+const PhSim = __webpack_require__(8138);
+const Vertices = __webpack_require__(9153);
+const PhSimEventTarget = __webpack_require__(4956);
+const EventStack = __webpack_require__(1010);
+
+// Try to import matter.js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(8054);
+}
+
+/**
+ * 
+ * Create Dynamic Object from static object
+ * @constructor
+ * @memberof PhSim
+ * @param {PhSimObject} staticObject - Static Object
+ * @param {Matter.Body} [matterBody] - Matter Body
+ * 
+ * @mixes PhSim.PhSimEventTarget
+ * @mixes StaticObject
+ * 
+ * @property {Number} x - x position
+ * @property {Number} y - y position
+ * 
+ */
+
+var DynObject = function(staticObject,matterBody) {
+
+	Object.assign(this,PhSimEventTarget);
+
+	Object.assign(this,PhSim.Query.deepClone(staticObject));
+
+	/**
+	 * DynObject name
+	 * @type {String}
+	 */
+
+	this.name = staticObject.name;
+
+	/**
+	 * Array of connected Dynamic Objects
+	 * @type {PhSim.DynObject[]}
+	 *
+	 */
+
+	this.connectedDynObjects = [];
+
+	/**
+	 * DynObject type
+	 * @type {"circle" | "polygon" | "rectangle" | "regPolygon"}
+	 * 
+	 */
+
+	this.type = staticObject.type;
+
+	// Apply Shape Specific Constructor
+
+	if(this.type === "circle") {
+		Static.Circle.apply(this,staticObject.x,staticObject.y,staticObject.r);
+	}
+
+	if(this.type === "regPolygon") {
+		Static.RegPolygon.apply(this,staticObject.x,staticObject.y,staticObject.radius,staticObject.sides)
+	}
+
+	if(this.type === "rectangle") {
+		Static.Rectangle.apply(this,staticObject.x,staticObject.y,staticObject.w,staticObject.h);
+	}
+
+	if(this.type === "polygon") {
+		Static.Polygon.apply(this,staticObject.verts);
+	}
+
+	this.widgets = staticObject.widgets;
+
+	/**
+	 * Matter Body
+	 * @type {Object}
+	 */
+
+	this.matter = matterBody || PhSim.DynObject.createMatterObject(staticObject);
+
+	if(staticObject.shape === "polygon") {
+		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
+	}
+
+	/**
+	 * Inital angle of object
+	 * @type {Number}
+	 */
+
+	this.firstCycle = staticObject.cycle || 0;
+
+	if(staticObject.shape === "composite") {
+		this.flattenedParts = DynObject.flattenComposite();
+	}
+
+	/** 
+	 * Reference to static object used to create the DynObject
+	 * @type {StaticObject}
+	 */
+
+	this.static = staticObject;
+
+	/** 
+	 * Object ID 
+	 * @type {String}
+	 * */
+
+	this.id = DynObject.nextId;
+	DynObject.nextId++;
+
+	/**
+	 * Custom properties that can be added by the user to extend the DynObject.
+	 * @type {Object}
+	 */
+
+	this.data = this.data || {}
+	
+	/**
+	 * Reference to parent simulation
+	 * @type {null|PhSim}
+	 */
+
+	this.phSim;
+
+	/**
+	 * Boolean that makes a dynamic object not collide with anything.
+	 * @type {boolean}
+	 * @default false
+	 */
+
+	this.noCollision = staticObject.noCollision || false;
+
+	/**
+ 	 * Object containing array functions to be called.
+ 	 * @type {PhSim.EventStack}
+ 	 */
+
+	this.eventStack = new EventStack();
+
+	/** 
+	 * Reference of DynObject in matter object 
+	 * @type {PhSim.DynObject}
+	 * */
+
+	this.matter.plugin.dynObject = this;
+
+	if(DynObject.keepInstances) {
+		DynObject.instances.push(this);
+	}
+
+}
+
+/**
+ * If set to `true`, all DynObject instances are put into the 
+ * {@link PhSim.DynObject.instances} array. By default, this is `false`.
+ * Do not use unless you want to risk memory leaks. This is primarily for debugging 
+ * purposes.
+ * 
+ * @memberof PhSim.DynObject
+ * @type {Boolean}
+ * @default false
+ */
+
+DynObject.keepInstances = false;
+
+/**
+ * If set to true, the `staticObject` is cloned before Object.assign is applied to 
+ * the DynObject to clone it.
+ */
+
+DynObject.deepCloneStaticObject = false;
+
+/**
+ * Array of instances if {@link PhSim.DynObject.keepInstances} is set to true
+ * @type {PhSim.DynObject[]}
+ */
+
+DynObject.instances = [];
+
+/**
+ * Set color for dynObject.
+ * This can be done alternatively by setting `dynObject.fillStyle` directly.
+ * 
+ * @param {PhSim.DynObject} dyn_object - Dynamic Object
+ * @param {String} colorStr - Color String
+ */
+
+DynObject.setColor = function(dyn_object,colorStr) {
+	dyn_object.fillStyle = colorStr;
+}
+
+/**
+ * Set color for dynObject.
+ * This can be done alternatively by setting `dynObject.fillStyle` directly.
+ * 
+ * @param {String} colorStr - Color String
+ */
+
+DynObject.prototype.setColor = function(colorStr) {
+	return DynObject.setColor(this,colorStr)
+}
+
+/**
+ * Set border color.
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {String} colorStr 
+ */
+
+DynObject.setBorderColor = function(dyn_object,colorStr) {
+	dyn_object.strokeStyle = colorStr;
+}
+
+/**
+ * Set border color.
+ * @param {String} colorStr 
+ */
+
+DynObject.prototype.setBorderColor = function(colorStr) {
+	return DynObject.setBorderColor(this,colorStr);
+}
+
+/**
+ * 
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Number} lineWidth 
+ */
+
+DynObject.setLineWidth = function(dyn_object,lineWidth) {
+	dyn_object.lineWidth = lineWidth;
+}
+
+
+/**
+ * 
+ * @function
+ * @param {PhSimObject} composite - The composite to be flattened.
+ * @returns {PhSimObject[]} - The array of objects found in the composites. 
+ */
+
+DynObject.flattenComposite = function(composite) {
+
+	var a = [];
+
+	/**
+	 * 
+	 * @param {*} composite
+	 * @inner
+	 */
+	
+	var __f = function(composite) {
+
+		for(var i = 0; i < composite.parts.length; i++) {
+
+			if(composite.parts[i].shape === "composite") {
+				DynObject.flattenComposite(composite.parts[i].shape === "composite");
+			}
+
+			else {
+				a.push(composite.parts[i]);
+			}
+
+		}
+
+
+	}
+
+	__f(composite);
+
+	return a;
+
+}
+
+/**
+ * 
+ * Create path
+ * 
+ * @function
+ * @param {Vector[]} vectorSet 
+ * @param {Path} options 
+ */
+
+DynObject.createPath = function(vectorSet,options) {
+	var o = new Static.Polygon(vectorSet);
+	Object.assign(o,options);
+	return new DynObject(o);
+}
+
+/**
+ * Create circle
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of center
+ * @param {Number} y - y-coordinate of center
+ * @param {Number} r - radius
+ * @param {Circle} options - options
+ * @returns {PhSim.DynObject}
+ */
+
+DynObject.createCircle = function(x,y,r,options = {}) {
+	var o = new Static.Circle(x,y,r);
+	Object.assign(o,options);
+	return new DynObject(o);
+}
+
+/**
+ * 
+ * Create rectangle
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of upper left corner 
+ * @param {Number} y - y-coordinate of upper left corner 
+ * @param {Number} w - Width
+ * @param {Number} h - Height
+ * @param {Rectangle} options 
+ * @returns {PhSim.DynObject} - The rectangle
+ */
+
+DynObject.createRectangle = function(x,y,w,h,options = {}) {
+	var o = new Static.Rectangle(x,y,w,h);
+	Object.assign(o,options);
+}
+
+/**
+ * Create regular polgyon.
+ * 
+ * @function
+ * @param {Number} x - x-coordinate of center
+ * @param {Number} y - y-coordinate of center
+ * @param {Number} r - radius
+ * @param {Number} n - number of sides
+ * @param {RegPolygon} options - options
+ * @returns {PhSim.DynObject}
+ */
+
+DynObject.createRegPolygon = function(x,y,r,n,options = {}) {
+	var o = new Static.RegPolygon(x,y,r,n);
+	Object.assign(o,options);
+	return new DynObject(o);
+}
+
+/**
+ * 
+ * Create a matter.js object from a DynSim static object
+ * 
+ * @function
+ * @param {StaticObject} staticObject
+ * @returns {MatterBody} 
+ */
+
+DynObject.createMatterObject = function(staticObject) {
+
+	var opts = staticObject.matter || {}
+
+	opts.label = staticObject.name || "Untitled Object";
+
+	opts.isStatic = staticObject.locked || staticObject.semiLocked;
+
+	var set;
+
+	if(typeof staticObject.density === "number") {
+		opts.density = staticObject.density;
+
+	}
+
+	else {
+		opts.density = 0.001;
+	}
+
+	if(typeof staticObject.mass === "number") {
+		opts.mass = staticObject.mass;
+		opts.inverseMass = 1/staticObject.mass;
+	}
+
+	if(typeof staticObject.airFriction === "number") {
+		opts.airFriction = staticObject.airFriction;
+	}
+
+	if(Number.isInteger(staticObject.collisionNum)) {
+		opts.collisionFilter = staticObject.collisionNum;
+	}
+
+
+	if(staticObject.shape === "polygon") {
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
+	}
+
+	
+	else if(staticObject.shape === "circle") {
+		return Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
+	}
+
+
+	else if(staticObject.shape === "rectangle") {
+		set = Vertices.rectangle(staticObject);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+	}
+
+	else if(staticObject.shape === "regPolygon") {
+		set = Vertices.regPolygon(staticObject);
+		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
+	}
+
+
+}
+
+DynObject.nextId = 0;
+
+/**
+ * A PhSimObject is either a static object or a dynamic object.
+ * 
+ * @typedef {PhSim.DynObject|StaticObject} PhSimObject
+ * 
+ */
+
+ /**
+  * A PhSimObject array is an array of PhSimObject objects
+  * @typedef {PhSimObject[]} PhSimObjectArr
+  */
+
+module.exports = DynObject;
+
+/***/ }),
+
+/***/ 9662:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const Vector = __webpack_require__(2450)
+const Motion = __webpack_require__(341);
+
+/**
+ * @constructor
+ * @memberof PhSim
+ * @param {*} dynSim 
+ */
+
+var Camera = function(dynSim) {
+
+	/**
+	 * Dynamic Simulation
+	 * @type {PhSim}
+	 */
+
+	this.dynSim = dynSim;
+
+}
+
+/**
+ * Camera scale
+ * @type {Number}
+ */
+
+Camera.prototype.scale = 1;
+
+/**
+ * Camera offset x 
+ * @type {Number}
+ */
+
+Camera.prototype.x = 0;
+
+/**
+ * Camera offset y
+ * @type {Number}
+ */
+
+Camera.prototype.y = 0;
+
+/**
+ * Target object
+ * @type {StaticObject}
+ */
+
+Camera.prototype.targetObj = null;
+
+/**
+ * Objects that will transform with the camera
+ * @type {StaticObject[]}
+ */
+
+Camera.prototype.transformingObjects = []
+
+Camera.prototype.zoomIn = function(scaleFactor) {
+	this.scale = this.scale * scaleFactor;
+	this.dynSim.ctx.scale(scaleFactor,scaleFactor);
+}
+
+/**
+ * Translate camera by the vector `(dx,dy)`.
+ * 
+ * @param {Number} dx - Amount to transform camera in `x` direction.
+ * @param {Number} dy - Amount to transform camera in `y` direction.
+ * 
+ */
+
+Camera.prototype.translate = function(dx,dy) {
+
+	dx = dx || 0
+	dy = dy || 0
+
+	this.x = this.x + dx;
+	this.y = this.y + dy;
+	this.dynSim.ctx.translate(dx,dy);
+
+	for(var i = 0; i < this.transformingObjects.length; i++) {
+		Motion.translate(this.transformingObjects[i],new Vector(-dx,-dy));
+	}
+}
+
+Camera.prototype.setPosition = function(x,y) {
+	this.dynSim.ctx.translate(-this.x,-this.y)
+	this.x = x;
+	this.y = y;
+}
+
+module.exports = Camera;
+
+/***/ }),
+
+/***/ 4956:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+
+/**
+ * @mixin
+ * @memberof PhSim
+ */
+
+const PhSimEventTarget = {}
+
+/**
+ * 
+ * Used to add events to a PhSim simulation
+ * 
+ * @function
+ * @param {string} eventStr - String representing the event.
+ * @param {PhSimEventCall} call - Function to run when event is executed.
+ * @param {object} [options = {}] - Event Listener Options.
+ * @param {boolean} [options.once] - If true, the function is executed only once.
+ * @param {boolean} [options.slEvent] - If true, the event will be removed when the simulation changes
+ * 
+ */
+
+PhSimEventTarget.on = function(eventStr,call,options = {}) {
+	
+	if(options && options.slEvent === true) {
+		if(this.simulationEventStack[eventStr]) {
+			this.simulationEventStack[eventStr].push(call);
+		}
+	}
+
+	else {
+		if(this.eventStack[eventStr]) {
+			this.eventStack[eventStr].push(call);
+		}
+	}
+
+
+	if(options) {
+		if(options === true) {
+			if(options.once) {
+	
+				var f = function() {
+					this.off(eventStr,call)
+					this.off(eventStr,f)
+				}
+	
+				this.on(eventStr,f);
+
+			}
+		}
+
+	}
+
+
+	else {
+		throw new Error("Event Target Not Available")
+	}
+
+}
+
+/**
+ * @function 
+ * @param {String} eventStr 
+ * @param {PhSimEventCall} call 
+ */
+
+
+PhSimEventTarget.off = function(eventStr,call) {
+
+	var callIndex;
+	
+	if(this.eventStack[eventStr] && this.eventStack[eventStr].includes(call)) {
+		callIndex = this.eventStack[eventStr].indexOf(call);
+		this.eventStack[eventStr].splice(callIndex,1);
+	}
+
+	if(this.simulationEventStack[eventStr] && this.simulationEventStack[eventStr].includes(call)) {
+		callIndex = this.simulationEventStack[eventStr].indexOf(call);
+		this.simulationEventStack[eventStr].splice(callIndex,1);
+	}
+
+}
+
+/**
+ * @function
+ * @param {PhSim.Events.PhSimEvent} event - Event Object
+ */
+
+PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
+
+	var func;
+
+	if(this.eventStack[eventStr]) {
+		for(let i = 0; i < this.eventStack[eventStr].length; i++) {
+			func = this.eventStack[eventStr][i]
+			eventArg.func = func;
+			func.call(thisArg,eventArg);
+
+		}
+	}
+
+	if(this instanceof PhSim) {
+
+		if(this.simulationEventStack[eventStr]) {
+			for(let j = 0; j < this.simulationEventStack[eventStr].length; j++) {
+	
+				func = this.simulationEventStack[eventStr][j]
+				eventArg.func = func;
+				func.call(thisArg,eventArg);
+	
+			}
+		}
+
+	}
+	
+}
+
+module.exports = PhSimEventTarget;
+
+/***/ }),
+
+/***/ 1448:
+/***/ ((module) => {
+
+/**
+ * Namespace for event objects
+ * @memberof PhSim
+ * @namespace
+ */
+
+const Events = {}
+
+/**
+ * @constructor
+ * 
+ * 
+ */
+
+Events.PhSimEvent = function(type) {
+	this.target = null; 
+	this.timestamp = null;
+	this.type = type;
+}
+
+/**
+ * @constructor
+ */
+
+Events.PhSimDynEvent = function() {
+	Events.PhSimEvent.call(this);
+	this.layer = null;
+	this.simulation = null;
+	this.object = null;
+}
+
+Events.PhSimDynEvent.prototype = Object.create(Events.PhSimEvent.prototype);
+
+/**
+ * @constructor
+ * @extends PhSim.Events.PhSimEvent
+ */
+
+
+Events.PhSimEventKey = function() {
+	Events.PhSimDynEvent.call(this);
+	this.key = null;
+	this.domEvent = null;
+}
+
+Events.PhSimEventKey.prototype = Object.create(Events.PhSimDynEvent.prototype);
+
+/**
+ * Event object for mouse events.
+ * 
+ * @constructor
+ * @extends PhSim.Events.PhSimDynEvent
+ */
+
+
+Events.PhSimMouseEvent = function() {
+	Events.PhSimDynEvent.call(this);
+	this.x = null;
+	this.y = null;
+	this.domEvent = null;
+	this.dynArr = null;
+}
+
+Events.PhSimMouseEvent.prototype = Object.create(Events.PhSimDynEvent.prototype);
+
+/**
+ * 
+ * Event fired whenever the mouse is pressed down on an object.
+ * 
+ * @event PhSim.Events#objmousedown
+ * @type {PhSim.Events.PhSimMouseEvent}
+ */
+
+/**
+ * Event fired whenever the mouse is let go of while over an object
+ * 
+ * @event PhSim.Events#objmouseup
+ * @type {PhSim.Events.PhSimMouseEvent}
+ */
+
+/**
+ * @constructor
+ */
+
+
+Events.PhSimCollision = function() {
+	this.bodyA = null;
+	this.bodyB = null;
+	this.matter = null;
+}
+
+module.exports = Events;
+
+/***/ }),
+
+/***/ 1010:
+/***/ ((module) => {
+
+/**
+ * 
+ * The event stack is an object that is used to store event listeners.
+ * @constructor
+ * @memberof PhSim
+ * @enum {PhSimEventCall[]}
+ * 
+ */
+
+const EventStack = function() {
+
+	/** 
+	 * 
+	 * Array of functions to be executed whenever two or more objects contact each other
+	 * This array represents {@link event:contact} 
+	 * @type {PhSimEventCall[]}
+	 * 
+	*/
+
+	this.contact = [];
+
+	/** 
+	 * 
+	 * Array of functions to be executed before the simulation updates 
+	 * This array represents {@link event:beforeupdate} 
+	 * 
+	 * @type {PhSimEventCall[]}
+	 * 
+	 */
+
+	this.beforeupdate = [];
+
+	/** 
+	 * 
+	 * Array of functions to be exected when PhSim.updateDynObject is called 
+	 * This array represents {@link event:objupdate} 
+	 * 
+	 * @type {PhSimEventCall[]}
+	 * 
+	 */
+
+	this.objupdate = [];
+
+
+	/** 
+	 * 
+	 * Array of functions to be executed after the simulation updates 
+	 * This array represents {@link event:afterupdate} 
+	 * 
+	 * @type {PhSimEventCall[]}
+	 * 
+	 */
+
+	this.afterupdate = [];
+
+	/** 
+	 * 
+	 * Array of functions to be executed before the simulation is changed 
+	 * This array represents {@link event:beforeslchange} 
+	 * 
+	 * @type {PhSimEventCall[]}
+	 * 
+	 */
+
+	this.beforeslchange = [];
+
+	/** 
+	 * 
+	 * Array of functions to be executed after the simulation is changed 
+	 * This array represents {@link event:afterslchange} 
+	 * 
+	 * @type {PhSimEventCall[]}
+	 * 
+	 */
+
+	this.afterslchange = [];
+
+	/** 
+	 * 
+	 * Array of functions to be executed before the Sprite Image Array loads 
+	 * This array represents {@link event:beforespriteimgload} 
+	 * 
+	 * @type {PhSimEventCall[]}
+	 * 
+	 */
+
+	this.beforespriteimgload = [];
+
+	/** Array of functions to be executed after the Sprite Image Array loads */
+
+	this.afterspriteimgload = [];
+	this.beforeforcekey = [];
+
+	/** 
+	 * Array of functions to be executed when mouse is let go while over simulation 
+	 * canvas 
+	 * 
+	 * This array represents {@link event:mouseup} 
+	 * 
+	 */
+
+	this.mouseup = [];
+
+	/** 
+	 * Array of functions to be executed when mouse leaves simulation canvas 
+	 * 
+	 * This array represents {@link event:mouseout} 
+	 *
+	 */
+
+	this.mouseout = [];
+
+	/** 
+	 * Array of functions to be executed when the mouse moves
+	 * This array represents {@link event:mousemove} 
+	 * 
+	 */
+
+	this.mousemove = [];
+
+	/** Array of functions to be executed when at least one key is pressed */
+
+	this.keydown = [];
+
+	/** Array of functions to be executed when a new collision is created */
+
+	this.collisionstart = [];
+
+	/** Array of functions to be executed during an active collision */
+
+	this.collisionactive = [];
+
+	/** Array of functions to be executed when a new collision is deleted */
+
+	this.collisionend = [];
+
+	this.beforecounterset = [];
+
+	this.aftercounterset = [];
+
+	this.collisionchange = [];
+
+	this.load = [];
+
+	this.matterJSLoad = [];
+
+	/** Array of functions to be executed when an object is cloned */
+
+	this.clone = [];
+
+	/** Array of functions to be executed when the mouse is down on an object */
+
+	this.objmousedown = [];
+
+	/** Array of functions to be executed when the mouse is over an object */
+
+	this.objmouseover = [];
+
+	/** Array of functions to be executed when the mouse is over an object */
+
+	this.objmouseout = [];
+
+	/** Array of functions  */
+
+	this.firstslupdate = [];
+
+	/** Array of functions to be executed before the simulation exit */
+
+	this.exit = []
+
+	/** Array of functions to be executed when the canvas is clicked down on */
+
+	this.mousedown = [];
+
+	/** Array of functions to be executed when the canvas is clicked on */
+
+	this.click = [];
+
+	this.objclick = [];
+
+	this.objmousemove = [];
+
+	this.objmouseup = [];
+
+	this.score = [];
+
+	this.hazard = [];
+
+	this.gamewin = [];
+
+	this.levelwin = [];
+
+	this.levelloss = [];
+
+	/**
+	 * Array of functions to be executed when an wFunction body makes an error.
+	 */
+
+	this.wfunctionerror = [];
+
+
+}
+
+module.exports = EventStack;
+
+/***/ }),
+
+/***/ 1844:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+
+/**
+ * Fire the mousedown event for PhSim.
+ * If {@link PhSim#objMouseArr} length is greater than zero, 
+ * this also executes the objmousedown event
+ *
+ * @listens objmousedown
+ * @function
+ * @param {MouseEvent} e - Mouse Event Object
+ */
+
+/**
+ * The standard object for mouse related DOM events
+ * @external MouseEvent
+ * @type {MouseEvent} 
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent
+ */
+
+
+/**
+ * Listens click event
+ * @function
+ * @listens MouseEvent
+ * @param {MouseEvent} e 
+ */
+
+/**
+ * Fire the mousedown event for PhSim.
+ * If {@link PhSim#objMouseArr} length is greater than zero, 
+ * this also executes the objmousedown event
+ *
+ * @listens MouseEvent
+ * @function
+ * @param {MouseEvent} e - Mouse Event Object
+ */
+
+/**
+ * @function
+ * @param {MouseEvent} e 
+ */
+
+/**
+ * @function
+ * @param {MouseEvent} e 
+ */
+
+
+
+/**
+ * 
+ * Create a wrapping function that is used for events.
+ * 
+ * @param {Function} f - Function
+ * 
+ */
+
+PhSim.prototype.getEventBridge = function(f) {
+
+	var self = this;
+
+	return function(e) {
+		f.call(self,e);
+	}
+}
+
+/**
+ * 
+ * Used to set event listeners for a canvas.
+ * This function works if {@link PhSim.prototype#ctx} 
+ * and {@link PhSim.prototype#canvas} are set.
+ * 
+ * @function
+ * @this PhSim
+ *  
+ */
+
+PhSim.prototype.registerCanvasEvents = function() {
+
+	var self = this;
+
+	/**
+	 * @function 
+	 * @this HTMLCanvasElement
+	 * @param {external:MouseEvent} e - MouseEvent object
+	 * 
+	 * @fires Events#mousedown
+	 * @fires Events#objmousedown
+	 * 
+	 */
+
+
+	this.dispatchMouseDown = function(e) {
+
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
+		var canvas = self.ctx.canvas;
+		eventObj.domEvent = e;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
+		eventObj.type = "mousedown";
+		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
+	
+		if(!self.paused) {
+			if(self.objMouseArr && self.objMouseArr.length > 0) {
+				
+				eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
+
+				self.callEventClass("objmousedown",canvas,eventObj);
+
+				for(var i = 0; i < eventObj.dynArr.length; i++) {
+					eventObj.dynArr[i].callEventClass("objmousedown",eventObj.dynArr[i],eventObj);
+				}
+
+			}
+		}
+
+		/**
+		 * PhSim `mousedown` event.
+		 * @event mousedown
+		 * @type {PhSim.Events.PhSimMouseEvent}
+		 */
+	
+		self.callEventClass("mousedown",canvas,eventObj);
+	}
+
+	this.canvas.addEventListener("mousedown",this.dispatchMouseDown);
+
+	/**
+	 * @function
+	 * @param {external:MouseEvent} e 
+	 * 
+	 * @fires Events#click
+	 * @fires Events#objclick
+	 * 
+	 */
+
+	this.dispatchClick = function(e) {
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
+		var canvas = self.ctx.canvas;
+		eventObj.domEvent = e;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
+		eventObj.type = "click";
+		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
+
+		if(self.objMouseArr.length > 0) {
+
+			eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
+
+			self.callEventClass("objclick",canvas,eventObj);
+
+			for(var i = 0; i < eventObj.dynArr.length; i++) {
+				eventObj.dynArr[i].callEventClass("objclick",eventObj.dynArr[i],eventObj);
+			}
+
+		}
+	
+		self.callEventClass("click",canvas,eventObj);
+	}
+
+	this.canvas.addEventListener("click",this.dispatchClick);
+
+	/**
+	 * 
+	 * Dispatch `mousemove` event.
+	 * 
+	 * @function
+	 * @param {external:MouseEvent} e - Standard MouseEvent Javascript object 
+	 * 
+	 * @fires PhSim.Events#objmousemove
+	 * @fires PhSim.Events#objmouseover
+	 * @fires PhSim.Events#objmouseout
+	 * @fires PhSim.Events#mousemove
+	 */
+
+	this.dispatchMouseMove = function(e) {
+
+		var perform_i = performance.now()
+
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
+		var canvas = self.ctx.canvas;
+		var rect = canvas.getBoundingClientRect();
+		eventObj.domEvent = e;
+	
+		eventObj.x =  e.clientX - rect.left - self.camera.x;
+		eventObj.y = e.clientY - rect.top - self.camera.y;
+
+		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
+	
+		if(self.mouseX && self.mouseY) {
+			self.prevMouseX = self.mouseX;
+			self.prevMouseY = self.mouseY;
+		}
+	
+		self.prevObjMouseArr = [];
+	
+		if(self.objMouseArr) {
+			self.prevObjMouseArr = [...self.objMouseArr];
+		}
+	
+		self.mouseX = eventObj.x;
+		self.mouseY = eventObj.y;
+	
+		self.dynArr = self.objMouseArr;
+	
+		self.objMouseArr = [];
+		self.formerMouseObjs = [];
+		self.newMouseObjs = [];
+	
+		if(self.init) {
+	
+			for(var i = 0; i < self.objUniverse.length; i++) {
+	
+				if(self.pointInObject(self.objUniverse[i],self.mouseX,self.mouseY)) {
+					self.objMouseArr.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmousemove",self.objUniverse[i],eventObj);
+				}
+	
+				if(!self.objMouseArr.includes(self.objUniverse[i]) && self.prevObjMouseArr.includes(self.objUniverse[i])) {
+					self.formerMouseObjs.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmouseover",self.objUniverse[i],eventObj);
+				}
+	
+				if(self.objMouseArr.includes(self.objUniverse[i]) && !self.prevObjMouseArr.includes(self.objUniverse[i])) {
+					self.newMouseObjs.push(self.objUniverse[i]);
+					self.objUniverse[i].callEventClass("objmouseout",self.objUniverse[i],eventObj);
+				}
+	
+			}
+	
+			if(self.objMouseArr && self.objMouseArr.length > 0) {
+
+				eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
+
+				self.callEventClass("objmousemove",canvas,eventObj);
+
+			}
+	
+			if(self.newMouseObjs && self.newMouseObjs.length > 0) {
+
+				eventObj.newMouseObjs = self.newMouseObjs;
+
+				eventObj.target = eventObj.newMouseObjs[eventObj.dynArr.length - 1];
+
+				self.callEventClass("objmouseover",canvas,eventObj);
+
+			}
+	
+			if(self.formerMouseObjs && self.formerMouseObjs.length > 0) {
+
+				eventObj.formerMouseObjs = self.formerMouseObjs;
+
+				eventObj.target = eventObj.formerMouseObjs[eventObj.dynArr.length - 1];
+
+				self.callEventClass("objmouseout",canvas,eventObj);
+
+			}
+		}
+	
+		/**
+		 * @event mousemove
+		 */
+	
+		self.callEventClass("mousemove",canvas,eventObj);
+	
+		//console.log(eventObj);
+
+		if(self.debugging.logMouseMovePerformance) {
+
+			var perform_f = performance.now() - perform_i;
+			
+			self.debuggingData.mouseMovePerformance = self.debuggingData.mouseMovePerformance || [];
+			
+			self.debuggingData.mouseMovePerformance.push({
+				delta: perform_f,
+				perform_i: perform_i,
+				x: eventObj.x,
+				y: eventObj.y
+			});
+
+		}
+
+	}
+
+	this.canvas.addEventListener("mousemove",this.dispatchMouseMove);
+
+	this.dispatchMouseUp = function(e) {
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
+		var canvas = self.ctx.canvas;
+		eventObj.domEvent = e;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
+		self.mouseX = eventObj.x;
+		self.mouseY = eventObj.y;
+
+		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
+	
+		if(self.objMouseArr.length > 0) {
+
+			eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
+
+			self.callEventClass("objmouseup",canvas,eventObj);
+
+			for(var i = 0; i < eventObj.dynArr.length; i++) {
+				eventObj.dynArr[i].callEventClass("objmouseup",eventObj.dynArr[i],eventObj);
+			}
+
+		}
+	
+		self.callEventClass("mouseup",canvas,eventObj);
+	}
+
+	this.canvas.addEventListener("mouseup",this.getEventBridge(self.dispatchMouseUp));
+
+	self.dispatchMouseOut = function(e) {
+		var eventObj = new PhSim.Events.PhSimMouseEvent();
+		var canvas = self.ctx.canvas;
+		eventObj.domEvent = e;
+		eventObj.x =  self.mouseX
+		eventObj.y = self.mouseY
+		self.mouseX = eventObj.x;
+		self.mouseY = eventObj.y;
+		self.callEventClass("mouseout",canvas,eventObj);
+	}
+
+	this.canvas.addEventListener("mouseout",this.dispatchMouseOut);
+
+}
+
+PhSim.prototype.deregisterCanvasEvents = function() {
+	//self.canvas.removeEventListener("mousedown",self.getEventBridge(self.mousedownListener));
+	//self.canvas.removeEventListener("click",self.getEventBridge(self.clickListener));
+	//self.canvas.removeEventListener("mousemove",self.getEventBridge(self.mousemoveListener));
+	//self.canvas.removeEventListener("mouseup",self.getEventBridge(self.mouseupListener));
+	//self.canvas.removeEventListener("mouseout",self.getEventBridge(self.mouseoutListener));
+
+}
+
+PhSim.prototype.registerKeyEvents = function() {
+
+	var self = this;
+
+	self.windowObj = self.windowObj || window;
+
+	self.keydownBridge = function(e) {
+		var eventObj = new PhSim.Events.PhSimEventKey();
+		eventObj.domEvent = e;
+		eventObj.key = e.key;
+		eventObj.code = e.code;
+		eventObj.type = "keydown";
+		self.callEventClass("keydown",this,eventObj);
+	}
+
+	self.keydownBridgeWrapper = function(e) {
+		if(!self.filter) {
+			self.keydownBridge(e);
+		}
+	}
+
+	self.windowObj.addEventListener("keydown",self.keydownBridgeWrapper);
+}
+
+PhSim.prototype.deregisterKeyEvents = function() {
+	this.windowObj.removeEventListener("keydown",self.keydownBridgeWrapper);
+}
+
+/***/ }),
+
+/***/ 4468:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+
+/**
+ * Config filter
+ * @function
+ * @param {HTMLElement} container 
+ */
+
+PhSim.prototype.configFilter = function(container) {
+	this.htmlFilter = document.createElement("div");
+	this.htmlFilter.style.background = "rgba(3,3,3,0.7)";
+	this.htmlFilter.style.position = "absolute";
+	this.htmlFilter.style.display = "none";
+	this.htmlFilter.classList.add("dynsim-filter");
+	container.appendChild(this.htmlFilter);
+}
+
+/**
+ * Enable filter
+ * @function
+ */
+
+PhSim.prototype.enableFilter = function() {
+	var elmBox = this.canvas.getBoundingClientRect();
+	this.htmlFilter.style.display = "inline-block";
+	this.htmlFilter.style.left = "0px";
+	this.htmlFilter.style.position = "absolute";
+	//this.htmlFilter.style.top = elmBox.top + "px";
+	this.htmlFilter.style.width = Math.floor(elmBox.width) + "px";
+	this.htmlFilter.style.height = Math.floor(elmBox.height) + "px";
+}
+
+/**
+ * Disable filter
+ * @function
+ */
+
+PhSim.prototype.disableFilter = function() {
+	this.htmlFilter.style.display = "none";
+}
+
+/**
+ * Toggle filter
+ * @function
+ */
+
+PhSim.prototype.toggleFilter = function() {
+
+	if(this.htmlFilter.style.display === "none") {
+		this.enableFilter();
+	}
+
+	else {
+		this.disableFilter();
+	}
+}
+
+/**
+ * @function
+ * @param {Object} options - Options
+ * @param {String} options.msg - The message
+ * @param {String} options.closeButtonTxt - Inner text for closing button
+ * @param {String} options.bgColor - Background Color
+ * @param {String} options.txtColor - Text Color
+ * @param {Number} options.w - Width
+ * @param {Number} options.h - Height
+ * @param {Function} options.onok - Function to call when alert is closed
+ *  
+ */
+
+PhSim.prototype.alert = function(options) {
+	
+	var alertBox = document.createElement("div");
+	alertBox.style.backgroundColor = options.bgColor;
+	alertBox.style.color = options.txtColor;
+	alertBox.style.textAlign = "center";
+	alertBox.style.width = options.w + "px";
+	alertBox.style.height = options.h + "px";
+	alertBox.style.fontSize = "20px";
+
+	var elmBox = this.canvas.getBoundingClientRect();
+
+	var alertBoxMsg = document.createElement("div");
+	alertBoxMsg.className = "phsim-alertbox-msg"
+	alertBoxMsg.innerText = options.msg;
+	alertBoxMsg.style.textAlign = "left";
+	alertBoxMsg.style.padding = "20px";
+
+	alertBox.appendChild(alertBoxMsg);
+
+	var closeButton = document.createElement("div");
+
+	var f = function() {
+		options.onok();
+		closeButton.removeEventListener("click",f);
+	}
+
+	closeButton.addEventListener("click",f);
+
+	closeButton.innerText = options.closeButtonTxt;
+	alertBox.appendChild(closeButton);
+
+	this.container.appendChild(alertBox);
+
+	alertBox.style.position = "absolute";
+	alertBox.style.left = (elmBox.width * 0.5 - alertBox.offsetWidth * 0.5) + "px";
+	alertBox.style.top = (elmBox.height * 0.5 - alertBox.offsetHeight * 0.5) + "px";
+
+	return alertBox;
+
+}
+
+/***/ }),
+
+/***/ 1417:
+/***/ ((module) => {
+
+/**
+ * 
+ * PhSim game constructor.
+ * 
+ * @constructor
+ * @memberof PhSim
+ * @param {PhSim} phSim 
+ * @param {PhSim.Game.Options} options 
+ */
+
+var Game = function(phSim,options) {
+
+	/**
+     * Inital Life
+	 * @type {Number}
+	 */
+
+	this.intLife = options.life;
+
+	/**
+     * Game goal
+	 * @type {Number}
+	 */
+
+	this.goal = options.goal;
+
+	/**
+     * Inital Score
+	 * @type {Number}
+	 */
+	
+	this.intScore = options.score;
+
+	/**
+     * 
+     * Options passed into the constructor
+	 * @type {Number}
+	 */
+
+	this.options = options;
+
+	/**
+     * Life
+	 * @type {Number}
+     * 
+	 */
+
+	this.life = options.life;
+
+	/**
+     * Score
+	 * @type {Number}
+	 */
+
+	this.score = options.score;
+
+	/**
+     * Reference to the parent PhSim simulation
+	 * @type {PhSim}
+	 */
+
+	this.phSim = phSim;
+
+	// Adding arrays to phSim eventstack
+
+}
+
+/**
+ * Game Options
+ * @constructor
+ * @param {Number} goal 
+ * @param {Number} life 
+ * @param {Number} score 
+ */
+
+Game.Options = function(goal,life,score) {
+
+	/**
+     * Game Goal
+	 * @type {Number}
+	 */
+
+	this.goal = goal;
+
+	/**
+     * Game goal
+	 * @type {Number}
+	 */
+
+	this.life = life;
+
+	/**
+     * Game score
+	 * @type {Number}
+     * 
+	 */
+
+	this.score = score;
+}
+
+/**
+ * Enable default modal for game wins
+ * @default true
+ * @type {Boolean}
+ */
+
+Game.prototype.defaultGameWinModal = true;
+
+/**
+ * Enable default modal for level wins
+ * @default true
+ * @type {Boolean}
+ */
+
+Game.prototype.defaultLevelWinModal = true;
+
+/**
+ * Set score
+ * @function
+ * @param {Number} c - Score
+ */
+
+Game.prototype.setScore = function(c) {
+
+    var self = this;
+
+	this.score = c;
+
+	if(this.score >= this.goal && Number.isInteger(this.score) && Number.isInteger(this.goal)) {
+	
+		this.phSim.pause();
+		this.phSim.enableFilter();
+
+		// Code to execute 
+
+		if(this.phSim.simulationIndex + 1 === this.phSim.simulations.length) {
+
+			if(this.defaultGameWinModal) {
+
+                this.phSim.callEventClass("gamewin",this,{});                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+				var a = self.phSim.alert({
+					msg:"You Win!",
+					closeButtonTxt:"Play again",
+					bgColor:"#333",
+					txtColor:"#fff",
+					w:300,
+					h:100,
+					onok: function() {
+						self.phSim.disableFilter();
+						a.parentNode.removeChild(a);
+						self.phSim.gotoSimulationIndex(0);
+						self.phSim.play();
+					}
+				});
+
+			}
+
+		}
+
+		// If not the final simulation
+
+		else {
+
+			this.phSim.callEventClass("levelwin",this,{}); 
+
+			clearInterval(this.phSim.intervalLoop);
+			this.phSim.disableFilter();
+			this.phSim.gotoSimulationIndex(this.phSim.simulationIndex + 1);
+			self.phSim.play();
+		}
+
+
+	}
+
+	this.phSim.callEventClass("score",this,{}); 
+},
+
+/**
+ * Set life
+ * @function
+ * @param {Number} c - Life value
+ */
+
+Game.prototype.setLife = function(c) {
+	this.life = c;
+
+	if(this.life === 0) {
+		this.end();
+	}
+}
+
+/**
+ * Increment life (add 1 to the current life)
+ * @function
+ */
+
+Game.prototype.incrementLife = function() {
+	this.setLife(this.life + 1);
+}
+
+/**
+ * Decrement life (subtract 1 from life)
+ * @function
+ */
+
+Game.prototype.decrementLife = function() {
+	this.setLife(this.life - 1);
+}
+
+/**
+ * End game
+ * @function
+ */
+
+Game.prototype.end = function() {
+
+	this.phSim.pause();
+	this.phSim.enableFilter();
+
+	var self = this;
+
+
+	var a = this.phSim.alert({
+		msg:"Game Over",
+		closeButtonTxt:"Try again",
+		bgColor:"#333",
+		txtColor:"#fff",
+		w:300,
+		h:100,
+		onok: function() {
+			self.phSim.gotoSimulationIndex(self.phSim.simulationIndex);
+			self.phSim.play();
+			self.phSim.disableFilter();
+			a.parentNode.removeChild(a);	
+		}
+	});
+
+	this.phSim.callEventClass("levelloss",this,{}); 
+
+}
+
+/**
+ * Namespace for game widgets
+ * @mixin
+ * 
+ */
+
+Game.Widgets = {
+
+}
+
+/**
+ * Coin widget. Works if game widget is enabled. If not enabled, it throws an exception.
+ * 
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget - Widget options
+ * @param {Number} [widget.value] - Value of coin. If undefined, the value of the coin is 1.
+ * @this PhSim
+ */
+
+Game.Widgets.coin = function(dyn_object,widget) {
+
+	widget = widget || {};
+
+	var value = widget.value || 1;
+
+	var self = this;
+
+	var func = function() {
+
+		var obj1 = dyn_object;
+
+		var a = function() {
+
+			if(self.inSensorCollision(obj1) && self.lclGame) {
+				self.lclGame.setScore(self.lclGame.score + value);
+				self.off("collisionstart",a);	
+			}
+
+		}
+
+		return a;
+
+	}
+
+	self.on("collisionstart",func());
+
+
+}
+
+/**
+ * Hazard Widget
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget
+ * @param {Number} [widget.damage] - Quantity of life lost. By default, it is equal to 1.
+ */
+
+Game.Widgets.hazard = function(dyn_object,widget) {
+
+	widget = widget || {};
+
+	widget.damage = widget.damage || 1;
+
+	var self = this;
+
+	var func = function() {
+
+		var obj1 = dyn_object;
+
+		var a = function() {
+
+			if(self.inSensorCollision(obj1) && self.lclGame) {
+				self.lclGame.setLife(self.lclGame.life - widget.damage);
+				self.off("collisionstart",a);
+			}
+
+		}
+
+		return a;
+
+	}
+
+	self.on("collisionstart",func());
+
+}
+
+/**
+ * 
+ * @param {PhSim} dyn_object 
+ * @param {Object} [widget] - Widget configuration
+ * @param {Number} [widget.lives] - Lives to be gained.
+ */
+
+Game.Widgets.health = function(dyn_object,widget) {
+
+	widget = widget || {};
+	widget.lives = widget.lives || 1;
+
+	var self = this;
+
+	var func = function() {
+
+		var obj1 = dyn_object;
+
+		var a = function() {
+
+			if(self.inSensorCollision(obj1) && self.lclGame) {
+				self.lclGame.setLife(self.lclGame.life + widget.lives);
+				self.off("collisionstart",a);	
+			}
+
+		}
+
+		return a;
+
+	}
+
+	self.on("collisionstart",func());
+
+}
+
+Game.Widgets.endGame = function(dyn_object,widget) {
+	var f = this.createMotionFunction("position",dyn_object,widget.vector);
+	this.createWFunction(dyn_object,f,widget);
+}
+
+module.exports = Game;
+
+/***/ }),
+
+/***/ 8132:
+/***/ ((module) => {
+
+/**
+ * Get widget by name
+ * @memberof PhSim
+ * @param {String} nameStr 
+ */
+
+function getWidgetByName(nameStr) {
+	for(var i = 0; i < this.objUniverse.length; i++) {
+		this.objUniverse[i].getWidgetByName(nameStr);
+	}
+}
+
+module.exports = getWidgetByName;
+
+/***/ }),
+
+/***/ 5258:
+/***/ ((module) => {
+
+
+/**
+ * Gradient Namespace
+ * @memberof PhSim
+ * @namespace
+ */
+
+var Gradients = {}
+
+/**
+ * @function
+ * @param {CanvasRenderingContext2D} ctx 
+ * @param {PhSim.Static.Gradient} jsObject 
+ */
+
+Gradients.extractGradient = function(ctx,jsObject) {
+
+	var gradient = ctx.createLinearGradient(jsObject.limits.start.x,jsObject.limits.start.y,jsObject.limits.end.x,jsObject.limits.end.y);
+
+	for(var i = 0; i < jsObject.stops.length; i++) {
+		gradient.addColorStop(jsObject.stops[i].pos,jsObject.stops[i].color);
+	}
+	
+	return gradient;
+
+}
+
+module.exports = Gradients;
+
+/***/ }),
+
+/***/ 3333:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+
+/**
+ * Apply Newtonian gravity field.
+ * @function
+ */
+
+PhSim.prototype.applyGravitationalField = function() {
+	
+	var a = this.objUniverse;
+
+	for(var i = 0; i < a.length; i++) {
+		for(var j = 0; j < a.length; j++) {
+			if(i !== j && !this.isNonDyn(a[i]) && !this.isNonDyn(a[j]) && !a[i].matter.isStatic && !a[j].matter.isStatic) {
+				var a1 = PhSim.Vector.scale(PhSim.Vector.subtract(a[j].matter.position,a[i].matter.position),6.67 * Math.pow(10,-11) * a[i].matter.mass * a[j].matter.mass * -1)
+				var b1 = Math.pow(PhSim.Vector.distance(a[j].matter.position,a[i].matter.position),3);
+				var c = PhSim.Vector.divide(a1,b1);
+				PhSim.Motion.applyForce(a[j],a[i].matter.position,c);
+			}
+		}	
+	}
+
+}
+
+
+/***/ }),
+
+/***/ 8138:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
@@ -142,7 +2216,7 @@ if(typeof window === "object") {
 }
 
 else {
-	Matter = __webpack_require__(1);
+	Matter = __webpack_require__(8054);
 }
 
 /** 
@@ -561,11 +2635,11 @@ if(true) {
     module.exports = PhSim;
 }
 
-PhSim.Static = __webpack_require__(6 );
+PhSim.Static = __webpack_require__(2094 );
 
-__webpack_require__(15 );
+__webpack_require__(4941 );
 
-PhSim.EventStack = __webpack_require__(10 );
+PhSim.EventStack = __webpack_require__(1010 );
 
 /**
  * Object containing array functions to be called.
@@ -581,59 +2655,59 @@ PhSim.prototype.eventStack = new PhSim.EventStack();
 
 PhSim.prototype.simulationEventStack = new PhSim.EventStack();
 
-PhSim.prototype.getWidgetByName = __webpack_require__(16);
+PhSim.prototype.getWidgetByName = __webpack_require__(8132);
 
-PhSim.PhRender = __webpack_require__(17);
-PhSim.Sprites = __webpack_require__(18);
-PhSim.Audio = __webpack_require__(19);
-PhSim.Vector = __webpack_require__(3);
-PhSim.diagRect = __webpack_require__(13);
-PhSim.Vertices = __webpack_require__(7);
+PhSim.PhRender = __webpack_require__(3811);
+PhSim.Sprites = __webpack_require__(8313);
+PhSim.Audio = __webpack_require__(1458);
+PhSim.Vector = __webpack_require__(2450);
+PhSim.diagRect = __webpack_require__(4035);
+PhSim.Vertices = __webpack_require__(9153);
 
-PhSim.Centroid = __webpack_require__(8);
+PhSim.Centroid = __webpack_require__(209);
 
 // Bounding box functions
 
-PhSim.BoundingBox = __webpack_require__(12);
-PhSim.DynObject = __webpack_require__(2);
-PhSim.Events = __webpack_require__(20);
+PhSim.BoundingBox = __webpack_require__(6254);
+PhSim.DynObject = __webpack_require__(390);
+PhSim.Events = __webpack_require__(1448);
 
-__webpack_require__(21);
-__webpack_require__(22);
-__webpack_require__(23);
-__webpack_require__(24);
-__webpack_require__(25);
-__webpack_require__(26);
+__webpack_require__(6396);
+__webpack_require__(8569);
+__webpack_require__(4468);
+__webpack_require__(8175);
+__webpack_require__(1320);
+__webpack_require__(3499);
+__webpack_require__(1844);
 
-PhSim.PhSimEventTarget =  __webpack_require__(9);
+PhSim.PhSimEventTarget =  __webpack_require__(4956);
 
 Object.assign(PhSim.prototype,PhSim.PhSimEventTarget);
 
-__webpack_require__(27);
-__webpack_require__(28);
-__webpack_require__(29);
+__webpack_require__(447);
+__webpack_require__(3333);
+__webpack_require__(6367);
 
-PhSim.prototype.gotoSimulationIndex = __webpack_require__(30);
-PhSim.Motion = __webpack_require__(4);
+PhSim.prototype.gotoSimulationIndex = __webpack_require__(6949);
+PhSim.Motion = __webpack_require__(341);
 
-__webpack_require__(31);
-__webpack_require__(32);
-__webpack_require__(33);
+__webpack_require__(4045);
+__webpack_require__(1768);
+__webpack_require__(2841);
 
-PhSim.Camera = __webpack_require__(34);
-PhSim.Game = __webpack_require__(14);
-PhSim.Gradients = __webpack_require__(11);
+PhSim.Camera = __webpack_require__(9662);
+PhSim.Game = __webpack_require__(1417);
+PhSim.Gradients = __webpack_require__(5258);
 
-PhSim.Widget = __webpack_require__(5);
+PhSim.Widget = __webpack_require__(5203);
 
-__webpack_require__(35);
+__webpack_require__(4836);
 
-PhSim.calc_skinmesh = __webpack_require__(52);
+PhSim.calc_skinmesh = __webpack_require__(1800);
 
-__webpack_require__(53);
-__webpack_require__(54);
+__webpack_require__(7529);
 
-PhSim.ObjLoops = __webpack_require__(55);
+PhSim.ObjLoops = __webpack_require__(3065);
 
 
 /**
@@ -667,747 +2741,59 @@ PhSim.statusStruct = {
 }
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports) {
 
-module.exports = require("matter-js");
+/***/ 6396:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+
+/**
+ * @function
+ * @param {Number} L 
+ */
+
+PhSim.prototype.L = function(L) {
+	return this.dynTree[L];
+}
+
+/**
+ * @function
+ * @param {Number} L 
+ * @param {Number} O 
+ */
+
+PhSim.prototype.LO = function(L,O) {
+	return this.dynTree[L][O];
+}
+
+/**
+ * A Layer-Object string (LOStr) is a string specifying the layer and object indexes
+ * of an object in the DynTree.'
+ * 
+ * The form of the LOStr is:
+ * `<layer_index>,<object_index>`
+ * 
+ * @typedef {String} LOStr
+ */
+
+/**
+ * @function
+ * @param {LOStr} str
+ * @returns {PhSimObject} 
+ */
+
+PhSim.prototype.getObjectFromLOStr = function(str) {
+	str.split(",");
+	return this.LO(str[1],str[2])
+}
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(6);
-const PhSim = __webpack_require__(0);
-const Vertices = __webpack_require__(7);
-const PhSimEventTarget = __webpack_require__(9);
-const EventStack = __webpack_require__(10);
+/***/ 6949:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-// Try to import matter.js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = __webpack_require__(1);
-}
-
-/**
- * 
- * Create Dynamic Object from static object
- * @constructor
- * @memberof PhSim
- * @param {PhSimObject} staticObject - Static Object
- * @param {Matter.Body} [matterBody] - Matter Body
- * 
- * @mixes PhSim.PhSimEventTarget
- * @mixes StaticObject
- * 
- * @property {Number} x - x position
- * @property {Number} y - y position
- * 
- */
-
-var DynObject = function(staticObject,matterBody) {
-
-	Object.assign(this,PhSimEventTarget);
-
-	Object.assign(this,PhSim.Query.deepClone(staticObject));
-
-	/**
-	 * DynObject name
-	 * @type {String}
-	 */
-
-	this.name = staticObject.name;
-
-	/**
-	 * DynObject type
-	 * @type {"circle" | "polygon" | "rectangle" | "regPolygon"}
-	 * 
-	 */
-
-	this.type = staticObject.type;
-
-	// Apply Shape Specific Constructor
-
-	if(this.type === "circle") {
-		Static.Circle.apply(this,staticObject.x,staticObject.y,staticObject.r);
-	}
-
-	if(this.type === "regPolygon") {
-		Static.RegPolygon.apply(this,staticObject.x,staticObject.y,staticObject.radius,staticObject.sides)
-	}
-
-	if(this.type === "rectangle") {
-		Static.Rectangle.apply(this,staticObject.x,staticObject.y,staticObject.w,staticObject.h);
-	}
-
-	if(this.type === "polygon") {
-		Static.Polygon.apply(this,staticObject.verts);
-	}
-
-	this.widgets = staticObject.widgets;
-
-	/**
-	 * Matter Body
-	 * @type {Object}
-	 */
-
-	this.matter = matterBody || PhSim.DynObject.createMatterObject(staticObject);
-
-	if(staticObject.shape === "polygon") {
-		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
-	}
-
-	/**
-	 * Inital angle of object
-	 * @type {Number}
-	 */
-
-	this.firstCycle = staticObject.cycle || 0;
-
-	if(staticObject.shape === "composite") {
-		this.flattenedParts = DynObject.flattenComposite();
-	}
-
-	/** 
-	 * Reference to static object used to create the DynObject
-	 * @type {StaticObject}
-	 */
-
-	this.static = staticObject;
-
-	/** 
-	 * Object ID 
-	 * @type {String}
-	 * */
-
-	this.id = DynObject.nextId;
-	DynObject.nextId++;
-
-	/**
-	 * Custom properties that can be added by the user to extend the DynObject.
-	 * @type {Object}
-	 */
-
-	this.data = this.data || {}
-	
-	/**
-	 * Reference to parent simulation
-	 * @type {null|PhSim}
-	 */
-
-	this.phSim;
-
-	/**
-	 * Boolean that makes a dynamic object not collide with anything.
-	 * @type {boolean}
-	 * @default false
-	 */
-
-	this.noCollision = staticObject.noCollision || false;
-
-	/**
- 	 * Object containing array functions to be called.
- 	 * @type {PhSim.EventStack}
- 	 */
-
-	this.eventStack = new EventStack();
-
-	/** 
-	 * Reference of DynObject in matter object 
-	 * @type {PhSim.DynObject}
-	 * */
-
-	this.matter.plugin.dynObject = this;
-
-	if(DynObject.keepInstances) {
-		DynObject.instances.push(this);
-	}
-
-}
-
-/**
- * If set to `true`, all DynObject instances are put into the 
- * {@link PhSim.DynObject.instances} array. By default, this is `false`.
- * Do not use unless you want to risk memory leaks. This is primarily for debugging 
- * purposes.
- * 
- * @memberof PhSim.DynObject
- * @type {Boolean}
- * @default false
- */
-
-DynObject.keepInstances = false;
-
-/**
- * If set to true, the `staticObject` is cloned before Object.assign is applied to 
- * the DynObject to clone it.
- */
-
-DynObject.deepCloneStaticObject = false;
-
-/**
- * Array of instances if {@link PhSim.DynObject.keepInstances} is set to true
- * @type {PhSim.DynObject[]}
- */
-
-DynObject.instances = [];
-
-/**
- * Set color for dynObject.
- * This can be done alternatively by setting `dynObject.fillStyle` directly.
- * 
- * @param {PhSim.DynObject} dyn_object - Dynamic Object
- * @param {String} colorStr - Color String
- */
-
-DynObject.setColor = function(dyn_object,colorStr) {
-	dyn_object.fillStyle = colorStr;
-}
-
-/**
- * Set color for dynObject.
- * This can be done alternatively by setting `dynObject.fillStyle` directly.
- * 
- * @param {String} colorStr - Color String
- */
-
-DynObject.prototype.setColor = function(colorStr) {
-	return DynObject.setColor(this,colorStr)
-}
-
-/**
- * Set border color.
- * @param {PhSim.DynObject} dyn_object 
- * @param {String} colorStr 
- */
-
-DynObject.setBorderColor = function(dyn_object,colorStr) {
-	dyn_object.strokeStyle = colorStr;
-}
-
-/**
- * Set border color.
- * @param {String} colorStr 
- */
-
-DynObject.prototype.setBorderColor = function(colorStr) {
-	return DynObject.setBorderColor(this,colorStr);
-}
-
-/**
- * 
- * @param {PhSim.DynObject} dyn_object 
- * @param {Number} lineWidth 
- */
-
-DynObject.setLineWidth = function(dyn_object,lineWidth) {
-	dyn_object.lineWidth = lineWidth;
-}
-
-
-/**
- * 
- * @function
- * @param {PhSimObject} composite - The composite to be flattened.
- * @returns {PhSimObject[]} - The array of objects found in the composites. 
- */
-
-DynObject.flattenComposite = function(composite) {
-
-	var a = [];
-
-	/**
-	 * 
-	 * @param {*} composite
-	 * @inner
-	 */
-	
-	var __f = function(composite) {
-
-		for(var i = 0; i < composite.parts.length; i++) {
-
-			if(composite.parts[i].shape === "composite") {
-				DynObject.flattenComposite(composite.parts[i].shape === "composite");
-			}
-
-			else {
-				a.push(composite.parts[i]);
-			}
-
-		}
-
-
-	}
-
-	__f(composite);
-
-	return a;
-
-}
-
-/**
- * 
- * Create path
- * 
- * @function
- * @param {Vector[]} vectorSet 
- * @param {Path} options 
- */
-
-DynObject.createPath = function(vectorSet,options) {
-	var o = new Static.Polygon(vectorSet);
-	Object.assign(o,options);
-	return new DynObject(o);
-}
-
-/**
- * Create circle
- * 
- * @function
- * @param {Number} x - x-coordinate of center
- * @param {Number} y - y-coordinate of center
- * @param {Number} r - radius
- * @param {Circle} options - options
- * @returns {PhSim.DynObject}
- */
-
-DynObject.createCircle = function(x,y,r,options = {}) {
-	var o = new Static.Circle(x,y,r);
-	Object.assign(o,options);
-	return new DynObject(o);
-}
-
-/**
- * 
- * Create rectangle
- * 
- * @function
- * @param {Number} x - x-coordinate of upper left corner 
- * @param {Number} y - y-coordinate of upper left corner 
- * @param {Number} w - Width
- * @param {Number} h - Height
- * @param {Rectangle} options 
- * @returns {PhSim.DynObject} - The rectangle
- */
-
-DynObject.createRectangle = function(x,y,w,h,options = {}) {
-	var o = new Static.Rectangle(x,y,w,h);
-	Object.assign(o,options);
-}
-
-/**
- * Create regular polgyon.
- * 
- * @function
- * @param {Number} x - x-coordinate of center
- * @param {Number} y - y-coordinate of center
- * @param {Number} r - radius
- * @param {Number} n - number of sides
- * @param {RegPolygon} options - options
- * @returns {PhSim.DynObject}
- */
-
-DynObject.createRegPolygon = function(x,y,r,n,options = {}) {
-	var o = new Static.RegPolygon(x,y,r,n);
-	Object.assign(o,options);
-	return new DynObject(o);
-}
-
-/**
- * 
- * Create a matter.js object from a DynSim static object
- * 
- * @function
- * @param {StaticObject} staticObject
- * @returns {MatterBody} 
- */
-
-DynObject.createMatterObject = function(staticObject) {
-
-	var opts = staticObject.matter || {}
-
-	opts.label = staticObject.name || "Untitled Object";
-
-	opts.isStatic = staticObject.locked || staticObject.semiLocked;
-
-	var set;
-
-	if(typeof staticObject.density === "number") {
-		opts.density = staticObject.density;
-
-	}
-
-	else {
-		opts.density = 0.001;
-	}
-
-	if(typeof staticObject.mass === "number") {
-		opts.mass = staticObject.mass;
-		opts.inverseMass = 1/staticObject.mass;
-	}
-
-	if(typeof staticObject.airFriction === "number") {
-		opts.airFriction = staticObject.airFriction;
-	}
-
-	if(Number.isInteger(staticObject.collisionNum)) {
-		opts.collisionFilter = staticObject.collisionNum;
-	}
-
-
-	if(staticObject.shape === "polygon") {
-		return Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
-	}
-
-	
-	else if(staticObject.shape === "circle") {
-		return Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
-	}
-
-
-	else if(staticObject.shape === "rectangle") {
-		set = Vertices.rectangle(staticObject);
-		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-	}
-
-	else if(staticObject.shape === "regPolygon") {
-		set = Vertices.regPolygon(staticObject);
-		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
-	}
-
-
-}
-
-DynObject.nextId = 0;
-
-/**
- * A PhSimObject is either a static object or a dynamic object.
- * 
- * @typedef {PhSim.DynObject|StaticObject} PhSimObject
- * 
- */
-
- /**
-  * A PhSimObject array is an array of PhSimObject objects
-  * @typedef {PhSimObject[]} PhSimObjectArr
-  */
-
-module.exports = DynObject;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-/** 
- * Constructor for the minimal requirements for being a {@link Vector}.
- *  
- * @memberof PhSim
- * @constructor
- * @param {Number} x 
- * @param {Number} y
- * 
- */
-
-var Vector = function(x,y) {
-	
-	/**
-	 * x-coordinate of the vector
-	 * @type {Number}
-	 */
-	
-	this.x;
-
-	/**
-	 * y-coordinate of the vector
-	 * @type {Number}
-	 */
-	
-	this.y;
-
-	if(typeof x === "number") {
-		this.x = x;
-	}
-
-	else {
-		console.trace();
-		throw "Expecting a number in argument 1";
-	}
-
-	if(typeof y === "number") {
-		this.y = y;
-	}
-
-	else {
-		console.trace()
-		throw "Expecting a number in argument 2"
-	}
-
-}
-
-/**
- * 
- * Perform vector addition
- * 
- * @function
- * @param {Vector} vector1 - The first vector
- * @param {Vector} vector2 - The second vector
- * 
- * @param {Boolean} [newObj = true] - Boolean that determines the return value. 
- * If true, then it returns a new Vector object `vector` such that 
- * `vector.x === vector1.x + vector2.x` and `vector.x === vector1.y + vector2.y`
- * 
- * If false, then `vector2.x` is added to `vector1.x`, `vector2.y` is added to `vector1.y`
- * and then `vector1` is returned.
- * 
- * @returns {Vector} - The sum of the two vectors. New object if `newObj` is true. Returns
- * `vector1` otherwise. 
- */
-
-Vector.add = function(vector1,vector2,newObj = true) {
-	
-	if(newObj) {
-		return new Vector(vector1.x + vector2.x, vector1.y + vector2.y);
-	}
-
-	else {
-		vector1.x = vector1.x + vector2.x;
-		vector1.y = vector1.y + vector2.y;
-		return vector1;
-	}
-
-}
-
-/**
- * 
- * Perform vector subtraction
- * 
- * @function
- * @param {Vector} vector1 
- * @param {Vector} vector2 
- * 
- * * @param {Boolean} [newObj = true] - Boolean that determines the return value. 
- * If true, then it returns a new Vector object `vector` such that 
- * `vector.x === vector1.x - vector2.x` and `vector.x === vector1.y - vector2.y`
- * 
- * If false, then `vector2.x` is subtracted from `vector1.x`, `vector2.y` is subtracted 
- * from `vector1.y` and then `vector1` is returned.
- * 
- * @returns {Vector} - The difference between the two vectors. New object if `newObj` is true. Returns
- * `vector1` otherwise. 
- */
-
-Vector.subtract = function(vector1,vector2,newObj = true) {
-
-	if(newObj) {
-		return new Vector(vector1.x - vector2.x, vector1.y - vector2.y);	}
-
-	else {
-		vector1.x = vector1.x - vector2.x;
-		vector1.y = vector1.y - vector2.y;
-		return vector1;
-	}
-
-}
-
-/**
- * 
- * Multiply a vector by a scalar
- * 
- * @function
- * @param {Vector} vector 
- * @param {Number} scalar
- * @returns {Vector} 
- * 
- */
-
-Vector.scale = function(vector,scalar) {
-	return new Vector(vector.x * scalar,vector.y * scalar)
-}
-
-/**
- * Returns a new Vector object `vector` such that `vector.x === o.x` and 
- * `vector.y === o.y`.
- * 
- * @function
- * @param {Object} o
- * @param {Number} o.x
- * @param {Number} o.y 
- * @returns {Vector} 
- */
-
-Vector.extract = function(o) {
-	return new Vector(o.x,o.y);
-}
-
-/**
- * Returns a vector equal in magnitude of `vector` but opposite in direction of `vector`.
- * @param {Vector} vector 
- * @returns {PhSim.Vector} -  The reversed vector.
- */
-
-Vector.neg = function(vector) {
-	return new Vector(-vector.x,-vector.y);
-}
-
-/**
- * 
- * Divide a vector by a scalar
- * 
- * @function
- * @param {Vector} vector 
- * @param {Number} scalar
- * @returns {Vector} 
- *  
- */
-
-Vector.divide = function(vector,scalar) {
-	return new Vector(vector.x * (1/scalar),vector.y * (1/scalar));
-}
-
-/**
- * 
- * Get distance between two vectors.
- * 
- * @function
- * @param {Vector} vector1 
- * @param {Vector} vector2
- * @returns - The vector distance
- *  
- */
-
-Vector.distance = function(vector1,vector2) {
-	
-	var l1 = Math.pow(vector1.x - vector2.x,2);
-	var l2 = Math.pow(vector1.y - vector2.y,2);
-
-	return Math.sqrt(l1+l2);
-
-}
-
-/**
- * 
- * Get length of the vector
- * 
- * @function
- * @param {Vector} vector 
- * @returns {Number} - The length of the vector
- */
-
-Vector.getLength = function(vector) {
-	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
-}
-
-/**
- * 
- * Get normalized vector of some vector.
- * 
- * @function
- * @param {Vector} vector - Vector to normalize.
- * @returns {Vector} -  The Unit Vector
- */
-
-Vector.unitVector = function(vector) {
-	return Vector.scale(vector,1/Vector.getLength(vector));
-}
-
-/**
- * Apply a linear transformation defined by a 2x2 matrix to a vector.
- * 
- * @function
- * @param {Number} a11 - Element found in row 1, column 1
- * @param {Number} a12 - Element found in row 1, column 2
- * @param {Number} a21 - Element found in row 2, column 1
- * @param {Number} a22 - Element found in row 2, column 2
- * @param {Number} x - x-coordinate of vector to be transformed
- * @param {Number} y - y-coordinate of vector to be transformed
- * @returns - The transformed vector 
- */
-
-Vector.applyTransformation = function(a11,a12,a21,a22,x,y) {
-	return new Vector(a11 * x + a12 * y,a21 * x + a22 * y);
-}
-
-/**
- * 
- * Rotate a vector (x,y) by angle a
- * 
- * @function
- * @param {Number} x - x-coordinate
- * @param {Number} y - y-coordinate
- * @param {Number} a - Angle in radians
- * @returns {Vector}
- */
-
-Vector.rotate = function(x,y,a) {
-	return Vector.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
-}
-
-/**
- * Get SVG point
- * @param {Number} x 
- * @param {Number} y
- * @returns {String} - SVG Vector String 
- */
-
-Vector.svgVector = function(x,y) {
-	return x + "," + y;
-}
-
-/**
- * Calculate dot product of `vector1` and `vector2`.
- * 
- * @function
- * @since 0.2.0-alpha
- * @param {Vector} vector1
- * @param {Vector} vector2
- * @returns {Number} - The dot product 
- */
-
-Vector.dotProduct = function(vector1,vector2) {
-	return vector1.x * vector2.x + vector1.y * vector2.y;
-}
-
-/**
- * 
- * Gets angle between two lines that both end at `vertex`.
- * 
- * That is, suppose that `A` is the point `ray1`, `B` is the point `ray2` and that
- * `C` is the point `vertex`. Then, `vectorToArray` returns the angle between the lines
- * `AC` and `BC`.
- * 
- * @function
- * @since 0.2.0-alpha
- * @param {Vector} vertex 
- * @param {Vector} ray1 
- * @param {Vector} ray2
- * @returns {Number} - The angle 
- */
-
-Vector.vectorToArray = function(vertex,ray1,ray2) {
-
-	ray1.x = ray1.x - vertex.x;
-	ray1.y = ray1.y - vertex.y;
-
-	ray2.x = ray2.x - vertex.x;
-	ray2.y = ray2.y - vertex.y;
-
-	return Math.acos(Vector.dotProduct(ray1,ray2));
-
-}
-
-module.exports = Vector;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const DynObject = __webpack_require__(2);
-const Centroid = __webpack_require__(8);
+const DynObject = __webpack_require__(390);
+const PhSim = __webpack_require__(8138);
 
 // Try to import matter-js as a commonJS module
 
@@ -1418,7 +2804,760 @@ if(typeof window === "object") {
 }
 
 else {
-	Matter = __webpack_require__(1);
+	Matter = __webpack_require__(8054);
+}
+
+
+/**
+ * Go to simulation in the composite simulation
+ * 
+ * In a PhSim object, there is a property known as PhSim.prototype.sim. 
+ * This property is used to define a simulation.
+ * 
+ * When PhSim.prototype.gotoSimulationIndex is used, it resets 
+ * 
+ * @function
+ * @param {Number} i
+ * @this PhSim
+ * @memberof PhSim
+ * @returns {Promise} - A promise that is fulfiled if the loading is successful.
+ * 
+ */
+
+var gotoSimulationIndex = function (i) {
+
+	var self = this;
+
+	return new Promise(function(resolve){
+
+		self.status = PhSim.statusCodes.INT;
+
+		var optionMap = new Map();  
+
+		self.firstSlUpdate = false;
+
+		var event = new PhSim.Events.PhSimEvent("slchange");
+
+		event.type = "slchange";
+
+		self.callEventClass("beforeslchange",self,event);
+
+		if(!self.noCamera) {
+			self.camera.translate(-self.camera.x,-self.camera.y);
+		}
+
+		if(self.ctx) {
+			self.drawLoadingScreen();
+		}
+
+		self.simulation = self.simulations[i];
+		self.simOptions = self.simulations[i];
+
+		self.simulationIndex = i;
+
+		if(self.ctx) {
+			self.width = self.ctx.canvas.width;
+			self.height = self.ctx.canvas.height;
+		}
+
+		self.paused = false;
+
+		self.matterJSWorld = Matter.World.create();
+
+		self.matterJSEngine = Matter.Engine.create({
+			world: self.matterJSWorld
+		});
+
+		self.dynTree = [];
+		self.objUniverse = [];
+		self.staticSprites = [];
+		self.spriteUrls = new Set();
+		self.staticAudio = [];
+		self.audioPlayers = 0;
+		self.simulationEventStack = new PhSim.EventStack();
+
+
+		if(self.sprites) {
+			self.staticSprites.concat(self.sprites);
+		}
+
+
+		if(self.simOptions && self.simOptions.world && self.simOptions.world.bg) {
+			self.bgFillStyle = self.simOptions.world.bg;
+		}
+
+		if(self.world && self.world && self.world.bg) {
+			self.bgFillStyle = self.world.bg;
+		}
+
+		if(self.world) {
+
+			if(typeof self.world.grav === "number") {
+				self.matterJSWorld.gravity.y = self.world.grav;
+			}
+
+			if(typeof self.world.grav === "object" && typeof self.world.grav.x === "number" && typeof self.world.grav.y === "number") {
+				self.matterJSWorld.gravity.x = self.world.grav.x;
+				self.matterJSWorld.gravity.y = self.world.grav.y;
+			}
+
+
+		}
+
+		if(self.simulations) {
+
+			for(let i = 0; i < self.simOptions.layers.length; i++) {
+
+				self.dynTree.push([]);
+
+				for(let j = 0; j < self.simOptions.layers[i].objUniverse.length; j++) {
+
+					var o = self.simOptions.layers[i].objUniverse[j];
+
+					if(o.sprite) {
+						self.staticSprites.push(o.sprite);
+						self.spriteUrls.add(o.sprite.src);	
+					}
+					
+					if(o instanceof DynObject && !o.noDyn) {
+						self.addObject(o,{
+							layer: i
+						});
+					}
+
+					else {
+						var dynObject = new DynObject(o);
+
+						self.addObject(dynObject,{
+							layer: i
+						});
+
+						optionMap.set(o,dynObject);
+					}
+
+				}
+
+				var phSimDynEvent = new PhSim.Events.PhSimDynEvent();
+				self.callEventClass("matterJSLoad",self,phSimDynEvent);
+
+			}
+
+		}
+
+		Matter.Events.on(self.matterJSEngine,"collisionStart",function(event) {
+			
+			var a = new PhSim.Events.PhSimDynEvent();
+			a.matterEvent = event;
+			self.callEventClass("collisionstart",self,a);
+
+		});
+
+		if(self.simOptions.game) {
+			self.lclGame = new PhSim.Game(self,self.simOptions.game);
+		}
+
+		if(self.simulation.widgets) {
+
+			for(var C = 0; C < self.simulation.widgets.length; C++) {
+				var widget = self.simulation.widgets[C];
+
+				if(widget.type === "setImgSrc") {
+					this.spriteUrls.add(widget.src);
+				}
+
+				self.extractWidget(self,widget);
+			}
+
+		}
+
+		self.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
+
+		resolve();
+
+	})
+	.then(function(){
+
+		return new Promise(function(resolve){
+
+			if(self.phRender && self.staticSprites.length) {
+				self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(Array.from(self.spriteUrls.values()),function() {
+					self.status = PhSim.statusCodes.LOADED_SPRITES;
+					resolve();
+				});
+			}
+	
+			else {
+				self.status = PhSim.statusCodes.LOADED_SPRITES;
+				resolve();
+			}
+	
+		});
+
+	})
+	.then(function() {
+		
+		return new Promise(function(resolve){
+
+			if(self.staticAudio.length) {
+				self.audioArray = new PhSim.Audio.AudioArray(self.staticAudio,function(){
+					self.status = PhSim.statusCodes.LOADED_AUDIO;
+					resolve();
+				});
+			}
+
+			else {
+				self.status = PhSim.statusCodes.LOADED_AUDIO;
+				resolve();
+			}
+
+		});
+		
+	}).then(function(){
+		self.init = true;
+
+		self.status = PhSim.statusCodes.LOADED_SIMULATION;
+
+		var e = new PhSim.Events.PhSimDynEvent();
+	
+		self.callEventClass("load",self,e);
+
+	}).catch(function(e){
+		self.callEventClass("error",self,e);
+		throw e;
+	});
+
+}
+
+module.exports = gotoSimulationIndex;
+
+/***/ }),
+
+/***/ 6367:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+
+/**
+ * Play simulation
+ * 
+ * @function
+ * @memberof PhSim
+ * @this PhSim
+ * @returns {Promise} - A promise that is fulfilled if the playing the simulation is sucessful. 
+ * If resolved, the promise is fullfilled with the `PhSim` instance as its value.
+ */
+
+PhSim.prototype.play = function() {
+
+	var self = this;
+
+	return new Promise(function(resolve){
+		self.paused = false;
+		self.intervalLoop = setInterval(self.loopFunction.bind(self),self.delta);
+		resolve(self);
+	});
+}
+
+/**
+ * Pause simulation
+ * @function
+ * @returns {Promise} - A promise that is fulfilled if the pausing the simulation is sucessful. 
+ * If resolved, the promise is fullfilled with the `PhSim` instance as its value.
+ */
+
+PhSim.prototype.pause = function() {
+
+	var self = this;
+
+	return new Promise(function(resolve){
+		clearInterval(self.intervalLoop);
+		self.paused = true;
+		resolve(self);
+	});
+
+}
+
+/**
+ * Toggle Simulation
+ * 
+ * @function
+ * @returns {Promise}
+ */
+
+PhSim.prototype.toggle = function() {
+
+	var self = this;
+
+	return new Promise(function(resolve,reject){
+
+		if(self.paused) {
+
+			self.play().then(function(phsim){
+				resolve(phsim);
+			}).catch(function(e){
+				reject(e);
+			});
+
+		}
+
+		else {
+
+			self.pause().then(function(phsim){
+				resolve(phsim)
+			}).catch(function(e){
+				reject(e)
+			});
+
+		}
+	});
+
+
+}
+
+/**
+ * Exit simulation
+ * @function
+ */
+
+PhSim.prototype.exitSl = function() {
+
+	var self = this;
+
+	return new Promise(function(resolve){
+		self.callEventClass("beforeslchange",self,new PhSim.Events.PhSimEvent("beforeslchange"));
+		self.paused = false;
+		clearInterval(self.intervalLoop);
+		resolve(self);
+	});
+
+}
+
+/**
+ * 
+ * Completely reset PhSim object. That is, make it as if it is a new one.
+ * @function
+ * @returns {Promise}
+ */
+
+PhSim.prototype.exit = function() {
+
+	var self = this;
+
+	return new Promise(function(resolve){
+
+		// Remove references to avoid memory leak
+
+		delete self.camera.dynSim
+		delete self.phRender.dynSim
+
+		for(var i = 0; i < self.objUniverse.length; i++) {
+			delete self.objUniverse[i].phSim;
+		}
+
+		self.callEventClass("exit",self,new PhSim.Events.PhSimEvent("exit"));
+		self.deregisterCanvasEvents();
+		self.deregisterKeyEvents();
+		self.exitSl();
+
+		// Erase all things
+
+		Object.assign(self,new PhSim());
+
+		resolve(self);
+
+	});
+
+}
+
+/***/ }),
+
+/***/ 1768:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+const Motion = __webpack_require__(341);
+const Vector = __webpack_require__(2450);
+
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(8054);
+}
+
+/**
+ * 
+ * Update a dynamic object.
+ * 
+ * @function
+ * @param {PhSimObject} currentObj - Object to be updated
+ * @fires PhSim.Events.PhSimEvent
+ * 
+ */
+
+PhSim.prototype.updateDynObj = function(currentObj) {
+
+
+	// Loop must start at index 1 because the first element in the array is a reference to the parent object itself.
+
+	if(currentObj.noDyn) {
+		this.phRender.renderStatic(currentObj);	
+	}
+	
+	else {
+
+		if(currentObj.shape === "circle" || currentObj.shape === "regPolygon" || currentObj.shape === "rectangle") {
+			currentObj.cycle = currentObj.firstCycle + currentObj.matter.angle;
+		}
+	
+		if(currentObj.shape === "rectangle") {
+			currentObj.x = currentObj.matter.position.x - currentObj.w * 0.5
+			currentObj.y = currentObj.matter.position.y - currentObj.h * 0.5
+		}
+	
+		if(currentObj.shape === "circle" || currentObj.shape === "regPolygon") {
+			currentObj.x = currentObj.matter.position.x;
+			currentObj.y = currentObj.matter.position.y;
+		}
+	
+		if(currentObj.shape === "polygon") {
+			PhSim.calc_skinmesh(currentObj);
+		}
+
+		if(this.phRender) {	
+			this.phRender.dynamicRenderDraw(currentObj);
+		}
+
+	}
+
+	var event = new PhSim.Events.PhSimEvent("objupdate");
+	event.target = currentObj;
+
+	this.callEventClass("objupdate",this,event);
+
+}
+
+/**
+ * The loopFunction is a function that is executed over and over again. It is responsible
+ * for providing the simulation loop.
+ */
+
+PhSim.prototype.loopFunction = function() {
+
+	if(this.paused === false && this.status === PhSim.statusCodes.LOADED_SIMULATION) {
+
+		var beforeUpdateEvent = new PhSim.Events.PhSimDynEvent()
+
+		beforeUpdateEvent.simulation = this.simulation;
+
+		this.prevDate = this.prevDate && this.updateDate;
+	
+		this.callEventClass("beforeupdate",this,beforeUpdateEvent);
+
+		if(!this.firstSlUpdate) {
+			this.callEventClass("beforefirstslupdate",this,afterUpdateEvent);
+		}
+
+		this.updateDate = new Date();
+
+		if(this.prevDate) {
+			this.updateTimeInterval = this.updateDate - this.prevDate;
+		}
+
+		for(let i = 0; i < this.objUniverse.length; i++) {
+
+			let currentObj = this.objUniverse[i];
+
+			if(typeof this.atmosphere === "object" && typeof this.atmosphere.density === "number") {
+
+				let x = -this.matterJSWorld.gravity.x;
+				let y = -this.matterJSWorld.gravity.y;
+		
+				let b = Vector.scale(new Vector(x,y),currentObj.matter.area * this.matterJSWorld.gravity.scale * this.atmosphere.density);
+		
+				Motion.applyForce(currentObj,currentObj.matter.position,b);
+		
+			}
+
+			if(this.objUniverse[i].dragCoefficient) {
+
+			}
+		}
+
+		Matter.Engine.update(this.matterJSEngine,this.delta);
+
+		if(this.ctx) {
+
+			this.ctx.fillStyle = this.bgFillStyle;
+
+			if(this.noCamera) {
+				this.ctx.fillRect(0,0,this.width,this.height);
+			}
+	
+			else {
+				this.ctx.fillRect(0 - this.camera.x,0 - this.camera.y,this.width / this.camera.scale,this.height / this.camera.scale);
+			}
+		}
+
+		for(let i = 0; i < this.objUniverse.length; i++) {
+			this.updateDynObj(this.objUniverse[i]);
+		}
+	
+		this.applyGravitationalField()
+
+		var afterUpdateEvent = new PhSim.Events.PhSimDynEvent()
+
+		afterUpdateEvent.simulation = this.simulation;
+
+		this.sl_time = this.sl_time + this.delta;
+
+		if(this.filter) {
+			this.ctx.fillStyle = "rgba(3,3,3,0.7)";
+			this.ctx.fillRect(0,0,this.width / this.camera.scale,this.height / this.camera.scale);
+		}
+
+		if(!this.firstSlUpdate) {
+			this.callEventClass("firstslupdate",this,afterUpdateEvent);
+			this.firstSlUpdate = true;
+		}
+
+		this.callEventClass("afterupdate",this,afterUpdateEvent);
+
+		//this.renderAllCounters();
+
+
+	}
+
+}
+
+/***/ }),
+
+/***/ 8569:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+
+/**
+ * @function
+ * @param {Object} sim 
+ * @param {HTMLCanvasElement} canvas
+ * @memberof PhSim 
+ */
+
+PhSim.createFromCanvas = function(sim,canvas) {
+	var o = Object.create(sim);
+	o.canvas = canvas;
+	return new PhSim(o);
+}
+
+/**
+ * @function
+ * @param {Object} sim 
+ * @param {HTMLElement} container 
+ * @memberof PhSim 
+ */
+
+PhSim.createFromContainer = function(sim,container) {
+	var o = Object.create(sim);
+	o.container = container;
+	return new PhSim(o);
+}
+
+/**
+ * @function
+ * @param {*} sim 
+ * @memberof PhSim.DymSim 
+ */
+
+PhSim.createContainer = function(sim) {
+	var container = document.createElement("div");
+	return this.createFromContainer(sim,container);
+}
+
+/**
+ * @function
+ * @param {String} jsonURL - URL For JSON File
+ * @param {function} onload - Onload function
+ * @memberof PhSim 
+ */
+
+PhSim.loadFromJSON = function(jsonURL,onload) {
+
+	var x = new XMLHttpRequest();
+	x.open("GET",jsonURL);
+
+	var f = function(){
+		var o = PhSim.createContainer(JSON.parse(x.responseText));
+		onload(o);
+		x.removeEventListener("load",f);
+	}
+
+	x.addEventListener("load",f)
+
+	x.send();
+
+}
+
+/**
+ * @function
+ * @memberof PhSim 
+ */
+
+PhSim.prototype.configRender = function() {
+	
+	this.assignPhRender(new PhSim.PhRender(this.ctx));
+	
+	if(!this.noCamera) {
+		this.camera = new PhSim.Camera(this);
+		this.camera.translate(-this.camera.x,-this.camera.y);
+	}
+
+}
+
+/***/ }),
+
+/***/ 4941:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const DynObject = __webpack_require__(390);
+const PhSim = __webpack_require__(8138);
+
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(8054);
+}
+
+/**
+ * Object that registers PhSim as a Matter.js plugin.
+ * The modified matter.js object is stored in {@link Matter}
+ * @namespace
+ * 
+ */
+
+const matterPlugin = {
+
+    name: "phsim",
+
+    version: "0.1.0",
+
+    /**
+     * Installation function for plugin
+     * @param {Matter} matter 
+     */
+
+    install: function(matter) {
+
+        matter.after('Detector.collisions',function(){
+            matterPlugin.Detector.collisions.call(this,arguments);
+        });
+
+        //matter.after('Body.create',function(options){
+          //  matterPlugin.Body.init(options)
+        //});
+
+    },
+
+    /**
+     * Detector patch for Matter.js.
+     * 
+     * 
+     */
+
+    Detector: {
+
+        /**
+         * Matter.Detector.collisions patch for Matter.js.
+         * This modifies the function for checking collisions in Matter.js.
+         * @function 
+         */
+
+        collisions: function() {
+
+            for(var i = 0; i < this.length; i++) {
+
+                var bodyA = this[i].bodyA;
+                var bodyB = this[i].bodyB;
+                var c_classesA;
+                var c_classesB;
+
+                if( (bodyA.parent === bodyA && bodyA.plugin.dynObject.noCollision) || (bodyB.parent === bodyB && bodyB.plugin.dynObject.noCollision) ) {
+                    this.splice(this.indexOf(this[i]),1);
+                }
+
+                if(bodyA.parent === bodyA) {
+                    if(bodyA.plugin.dynObject instanceof DynObject) {
+                        c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.dynObject);
+                    }
+                }
+                
+                else {
+                    c_classesA = PhSim.Query.getCollisionClasses(bodyA.parent.plugin.dynObject);
+                }
+
+                if(bodyB.parent === bodyB) {
+                    if(bodyB.plugin.dynObject instanceof DynObject) {
+                        c_classesB = PhSim.Query.getCollisionClasses(bodyB.plugin.dynObject);
+                    }    
+                }
+
+                else {
+                    c_classesB = PhSim.Query.getCollisionClasses(bodyB.parent.plugin.dynObject);                    
+                }
+
+                if(c_classesA.length > 0 && c_classesB.length > 0) {
+                    if(!PhSim.Query.intersectionExists(c_classesA,c_classesB)) {
+
+                        this.splice(this.indexOf(this[i]),1);
+
+                        // Reset index to zero to make sure all collisions
+                        // that have no collision classes in common get removed
+
+                        i = 0;
+                    }
+                }
+
+
+            }
+
+        }
+    }
+
+}
+
+PhSim.matterPlugin = matterPlugin;
+
+Matter.Plugin.register(PhSim.matterPlugin); 
+
+/***/ }),
+
+/***/ 341:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const DynObject = __webpack_require__(390);
+const Centroid = __webpack_require__(209);
+
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(8054);
 }
 
 /**
@@ -1601,134 +3740,173 @@ Motion.setAngle = function(dynObject,angle) {
 module.exports = Motion;
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const PhSim = __webpack_require__(0);
-const DynObject = __webpack_require__(2);
-const PhSimEventTarget = __webpack_require__(9);
+/***/ 3065:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
 
 /**
- * Dynamic Widget Object
- * @param {Object} options 
+ * @namespace
+ * @memberof PhSim
  */
 
-const Widget = function(target,options) {
+const ObjLoops = {}
 
-	/**
-	 * Status of widget
-	 * @type {"enabled"|"disabled"|"destroyed"}
-	 */
+/**
+ * Execute function on all members of a PhSim simulation or PhSim options.
+ * @function
+ * @param {PhSim|PhSimOptions} sim 
+ * @param {Function} method 
+ */
 
-	this.status;
+ObjLoops.global = function(sim,method) {
 
-	/**
-	 * Thing to be affected by the widget.
-	 * @type {PhSim|PhSim.DynObject}
-	 */
+    if(sim instanceof PhSim) {
+        for(let i = 0; i < sim.objUniverse.length; i++) {
+            method(sim.objUniverse[i]);
+        }
+    }
 
-	
-	this.target = target;
+    else {
 
-	if(typeof options !== "undefined") {
-		Object.assign(this,options);
-	}
+        for(let i = 0; i < sim.simulations.length; i++) {
+            for(let j = 0; j < sim.simulations[i].layers.length; j++) {
+                for(let k = 0; k < sim.simulations[i].layers[j].objUniverse.length; k++) {
+                    method(sim.simulations[i].layers[j].objUniverse[k]);
+                }
+            }
+        }
 
-	Object.assign(this,PhSimEventTarget);
-
-	this.enable();
-
-}
-
-Widget.prototype.eventStack = {
-	enable: [],
-	disable: [],
-	destroy: []
-}
-
-Widget.prototype.enable = function() {
-
-	if(typeof this.wFunction === "function") {
-		this.wFunction.wFunction_enabled = true;
-	}
-
-	this.callEventClass("enable",this,this);
-
-	this.status = "enabled";
+    }
 
 }
 
 /**
- * Function for disabling widget
- * @type {Function}
+ * Execute function on all members of a simulation object.
+ * @function
+ * @param {Object} simulation 
+ * @param {Function} method 
  */
 
-Widget.prototype.disable = function() {
-
-	if(typeof this.wFunction === "function") {
-		this.wFunction.wFunction_enabled = false;
-	}
-
-	this.callEventClass("disable",this,this);
-
-	this.status = "disabled";
-
+ObjLoops.simulation = function(simulation,method) {
+    for(let j = 0; j < simulation.layers.length; j++) {
+        for(let k = 0; k < simulation.layers[j].objUniverse.length; k++) {
+            method(simulation.layers[j].objUniverse[k]);
+        }
+    }
 }
 
 /**
- * Function for destroying widget
- * @type 
+ * Execute function on all members of an layer
+ * @function
+ * @param {Object} layer
+ * @param {Function} method
  */
 
-
-Widget.prototype.destroy = function() {
-
-	if(typeof this.wFunction === "function") {
-
-		if(this.wFunction._thisRef instanceof DynObject) {
-			wFunction._thisRef.phsim.destroyWFunction(w.wFunction);
-		}
-
-		if(this.wFunction._thisRef instanceof PhSim) {
-			wFunction._thisRef.destroyWFunction(w.wFunction);	
-		}
-
-	}
-
-	this.callEventClass("destroy",this,this);
-
-	this.status = "destroyed";
-
+ObjLoops.layer = function(layer,method) {
+    for(let k = 0; k < layer.objUniverse.length; k++) {
+        method(layer.objUniverse[k]);
+    }
 }
 
+module.exports = ObjLoops;
+
+/***/ }),
+
+/***/ 1320:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+const DynObject = __webpack_require__(390);
 
 /**
  * 
+ * Add Object to PhSim simulation
+ * 
+ * @function
  * @param {PhSimObject} o 
+ * @param {Object} options
+ * @param {Number} options.layer 
+ * @returns {PhSim.DynObject} - The added dynObject. 
  */
 
-Widget.defineByBoolean = function(o) {
+PhSim.prototype.addObject = function(o,options = {}) {
 
-	Object.keys(Widgets).forEach(function(p){
-		if(o[p]) {
-			o.type = p;
+	if(typeof options.layer === "number") {
+		this.dynTree[options.layer].push(o);
+
+		if(o instanceof DynObject) {
+			o.layerBranch = this.dynTree[options.layer];
 		}
-	})
 
+	}
+
+	this.objUniverse.push(o);
+
+	if(o instanceof DynObject) {
+
+		o.phSim = this;
+
+		Matter.World.add(this.matterJSWorld,o.matter);
+
+		if(o.static.widgets) {
+			this.extractWidgets(o);
+		}
+
+	}
+
+	return o;
+}
+
+
+/**
+ * Add object to over layer.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObject 
+ */
+
+PhSim.prototype.addToOverlayer = function(o) {
 	
+	if(o instanceof DynObject) {
+		Matter.World.add(this.matterJSWorld, o.matter);
+	}
+
+	this.objUniverse.push(o);
+
 }
 
-Widget.WidgetOptions = function(type) {
-	this.type = type;
-}
+/**
+ * Remove dynamic object
+ * 
+ * @function
+ * @param {PhSim.DynObject}  dynObject - Dynamic Object
+ * @returns {PhSim.DynObject} - The removed Dynamic Object
+ */
 
-module.exports = Widget;
+PhSim.prototype.removeDynObj = function(dynObject) {
+
+	Matter.Composite.remove(this.matterJSWorld,dynObject.matter);
+
+	this.objUniverse.splice(this.objUniverse.indexOf(dynObject),1);
+
+	if(dynObject.layerBranch) {
+		var i = dynObject.layerBranch.indexOf(dynObject);
+		dynObject.layerBranch.splice(i,1);
+		dynObject.layerBranch = undefined;
+	}
+
+	return dynObject;
+
+}
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const PhSim = __webpack_require__(0);
+/***/ 2094:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
 
 /**
  * A static object is an object that is not simulated by the PhSim simulation.
@@ -2302,1283 +4480,14 @@ Static.SLO = function(S,L,O) {
 module.exports = Static;
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const Static = __webpack_require__(6);
-const Centroid = __webpack_require__(8);
-const Vector = __webpack_require__(3);
+/***/ 3811:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const Vertices = {}
-
-// Try to import matter-js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = __webpack_require__(1);
-}
-
-/**
- * 
- * Get vertices for a static object representing a regular polygon.
- * 
- * @function
- * @param {PhSim.Static.RegPolygon} regularPolygon - The Static Regular Polygon Object
- * @returns {PhSim.Vector[]}
- * 
- */
-
-Vertices.regPolygon = function(regularPolygon) {
-
-	var a = []
-	
-	var firstAngle = (2*Math.PI)/regularPolygon.sides;
-
-	for(var i = 0; i < regularPolygon.sides; i++) {
-		var x = regularPolygon.x + Math.cos(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
-		var y = regularPolygon.y + Math.sin(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
-		a.push(new Vector(x,y));
-	}
-
-	return a;
-
-}
-
-
-/**
- * 
- * Get vertices for a rectangle
- * 
- * @function
- * @param {PhSim.Static.Rectangle} rectangle
- * @returns {Object[]} 
- */
-
-Vertices.rectangle = function(rectangle) {
-
-	var a = [
-
-			{
-				"x": rectangle.x,
-				"y": rectangle.y,
-				"topLeft": true
-			},
-	
-			{
-				"x": rectangle.x + rectangle.w,
-				"y": rectangle.y,
-				"topRight": true
-			},
-
-			{
-				"x": rectangle.x + rectangle.w,
-				"y": rectangle.y + rectangle.h,
-				"bottomRight": true
-			},
-	
-			{
-				"x": rectangle.x,
-				"y": rectangle.y + rectangle.h,
-				"bottomLeft": true
-			}
-	
-	];
-
-	if(rectangle.cycle) {
-		Matter.Vertices.rotate(a, rectangle.cycle, Centroid.rectangle(rectangle));
-	}
-
-	return a;
-
-}
-
-/**
- * 
- * Get rectangle corners
- * 
- * @function
- * @param {PhSim.Static.Rectangle} rectangle 
- * @returns {Object}
- */
-
-
-Vertices.getRectangleCorners = function(rectangle) {
-
-
-	var a = Vertices.rectangle(rectangle)
-
-	
-	var z = {
-
-		"topLeft": a[0],
-
-		"topRight": a[1],
-
-		"bottomLeft": a[3],
-
-		"bottomRight": a[2]
-
-	}
-
-	return z;
-
-}
-
-/**
- * Get vertices for regular polygon inscribed in circle.
- * @param {Circle} circle 
- * @param {Number} sides 
- */
-
-Vertices.inscribedRegPolygonCircle = function(circle,sides) {
-	return new Static.RegPolygon(circle.x,circle.y,circle.radius,sides);
-}
-
-/**
- * Returns the vertices for a regular polygon inscribed in the circle. It has 25 sides.
- * This is meant to create a regular polygon that is used to create Matter.js circles.
- * 
- * @param {Circle} circle 
- * 
- */
-
-Vertices.inscribedMatterCirclePolygon = function(circle) {
-	return Vertices.inscribedRegPolygonCircle(circle,25);
-}
-
-/**
- * Get verticles of PhSim objects
- * @param {*} o 
- */
-
-Vertices.object = function(o) {
-
-	if(o.shape === "rectangle") {
-		return Vertices.rectangle(o);
-	}
-
-	if(o.shape === "regPolygon") {
-		return Vertices.regPolygon(o);
-	}
-
-	if(o.shape === "polygon") {
-		return o.verts;
-	}
-
-	if(o.shape === "circle") {
-		return Vertices.inscribedMatterCirclePolygon(o);
-	}
-
-}
-
-module.exports = Vertices;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Vector = __webpack_require__(3);
-
-/**
- * Namespace for functions that get the centroid (the center) of a {@link PhSimObject}.
- * @memberof PhSim
- * @namespace
- */
-
-const Centroid = {}
-
-/**
- * Get centroid of any shape.
- * If it is a circle or a regPolygon, then `o` is returned because the properties `x` and
- * `y` already define the centroid of the object.
- * 
- * @param {PhSimObject} o 
- * @returns {Vector}
- */
-
-Centroid.shape = function(o) {
-	
-	if(o.shape === "rectangle") {
-		return Centroid.rectangle(o);
-	}
-
-	if(o.shape === "polygon") {
-		return Centroid.polygon(o)
-	}
-
-	if(o.shape === "circle" || o.shape === "regPolygon") {
-		return o;
-	}
-
-}
-
-/**
- * 
- * Get centroid of a rectangle
- * 
- * @function
- * @param {PhSim.Static.Rectangle} rectangle
- * @returns {Vector}
- *  
- */
-
-Centroid.rectangle = function(rectangle) {
-	return {
-		"x": rectangle.x + 0.5 * rectangle.w,
-		"y": rectangle.y + 0.5 * rectangle.h
-	}
-}
-
-
-/** 
- * Find Centroid of a polygon
- * @function
- * @param {Polygon} a - Path
- * @returns {Vector}
- */
-
-Centroid.polygon = function(a) {
-		
-	var v = new Vector(0,0);
-	
-	for(var j = 0; j < a.verts.length; j++) { 
-		v.x += a.verts[j].x;
-		v.y += a.verts[j].y;
-	}
-	
-	v.x = (1/a.verts.length) * v.x;
-	v.y = (1/a.verts.length) * v.y;
-	
-	return v;
-
-}
-
-module.exports = Centroid;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/**
- * @mixin
- * @memberof PhSim
- */
-
-const PhSimEventTarget = {}
-
-/**
- * 
- * Used to add events to a PhSim simulation
- * 
- * @function
- * @param {string} eventStr - String representing the event.
- * @param {PhSimEventCall} call - Function to run when event is executed.
- * @param {object} [options = {}] - Event Listener Options.
- * @param {boolean} [options.once] - If true, the function is executed only once.
- * @param {boolean} [options.slEvent] - If true, the event will be removed when the simulation changes
- * 
- */
-
-PhSimEventTarget.on = function(eventStr,call,options = {}) {
-	
-	if(options && options.slEvent === true) {
-		if(this.simulationEventStack[eventStr]) {
-			this.simulationEventStack[eventStr].push(call);
-		}
-	}
-
-	else {
-		if(this.eventStack[eventStr]) {
-			this.eventStack[eventStr].push(call);
-		}
-	}
-
-
-	if(options) {
-		if(options === true) {
-			if(options.once) {
-	
-				var f = function() {
-					this.off(eventStr,call)
-					this.off(eventStr,f)
-				}
-	
-				this.on(eventStr,f);
-
-			}
-		}
-
-	}
-
-
-	else {
-		throw new Error("Event Target Not Available")
-	}
-
-}
-
-/**
- * @function 
- * @param {String} eventStr 
- * @param {PhSimEventCall} call 
- */
-
-
-PhSimEventTarget.off = function(eventStr,call) {
-
-	var callIndex;
-	
-	if(this.eventStack[eventStr] && this.eventStack[eventStr].includes(call)) {
-		callIndex = this.eventStack[eventStr].indexOf(call);
-		this.eventStack[eventStr].splice(callIndex,1);
-	}
-
-	if(this.simulationEventStack[eventStr] && this.simulationEventStack[eventStr].includes(call)) {
-		callIndex = this.simulationEventStack[eventStr].indexOf(call);
-		this.simulationEventStack[eventStr].splice(callIndex,1);
-	}
-
-}
-
-/**
- * @function
- * @param {PhSim.Events.PhSimEvent} event - Event Object
- */
-
-PhSimEventTarget.callEventClass = function(eventStr,thisArg,eventArg) {
-
-	var func;
-
-	if(this.eventStack[eventStr]) {
-		for(let i = 0; i < this.eventStack[eventStr].length; i++) {
-			func = this.eventStack[eventStr][i]
-			eventArg.func = func;
-			func.call(thisArg,eventArg);
-
-		}
-	}
-
-	if(this instanceof PhSim) {
-
-		if(this.simulationEventStack[eventStr]) {
-			for(let j = 0; j < this.simulationEventStack[eventStr].length; j++) {
-	
-				func = this.simulationEventStack[eventStr][j]
-				eventArg.func = func;
-				func.call(thisArg,eventArg);
-	
-			}
-		}
-
-	}
-	
-}
-
-module.exports = PhSimEventTarget;
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-/**
- * 
- * The event stack is an object that is used to store event listeners.
- * @constructor
- * @memberof PhSim
- * @enum {PhSimEventCall[]}
- * 
- */
-
-const EventStack = function() {
-
-	/** 
-	 * 
-	 * Array of functions to be executed whenever two or more objects contact each other
-	 * This array represents {@link event:contact} 
-	 * @type {PhSimEventCall[]}
-	 * 
-	*/
-
-	this.contact = [];
-
-	/** 
-	 * 
-	 * Array of functions to be executed before the simulation updates 
-	 * This array represents {@link event:beforeupdate} 
-	 * 
-	 * @type {PhSimEventCall[]}
-	 * 
-	 */
-
-	this.beforeupdate = [];
-
-	/** 
-	 * 
-	 * Array of functions to be exected when PhSim.updateDynObject is called 
-	 * This array represents {@link event:objupdate} 
-	 * 
-	 * @type {PhSimEventCall[]}
-	 * 
-	 */
-
-	this.objupdate = [];
-
-
-	/** 
-	 * 
-	 * Array of functions to be executed after the simulation updates 
-	 * This array represents {@link event:afterupdate} 
-	 * 
-	 * @type {PhSimEventCall[]}
-	 * 
-	 */
-
-	this.afterupdate = [];
-
-	/** 
-	 * 
-	 * Array of functions to be executed before the simulation is changed 
-	 * This array represents {@link event:beforeslchange} 
-	 * 
-	 * @type {PhSimEventCall[]}
-	 * 
-	 */
-
-	this.beforeslchange = [];
-
-	/** 
-	 * 
-	 * Array of functions to be executed after the simulation is changed 
-	 * This array represents {@link event:afterslchange} 
-	 * 
-	 * @type {PhSimEventCall[]}
-	 * 
-	 */
-
-	this.afterslchange = [];
-
-	/** 
-	 * 
-	 * Array of functions to be executed before the Sprite Image Array loads 
-	 * This array represents {@link event:beforespriteimgload} 
-	 * 
-	 * @type {PhSimEventCall[]}
-	 * 
-	 */
-
-	this.beforespriteimgload = [];
-
-	/** Array of functions to be executed after the Sprite Image Array loads */
-
-	this.afterspriteimgload = [];
-	this.beforeforcekey = [];
-
-	/** 
-	 * Array of functions to be executed when mouse is let go while over simulation 
-	 * canvas 
-	 * 
-	 * This array represents {@link event:mouseup} 
-	 * 
-	 */
-
-	this.mouseup = [];
-
-	/** 
-	 * Array of functions to be executed when mouse leaves simulation canvas 
-	 * 
-	 * This array represents {@link event:mouseout} 
-	 *
-	 */
-
-	this.mouseout = [];
-
-	/** 
-	 * Array of functions to be executed when the mouse moves
-	 * This array represents {@link event:mousemove} 
-	 * 
-	 */
-
-	this.mousemove = [];
-
-	/** Array of functions to be executed when at least one key is pressed */
-
-	this.keydown = [];
-
-	/** Array of functions to be executed when a new collision is created */
-
-	this.collisionstart = [];
-
-	/** Array of functions to be executed during an active collision */
-
-	this.collisionactive = [];
-
-	/** Array of functions to be executed when a new collision is deleted */
-
-	this.collisionend = [];
-
-	this.beforecounterset = [];
-
-	this.aftercounterset = [];
-
-	this.collisionchange = [];
-
-	this.load = [];
-
-	this.matterJSLoad = [];
-
-	/** Array of functions to be executed when an object is cloned */
-
-	this.clone = [];
-
-	/** Array of functions to be executed when the mouse is down on an object */
-
-	this.objmousedown = [];
-
-	/** Array of functions to be executed when the mouse is over an object */
-
-	this.objmouseover = [];
-
-	/** Array of functions to be executed when the mouse is over an object */
-
-	this.objmouseout = [];
-
-	/** Array of functions  */
-
-	this.firstslupdate = [];
-
-	/** Array of functions to be executed before the simulation exit */
-
-	this.exit = []
-
-	/** Array of functions to be executed when the canvas is clicked down on */
-
-	this.mousedown = [];
-
-	/** Array of functions to be executed when the canvas is clicked on */
-
-	this.click = [];
-
-	this.objclick = [];
-
-	this.objmousemove = [];
-
-	this.objmouseup = [];
-
-	this.score = [];
-
-	this.hazard = [];
-
-	this.gamewin = [];
-
-	this.levelwin = [];
-
-	this.levelloss = [];
-
-	/**
-	 * Array of functions to be executed when an wFunction body makes an error.
-	 */
-
-	this.wfunctionerror = [];
-
-
-}
-
-module.exports = EventStack;
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-
-/**
- * Gradient Namespace
- * @memberof PhSim
- * @namespace
- */
-
-var Gradients = {}
-
-/**
- * @function
- * @param {CanvasRenderingContext2D} ctx 
- * @param {PhSim.Static.Gradient} jsObject 
- */
-
-Gradients.extractGradient = function(ctx,jsObject) {
-
-	var gradient = ctx.createLinearGradient(jsObject.limits.start.x,jsObject.limits.start.y,jsObject.limits.end.x,jsObject.limits.end.y);
-
-	for(var i = 0; i < jsObject.stops.length; i++) {
-		gradient.addColorStop(jsObject.stops[i].pos,jsObject.stops[i].color);
-	}
-	
-	return gradient;
-
-}
-
-module.exports = Gradients;
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const diagRect = __webpack_require__(13);
-const Static = __webpack_require__(6);
-const Vertices = __webpack_require__(7);
-
-/**
- * Get bounding box from an array of vectors.
- * 
- * @constructor
- * @memberof PhSim
- * @extends PhSim.Options.Rectangle
- * @param {Vector[]} verts 
- */
-
-const BoundingBox = function(verts) {
-
-	verts = Object.assign([],verts);
-
-	verts.sort(function(a,b){
-		return a.x - b.x;
-	});
-
-	/**
-	 * The x coordinate of the left most vertex of `verts`.
-	 * @type {Number}
-	 */
-
-	this.smallX = verts[0].x;
-
-	/**
-	 * The x coordinate of the right most vertex of `verts`.
-	 * @type {Number}
-	 */
-
-	this.largeX = verts[verts.length - 1].x;
-
-	verts.sort(function(a,b){
-		return a.y - b.y;
-	});
-
-	this.smallY = verts[0].y;
-	this.largeY = verts[verts.length - 1].y;
-
-	var w = this.largeX - this.smallX;
-	var h = this.largeY - this.smallY;
-	var x = this.smallX;
-	var y = this.smallY;
-
-	Static.Rectangle.call(this,w,h,x,y);
-
-}
-
-/**
- * Get bounding box of PhSim shape.
- * @param {PhSimObject} object - The Static Object
- * @returns {PhSim.BoundingBox} 
- */
-
-BoundingBox.fromShape = function(object) {
-	
-	if(object.shape === "polygon") {
-		return new BoundingBox(object.verts);
-	}
-
-	if(object.shape === "regPolygon") {
-		return new BoundingBox(Vertices.regPolygon(object));
-	}
-
-	if(object.shape === "rectangle") {
-		return new BoundingBox(Vertices.rectangle(object,true));
-	}
-
-	if(object.shape === "circle") {
-
-		var ax = object.x - object.radius;
-		var ay = object.y - object.radius;
-		var bx = object.x + object.radius;
-		var by = object.y + object.radius;
-
-		return diagRect(ax,ay,bx,by,0);
-	}
-
-	if(object.composite) {
-		
-		var a = [];
-
-		for(var i = 0; i < object.objUniverse.length; i++) {
-			a.push( Vertices.rectangle( this.getStaticBoundingBox(object.objUniverse[i]) ) );
-		}
-
-		a = a.flat(Infinity);
-
-		return new BoundingBox(a);
-
-	}
-}
-
-module.exports = BoundingBox;
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Static = __webpack_require__(6);
-
-/**
- * 
- * Get Rectangle by diagonal with points (x1,y1) and (x2,y2);
- * 
- * @function
- * @memberof PhSim
- * 
- * @param {Number} x1
- * @param {Number} y1
- * @param {Number} x2
- * @param {Number} y2 
- * @returns {PhSim.Static.Rectangle} - Rectangle Object
- * 
- */
-
-var diagRect = function(x1,y1,x2,y2) {
-
-	var w = x2 - x1;
-	var h = y2 - y1;
-
-    return new Static.Rectangle(x1,y1,w,h);
-    
- }
-
-module.exports = diagRect;
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports) {
-
-/**
- * 
- * PhSim game constructor.
- * 
- * @constructor
- * @memberof PhSim
- * @param {PhSim} phSim 
- * @param {PhSim.Game.Options} options 
- */
-
-var Game = function(phSim,options) {
-
-	/**
-     * Inital Life
-	 * @type {Number}
-	 */
-
-	this.intLife = options.life;
-
-	/**
-     * Game goal
-	 * @type {Number}
-	 */
-
-	this.goal = options.goal;
-
-	/**
-     * Inital Score
-	 * @type {Number}
-	 */
-	
-	this.intScore = options.score;
-
-	/**
-     * 
-     * Options passed into the constructor
-	 * @type {Number}
-	 */
-
-	this.options = options;
-
-	/**
-     * Life
-	 * @type {Number}
-     * 
-	 */
-
-	this.life = options.life;
-
-	/**
-     * Score
-	 * @type {Number}
-	 */
-
-	this.score = options.score;
-
-	/**
-     * Reference to the parent PhSim simulation
-	 * @type {PhSim}
-	 */
-
-	this.phSim = phSim;
-
-	// Adding arrays to phSim eventstack
-
-}
-
-/**
- * Game Options
- * @constructor
- * @param {Number} goal 
- * @param {Number} life 
- * @param {Number} score 
- */
-
-Game.Options = function(goal,life,score) {
-
-	/**
-     * Game Goal
-	 * @type {Number}
-	 */
-
-	this.goal = goal;
-
-	/**
-     * Game goal
-	 * @type {Number}
-	 */
-
-	this.life = life;
-
-	/**
-     * Game score
-	 * @type {Number}
-     * 
-	 */
-
-	this.score = score;
-}
-
-/**
- * Enable default modal for game wins
- * @default true
- * @type {Boolean}
- */
-
-Game.prototype.defaultGameWinModal = true;
-
-/**
- * Enable default modal for level wins
- * @default true
- * @type {Boolean}
- */
-
-Game.prototype.defaultLevelWinModal = true;
-
-/**
- * Set score
- * @function
- * @param {Number} c - Score
- */
-
-Game.prototype.setScore = function(c) {
-
-    var self = this;
-
-	this.score = c;
-
-	if(this.score >= this.goal && Number.isInteger(this.score) && Number.isInteger(this.goal)) {
-	
-		this.phSim.pause();
-		this.phSim.enableFilter();
-
-		// Code to execute 
-
-		if(this.phSim.simulationIndex + 1 === this.phSim.simulations.length) {
-
-			if(this.defaultGameWinModal) {
-
-                this.phSim.callEventClass("gamewin",this,{});                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-
-				var a = self.phSim.alert({
-					msg:"You Win!",
-					closeButtonTxt:"Play again",
-					bgColor:"#333",
-					txtColor:"#fff",
-					w:300,
-					h:100,
-					onok: function() {
-						self.phSim.disableFilter();
-						a.parentNode.removeChild(a);
-						self.phSim.gotoSimulationIndex(0);
-						self.phSim.play();
-					}
-				});
-
-			}
-
-		}
-
-		// If not the final simulation
-
-		else {
-
-			this.phSim.callEventClass("levelwin",this,{}); 
-
-			clearInterval(this.phSim.intervalLoop);
-			this.phSim.disableFilter();
-			this.phSim.gotoSimulationIndex(this.phSim.simulationIndex + 1);
-			self.phSim.play();
-		}
-
-
-	}
-
-	this.phSim.callEventClass("score",this,{}); 
-},
-
-/**
- * Set life
- * @function
- * @param {Number} c - Life value
- */
-
-Game.prototype.setLife = function(c) {
-	this.life = c;
-
-	if(this.life === 0) {
-		this.end();
-	}
-}
-
-/**
- * Increment life (add 1 to the current life)
- * @function
- */
-
-Game.prototype.incrementLife = function() {
-	this.setLife(this.life + 1);
-}
-
-/**
- * Decrement life (subtract 1 from life)
- * @function
- */
-
-Game.prototype.decrementLife = function() {
-	this.setLife(this.life - 1);
-}
-
-/**
- * End game
- * @function
- */
-
-Game.prototype.end = function() {
-
-	this.phSim.pause();
-	this.phSim.enableFilter();
-
-	var self = this;
-
-
-	var a = this.phSim.alert({
-		msg:"Game Over",
-		closeButtonTxt:"Try again",
-		bgColor:"#333",
-		txtColor:"#fff",
-		w:300,
-		h:100,
-		onok: function() {
-			self.phSim.gotoSimulationIndex(self.phSim.simulationIndex);
-			self.phSim.play();
-			self.phSim.disableFilter();
-			a.parentNode.removeChild(a);	
-		}
-	});
-
-	this.phSim.callEventClass("levelloss",this,{}); 
-
-}
-
-/**
- * Namespace for game widgets
- * @mixin
- * 
- */
-
-Game.Widgets = {
-
-}
-
-/**
- * Coin widget. Works if game widget is enabled. If not enabled, it throws an exception.
- * 
- * @param {PhSim.DynObject} dyn_object 
- * @param {Object} widget - Widget options
- * @param {Number} [widget.value] - Value of coin. If undefined, the value of the coin is 1.
- * @this PhSim
- */
-
-Game.Widgets.coin = function(dyn_object,widget) {
-
-	widget = widget || {};
-
-	var value = widget.value || 1;
-
-	var self = this;
-
-	var func = function() {
-
-		var obj1 = dyn_object;
-
-		var a = function() {
-
-			if(self.inSensorCollision(obj1) && self.lclGame) {
-				self.lclGame.setScore(self.lclGame.score + value);
-				self.off("collisionstart",a);	
-			}
-
-		}
-
-		return a;
-
-	}
-
-	self.on("collisionstart",func());
-
-
-}
-
-/**
- * Hazard Widget
- * @param {PhSim.DynObject} dyn_object 
- * @param {Object} widget
- * @param {Number} [widget.damage] - Quantity of life lost. By default, it is equal to 1.
- */
-
-Game.Widgets.hazard = function(dyn_object,widget) {
-
-	widget = widget || {};
-
-	widget.damage = widget.damage || 1;
-
-	var self = this;
-
-	var func = function() {
-
-		var obj1 = dyn_object;
-
-		var a = function() {
-
-			if(self.inSensorCollision(obj1) && self.lclGame) {
-				self.lclGame.setLife(self.lclGame.life - widget.damage);
-				self.off("collisionstart",a);
-			}
-
-		}
-
-		return a;
-
-	}
-
-	self.on("collisionstart",func());
-
-}
-
-/**
- * 
- * @param {PhSim} dyn_object 
- * @param {Object} [widget] - Widget configuration
- * @param {Number} [widget.lives] - Lives to be gained.
- */
-
-Game.Widgets.health = function(dyn_object,widget) {
-
-	widget = widget || {};
-	widget.lives = widget.lives || 1;
-
-	var self = this;
-
-	var func = function() {
-
-		var obj1 = dyn_object;
-
-		var a = function() {
-
-			if(self.inSensorCollision(obj1) && self.lclGame) {
-				self.lclGame.setLife(self.lclGame.life + widget.lives);
-				self.off("collisionstart",a);	
-			}
-
-		}
-
-		return a;
-
-	}
-
-	self.on("collisionstart",func());
-
-}
-
-Game.Widgets.endGame = function(dyn_object,widget) {
-	var f = this.createMotionFunction("position",dyn_object,widget.vector);
-	this.createWFunction(dyn_object,f,widget);
-}
-
-module.exports = Game;
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const DynObject = __webpack_require__(2);
-const PhSim = __webpack_require__(0);
-
-// Try to import matter-js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = __webpack_require__(1);
-}
-
-/**
- * Object that registers PhSim as a Matter.js plugin.
- * The modified matter.js object is stored in {@link Matter}
- * @namespace
- * 
- */
-
-const matterPlugin = {
-
-    name: "phsim",
-
-    version: "0.1.0",
-
-    /**
-     * Installation function for plugin
-     * @param {Matter} matter 
-     */
-
-    install: function(matter) {
-
-        matter.after('Detector.collisions',function(){
-            matterPlugin.Detector.collisions.call(this,arguments);
-        });
-
-        //matter.after('Body.create',function(options){
-          //  matterPlugin.Body.init(options)
-        //});
-
-    },
-
-    /**
-     * Detector patch for Matter.js.
-     * 
-     * 
-     */
-
-    Detector: {
-
-        /**
-         * Matter.Detector.collisions patch for Matter.js.
-         * This modifies the function for checking collisions in Matter.js.
-         * @function 
-         */
-
-        collisions: function() {
-
-            for(var i = 0; i < this.length; i++) {
-
-                var bodyA = this[i].bodyA;
-                var bodyB = this[i].bodyB;
-                var c_classesA;
-                var c_classesB;
-
-                if(bodyA.plugin.dynObject.noCollision || bodyB.plugin.dynObject.noCollision) {
-                    this.splice(this.indexOf(this[i]),1);
-                }
-
-                if(bodyA.parent === bodyA) {
-                    if(bodyA.plugin.dynObject instanceof DynObject) {
-                        c_classesA = PhSim.Query.getCollisionClasses(bodyA.plugin.dynObject);
-                    }
-                }
-                
-                else {
-                    c_classesA = PhSim.Query.getCollisionClasses(bodyA.parent.plugin.dynObject);
-                }
-
-                if(bodyB.parent === bodyB) {
-                    if(bodyB.plugin.dynObject instanceof DynObject) {
-                        c_classesB = PhSim.Query.getCollisionClasses(bodyB.plugin.dynObject);
-                    }    
-                }
-
-                else {
-                    c_classesB = PhSim.Query.getCollisionClasses(bodyB.parent.plugin.dynObject);                    
-                }
-
-                if(c_classesA.length > 0 && c_classesB.length > 0) {
-                    if(!PhSim.Query.intersectionExists(c_classesA,c_classesB)) {
-
-                        this.splice(this.indexOf(this[i]),1);
-
-                        // Reset index to zero to make sure all collisions
-                        // that have no collision classes in common get removed
-
-                        i = 0;
-                    }
-                }
-
-
-            }
-
-        }
-    }
-
-}
-
-PhSim.matterPlugin = matterPlugin;
-
-Matter.Plugin.register(PhSim.matterPlugin); 
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-/**
- * Get widget by name
- * @memberof PhSim
- * @param {String} nameStr 
- */
-
-function getWidgetByName(nameStr) {
-	for(var i = 0; i < this.objUniverse.length; i++) {
-		this.objUniverse[i].getWidgetByName(nameStr);
-	}
-}
-
-module.exports = getWidgetByName;
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Gradients = __webpack_require__(11);
-const BoundingBox = __webpack_require__(12);
-const Centroid = __webpack_require__(8);
-const Vertices = __webpack_require__(7);
+const Gradients = __webpack_require__(5258);
+const BoundingBox = __webpack_require__(6254);
+const Centroid = __webpack_require__(209);
+const Vertices = __webpack_require__(9153);
 
 /** 
  * 
@@ -4457,1372 +5366,195 @@ PhRender.prototype.dynamicDrawLayer = function(L,sim,simulationI) {
 module.exports = PhRender;
 
 /***/ }),
-/* 18 */
-/***/ (function(module, exports) {
+
+/***/ 7529:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
 
 /**
- * Sprites namespace
- * @namespace
- * @memberof PhSim
+ * Object containing variables that can be read by widgets such as
+ * the {@link|RectText} widget. 
  */
 
-var Sprites = {
-    Calc: {}
-}
-
-Sprites.Sprite = function() {
-	this.src = null;
-	this.w = null;
-	this.h = null;
-	this.x = null;
-	this.y = null;
-	this.fit = null;
-	this.repeat = null;
-	this.object = null;
-}
-
-Sprites.renderSprite = function(ctx,sprite) {
-	var localElm = document.createElement("img");
-	localElm.src = sprite.src;
-	if(sprite.spec === true) {
-		ctx.drawImage(localElm,sprite.x,sprite.y,sprite.w,sprite.h);
-	}
-
-	if(sprite.auto === true) {
-		ctx.drawImage(localElm,sprite.x,sprite.y,sprite.w,sprite.h);
-	}
-}
-
-Sprites.renderGlobalSprites = function(ctx,simulation) {
-
-	for(let i = 0; i < simulation.sprites.length; i++) {
-		Sprites.renderSprite(ctx,simulation.sprites[i]);
-	}
-
-}
-
-
-Sprites.circularSpriteRenderCanvas = function(ctx,canvas,angle) {
-
-	var localElm = document.createElement("canvas");
-	var localCtx = localElm.getContext("2d");
-
-	var localImg = document.createElement("img");
-	localImg.src = canvas.src;
-
-	localCtx.rotate(angle);
-
-	localCtx.drawImage()
-
-
-}
+PhSim.prototype.vars = {}
 
 /**
- * 
- * The `spriteImgObj` class is used to store catche for sprites.
- * 
- * @constructor
- * @param {String[]} sprites - An array of strings representing sources
- * @param {Function} onload - A function that is executed when all of the images are loaded.
+ * Object containing magic words
  */
 
-Sprites.spriteImgObj = function(sprites,onload = function() {}) {
-	
-	// Force load if sprites list is empty
+PhSim.prototype.magicWords = {}
+
+PhSim.MagicWords = {
+
+	__test1: function() {
+		return "4";
+	},
 
 	/**
-	 * Array of catched sprites
+	 * The `__game__score` magical word returns the game score if the game widget is enabled.
+	 * @function
+	 * @returns {Number} - Game score.
 	 */
 
-	Object.defineProperty(this,"array",{
-		enumerable: false,
-		value: [],
-		writable: true,
-	})
+	__game__score: function() {
+		return this.lclGame && this.lclGame.score;
+	},
 
 	/**
+	 * The `__game__life` magical word returns the live count of the player if the 
+	 * game widget is enabled.
 	 * 
-	 * Object of static sprite objects
-	 * 
-	 * @type {Object}
-	 * @name PhSim.Sprites.spriteImgObj#static
+	 * @function
+	 * @returns {Number} - Life count
 	 */
 
-	Object.defineProperty(this,"static",{
-		enumerable: false,
-		value: {},
-		writable: true,
-	});
+	__game__life: function() {
+		return this.lclGame && this.lclGame.life; 
+	},
 
 	/**
+	 * The `__game__goal` magical word returns the goal of the game if the game widget
+	 * is enabled.
 	 * 
-	 * Number of loaded sprites
-	 * 
-	 * @type {Number}
-	 * @name PhSim.Sprites.spriteImgObj#loaded_n
+	 * @function
+	 * @returns {Number}
 	 */
 
-	Object.defineProperty(this,"loaded_n",{
-		enumerable: false,
-		value: 0,
-		writable: true
-	});
+	__game__goal: function() {
+		return this.lclGame && this.lclGame.goal;
+	},
 
 	/**
+	 * The `__game__int_life` magical word returns the intial life count of the game,
+	 * given the game widget is enabled.
 	 * 
-	 * Boolean telling us if it is loaded or not.
-	 * 
-	 * @type {Boolean}
-	 * @name PhSim.Sprites.spriteImgObj#length
+	 * @function
+	 * @returns {Number}
 	 */
 
-	Object.defineProperty(this,"loaded",{
-		enumerable: false,
-		value: false,
-		writable: true,
-	});
+	__game__int_life: function() {
+		return this.lclGame && this.lclGame.intLife;
+	},
 
 	/**
+	 * The `__game__int_score` magical word returns the inital game score given the 
+	 * game widget is enabled.
 	 * 
-	 * Function to call if loaded.
-	 * 
-	 * @type {Function}
-	 * @name PhSim.Sprites.spriteImgObj#onload
+	 * @function
+	 * @returns {Number}
 	 */
 
-	Object.defineProperty(this,"onload",{
-		enumerable: false,
-		value: onload,
-		writable: true
-	});
-
-	/**
-	 * 
-	 * URL List
-	 * 
-	 * @type {Object}
-	 * @name PhSim.Sprites.spriteImgObj#urls
-	 */
-
-	Object.defineProperty(this,"urls",{
-		enumerable: false,
-		value: [],
-		writable: true
-	});
-
-	/**
-	 * 
-	 * Image List
-	 * 
-	 * @type {Array}
-	 * @name PhSim.Sprites.spriteImgObj#urls
-	 */
-
-	Object.defineProperty(this,"img",{
-		enumerable: false,
-		value: [],
-		writable: true
-	});
-
-	/**
-	 * 
-	 * Image List
-	 * 
-	 * @type {Array}
-	 * @name PhSim.Sprites.spriteImgObj#urls
-	 */
-
-	Object.defineProperty(this,"loadedImg",{
-		enumerable: false,
-		value: [],
-		writable: true
-	});
-
-	/**
-	 * 
-	 * Length
-	 * 
-	 * @type {Number}
-	 * @name PhSim.Sprites.spriteImgObj#length
-	 */
-
-	Object.defineProperty(this,"length",{
-		enumerable: false,
-		value: 0,
-		writable: true,
-	})
-
-	var self = this;
-
-	for(var i = 0; i < sprites.length; i++) {
-		self.addSprite(sprites[i],function(){
-			if(self.loadedImg.length === self.img.length) {
-				onload();
-			}
-		})
-	}
-
-	if(sprites.length === 0) {
-		self.onload();
-		self.loaded = true;
+	__game__int_score: function() {
+		return this.lclGame && this.lclGame.intScore;
 	}
 
 }
 
 /**
  * 
- * Add sprite to the Sprite Image Array.
+ * Adds a global magical word function.
  * 
  * @function
- * @this Sprites.spriteImgObj
- * 
- * @param {string|Object} src - Source of sprite. If ```src``` is a string representing 
- * a url, then the image added has its source as ```src```. If ```src``` is an object, 
- * then the source is ```src.src```. This means that any object with an ```src``` property
- * can be added.
- * 
- * @param {Function} [onload] - a function that is executed when the image loads.
- * 
- * @returns {Image}
- */
-
-Sprites.spriteImgObj.prototype.addSprite = function(src,onload = function() {} ) {
-
-	// Insuring that the sprite src stays a string.
-
-	if(typeof src === "object" && typeof src.src === "string") {
-		src = src.src;
-	}
-
-	var self = this;
-
-	let img = document.createElement("img");
-
-	let f = function() {
-
-		self[src] = img;
-		self.urls.push(src);
-		self.loadedImg.push(this);
-		self.length++;
-
-		onload();
-
-		img.removeEventListener("load",f);
-
-	}
-
-	img.addEventListener("load",f);
-
-	this.img.push(img);
-
-	img.src = src;
-
-	return img;
-
-}
-
-module.exports = Sprites;
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/**
- * @namespace
- * @memberof PhSim
- */
-
-var Audio = {}
-
-/**
- * @constructor
- * @param {Object} p_audio - Static Audio Object
- * @param {Function} onload 
- */
-
-Audio.AudioArray = function(p_audio,onload) {
-
-	// force load function if audio list is empty
-	
-	this.array = [];
-	this.loaded_n = 0;
-	this.loaded = false;
-	this.onload = onload;
-
-	var self = this;
-
-	
-	if(p_audio.length === 0) {
-		self.loaded = true;
-		self.onload();
-	}
-
-	for(var i = 0; i < p_audio.length; i++) {
-
-		var audio = document.createElement("audio");
-
-		var f = function() {
-			self.loaded_n++;
-
-			if(self.array.length === self.loaded_n) {
-				self.loaded = true;
-				self.onload();
-				audio.removeEventListener("canplaythrough",f);
-			}
-
-		}
-
-		audio.addEventListener("canplaythrough",f)
-
-		audio.src = p_audio[i].src;
-		audio.loop = p_audio[i].loop
-
-		this.array.push(audio);
-
-	}
-
-}
-
-/**
- * Play audio by index.
- * Alternative function: {@link PhSim#playAudioByIndex}
- * 
- * @function 
- * @param {PhSim} phsim - PhSim instance.
- * @param {Number} i - Index in audio array.
- * @returns {Promise} - Promise that is fulfilled when the audio is played. 
- */
-
-Audio.playAudioByIndex = function(phsim,i) {
-	return phsim.audioArray.array[i].play();
-}
-
-/**
- * Play audio by index
- * Alternative function: {@link PhSim.Audio#playAudioByIndex}
- * 
- * @function 
- * @param {PhSim} phsim - PhSim instance.
- * @param {Number} i - Index in audio array.
- * @returns {Promise} - Promise that is fulfilled when the audio is played.  
- */
-
-PhSim.prototype.playAudioByIndex = function(i) {
-	Audio.playAudioByIndex(this,i);
-};
-
-/**
- * Pause audio by index.
- * Alternative function: {@link PhSim#pauseAudioByIndex}
- * @function
- * @param {PhSim} phsim - PhSim instance.
- * @param {Number} i 
- */
-
-Audio.pauseAudioByIndex = function(phsim,i) {
-	return phsim.audioArray.array[i].pause();
-}
-
-/**
- * Pause audio by index.
- * Alternative function: {@link PhSim.Audio#pauseAudioByIndex}
- * @function
- * @param {Number} i 
- */
-
-PhSim.prototype.pauseAudioByIndex = function(i) {
-	return Audio.pauseAudioByIndex(this,i);
-}
-
-/**
- * Set volume by index
- * Alternative function: {@link PhSim#setAudioVolByIndex}
- * @function
- * @param {PhSim} phsim - PhSim instance
- * @param {Number} i - Index
- * @param {Number} v - Volume
- */
-
-Audio.setAudioVolByIndex = function(phsim,i,v) {
-	return phsim.audioArray.array[i].volume = v;
-}
-
-/**
- * Set volume by index
- * Alternative function: {@link PhSim.Audio#setAudioVolByIndex}
- * @function
- * @param {Number} i - Index
- * @param {Number} v - Volume
- */
-
-PhSim.prototype.setAudioVolByIndex = function(i,v) {
-	return Audio.setAudioVolByIndex(this,i,v);
-}
-
-
-/**
- * 
- * Mute the `i`th element of the audio array.
- * 
- * Alternative function: {@link PhSim#setAudioMuteByIndex}
- * 
- * @function
- * @param {Number} i
- * @param {PhSim} phsim - PhSim instance 
- */
-
-Audio.setAudioMuteByIndex = function(phsim,i) {
-	return phsim.audioArray.array[i].muted = true;
-}
-
-/**
- * 
- * Mute the `i`th element of the audio array.
- * 
- * Alternative function: {@link PhSim.Audio#setAudioMuteByIndex}
- * 
- * @function
- * @param {PhSim} phsim - PhSim instance 
- */
-
-PhSim.prototype.setAudioMuteByIndex = function(i) {
-	return Audio.setAudioMuteByIndex(this,i);
-}
-
-/**
- * @function
- * @param {PhSIm} phsim - PhSim instance
- * @param {Number} i - Index number
- * @returns {Boolean} - True if paused, false otherwise.
- */
-
-
-Audio.toggleAudioByIndex = function(phsim,i) {
-	return phsim.audioArray.array[i].muted = !phsim.audioArray.array[i].muted;
-}
-
-/**
- * @function
- * @param {Number} i
- * @returns {Boolean} - True if paused, false otherwise.
- */
-
-PhSim.prototype.toggleAudioByIndex = function(i) {
-	return Audio.toggleAudioByIndex(this,i);
-}
-
-module.exports = Audio;
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
-/**
- * Namespace for event objects
- * @memberof PhSim
- * @namespace
- */
-
-const Events = {}
-
-/**
- * @constructor
- * 
- * 
- */
-
-Events.PhSimEvent = function(type) {
-	this.target = null; 
-	this.timestamp = null;
-	this.type = type;
-}
-
-/**
- * @constructor
- */
-
-Events.PhSimDynEvent = function() {
-	Events.PhSimEvent.call(this);
-	this.layer = null;
-	this.simulation = null;
-	this.object = null;
-}
-
-Events.PhSimDynEvent.prototype = Object.create(Events.PhSimEvent.prototype);
-
-/**
- * @constructor
- * @extends PhSim.Events.PhSimEvent
- */
-
-
-Events.PhSimEventKey = function() {
-	Events.PhSimDynEvent.call(this);
-	this.key = null;
-	this.domEvent = null;
-}
-
-Events.PhSimEventKey.prototype = Object.create(Events.PhSimDynEvent.prototype);
-
-/**
- * Event object for mouse events.
- * 
- * @constructor
- * @extends PhSim.Events.PhSimDynEvent
- */
-
-
-Events.PhSimMouseEvent = function() {
-	Events.PhSimDynEvent.call(this);
-	this.x = null;
-	this.y = null;
-	this.domEvent = null;
-	this.dynArr = null;
-}
-
-Events.PhSimMouseEvent.prototype = Object.create(Events.PhSimDynEvent.prototype);
-
-/**
- * 
- * Event fired whenever the mouse is pressed down on an object.
- * 
- * @event PhSim.Events#objmousedown
- * @type {PhSim.Events.PhSimMouseEvent}
- */
-
-/**
- * Event fired whenever the mouse is let go of while over an object
- * 
- * @event PhSim.Events#objmouseup
- * @type {PhSim.Events.PhSimMouseEvent}
- */
-
-/**
- * @constructor
- */
-
-
-Events.PhSimCollision = function() {
-	this.bodyA = null;
-	this.bodyB = null;
-	this.matter = null;
-}
-
-module.exports = Events;
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/**
- * @function
- * @param {Number} L 
- */
-
-PhSim.prototype.L = function(L) {
-	return this.dynTree[L];
-}
-
-/**
- * @function
- * @param {Number} L 
- * @param {Number} O 
- */
-
-PhSim.prototype.LO = function(L,O) {
-	return this.dynTree[L][O];
-}
-
-/**
- * A Layer-Object string (LOStr) is a string specifying the layer and object indexes
- * of an object in the DynTree.'
- * 
- * The form of the LOStr is:
- * `<layer_index>,<object_index>`
- * 
- * @typedef {String} LOStr
- */
-
-/**
- * @function
- * @param {LOStr} str
- * @returns {PhSimObject} 
- */
-
-PhSim.prototype.getObjectFromLOStr = function(str) {
-	str.split(",");
-	return this.LO(str[1],str[2])
-}
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/**
- * @function
- * @param {Object} sim 
- * @param {HTMLCanvasElement} canvas
- * @memberof PhSim 
- */
-
-PhSim.createFromCanvas = function(sim,canvas) {
-	var o = Object.create(sim);
-	o.canvas = canvas;
-	return new PhSim(o);
-}
-
-/**
- * @function
- * @param {Object} sim 
- * @param {HTMLElement} container 
- * @memberof PhSim 
- */
-
-PhSim.createFromContainer = function(sim,container) {
-	var o = Object.create(sim);
-	o.container = container;
-	return new PhSim(o);
-}
-
-/**
- * @function
- * @param {*} sim 
- * @memberof PhSim.DymSim 
- */
-
-PhSim.createContainer = function(sim) {
-	var container = document.createElement("div");
-	return this.createFromContainer(sim,container);
-}
-
-/**
- * @function
- * @param {String} jsonURL - URL For JSON File
- * @param {function} onload - Onload function
- * @memberof PhSim 
- */
-
-PhSim.loadFromJSON = function(jsonURL,onload) {
-
-	var x = new XMLHttpRequest();
-	x.open("GET",jsonURL);
-
-	var f = function(){
-		var o = PhSim.createContainer(JSON.parse(x.responseText));
-		onload(o);
-		x.removeEventListener("load",f);
-	}
-
-	x.addEventListener("load",f)
-
-	x.send();
-
-}
-
-/**
- * @function
- * @memberof PhSim 
- */
-
-PhSim.prototype.configRender = function() {
-	
-	this.assignPhRender(new PhSim.PhRender(this.ctx));
-	
-	if(!this.noCamera) {
-		this.camera = new PhSim.Camera(this);
-		this.camera.translate(-this.camera.x,-this.camera.y);
-	}
-
-}
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/**
- * Config filter
- * @function
- * @param {HTMLElement} container 
- */
-
-PhSim.prototype.configFilter = function(container) {
-	this.htmlFilter = document.createElement("div");
-	this.htmlFilter.style.background = "rgba(3,3,3,0.7)";
-	this.htmlFilter.style.position = "absolute";
-	this.htmlFilter.style.display = "none";
-	this.htmlFilter.classList.add("dynsim-filter");
-	container.appendChild(this.htmlFilter);
-}
-
-/**
- * Enable filter
- * @function
- */
-
-PhSim.prototype.enableFilter = function() {
-	var elmBox = this.canvas.getBoundingClientRect();
-	this.htmlFilter.style.display = "inline-block";
-	this.htmlFilter.style.left = "0px";
-	this.htmlFilter.style.position = "absolute";
-	//this.htmlFilter.style.top = elmBox.top + "px";
-	this.htmlFilter.style.width = Math.floor(elmBox.width) + "px";
-	this.htmlFilter.style.height = Math.floor(elmBox.height) + "px";
-}
-
-/**
- * Disable filter
- * @function
- */
-
-PhSim.prototype.disableFilter = function() {
-	this.htmlFilter.style.display = "none";
-}
-
-/**
- * Toggle filter
- * @function
- */
-
-PhSim.prototype.toggleFilter = function() {
-
-	if(this.htmlFilter.style.display === "none") {
-		this.enableFilter();
-	}
-
-	else {
-		this.disableFilter();
-	}
-}
-
-/**
- * @function
- * @param {Object} options - Options
- * @param {String} options.msg - The message
- * @param {String} options.closeButtonTxt - Inner text for closing button
- * @param {String} options.bgColor - Background Color
- * @param {String} options.txtColor - Text Color
- * @param {Number} options.w - Width
- * @param {Number} options.h - Height
- * @param {Function} options.onok - Function to call when alert is closed
- *  
- */
-
-PhSim.prototype.alert = function(options) {
-	
-	var alertBox = document.createElement("div");
-	alertBox.style.backgroundColor = options.bgColor;
-	alertBox.style.color = options.txtColor;
-	alertBox.style.textAlign = "center";
-	alertBox.style.width = options.w + "px";
-	alertBox.style.height = options.h + "px";
-	alertBox.style.fontSize = "20px";
-
-	var elmBox = this.canvas.getBoundingClientRect();
-
-	var alertBoxMsg = document.createElement("div");
-	alertBoxMsg.className = "phsim-alertbox-msg"
-	alertBoxMsg.innerText = options.msg;
-	alertBoxMsg.style.textAlign = "left";
-	alertBoxMsg.style.padding = "20px";
-
-	alertBox.appendChild(alertBoxMsg);
-
-	var closeButton = document.createElement("div");
-
-	var f = function() {
-		options.onok();
-		closeButton.removeEventListener("click",f);
-	}
-
-	closeButton.addEventListener("click",f);
-
-	closeButton.innerText = options.closeButtonTxt;
-	alertBox.appendChild(closeButton);
-
-	this.container.appendChild(alertBox);
-
-	alertBox.style.position = "absolute";
-	alertBox.style.left = (elmBox.width * 0.5 - alertBox.offsetWidth * 0.5) + "px";
-	alertBox.style.top = (elmBox.height * 0.5 - alertBox.offsetHeight * 0.5) + "px";
-
-	return alertBox;
-
-}
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Try to import matter-js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = __webpack_require__(1);
-}
-
-// Set Angle to mouse.
-
-const DynObject = __webpack_require__(2);
-const PhSim = __webpack_require__(0);
-
-// Object Connection
-
-PhSim.prototype.connectDynObjects = function(parent,child) {
-
-	Matter.Body.setStatic(child,true);
-
-	var f = function() {
-
-		var v = {
-			"x": parent.matter.position.x - parent.matter.positionPrev.x,
-			"y": parent.matter.position.y - parent.matter.positionPrev.y,
-		}
-
-		PhSim.Motion.translate(child,v);
-
-		PhSim.Motion.rotate(child,parent.matter.angle - parent.matter.anglePrev,parent.matter.position);
-
-	}
-
-	this.on("afterupdate",f)
-
-	return f;
-
-}
-
-/**
- * 
- * Run function on all objects.
- * 
- * @function
+ * @param {String} name - Name of magical word
  * @param {Function} call 
  */
 
-PhSim.prototype.forAllObjects = function(call) {
+PhSim.addGlobalMagicalWord = function(name,call) {
 	
-	var a = this.objUniverse;
-
-	for(var i = 0; i < a.length; i++) {
-		var z = call(a[i]);
-		if(z === false) {
-			break;
-		}
-	}
-}
-
-/**
- * Add object to over layer.
- * 
- * @function
- * @param {PhSim.DynObject} dynObject 
- */
-
-PhSim.prototype.addToOverlayer = function(o) {
-	
-	if(o instanceof DynObject) {
-		Matter.World.add(this.matterJSWorld, o.matter);
+	if(PhSim.MagicWords[name]) {
+		throw "Magical word " + name + " already exists."
 	}
 
-	this.objUniverse.push(o);
+	else {
+		PhSim.MagicWords[name] = call;
+	}
 
 }
 
 /**
- * Check if the object is a dynamic object.
+ * 
+ * Adds a local magical word function.
  * 
  * @function
- * @param {PhSimObject} o 
+ * @param {String} name - Name of magical word
+ * @param {Function} call 
  */
 
-PhSim.prototype.isNonDyn = function(o) {
-	return o.noDyn;
+PhSim.prototype.addLocalMagicalWord = function(name,call) {
+
+	if(this.magicWords[name]) {
+		throw "Magical word " + name + " already exists."
+	}
+
+	else {
+		this.magicWords[name] = call;
+	}
+
 }
 
 /**
  * 
- * Add Object to PhSim simulation
+ * Process string by replacing magical words and the values of elements in
+ * {@link PhSim#vars|PhSim.prototype.vars}.
+ * 
+ * Some of the magic words are the following:
+ * 
+ * `{__game__score}` - The game score
+ * `{__game__life}` -  The game life
+ * `{__game__goal}` - The game goal
+ * `{__game__int_life}` - The inital life value for the game
+ * 
+ * The expression `${key}` is replaced by the value of `{@link PhSim#vars |PhSim.prototype.vars[key]}`.
  * 
  * @function
- * @param {PhSimObject} o 
- * @param {Object} options
- * @param {Number} options.layer 
- * @returns {PhSim.DynObject} - The added dynObject. 
+ * @param {String} str 
+ * @returns {String}
+ * 
  */
 
-PhSim.prototype.addObject = function(o,options = {}) {
+PhSim.prototype.processVar = function(str) {
 
-	if(typeof options.layer === "number") {
-		this.dynTree[options.layer].push(o);
+	var magicWordKeys = Object.keys(PhSim.MagicWords);
 
-		if(o instanceof DynObject) {
-			o.layerBranch = this.dynTree[options.layer];
-		}
+	for(let i = 0; i < magicWordKeys.length; i++) {
 
-	}
+		let magicWord = magicWordKeys[i];
+		let mgkWordRegex = new RegExp("{" + magicWord + "}","g");
 
-	this.objUniverse.push(o);
+		if(str.search(mgkWordRegex) !== -1) {
 
-	if(o instanceof DynObject) {
-
-		o.phSim = this;
-
-		Matter.World.add(this.matterJSWorld,o.matter);
-
-		if(o.static.widgets) {
-			this.extractWidgets(o);
+			str = str.replace(mgkWordRegex,PhSim.MagicWords[magicWord].call(this));
 		}
 
 	}
 
-	return o;
-}
+	let a = Object.keys(this.vars);
 
-/**
- * Remove dynamic object
- * 
- * @function
- * @param {PhSim.DynObject}  dynObject - Dynamic Object
- * @returns {PhSim.DynObject} - The removed Dynamic Object
- */
+	for(let i = 0; i < a.length; i++) {
 
-PhSim.prototype.removeDynObj = function(dynObject) {
+		let v = "\\$\\{" + a[i] + "\\}";
+		let regex = new RegExp(v,"g");
+		let s = str.search(regex);
 
-	Matter.Composite.remove(this.matterJSWorld,dynObject.matter);
-
-	this.objUniverse.splice(this.objUniverse.indexOf(dynObject),1);
-
-	if(dynObject.layerBranch) {
-		var i = dynObject.layerBranch.indexOf(dynObject);
-		dynObject.layerBranch.splice(i,1);
-		dynObject.layerBranch = undefined;
+		if(s !== -1) {
+			str = str.replace(regex,this.vars[ a[i] ]);
+		}
 	}
 
-	return dynObject;
+	return str;
 
-}
-
-/**
- * Set Object Lifespan
- * 
- * @function
- * @param {*} dynObject - Dynamic Object
- * @param {Number} lifespan - Milliseconds 
- * 
- */
-
-PhSim.prototype.setDynObjectLifespan = function(dynObject,lifespan) {
-
-	var self = this;
-
-	setTimeout(lifespan,function(){
-		self.removeDynObj(dynObject);
-	});
-
-}
-
-PhSim.prototype.renderAllCounters = function() {
-	for(var i = 0; i < this.counterArray.length; i++) {
-		this.renderCounterByIndex(i);
-	}
 }
 
 /***/ }),
-/* 25 */
-/***/ (function(module, exports) {
 
+/***/ 447:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/**
- * Fire the mousedown event for PhSim.
- * If {@link PhSim#objMouseArr} length is greater than zero, 
- * this also executes the objmousedown event
- *
- * @listens objmousedown
- * @function
- * @param {MouseEvent} e - Mouse Event Object
- */
-
-/**
- * The standard object for mouse related DOM events
- * @external MouseEvent
- * @type {MouseEvent} 
- * @see https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent
- */
-
-
-/**
- * Listens click event
- * @function
- * @listens MouseEvent
- * @param {MouseEvent} e 
- */
-
-/**
- * Fire the mousedown event for PhSim.
- * If {@link PhSim#objMouseArr} length is greater than zero, 
- * this also executes the objmousedown event
- *
- * @listens MouseEvent
- * @function
- * @param {MouseEvent} e - Mouse Event Object
- */
-
-/**
- * @function
- * @param {MouseEvent} e 
- */
-
-/**
- * @function
- * @param {MouseEvent} e 
- */
-
-
-
-/**
- * 
- * Create a wrapping function that is used for events.
- * 
- * @param {Function} f - Function
- * 
- */
-
-PhSim.prototype.getEventBridge = function(f) {
-
-	var self = this;
-
-	return function(e) {
-		f.call(self,e);
-	}
-}
-
-/**
- * 
- * Used to set event listeners for a canvas.
- * This function works if {@link PhSim.prototype#ctx} 
- * and {@link PhSim.prototype#canvas} are set.
- * 
- * @function
- * @this PhSim
- *  
- */
-
-PhSim.prototype.registerCanvasEvents = function() {
-
-	var self = this;
-
-	/**
-	 * @function 
-	 * @this HTMLCanvasElement
-	 * @param {external:MouseEvent} e - MouseEvent object
-	 * 
-	 * @fires Events#mousedown
-	 * @fires Events#objmousedown
-	 * 
-	 */
-
-
-	this.dispatchMouseDown = function(e) {
-
-		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.ctx.canvas;
-		eventObj.domEvent = e;
-		eventObj.x =  self.mouseX
-		eventObj.y = self.mouseY
-		eventObj.type = "mousedown";
-		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
-	
-		if(!self.paused) {
-			if(self.objMouseArr && self.objMouseArr.length > 0) {
-				
-				eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
-
-				self.callEventClass("objmousedown",canvas,eventObj);
-
-				for(var i = 0; i < eventObj.dynArr.length; i++) {
-					eventObj.dynArr[i].callEventClass("objmousedown",eventObj.dynArr[i],eventObj);
-				}
-
-			}
-		}
-
-		/**
-		 * PhSim `mousedown` event.
-		 * @event mousedown
-		 * @type {PhSim.Events.PhSimMouseEvent}
-		 */
-	
-		self.callEventClass("mousedown",canvas,eventObj);
-	}
-
-	this.canvas.addEventListener("mousedown",this.dispatchMouseDown);
-
-	/**
-	 * @function
-	 * @param {external:MouseEvent} e 
-	 * 
-	 * @fires Events#click
-	 * @fires Events#objclick
-	 * 
-	 */
-
-	this.dispatchClick = function(e) {
-		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.ctx.canvas;
-		eventObj.domEvent = e;
-		eventObj.x =  self.mouseX
-		eventObj.y = self.mouseY
-		eventObj.type = "click";
-		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
-
-		if(self.objMouseArr.length > 0) {
-
-			eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
-
-			self.callEventClass("objclick",canvas,eventObj);
-
-			for(var i = 0; i < eventObj.dynArr.length; i++) {
-				eventObj.dynArr[i].callEventClass("objclick",eventObj.dynArr[i],eventObj);
-			}
-
-		}
-	
-		self.callEventClass("click",canvas,eventObj);
-	}
-
-	this.canvas.addEventListener("click",this.dispatchClick);
-
-	/**
-	 * 
-	 * Dispatch `mousemove` event.
-	 * 
-	 * @function
-	 * @param {external:MouseEvent} e - Standard MouseEvent Javascript object 
-	 * 
-	 * @fires PhSim.Events#objmousemove
-	 * @fires PhSim.Events#objmouseover
-	 * @fires PhSim.Events#objmouseout
-	 * @fires PhSim.Events#mousemove
-	 */
-
-	this.dispatchMouseMove = function(e) {
-
-		var perform_i = performance.now()
-
-		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.ctx.canvas;
-		var rect = canvas.getBoundingClientRect();
-		eventObj.domEvent = e;
-	
-		eventObj.x =  e.clientX - rect.left - self.camera.x;
-		eventObj.y = e.clientY - rect.top - self.camera.y;
-
-		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
-	
-		if(self.mouseX && self.mouseY) {
-			self.prevMouseX = self.mouseX;
-			self.prevMouseY = self.mouseY;
-		}
-	
-		self.prevObjMouseArr = [];
-	
-		if(self.objMouseArr) {
-			self.prevObjMouseArr = [...self.objMouseArr];
-		}
-	
-		self.mouseX = eventObj.x;
-		self.mouseY = eventObj.y;
-	
-		self.dynArr = self.objMouseArr;
-	
-		self.objMouseArr = [];
-		self.formerMouseObjs = [];
-		self.newMouseObjs = [];
-	
-		if(self.init) {
-	
-			for(var i = 0; i < self.objUniverse.length; i++) {
-	
-				if(self.pointInObject(self.objUniverse[i],self.mouseX,self.mouseY)) {
-					self.objMouseArr.push(self.objUniverse[i]);
-					self.objUniverse[i].callEventClass("objmousemove",self.objUniverse[i],eventObj);
-				}
-	
-				if(!self.objMouseArr.includes(self.objUniverse[i]) && self.prevObjMouseArr.includes(self.objUniverse[i])) {
-					self.formerMouseObjs.push(self.objUniverse[i]);
-					self.objUniverse[i].callEventClass("objmouseover",self.objUniverse[i],eventObj);
-				}
-	
-				if(self.objMouseArr.includes(self.objUniverse[i]) && !self.prevObjMouseArr.includes(self.objUniverse[i])) {
-					self.newMouseObjs.push(self.objUniverse[i]);
-					self.objUniverse[i].callEventClass("objmouseout",self.objUniverse[i],eventObj);
-				}
-	
-			}
-	
-			if(self.objMouseArr && self.objMouseArr.length > 0) {
-
-				eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
-
-				self.callEventClass("objmousemove",canvas,eventObj);
-
-			}
-	
-			if(self.newMouseObjs && self.newMouseObjs.length > 0) {
-
-				eventObj.newMouseObjs = self.newMouseObjs;
-
-				eventObj.target = eventObj.newMouseObjs[eventObj.dynArr.length - 1];
-
-				self.callEventClass("objmouseover",canvas,eventObj);
-
-			}
-	
-			if(self.formerMouseObjs && self.formerMouseObjs.length > 0) {
-
-				eventObj.formerMouseObjs = self.formerMouseObjs;
-
-				eventObj.target = eventObj.formerMouseObjs[eventObj.dynArr.length - 1];
-
-				self.callEventClass("objmouseout",canvas,eventObj);
-
-			}
-		}
-	
-		/**
-		 * @event mousemove
-		 */
-	
-		self.callEventClass("mousemove",canvas,eventObj);
-	
-		//console.log(eventObj);
-
-		if(self.debugging.logMouseMovePerformance) {
-
-			var perform_f = performance.now() - perform_i;
-			
-			self.debuggingData.mouseMovePerformance = self.debuggingData.mouseMovePerformance || [];
-			
-			self.debuggingData.mouseMovePerformance.push({
-				delta: perform_f,
-				perform_i: perform_i,
-				x: eventObj.x,
-				y: eventObj.y
-			});
-
-		}
-
-	}
-
-	this.canvas.addEventListener("mousemove",this.dispatchMouseMove);
-
-	this.dispatchMouseUp = function(e) {
-		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.ctx.canvas;
-		eventObj.domEvent = e;
-		eventObj.x =  self.mouseX
-		eventObj.y = self.mouseY
-		self.mouseX = eventObj.x;
-		self.mouseY = eventObj.y;
-
-		eventObj.dynArr = self.pointObjArray(eventObj.x,eventObj.y);
-	
-		if(self.objMouseArr.length > 0) {
-
-			eventObj.target = eventObj.dynArr[eventObj.dynArr.length - 1];
-
-			self.callEventClass("objmouseup",canvas,eventObj);
-
-			for(var i = 0; i < eventObj.dynArr.length; i++) {
-				eventObj.dynArr[i].callEventClass("objmouseup",eventObj.dynArr[i],eventObj);
-			}
-
-		}
-	
-		self.callEventClass("mouseup",canvas,eventObj);
-	}
-
-	this.canvas.addEventListener("mouseup",this.getEventBridge(self.dispatchMouseUp));
-
-	self.dispatchMouseOut = function(e) {
-		var eventObj = new PhSim.Events.PhSimMouseEvent();
-		var canvas = self.ctx.canvas;
-		eventObj.domEvent = e;
-		eventObj.x =  self.mouseX
-		eventObj.y = self.mouseY
-		self.mouseX = eventObj.x;
-		self.mouseY = eventObj.y;
-		self.callEventClass("mouseout",canvas,eventObj);
-	}
-
-	this.canvas.addEventListener("mouseout",this.dispatchMouseOut);
-
-}
-
-PhSim.prototype.deregisterCanvasEvents = function() {
-	//self.canvas.removeEventListener("mousedown",self.getEventBridge(self.mousedownListener));
-	//self.canvas.removeEventListener("click",self.getEventBridge(self.clickListener));
-	//self.canvas.removeEventListener("mousemove",self.getEventBridge(self.mousemoveListener));
-	//self.canvas.removeEventListener("mouseup",self.getEventBridge(self.mouseupListener));
-	//self.canvas.removeEventListener("mouseout",self.getEventBridge(self.mouseoutListener));
-
-}
-
-PhSim.prototype.registerKeyEvents = function() {
-
-	var self = this;
-
-	self.windowObj = self.windowObj || window;
-
-	self.keydownBridge = function(e) {
-		var eventObj = new PhSim.Events.PhSimEventKey();
-		eventObj.domEvent = e;
-		eventObj.key = e.key;
-		eventObj.code = e.code;
-		eventObj.type = "keydown";
-		self.callEventClass("keydown",this,eventObj);
-	}
-
-	self.keydownBridgeWrapper = function(e) {
-		if(!self.filter) {
-			self.keydownBridge(e);
-		}
-	}
-
-	self.windowObj.addEventListener("keydown",self.keydownBridgeWrapper);
-}
-
-PhSim.prototype.deregisterKeyEvents = function() {
-	this.windowObj.removeEventListener("keydown",self.keydownBridgeWrapper);
-}
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const { ObjLoops } = __webpack_require__(0);
-const Vector = __webpack_require__(3);
-const PhSim = __webpack_require__(0);
-const Vertices = __webpack_require__(7);
+const { ObjLoops } = __webpack_require__(8138);
+const Vector = __webpack_require__(2450);
+const PhSim = __webpack_require__(8138);
+const Vertices = __webpack_require__(9153);
 
 var Matter;
 
@@ -5831,7 +5563,7 @@ if(typeof window === "object") {
 }
 
 else {
-	Matter = __webpack_require__(1);
+	Matter = __webpack_require__(8054);
 }
 	
 /**
@@ -6160,6 +5892,39 @@ PhSim.Query.pointInVertsBorder = function(a,v,width) {
 		return false;
 	}
 
+}
+
+PhSim.Query.getMatterPartVertexByVertexPoint = function(dynObject,point,radius) {
+
+	radius = radius || 0;
+
+	for(let i = 0; i < dynObject.matter.parts.length; i++) {
+
+		let part = dynObject.matter.parts[i];
+
+		for(let j = 1; j < part.vertices.length; j++) {
+
+			if(radius) {
+				if(Vector.distance(part.vertices[j],point) < radius) {
+					return part.vertices[j];
+				}
+			}
+
+			else {
+
+				if(part.vertices[j].x === point.x && part.vertices[j].y === point.y) {
+					return part.vertices[j];
+				}
+
+			}	
+
+		}
+
+	}
+}
+
+PhSim.Query.getMatterPartByVertexPoint = function(dynObject,point,radius) {
+	return PhSim.Query.getMatterPartVertexByVertexPoint(dynObject,point,radius).body;
 }
 
 /**
@@ -6583,178 +6348,11 @@ PhSim.prototype.getCollisionChecker = function(dynObjectA,dynObjectB) {
 
 
 /***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const PhSim = __webpack_require__(0);
+/***/ 4045:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-/**
- * Apply Newtonian gravity field.
- * @function
- */
-
-PhSim.prototype.applyGravitationalField = function() {
-	
-	var a = this.objUniverse;
-
-	for(var i = 0; i < a.length; i++) {
-		for(var j = 0; j < a.length; j++) {
-			if(i !== j && !this.isNonDyn(a[i]) && !this.isNonDyn(a[j]) && !a[i].matter.isStatic && !a[j].matter.isStatic) {
-				var a1 = PhSim.Vector.scale(PhSim.Vector.subtract(a[j].matter.position,a[i].matter.position),6.67 * Math.pow(10,-11) * a[i].matter.mass * a[j].matter.mass * -1)
-				var b1 = Math.pow(PhSim.Vector.distance(a[j].matter.position,a[i].matter.position),3);
-				var c = PhSim.Vector.divide(a1,b1);
-				PhSim.Motion.applyForce(a[j],a[i].matter.position,c);
-			}
-		}	
-	}
-
-}
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/**
- * Play simulation
- * 
- * @function
- * @memberof PhSim
- * @this PhSim
- * @returns {Promise} - A promise that is fulfilled if the playing the simulation is sucessful. 
- * If resolved, the promise is fullfilled with the `PhSim` instance as its value.
- */
-
-PhSim.prototype.play = function() {
-
-	var self = this;
-
-	return new Promise(function(resolve){
-		self.paused = false;
-		self.intervalLoop = setInterval(self.loopFunction.bind(self),self.delta);
-		resolve(self);
-	});
-}
-
-/**
- * Pause simulation
- * @function
- * @returns {Promise} - A promise that is fulfilled if the pausing the simulation is sucessful. 
- * If resolved, the promise is fullfilled with the `PhSim` instance as its value.
- */
-
-PhSim.prototype.pause = function() {
-
-	var self = this;
-
-	return new Promise(function(resolve){
-		clearInterval(self.intervalLoop);
-		self.paused = true;
-		resolve(self);
-	});
-
-}
-
-/**
- * Toggle Simulation
- * 
- * @function
- * @returns {Promise}
- */
-
-PhSim.prototype.toggle = function() {
-
-	var self = this;
-
-	return new Promise(function(resolve,reject){
-
-		if(self.paused) {
-
-			self.play().then(function(phsim){
-				resolve(phsim);
-			}).catch(function(e){
-				reject(e);
-			});
-
-		}
-
-		else {
-
-			self.pause().then(function(phsim){
-				resolve(phsim)
-			}).catch(function(e){
-				reject(e)
-			});
-
-		}
-	});
-
-
-}
-
-/**
- * Exit simulation
- * @function
- */
-
-PhSim.prototype.exitSl = function() {
-
-	var self = this;
-
-	return new Promise(function(resolve){
-		self.callEventClass("beforeslchange",self,new PhSim.Events.PhSimEvent("beforeslchange"));
-		self.paused = false;
-		clearInterval(self.intervalLoop);
-		resolve(self);
-	});
-
-}
-
-/**
- * 
- * Completely reset PhSim object. That is, make it as if it is a new one.
- * @function
- * @returns {Promise}
- */
-
-PhSim.prototype.exit = function() {
-
-	var self = this;
-
-	return new Promise(function(resolve){
-
-		// Remove references to avoid memory leak
-
-		delete self.camera.dynSim
-		delete self.phRender.dynSim
-
-		for(var i = 0; i < self.objUniverse.length; i++) {
-			delete self.objUniverse[i].phSim;
-		}
-
-		self.callEventClass("exit",self,new PhSim.Events.PhSimEvent("exit"));
-		self.deregisterCanvasEvents();
-		self.deregisterKeyEvents();
-		self.exitSl();
-
-		// Erase all things
-
-		Object.assign(self,new PhSim());
-
-		resolve(self);
-
-	});
-
-}
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const DynObject = __webpack_require__(2);
-const PhSim = __webpack_require__(0);
+const PhSim = __webpack_require__(8138);
 
 // Try to import matter-js as a commonJS module
 
@@ -6765,234 +6363,7 @@ if(typeof window === "object") {
 }
 
 else {
-	Matter = __webpack_require__(1);
-}
-
-
-/**
- * Go to simulation in the composite simulation
- * 
- * In a PhSim object, there is a property known as PhSim.prototype.sim. 
- * This property is used to define a simulation.
- * 
- * When PhSim.prototype.gotoSimulationIndex is used, it resets 
- * 
- * @function
- * @param {Number} i
- * @this PhSim
- * @memberof PhSim
- * @returns {Promise} - A promise that is fulfiled if the loading is successful.
- * 
- */
-
-var gotoSimulationIndex = function (i) {
-
-	var self = this;
-
-	return new Promise(function(resolve){
-
-		self.status = PhSim.statusCodes.INT;
-
-		var optionMap = new Map();  
-
-		self.firstSlUpdate = false;
-
-		var event = new PhSim.Events.PhSimEvent("slchange");
-
-		event.type = "slchange";
-
-		self.callEventClass("beforeslchange",self,event);
-
-		if(!self.noCamera) {
-			self.camera.translate(-self.camera.x,-self.camera.y);
-		}
-
-		if(self.ctx) {
-			self.drawLoadingScreen();
-		}
-
-		self.simulation = self.simulations[i];
-		self.simOptions = self.simulations[i];
-
-		self.simulationIndex = i;
-
-		if(self.ctx) {
-			self.width = self.ctx.canvas.width;
-			self.height = self.ctx.canvas.height;
-		}
-
-		self.paused = false;
-
-		self.matterJSWorld = Matter.World.create();
-
-		self.matterJSEngine = Matter.Engine.create({
-			world: self.matterJSWorld
-		});
-
-		self.dynTree = [];
-		self.objUniverse = [];
-		self.staticSprites = [];
-		self.spriteUrls = new Set();
-		self.staticAudio = [];
-		self.audioPlayers = 0;
-		self.simulationEventStack = new PhSim.EventStack();
-
-
-		if(self.sprites) {
-			self.staticSprites.concat(self.sprites);
-		}
-
-
-		if(self.simOptions && self.simOptions.world && self.simOptions.world.bg) {
-			self.bgFillStyle = self.simOptions.world.bg;
-		}
-
-		if(self.world && self.world && self.world.bg) {
-			self.bgFillStyle = self.world.bg;
-		}
-
-		if(self.simulations) {
-
-			for(let i = 0; i < self.simOptions.layers.length; i++) {
-
-				self.dynTree.push([]);
-
-				for(let j = 0; j < self.simOptions.layers[i].objUniverse.length; j++) {
-
-					var o = self.simOptions.layers[i].objUniverse[j];
-
-					if(o.sprite) {
-						self.staticSprites.push(o.sprite);
-						self.spriteUrls.add(o.sprite.src);	
-					}
-					
-					if(o instanceof DynObject && !o.noDyn) {
-						self.addObject(o,{
-							layer: i
-						});
-					}
-
-					else {
-						var dynObject = new DynObject(o);
-
-						self.addObject(dynObject,{
-							layer: i
-						});
-
-						optionMap.set(o,dynObject);
-					}
-
-				}
-
-				var phSimDynEvent = new PhSim.Events.PhSimDynEvent();
-				self.callEventClass("matterJSLoad",self,phSimDynEvent);
-
-			}
-
-		}
-
-		Matter.Events.on(self.matterJSEngine,"collisionStart",function(event) {
-			
-			var a = new PhSim.Events.PhSimDynEvent();
-			a.matterEvent = event;
-			self.callEventClass("collisionstart",self,a);
-
-		});
-
-		if(self.simOptions.game) {
-			self.lclGame = new PhSim.Game(self,self.simOptions.game);
-		}
-
-		if(self.simulation.widgets) {
-
-			for(var C = 0; C < self.simulation.widgets.length; C++) {
-				var widget = self.simulation.widgets[C];
-
-				if(widget.type === "setImgSrc") {
-					this.spriteUrls.add(widget.src);
-				}
-
-				self.extractWidget(self,widget);
-			}
-
-		}
-
-		self.status = PhSim.statusCodes.LOADED_DYN_OBJECTS;
-
-		resolve();
-
-	})
-	.then(function(){
-
-		return new Promise(function(resolve){
-
-			if(self.phRender && self.staticSprites.length) {
-				self.phRender.spriteImgObj = new PhSim.Sprites.spriteImgObj(Array.from(self.spriteUrls.values()),function() {
-					self.status = PhSim.statusCodes.LOADED_SPRITES;
-					resolve();
-				});
-			}
-	
-			else {
-				self.status = PhSim.statusCodes.LOADED_SPRITES;
-				resolve();
-			}
-	
-		});
-
-	})
-	.then(function() {
-		
-		return new Promise(function(resolve){
-
-			if(self.staticAudio.length) {
-				self.audioArray = new PhSim.Audio.AudioArray(self.staticAudio,function(){
-					self.status = PhSim.statusCodes.LOADED_AUDIO;
-					resolve();
-				});
-			}
-
-			else {
-				self.status = PhSim.statusCodes.LOADED_AUDIO;
-				resolve();
-			}
-
-		});
-		
-	}).then(function(){
-		self.init = true;
-
-		self.status = PhSim.statusCodes.LOADED_SIMULATION;
-
-		var e = new PhSim.Events.PhSimDynEvent();
-	
-		self.callEventClass("load",self,e);
-
-	}).catch(function(e){
-		self.callEventClass("error",self,e);
-		throw e;
-	});
-
-}
-
-module.exports = gotoSimulationIndex;
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-// Try to import matter-js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = __webpack_require__(1);
+	Matter = __webpack_require__(8054);
 }
 
 
@@ -7028,339 +6399,807 @@ PhSim.prototype.setRadius = function(dynObject,radius) {
 }
 
 /***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const PhSim = __webpack_require__(0);
-const Motion = __webpack_require__(4);
-const Vector = __webpack_require__(3);
-
-// Try to import matter-js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = __webpack_require__(1);
-}
+/***/ 8313:
+/***/ ((module) => {
 
 /**
- * 
- * Update a dynamic object.
- * 
- * @function
- * @param {PhSimObject} currentObj - Object to be updated
- * @fires PhSim.Events.PhSimEvent
- * 
- */
-
-PhSim.prototype.updateDynObj = function(currentObj) {
-
-
-	// Loop must start at index 1 because the first element in the array is a reference to the parent object itself.
-
-	if(currentObj.noDyn) {
-		this.phRender.renderStatic(currentObj);	
-	}
-	
-	else {
-
-		if(currentObj.shape === "circle" || currentObj.shape === "regPolygon" || currentObj.shape === "rectangle") {
-			currentObj.cycle = currentObj.firstCycle + currentObj.matter.angle;
-		}
-	
-		if(currentObj.shape === "rectangle") {
-			currentObj.x = currentObj.matter.position.x - currentObj.w * 0.5
-			currentObj.y = currentObj.matter.position.y - currentObj.h * 0.5
-		}
-	
-		if(currentObj.shape === "circle" || currentObj.shape === "regPolygon") {
-			currentObj.x = currentObj.matter.position.x;
-			currentObj.y = currentObj.matter.position.y;
-		}
-	
-		if(currentObj.shape === "polygon") {
-			PhSim.calc_skinmesh(currentObj);
-		}
-
-		if(this.phRender) {	
-			this.phRender.dynamicRenderDraw(currentObj);
-		}
-
-	}
-
-	var event = new PhSim.Events.PhSimEvent("objupdate");
-	event.target = currentObj;
-
-	this.callEventClass("objupdate",this,event);
-
-}
-
-/**
- * The loopFunction is a function that is executed over and over again. It is responsible
- * for providing the simulation loop.
- */
-
-PhSim.prototype.loopFunction = function() {
-
-	if(this.paused === false && this.status === PhSim.statusCodes.LOADED_SIMULATION) {
-
-		var beforeUpdateEvent = new PhSim.Events.PhSimDynEvent()
-
-		beforeUpdateEvent.simulation = this.simulation;
-
-		this.prevDate = this.prevDate && this.updateDate;
-	
-		this.callEventClass("beforeupdate",this,beforeUpdateEvent);
-
-		if(!this.firstSlUpdate) {
-			this.callEventClass("beforefirstslupdate",this,afterUpdateEvent);
-		}
-
-		this.updateDate = new Date();
-
-		if(this.prevDate) {
-			this.updateTimeInterval = this.updateDate - this.prevDate;
-		}
-
-		for(let i = 0; i < this.objUniverse.length; i++) {
-
-			let currentObj = this.objUniverse[i];
-
-			if(typeof this.atmosphere.density === "number") {
-
-				let x = -this.matterJSWorld.gravity.x;
-				let y = -this.matterJSWorld.gravity.y;
-		
-				let b = Vector.scale(new Vector(x,y),currentObj.matter.area * this.matterJSWorld.gravity.scale * this.atmosphere.density);
-		
-				Motion.applyForce(currentObj,currentObj.matter.position,b);
-		
-			}
-
-			if(this.objUniverse[i].dragCoefficient) {
-
-			}
-		}
-
-		Matter.Engine.update(this.matterJSEngine,this.delta);
-
-		if(this.ctx) {
-
-			this.ctx.fillStyle = this.bgFillStyle;
-
-			if(this.noCamera) {
-				this.ctx.fillRect(0,0,this.width,this.height);
-			}
-	
-			else {
-				this.ctx.fillRect(0 - this.camera.x,0 - this.camera.y,this.width / this.camera.scale,this.height / this.camera.scale);
-			}
-		}
-
-		for(let i = 0; i < this.objUniverse.length; i++) {
-			this.updateDynObj(this.objUniverse[i]);
-		}
-	
-		this.applyGravitationalField()
-
-		var afterUpdateEvent = new PhSim.Events.PhSimDynEvent()
-
-		afterUpdateEvent.simulation = this.simulation;
-
-		this.sl_time = this.sl_time + this.delta;
-
-		if(this.filter) {
-			this.ctx.fillStyle = "rgba(3,3,3,0.7)";
-			this.ctx.fillRect(0,0,this.width / this.camera.scale,this.height / this.camera.scale);
-		}
-
-		if(!this.firstSlUpdate) {
-			this.callEventClass("firstslupdate",this,afterUpdateEvent);
-			this.firstSlUpdate = true;
-		}
-
-		this.callEventClass("afterupdate",this,afterUpdateEvent);
-
-		//this.renderAllCounters();
-
-
-	}
-
-}
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/** 
- * 
- * Extract Widgets from Dynamic Object.
- * To extract a widget in PhSim is to read all of the objects in the "widgets" array found in each
- * well-formed PhSim object and then translate it into JavaScript.
- * 
- * @function
- * @param {WidgetOptions} widget - The Widget
- * @param {PhSim.DynObject} dyn_object The individual Dynamic Object
- * @returns undefined
- * 
-*/
-
-PhSim.prototype.extractWidget = function(dyn_object,widget) {
-
-    if(PhSim.Widgets[widget.type]) {
-        PhSim.Widgets[widget.type].call(this,dyn_object,widget);
-    }
-
-    if(widget.name) {
-        this.widgets[widget.name] = widget;
-    }
-
-    var self = this;
-    
-        if(widget.changeSl) {
-    
-            var closure = function() {
-    
-                var i = widget.slIndex;
-    
-                var f = function() {
-                    self.gotoSimulationIndex(i)
-                }
-    
-                return f;
-            }
-    
-            this.createWFunction(widget.trigger,closure(),{
-                ...widget,
-                wFunctionObj: dyn_object
-            });
-        }
-
-        if(widget.transformWithCamera) {
-            this.camera.transformingObjects.push(dyn_object)
-        }
-
-    }
-
-    /**
-     * Extract all widgets from a dynamic object.
-     * @param {PhSim.DynObject} dyn_object 
-     */
-    
-    
-    PhSim.prototype.extractWidgets = function(dyn_object) {
-        for(var i = 0; i < dyn_object.widgets.length; i++) {
-            this.extractWidget(dyn_object,dyn_object.widgets[i]);
-        }
-    }
-
-
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Vector = __webpack_require__(3)
-const Motion = __webpack_require__(4);
-
-/**
- * @constructor
+ * Sprites namespace
+ * @namespace
  * @memberof PhSim
- * @param {*} dynSim 
  */
 
-var Camera = function(dynSim) {
+var Sprites = {
+    Calc: {}
+}
+
+Sprites.Sprite = function() {
+	this.src = null;
+	this.w = null;
+	this.h = null;
+	this.x = null;
+	this.y = null;
+	this.fit = null;
+	this.repeat = null;
+	this.object = null;
+}
+
+Sprites.renderSprite = function(ctx,sprite) {
+	var localElm = document.createElement("img");
+	localElm.src = sprite.src;
+	if(sprite.spec === true) {
+		ctx.drawImage(localElm,sprite.x,sprite.y,sprite.w,sprite.h);
+	}
+
+	if(sprite.auto === true) {
+		ctx.drawImage(localElm,sprite.x,sprite.y,sprite.w,sprite.h);
+	}
+}
+
+Sprites.renderGlobalSprites = function(ctx,simulation) {
+
+	for(let i = 0; i < simulation.sprites.length; i++) {
+		Sprites.renderSprite(ctx,simulation.sprites[i]);
+	}
+
+}
+
+
+Sprites.circularSpriteRenderCanvas = function(ctx,canvas,angle) {
+
+	var localElm = document.createElement("canvas");
+	var localCtx = localElm.getContext("2d");
+
+	var localImg = document.createElement("img");
+	localImg.src = canvas.src;
+
+	localCtx.rotate(angle);
+
+	localCtx.drawImage()
+
+
+}
+
+/**
+ * 
+ * The `spriteImgObj` class is used to store catche for sprites.
+ * 
+ * @constructor
+ * @param {String[]} sprites - An array of strings representing sources
+ * @param {Function} onload - A function that is executed when all of the images are loaded.
+ */
+
+Sprites.spriteImgObj = function(sprites,onload = function() {}) {
+	
+	// Force load if sprites list is empty
 
 	/**
-	 * Dynamic Simulation
-	 * @type {PhSim}
+	 * Array of catched sprites
 	 */
 
-	this.dynSim = dynSim;
+	Object.defineProperty(this,"array",{
+		enumerable: false,
+		value: [],
+		writable: true,
+	})
+
+	/**
+	 * 
+	 * Object of static sprite objects
+	 * 
+	 * @type {Object}
+	 * @name PhSim.Sprites.spriteImgObj#static
+	 */
+
+	Object.defineProperty(this,"static",{
+		enumerable: false,
+		value: {},
+		writable: true,
+	});
+
+	/**
+	 * 
+	 * Number of loaded sprites
+	 * 
+	 * @type {Number}
+	 * @name PhSim.Sprites.spriteImgObj#loaded_n
+	 */
+
+	Object.defineProperty(this,"loaded_n",{
+		enumerable: false,
+		value: 0,
+		writable: true
+	});
+
+	/**
+	 * 
+	 * Boolean telling us if it is loaded or not.
+	 * 
+	 * @type {Boolean}
+	 * @name PhSim.Sprites.spriteImgObj#length
+	 */
+
+	Object.defineProperty(this,"loaded",{
+		enumerable: false,
+		value: false,
+		writable: true,
+	});
+
+	/**
+	 * 
+	 * Function to call if loaded.
+	 * 
+	 * @type {Function}
+	 * @name PhSim.Sprites.spriteImgObj#onload
+	 */
+
+	Object.defineProperty(this,"onload",{
+		enumerable: false,
+		value: onload,
+		writable: true
+	});
+
+	/**
+	 * 
+	 * URL List
+	 * 
+	 * @type {Object}
+	 * @name PhSim.Sprites.spriteImgObj#urls
+	 */
+
+	Object.defineProperty(this,"urls",{
+		enumerable: false,
+		value: [],
+		writable: true
+	});
+
+	/**
+	 * 
+	 * Image List
+	 * 
+	 * @type {Array}
+	 * @name PhSim.Sprites.spriteImgObj#urls
+	 */
+
+	Object.defineProperty(this,"img",{
+		enumerable: false,
+		value: [],
+		writable: true
+	});
+
+	/**
+	 * 
+	 * Image List
+	 * 
+	 * @type {Array}
+	 * @name PhSim.Sprites.spriteImgObj#urls
+	 */
+
+	Object.defineProperty(this,"loadedImg",{
+		enumerable: false,
+		value: [],
+		writable: true
+	});
+
+	/**
+	 * 
+	 * Length
+	 * 
+	 * @type {Number}
+	 * @name PhSim.Sprites.spriteImgObj#length
+	 */
+
+	Object.defineProperty(this,"length",{
+		enumerable: false,
+		value: 0,
+		writable: true,
+	})
+
+	var self = this;
+
+	for(var i = 0; i < sprites.length; i++) {
+		self.addSprite(sprites[i],function(){
+			if(self.loadedImg.length === self.img.length) {
+				onload();
+			}
+		})
+	}
+
+	if(sprites.length === 0) {
+		self.onload();
+		self.loaded = true;
+	}
 
 }
 
 /**
- * Camera scale
- * @type {Number}
+ * 
+ * Add sprite to the Sprite Image Array.
+ * 
+ * @function
+ * @this Sprites.spriteImgObj
+ * 
+ * @param {string|Object} src - Source of sprite. If ```src``` is a string representing 
+ * a url, then the image added has its source as ```src```. If ```src``` is an object, 
+ * then the source is ```src.src```. This means that any object with an ```src``` property
+ * can be added.
+ * 
+ * @param {Function} [onload] - a function that is executed when the image loads.
+ * 
+ * @returns {Image}
  */
 
-Camera.prototype.scale = 1;
+Sprites.spriteImgObj.prototype.addSprite = function(src,onload = function() {} ) {
+
+	// Insuring that the sprite src stays a string.
+
+	if(typeof src === "object" && typeof src.src === "string") {
+		src = src.src;
+	}
+
+	var self = this;
+
+	let img = document.createElement("img");
+
+	let f = function() {
+
+		self[src] = img;
+		self.urls.push(src);
+		self.loadedImg.push(this);
+		self.length++;
+
+		onload();
+
+		img.removeEventListener("load",f);
+
+	}
+
+	img.addEventListener("load",f);
+
+	this.img.push(img);
+
+	img.src = src;
+
+	return img;
+
+}
+
+module.exports = Sprites;
+
+/***/ }),
+
+/***/ 6254:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const diagRect = __webpack_require__(4035);
+const Static = __webpack_require__(2094);
+const Vertices = __webpack_require__(9153);
 
 /**
- * Camera offset x 
- * @type {Number}
+ * Get bounding box from an array of vectors.
+ * 
+ * @constructor
+ * @memberof PhSim
+ * @extends PhSim.Options.Rectangle
+ * @param {Vector[]} verts 
  */
 
-Camera.prototype.x = 0;
+const BoundingBox = function(verts) {
 
-/**
- * Camera offset y
- * @type {Number}
- */
+	verts = Object.assign([],verts);
 
-Camera.prototype.y = 0;
+	verts.sort(function(a,b){
+		return a.x - b.x;
+	});
 
-/**
- * Target object
- * @type {StaticObject}
- */
+	/**
+	 * The x coordinate of the left most vertex of `verts`.
+	 * @type {Number}
+	 */
 
-Camera.prototype.targetObj = null;
+	this.smallX = verts[0].x;
 
-/**
- * Objects that will transform with the camera
- * @type {StaticObject[]}
- */
+	/**
+	 * The x coordinate of the right most vertex of `verts`.
+	 * @type {Number}
+	 */
 
-Camera.prototype.transformingObjects = []
+	this.largeX = verts[verts.length - 1].x;
 
-Camera.prototype.zoomIn = function(scaleFactor) {
-	this.scale = this.scale * scaleFactor;
-	this.dynSim.ctx.scale(scaleFactor,scaleFactor);
+	verts.sort(function(a,b){
+		return a.y - b.y;
+	});
+
+	this.smallY = verts[0].y;
+	this.largeY = verts[verts.length - 1].y;
+
+	var w = this.largeX - this.smallX;
+	var h = this.largeY - this.smallY;
+	var x = this.smallX;
+	var y = this.smallY;
+
+	Static.Rectangle.call(this,w,h,x,y);
+
 }
 
 /**
- * Translate camera by the vector `(dx,dy)`.
- * 
- * @param {Number} dx - Amount to transform camera in `x` direction.
- * @param {Number} dy - Amount to transform camera in `y` direction.
- * 
+ * Get bounding box of PhSim shape.
+ * @param {PhSimObject} object - The Static Object
+ * @returns {PhSim.BoundingBox} 
  */
 
-Camera.prototype.translate = function(dx,dy) {
+BoundingBox.fromShape = function(object) {
+	
+	if(object.shape === "polygon") {
+		return new BoundingBox(object.verts);
+	}
 
-	dx = dx || 0
-	dy = dy || 0
+	if(object.shape === "regPolygon") {
+		return new BoundingBox(Vertices.regPolygon(object));
+	}
 
-	this.x = this.x + dx;
-	this.y = this.y + dy;
-	this.dynSim.ctx.translate(dx,dy);
+	if(object.shape === "rectangle") {
+		return new BoundingBox(Vertices.rectangle(object,true));
+	}
 
-	for(var i = 0; i < this.transformingObjects.length; i++) {
-		Motion.translate(this.transformingObjects[i],new Vector(-dx,-dy));
+	if(object.shape === "circle") {
+
+		var ax = object.x - object.radius;
+		var ay = object.y - object.radius;
+		var bx = object.x + object.radius;
+		var by = object.y + object.radius;
+
+		return diagRect(ax,ay,bx,by,0);
+	}
+
+	if(object.composite) {
+		
+		var a = [];
+
+		for(var i = 0; i < object.objUniverse.length; i++) {
+			a.push( Vertices.rectangle( this.getStaticBoundingBox(object.objUniverse[i]) ) );
+		}
+
+		a = a.flat(Infinity);
+
+		return new BoundingBox(a);
+
 	}
 }
 
-Camera.prototype.setPosition = function(x,y) {
-	this.dynSim.ctx.translate(-this.x,-this.y)
-	this.x = x;
-	this.y = y;
-}
-
-module.exports = Camera;
+module.exports = BoundingBox;
 
 /***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const PhSim = __webpack_require__(0);
+/***/ 209:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const Vector = __webpack_require__(2450);
+
+/**
+ * Namespace for functions that get the centroid (the center) of a {@link PhSimObject}.
+ * @memberof PhSim
+ * @namespace
+ */
+
+const Centroid = {}
+
+/**
+ * Get centroid of any shape.
+ * If it is a circle or a regPolygon, then `o` is returned because the properties `x` and
+ * `y` already define the centroid of the object.
+ * 
+ * @param {PhSimObject} o 
+ * @returns {Vector}
+ */
+
+Centroid.shape = function(o) {
+	
+	if(o.shape === "rectangle") {
+		return Centroid.rectangle(o);
+	}
+
+	if(o.shape === "polygon") {
+		return Centroid.polygon(o)
+	}
+
+	if(o.shape === "circle" || o.shape === "regPolygon") {
+		return o;
+	}
+
+}
+
+/**
+ * 
+ * Get centroid of a rectangle
+ * 
+ * @function
+ * @param {PhSim.Static.Rectangle} rectangle
+ * @returns {Vector}
+ *  
+ */
+
+Centroid.rectangle = function(rectangle) {
+	return {
+		"x": rectangle.x + 0.5 * rectangle.w,
+		"y": rectangle.y + 0.5 * rectangle.h
+	}
+}
+
+
+/** 
+ * Find Centroid of a polygon
+ * @function
+ * @param {Polygon} a - Path
+ * @returns {Vector}
+ */
+
+Centroid.polygon = function(a) {
+		
+	var v = new Vector(0,0);
+	
+	for(var j = 0; j < a.verts.length; j++) { 
+		v.x += a.verts[j].x;
+		v.y += a.verts[j].y;
+	}
+	
+	v.x = (1/a.verts.length) * v.x;
+	v.y = (1/a.verts.length) * v.y;
+	
+	return v;
+
+}
+
+module.exports = Centroid;
+
+/***/ }),
+
+/***/ 4035:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const Static = __webpack_require__(2094);
+
+/**
+ * 
+ * Get Rectangle by diagonal with points (x1,y1) and (x2,y2);
+ * 
+ * @function
+ * @memberof PhSim
+ * 
+ * @param {Number} x1
+ * @param {Number} y1
+ * @param {Number} x2
+ * @param {Number} y2 
+ * @returns {PhSim.Static.Rectangle} - Rectangle Object
+ * 
+ */
+
+var diagRect = function(x1,y1,x2,y2) {
+
+	var w = x2 - x1;
+	var h = y2 - y1;
+
+    return new Static.Rectangle(x1,y1,w,h);
+    
+ }
+
+module.exports = diagRect;
+
+
+/***/ }),
+
+/***/ 2450:
+/***/ ((module) => {
+
+/** 
+ * Constructor for the minimal requirements for being a {@link Vector}.
+ *  
+ * @memberof PhSim
+ * @constructor
+ * @param {Number} x 
+ * @param {Number} y
+ * 
+ */
+
+var Vector = function(x,y) {
+	
+	/**
+	 * x-coordinate of the vector
+	 * @type {Number}
+	 */
+	
+	this.x;
+
+	/**
+	 * y-coordinate of the vector
+	 * @type {Number}
+	 */
+	
+	this.y;
+
+	if(typeof x === "number") {
+		this.x = x;
+	}
+
+	else {
+		console.trace();
+		throw "Expecting a number in argument 1";
+	}
+
+	if(typeof y === "number") {
+		this.y = y;
+	}
+
+	else {
+		console.trace()
+		throw "Expecting a number in argument 2"
+	}
+
+}
+
+/**
+ * 
+ * Perform vector addition
+ * 
+ * @function
+ * @param {Vector} vector1 - The first vector
+ * @param {Vector} vector2 - The second vector
+ * 
+ * @param {Boolean} [newObj = true] - Boolean that determines the return value. 
+ * If true, then it returns a new Vector object `vector` such that 
+ * `vector.x === vector1.x + vector2.x` and `vector.x === vector1.y + vector2.y`
+ * 
+ * If false, then `vector2.x` is added to `vector1.x`, `vector2.y` is added to `vector1.y`
+ * and then `vector1` is returned.
+ * 
+ * @returns {Vector} - The sum of the two vectors. New object if `newObj` is true. Returns
+ * `vector1` otherwise. 
+ */
+
+Vector.add = function(vector1,vector2,newObj = true) {
+	
+	if(newObj) {
+		return new Vector(vector1.x + vector2.x, vector1.y + vector2.y);
+	}
+
+	else {
+		vector1.x = vector1.x + vector2.x;
+		vector1.y = vector1.y + vector2.y;
+		return vector1;
+	}
+
+}
+
+/**
+ * 
+ * Perform vector subtraction
+ * 
+ * @function
+ * @param {Vector} vector1 
+ * @param {Vector} vector2 
+ * 
+ * * @param {Boolean} [newObj = true] - Boolean that determines the return value. 
+ * If true, then it returns a new Vector object `vector` such that 
+ * `vector.x === vector1.x - vector2.x` and `vector.x === vector1.y - vector2.y`
+ * 
+ * If false, then `vector2.x` is subtracted from `vector1.x`, `vector2.y` is subtracted 
+ * from `vector1.y` and then `vector1` is returned.
+ * 
+ * @returns {Vector} - The difference between the two vectors. New object if `newObj` is true. Returns
+ * `vector1` otherwise. 
+ */
+
+Vector.subtract = function(vector1,vector2,newObj = true) {
+
+	if(newObj) {
+		return new Vector(vector1.x - vector2.x, vector1.y - vector2.y);	}
+
+	else {
+		vector1.x = vector1.x - vector2.x;
+		vector1.y = vector1.y - vector2.y;
+		return vector1;
+	}
+
+}
+
+/**
+ * 
+ * Multiply a vector by a scalar
+ * 
+ * @function
+ * @param {Vector} vector 
+ * @param {Number} scalar
+ * @returns {Vector} 
+ * 
+ */
+
+Vector.scale = function(vector,scalar) {
+	return new Vector(vector.x * scalar,vector.y * scalar)
+}
+
+/**
+ * Returns a new Vector object `vector` such that `vector.x === o.x` and 
+ * `vector.y === o.y`.
+ * 
+ * @function
+ * @param {Object} o
+ * @param {Number} o.x
+ * @param {Number} o.y 
+ * @returns {Vector} 
+ */
+
+Vector.extract = function(o) {
+	return new Vector(o.x,o.y);
+}
+
+/**
+ * Returns a vector equal in magnitude of `vector` but opposite in direction of `vector`.
+ * @param {Vector} vector 
+ * @returns {PhSim.Vector} -  The reversed vector.
+ */
+
+Vector.neg = function(vector) {
+	return new Vector(-vector.x,-vector.y);
+}
+
+/**
+ * 
+ * Divide a vector by a scalar
+ * 
+ * @function
+ * @param {Vector} vector 
+ * @param {Number} scalar
+ * @returns {Vector} 
+ *  
+ */
+
+Vector.divide = function(vector,scalar) {
+	return new Vector(vector.x * (1/scalar),vector.y * (1/scalar));
+}
+
+/**
+ * 
+ * Get distance between two vectors.
+ * 
+ * @function
+ * @param {Vector} vector1 
+ * @param {Vector} vector2
+ * @returns - The vector distance
+ *  
+ */
+
+Vector.distance = function(vector1,vector2) {
+	
+	var l1 = Math.pow(vector1.x - vector2.x,2);
+	var l2 = Math.pow(vector1.y - vector2.y,2);
+
+	return Math.sqrt(l1+l2);
+
+}
+
+/**
+ * 
+ * Get length of the vector
+ * 
+ * @function
+ * @param {Vector} vector 
+ * @returns {Number} - The length of the vector
+ */
+
+Vector.getLength = function(vector) {
+	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
+}
+
+/**
+ * 
+ * Get normalized vector of some vector.
+ * 
+ * @function
+ * @param {Vector} vector - Vector to normalize.
+ * @returns {Vector} -  The Unit Vector
+ */
+
+Vector.unitVector = function(vector) {
+	return Vector.scale(vector,1/Vector.getLength(vector));
+}
+
+/**
+ * Apply a linear transformation defined by a 2x2 matrix to a vector.
+ * 
+ * @function
+ * @param {Number} a11 - Element found in row 1, column 1
+ * @param {Number} a12 - Element found in row 1, column 2
+ * @param {Number} a21 - Element found in row 2, column 1
+ * @param {Number} a22 - Element found in row 2, column 2
+ * @param {Number} x - x-coordinate of vector to be transformed
+ * @param {Number} y - y-coordinate of vector to be transformed
+ * @returns - The transformed vector 
+ */
+
+Vector.applyTransformation = function(a11,a12,a21,a22,x,y) {
+	return new Vector(a11 * x + a12 * y,a21 * x + a22 * y);
+}
+
+/**
+ * 
+ * Rotate a vector (x,y) by angle a
+ * 
+ * @function
+ * @param {Number} x - x-coordinate
+ * @param {Number} y - y-coordinate
+ * @param {Number} a - Angle in radians
+ * @returns {Vector}
+ */
+
+Vector.rotate = function(x,y,a) {
+	return Vector.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
+}
+
+/**
+ * Get SVG point
+ * @param {Number} x 
+ * @param {Number} y
+ * @returns {String} - SVG Vector String 
+ */
+
+Vector.svgVector = function(x,y) {
+	return x + "," + y;
+}
+
+/**
+ * Calculate dot product of `vector1` and `vector2`.
+ * 
+ * @function
+ * @since 0.2.0-alpha
+ * @param {Vector} vector1
+ * @param {Vector} vector2
+ * @returns {Number} - The dot product 
+ */
+
+Vector.dotProduct = function(vector1,vector2) {
+	return vector1.x * vector2.x + vector1.y * vector2.y;
+}
+
+/**
+ * 
+ * Gets angle between two lines that both end at `vertex`.
+ * 
+ * That is, suppose that `A` is the point `ray1`, `B` is the point `ray2` and that
+ * `C` is the point `vertex`. Then, `vectorToArray` returns the angle between the lines
+ * `AC` and `BC`.
+ * 
+ * @function
+ * @since 0.2.0-alpha
+ * @param {Vector} vertex 
+ * @param {Vector} ray1 
+ * @param {Vector} ray2
+ * @returns {Number} - The angle 
+ */
+
+Vector.vectorToArray = function(vertex,ray1,ray2) {
+
+	ray1.x = ray1.x - vertex.x;
+	ray1.y = ray1.y - vertex.y;
+
+	ray2.x = ray2.x - vertex.x;
+	ray2.y = ray2.y - vertex.y;
+
+	return Math.acos(Vector.dotProduct(ray1,ray2));
+
+}
+
+module.exports = Vector;
+
+/***/ }),
+
+/***/ 9153:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const Static = __webpack_require__(2094);
+const Centroid = __webpack_require__(209);
+const Vector = __webpack_require__(2450);
+
+const Vertices = {}
 
 // Try to import matter-js as a commonJS module
 
@@ -7371,7 +7210,319 @@ if(typeof window === "object") {
 }
 
 else {
-	Matter = __webpack_require__(1);
+	Matter = __webpack_require__(8054);
+}
+
+/**
+ * 
+ * Get vertices for a static object representing a regular polygon.
+ * 
+ * @function
+ * @param {PhSim.Static.RegPolygon} regularPolygon - The Static Regular Polygon Object
+ * @returns {PhSim.Vector[]}
+ * 
+ */
+
+Vertices.regPolygon = function(regularPolygon) {
+
+	var a = []
+	
+	var firstAngle = (2*Math.PI)/regularPolygon.sides;
+
+	for(var i = 0; i < regularPolygon.sides; i++) {
+		var x = regularPolygon.x + Math.cos(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
+		var y = regularPolygon.y + Math.sin(firstAngle * i + regularPolygon.cycle) * regularPolygon.radius;
+		a.push(new Vector(x,y));
+	}
+
+	return a;
+
+}
+
+
+/**
+ * 
+ * Get vertices for a rectangle
+ * 
+ * @function
+ * @param {PhSim.Static.Rectangle} rectangle
+ * @returns {Object[]} 
+ */
+
+Vertices.rectangle = function(rectangle) {
+
+	var a = [
+
+			{
+				"x": rectangle.x,
+				"y": rectangle.y,
+				"topLeft": true
+			},
+	
+			{
+				"x": rectangle.x + rectangle.w,
+				"y": rectangle.y,
+				"topRight": true
+			},
+
+			{
+				"x": rectangle.x + rectangle.w,
+				"y": rectangle.y + rectangle.h,
+				"bottomRight": true
+			},
+	
+			{
+				"x": rectangle.x,
+				"y": rectangle.y + rectangle.h,
+				"bottomLeft": true
+			}
+	
+	];
+
+	if(rectangle.cycle) {
+		Matter.Vertices.rotate(a, rectangle.cycle, Centroid.rectangle(rectangle));
+	}
+
+	return a;
+
+}
+
+/**
+ * 
+ * Get rectangle corners
+ * 
+ * @function
+ * @param {PhSim.Static.Rectangle} rectangle 
+ * @returns {Object}
+ */
+
+
+Vertices.getRectangleCorners = function(rectangle) {
+
+
+	var a = Vertices.rectangle(rectangle)
+
+	
+	var z = {
+
+		"topLeft": a[0],
+
+		"topRight": a[1],
+
+		"bottomLeft": a[3],
+
+		"bottomRight": a[2]
+
+	}
+
+	return z;
+
+}
+
+/**
+ * Get vertices for regular polygon inscribed in circle.
+ * @param {Circle} circle 
+ * @param {Number} sides 
+ */
+
+Vertices.inscribedRegPolygonCircle = function(circle,sides) {
+	return new Static.RegPolygon(circle.x,circle.y,circle.radius,sides);
+}
+
+/**
+ * Returns the vertices for a regular polygon inscribed in the circle. It has 25 sides.
+ * This is meant to create a regular polygon that is used to create Matter.js circles.
+ * 
+ * @param {Circle} circle 
+ * 
+ */
+
+Vertices.inscribedMatterCirclePolygon = function(circle) {
+	return Vertices.inscribedRegPolygonCircle(circle,25);
+}
+
+/**
+ * Get verticles of PhSim objects
+ * @param {*} o 
+ */
+
+Vertices.object = function(o) {
+
+	if(o.shape === "rectangle") {
+		return Vertices.rectangle(o);
+	}
+
+	if(o.shape === "regPolygon") {
+		return Vertices.regPolygon(o);
+	}
+
+	if(o.shape === "polygon") {
+		return o.verts;
+	}
+
+	if(o.shape === "circle") {
+		return Vertices.inscribedMatterCirclePolygon(o);
+	}
+
+}
+
+module.exports = Vertices;
+
+/***/ }),
+
+/***/ 5203:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+const DynObject = __webpack_require__(390);
+const PhSimEventTarget = __webpack_require__(4956);
+
+/**
+ * Dynamic Widget Object
+ * @param {Object} options 
+ */
+
+const Widget = function(target,options) {
+
+	/**
+	 * Status of widget
+	 * @type {"enabled"|"disabled"|"destroyed"}
+	 */
+
+	this.status;
+
+	/**
+	 * Thing to be affected by the widget.
+	 * @type {PhSim|PhSim.DynObject}
+	 */
+
+	
+	this.target = target;
+
+	if(typeof options !== "undefined") {
+		Object.assign(this,options);
+	}
+
+	Object.assign(this,PhSimEventTarget);
+
+	this.enable();
+
+}
+
+Widget.prototype.eventStack = {
+	enable: [],
+	disable: [],
+	destroy: []
+}
+
+Widget.prototype.enable = function() {
+
+	if(typeof this.wFunction === "function") {
+		this.wFunction.wFunction_enabled = true;
+
+		if(this.wFunction._bodyFunction.motionFunctionEnabled === false) {
+			this.wFunction._bodyFunction.motionFunctionEnabled = false;
+		}
+
+	}
+
+	this.callEventClass("enable",this,this);
+
+	this.status = "enabled";
+
+}
+
+/**
+ * Function for disabling widget
+ * @type {Function}
+ */
+
+Widget.prototype.disable = function() {
+
+	if(typeof this.wFunction === "function") {
+
+		this.wFunction.wFunction_enabled = false;
+
+		if(this.wFunction._bodyFunction.motionFunctionEnabled === true) {
+			this.wFunction._bodyFunction.motionFunctionEnabled = false;
+		}
+
+	}
+
+	this.callEventClass("disable",this,this);
+
+	this.status = "disabled";
+
+}
+
+/**
+ * Function for destroying widget
+ * @type 
+ */
+
+
+Widget.prototype.destroy = function() {
+
+	if(typeof this.wFunction === "function") {
+
+		if(this.wFunction._thisRef instanceof DynObject) {
+			wFunction._thisRef.phsim.destroyWFunction(w.wFunction);
+		}
+
+		if(this.wFunction._thisRef instanceof PhSim) {
+			wFunction._thisRef.destroyWFunction(w.wFunction);	
+		}
+
+	}
+
+	delete this.wFunction;
+
+	this.callEventClass("destroy",this,this);
+
+	this.status = "destroyed";
+
+}
+
+
+/**
+ * 
+ * @param {PhSimObject} o 
+ */
+
+Widget.defineByBoolean = function(o) {
+
+	Object.keys(Widgets).forEach(function(p){
+		if(o[p]) {
+			o.type = p;
+		}
+	})
+
+	
+}
+
+Widget.WidgetOptions = function(type) {
+	this.type = type;
+}
+
+module.exports = Widget;
+
+/***/ }),
+
+/***/ 4836:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(8054);
 }
 
 /*
@@ -7409,31 +7560,32 @@ PhSim.prototype.widgets = {};
 
 PhSim.Widgets = {};
 
-__webpack_require__(36);
-__webpack_require__(37);
-__webpack_require__(38);
+__webpack_require__(4757);
+__webpack_require__(5496);
+__webpack_require__(3648);
 
 
-const Game = __webpack_require__(14);
+const Game = __webpack_require__(1417);
 
 Object.assign(PhSim.Widgets,Game.Widgets);
 
-__webpack_require__(39);
-__webpack_require__(40);
-__webpack_require__(41);
-__webpack_require__(42);
-__webpack_require__(43);
-__webpack_require__(44);
-__webpack_require__(45);
-__webpack_require__(46);
-__webpack_require__(47);
-__webpack_require__(48);
+__webpack_require__(5449);
+__webpack_require__(1799);
+__webpack_require__(1332);
+__webpack_require__(4105);
+__webpack_require__(1734);
+__webpack_require__(6038);
+__webpack_require__(9009);
+__webpack_require__(2905);
+__webpack_require__(3582);
+__webpack_require__(4591);
+__webpack_require__(4075);
 
-PhSim.Widgets.constraint = __webpack_require__(49);
+PhSim.Widgets.constraint = __webpack_require__(3302);
 
-PhSim.Widgets.setImgSrc = __webpack_require__(50);
+PhSim.Widgets.setImgSrc = __webpack_require__(7326);
 
-PhSim.Widgets.transformAgainstCamera = __webpack_require__(51);
+PhSim.Widgets.transformAgainstCamera = __webpack_require__(6249);
 
 /**
  * PlayAudio Widget
@@ -7489,8 +7641,9 @@ PhSim.prototype.getWidgetByName = function(name) {
 }
 
 /***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
+
+/***/ 4757:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 // Try to import matter-js as a commonJS module
 
@@ -7501,11 +7654,11 @@ if(typeof window === "object") {
 }
 
 else {
-	Matter = __webpack_require__(1);
+	Matter = __webpack_require__(8054);
 }
 
-const PhSim = __webpack_require__(0);
-const Motion = __webpack_require__(4);
+const PhSim = __webpack_require__(8138);
+const Motion = __webpack_require__(341);
 
 /**
  * Create circular constraint
@@ -7571,11 +7724,13 @@ PhSim.Widgets.circularConstraint = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const PhSim = __webpack_require__(0);
-const Widget = __webpack_require__(5);
+/***/ 5496:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+const Motion = __webpack_require__(341);
+const Widget = __webpack_require__(5203);
 
 /**
  * 
@@ -7589,8 +7744,12 @@ const Widget = __webpack_require__(5);
  */
 
 PhSim.prototype.cloneObject = function(dynObject,options = {}) {
+
+    var newObjStatic = Object.assign({},dynObject.static);
+
+    Motion.setPosition(newObjStatic,dynObject.matter.position);
     
-    var obj = new PhSim.DynObject(dynObject.static);
+    var obj = new PhSim.DynObject(newObjStatic);
     
     /**
      * Property telling if object is cloned.
@@ -7642,18 +7801,54 @@ PhSim.Widgets.clone = function(dyn_object,widget) {
         });
     }
 
-    w.wFunction = this .createWFunction(dyn_object,f,widget);
+    w.wFunction = this.createWFunction(dyn_object,f,widget);
 
     return w;
 
 }
 
 /***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const Motion = __webpack_require__(4);
-const PhSim = __webpack_require__(0);
+/***/ 4075:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+const Motion = __webpack_require__(341);
+const Vector = __webpack_require__(2450);
+
+/**
+ * Connect two Dynamic Objects
+ * @param {PhSim.DynObject} parent 
+ * @param {PhSim.DynObject} child 
+ */
+
+PhSim.prototype.connectDynObjects = function(parent,child) {
+
+	parent.connectedDynObjects.push(child);
+
+	Matter.Body.setStatic(child.matter,true);
+
+	var vect = Vector.subtract(child,parent);
+
+	var f = function() {
+		Motion.setPosition(child,Vector.add(parent.matter.position,vect));
+	}
+
+	this.on("afterupdate",f);
+
+	parent.connectedDynObjects.push(child);
+
+	return f;
+
+}
+
+/***/ }),
+
+/***/ 3302:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const Vector = __webpack_require__(2450);
+const DynObject = __webpack_require__(390);
 
 // Try to import matter-js as a commonJS module
 
@@ -7664,7 +7859,188 @@ if(typeof window === "object") {
 }
 
 else {
-	Matter = __webpack_require__(1);
+	Matter = __webpack_require__(8054);
+}
+
+/**
+ * 
+ * 
+ * Constraint Widget
+ * 
+ * @function
+ * @memberof PhSim.Widgets
+ * @param {PhSim} phsim 
+ * @param {Object} widget - Widget Options
+ * @param {LOAddress|PhSim.DynObject} [widget.objectA] - Object A - First point.
+ * @param {LOAddress|PhSim.DynObject} [widget.objectB] - Object B - Second Point
+ * @param {Vector} [widget.pointA] - First point (see `widget.position` for more information)
+ * @param {Vector} [widget.pointB] - Second point (see `widget.position` for more information)
+ * @param {"relative"|"absolute"} [widget.position = "absolute"] - Positions of points. 
+ * 
+ * If set to `"relative"`, then the rules for positioning a point is the following:
+ * 
+ * * If `widget.objectA` is set, then `widget.pointA` defines the offset from the 
+ * centroid of `widget.objectA`. Otherwise, the point is set to a point in the phsim space.
+ * 
+ * * If `widget.objectB` is set, then `widget.pointB` defines the offset from the centroid
+ * of `widget.objectB`. Otherwise, the point is set to a point in the phsim space.
+ * 
+ * Note: If one is familar with Matter.js, then the rules are simular to rules of making a 
+ * constraint are simular to those in Matter.js.
+ * 
+ * If set to `"absolute"`, then the rules for positioning a point is that the points 
+ * are set to points in space. This is the default value.
+ */
+
+function constraint(phsim,widget) {
+
+    var position = "absolute";
+
+    if(widget.position === "relative") {
+        position = "relative"
+    } 
+    
+    else if(widget.position === "absolute") {
+        position = "absolute";
+    }
+    
+    var b = {}
+
+    if(position === "absolute") {
+
+        if(widget.objectA) {
+
+            if(widget.objectA instanceof DynObject) {
+                b.bodyA = widget.objectA.matter;
+            }
+    
+            else {
+    
+                if(typeof widget.objectA.L === "number" && typeof widget.objectA.O === "number") {
+                    b.bodyA = phsim.LO(widget.objectA.L,widget.objectA.O).matter;
+                }
+    
+                else {
+                    b.bodyA = phsim.optionMap.get(widget.objectA).matter;
+                }
+    
+            }
+    
+        }
+    
+        if(widget.objectB) {
+            b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
+    
+            if(widget.objectB instanceof DynObject) {
+                b.bodyB = widget.objectB.matter;
+            }
+    
+            else {
+    
+                if(typeof widget.objectB.L === "number" && typeof widget.objectB.O === "number") {
+                    b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
+                }
+    
+                else {
+                    b.bodyB = phsim.optionMap.get(widget.objectB).matter;
+                }
+    
+            }
+    
+        }
+    
+        if(widget.pointA) {
+    
+            if(widget.objectA) {
+                b.pointA = Vector.subtract(widget.pointA,b.bodyA.position);
+            }
+    
+            else {
+                b.pointA = widget.pointA;
+            }
+    
+        }
+    
+        if(widget.pointB) {
+            
+            if(widget.objectB) {
+                b.pointB = Vector.subtract(widget.pointB,b.bodyB.position);
+            }
+    
+            else {
+                b.pointB = widget.pointB;
+            }
+        }
+
+    }
+
+    if(position === "relative") {
+        b.pointA = widget.pointA;
+        b.pointB = widget.pointB;
+        b.bodyA = widget.objectA.plugin.dynObject;
+        b.bodyB = widget.objectB.plugin.dynObject;
+    }
+
+    var c = Matter.Constraint.create(b);
+
+    Matter.World.add(phsim.matterJSWorld,c);
+
+}
+
+module.exports = constraint;
+
+/***/ }),
+
+/***/ 3582:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+const Widget = __webpack_require__(5203);
+
+/**
+ * 
+ * The deleteSelf widget makes an object delete itself from the simulation.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object - The Dynamic Object to be configured.
+ * @param {WFunctionOptions} widget - Configuration options
+ */
+
+PhSim.Widgets.deleteSelf = function(dyn_object,widget) {
+
+    var w = new Widget(dyn_object,widget);
+
+    var self = this;
+    
+    var f = function(){
+        self.removeDynObj(dyn_object);
+        self.disableWFunction(w.wFunction);
+    }
+
+    w.wFunction = this.createWFunction(dyn_object,f,widget);
+
+    return w;
+
+}
+
+/***/ }),
+
+/***/ 3648:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const Motion = __webpack_require__(341);
+const PhSim = __webpack_require__(8138);
+
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(8054);
 }
 
 /**
@@ -7732,8 +8108,9 @@ PhSim.Widgets.draggable = function(dyn_object) {
 }
 
 /***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
+
+/***/ 8175:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 // Try to import matter-js as a commonJS module
 
@@ -7744,11 +8121,369 @@ if(typeof window === "object") {
 }
 
 else {
-	Matter = __webpack_require__(1);
+	Matter = __webpack_require__(8054);
 }
 
-const PhSim = __webpack_require__(0);
-const Widget = __webpack_require__(5);
+// Set Angle to mouse.
+
+const DynObject = __webpack_require__(390);
+const PhSim = __webpack_require__(8138);
+
+/**
+ * 
+ * Run function on all objects.
+ * 
+ * @function
+ * @param {Function} call 
+ */
+
+PhSim.prototype.forAllObjects = function(call) {
+	
+	var a = this.objUniverse;
+
+	for(var i = 0; i < a.length; i++) {
+		var z = call(a[i]);
+		if(z === false) {
+			break;
+		}
+	}
+}
+
+
+/**
+ * Check if the object is a dynamic object.
+ * 
+ * @function
+ * @param {PhSimObject} o 
+ */
+
+PhSim.prototype.isNonDyn = function(o) {
+	return o.noDyn;
+}
+
+/**
+ * Set Object Lifespan
+ * 
+ * @function
+ * @param {*} dynObject - Dynamic Object
+ * @param {Number} lifespan - Milliseconds 
+ * 
+ */
+
+PhSim.prototype.setDynObjectLifespan = function(dynObject,lifespan) {
+
+	var self = this;
+
+	setTimeout(lifespan,function(){
+		self.removeDynObj(dynObject);
+	});
+
+}
+
+PhSim.prototype.renderAllCounters = function() {
+	for(var i = 0; i < this.counterArray.length; i++) {
+		this.renderCounterByIndex(i);
+	}
+}
+
+/***/ }),
+
+/***/ 1734:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const Motion = __webpack_require__(341);
+const Vector = __webpack_require__(2450);
+const PhSim = __webpack_require__(8138);
+
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(8054);
+}
+/**
+ * 
+ * The `elevator` widget makes objects go back and forth within some range.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {Object} widget - Options
+ * @param {Vector} widget.pointA - First point of the elevator
+ * @param {Vector} widget.pointB - Second point of the elevator
+ * @param {"x"|"y"} widget.bounding - Rules for deteriming the range of the elevator. 
+ * 
+ * If `widget.bounding` is equal to `"x"`, then the elevator switches direction if the
+ * `x` value of the position of `dyn_object` is equal to `widget.pointA.x` or `widget.pointB.x`.
+ * 
+ * If `widget.bounding` is equal to `"y"`, then the elevator switches direction if the
+ * `y` value of the position of `dyn_object` is equal to `widget.pointA.y` or `widget.pointB.y`.
+ * 
+ */
+
+PhSim.Widgets.elevator = function(dyn_object,widget) {
+            
+    var func = function() {
+    
+        var bounding = widget.bounding;
+
+        var obj = dyn_object;
+        var relVec = Vector.subtract(widget.pointB,widget.pointA);
+        
+        var u = Vector.unitVector(relVec);
+        
+        var ax;
+        var ay;
+        var bx;
+        var by;
+        
+        // Corrections
+        
+        var reversable = true;
+        
+        // Condition function for checking if object is in bounds
+        
+        var cond_f = function() {}
+        
+        if(bounding === "x") {
+
+            if(widget.pointA.x < widget.pointB.x) {
+                ax = widget.pointA.x;
+                bx = widget.pointB.x;
+            }
+            
+            if(widget.pointB.x < widget.pointA.x) {
+               ax = widget.pointB.x;
+               bx = widget.pointA.x;
+            }
+        
+            cond_f = function() {
+                return (ax <= obj.matter.position.x) && (obj.matter.position.x <= bx);
+            }
+        
+        }
+        
+        if(bounding === "y") {
+
+            if(widget.pointA.y < widget.pointB.y) {
+                ay = widget.pointA.y;
+                by = widget.pointB.y;
+            }
+            
+            if(widget.pointB.y < widget.pointA.y) {
+               ay = widget.pointB.y;
+               by = widget.pointA.y;
+            }
+        
+            cond_f = function() {
+                return (ay <= obj.matter.position.y) && (obj.matter.position.y <= by);
+            }
+        
+        }
+        
+        // Set body static
+        
+        Matter.Body.setStatic(dyn_object.matter,true);
+        
+        // Event function
+
+        var inRange = function() {
+
+        if( cond_f() ) {
+        Motion.translate(obj,Vector.scale(u,1));
+                reversable = true;
+        }
+          
+            else {
+            
+                if(reversable) {
+
+                    u = {
+                        "x": -u.x,
+                        "y": -u.y
+                    }
+
+                    reversable = false;
+                }
+
+                else {
+                    Motion.translate(obj,Vector.scale(u,1));
+                }
+            
+            }
+            
+
+        }
+
+        return inRange
+
+
+    }
+
+    this.on("afterupdate",func());
+
+}
+
+/***/ }),
+
+/***/ 2841:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+
+/** 
+ * 
+ * Extract Widgets from Dynamic Object.
+ * To extract a widget in PhSim is to read all of the objects in the "widgets" array found in each
+ * well-formed PhSim object and then translate it into JavaScript.
+ * 
+ * @function
+ * @param {WidgetOptions} widget - The Widget
+ * @param {PhSim.DynObject} dyn_object The individual Dynamic Object
+ * @returns undefined
+ * 
+*/
+
+PhSim.prototype.extractWidget = function(dyn_object,widget) {
+
+    if(PhSim.Widgets[widget.type]) {
+        PhSim.Widgets[widget.type].call(this,dyn_object,widget);
+    }
+
+    if(widget.name) {
+        this.widgets[widget.name] = widget;
+    }
+
+    var self = this;
+    
+        if(widget.changeSl) {
+    
+            var closure = function() {
+    
+                var i = widget.slIndex;
+    
+                var f = function() {
+                    self.gotoSimulationIndex(i)
+                }
+    
+                return f;
+            }
+    
+            this.createWFunction(widget.trigger,closure(),{
+                ...widget,
+                wFunctionObj: dyn_object
+            });
+        }
+
+        if(widget.transformWithCamera) {
+            this.camera.transformingObjects.push(dyn_object)
+        }
+
+    }
+
+    /**
+     * Extract all widgets from a dynamic object.
+     * @param {PhSim.DynObject} dyn_object 
+     */
+    
+    
+    PhSim.prototype.extractWidgets = function(dyn_object) {
+        for(var i = 0; i < dyn_object.widgets.length; i++) {
+            this.extractWidget(dyn_object,dyn_object.widgets[i]);
+        }
+    }
+
+
+
+/***/ }),
+
+/***/ 6038:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+const Motion = __webpack_require__(341);
+
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(8054);
+}
+
+/**
+ * 
+ * The `keyboardControls` widget is a widget that makes an object go at a certain velocity
+ * if the arrow keys are pressed.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dynObj 
+ * @param {Object} keyboardControls - Keyboard Controls options
+ * 
+ * @param {Number} keyboardControls.right - Velocity in the right direction if the right key is pressed.
+ * @param {NUmber} keyboardControls.up - Velocity in the up direction if the up key is pressed.
+ * @param {Number} keyboardControls.left - Velocity in the left direction if the left key is pressed.
+ * @param {Number} keyboardControls.down - Velocity in the down direction if the down key is pressed.
+ */
+
+PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
+
+	var f = function(event) {
+		if(event.code == "ArrowRight") {
+			Motion.setVelocity(dynObj, {x: keyboardControls.right, y: 0});
+		}
+		
+		if(event.code == "ArrowUp") {
+			Motion.setVelocity(dynObj, {x: 0, y: -keyboardControls.up});
+		}
+		
+		if(event.code == "ArrowLeft") {
+			Motion.setVelocity(dynObj, {x: -keyboardControls.left, y: 0});
+		}
+		
+		if(event.code == "ArrowDown") {
+			Motion.setVelocity(dynObj, {x: 0, y: keyboardControls.down});
+		}
+		
+	}
+
+	this.on("keydown",f,{
+		"slEvent": true
+	}); 
+4
+}
+
+PhSim.Widgets.keyboardControls = function(dyn_object,widget) {
+    this.addKeyboardControls(dyn_object,widget);
+}
+
+/***/ }),
+
+/***/ 5449:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+// Try to import matter-js as a commonJS module
+
+var Matter;
+
+if(typeof window === "object") {
+	Matter = window.Matter;
+}
+
+else {
+	Matter = __webpack_require__(8054);
+}
+
+const PhSim = __webpack_require__(8138);
+const Widget = __webpack_require__(5203);
 
 /**
  * Set lock of the Dynamic Object
@@ -7838,11 +8573,13 @@ PhSim.Widgets.toggleSemiLock = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const Motion = __webpack_require__(4);
-const PhSim = __webpack_require__(0);
+/***/ 1799:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const Motion = __webpack_require__(341);
+const PhSim = __webpack_require__(8138);
+const Widget = __webpack_require__(5203);
 
 /** 
  * 
@@ -7850,7 +8587,7 @@ const PhSim = __webpack_require__(0);
  * 
  * @function
  * @param {"setAngle"|"force"|"velocity"|"translate"|"position"|"rotation"|"circular_constraint_rotation"} mode - The possible modes are "force","velocity","translate"
- * @param {dyn_object} dyn_object - The dynamic object to put in motion.
+ * @param {PhSim.DynObject} dyn_object - The dynamic object to put in motion.
  * @param {Vector|Number} motion - The vector or scalar that defines the motion.
  * @returns {Function} - A function that makes an object undergo some motion.
  * 
@@ -7859,57 +8596,78 @@ const PhSim = __webpack_require__(0);
 
 PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
 
+	var f;
+
 	if(mode === "force") {
-		return function() {
-			return Motion.applyForce(dyn_object,dyn_object.matter.position,motion);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.applyForce(dyn_object,dyn_object.matter.position,motion);
+			}
 		}
 	}
 
 	if(mode === "velocity") {
-		return function() {
-			return Motion.setVelocity(dyn_object,motion);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.setVelocity(dyn_object,motion);
+			}
 		}
 	}
 
 	if(mode === "translate") {
-		return function() {
-			return Motion.translate(dyn_object,motion);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.translate(dyn_object,motion);
+			}
 		}
 	}
 
 	if(mode === "position") {
-		return function() {
-			return Motion.setPosition(dyn_object,motion)
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.setPosition(dyn_object,motion)
+			}
 		}
 	}
 
 	if(mode === "rotation") {
-		return function() {
-			return Motion.rotate(dyn_object,motion,dyn_object.matter.position);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.rotate(dyn_object,motion,dyn_object.matter.position);
+			}
 		}
 	}
 
 	if(mode === "circular_constraint_rotation") {
-		return function() {
-			return Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+			}
 		}
 	}
 
 	if(mode === "setAngle") {
-		return function() {
-			return Motion.setAngle(dyn_object,motion);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				return Motion.setAngle(dyn_object,motion);
+			}
 		}
 	}
 
 	if(mode === "circular_constraint_setAngle") {
-		return function() {
-			var a = Math.atan2(dyn_object.y - dyn_object.circularConstraintVector.y,dyn_object.x - dyn_object.circularConstraintVector.x)
-			Motion.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
-			Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+		f = function() {
+			if(f.motionFunctionEnabled === true) {
+				var a = Math.atan2(dyn_object.y - dyn_object.circularConstraintVector.y,dyn_object.x - dyn_object.circularConstraintVector.x)
+				Motion.rotate(dyn_object,-a,dyn_object.circularConstraintVector);
+				Motion.rotate(dyn_object,motion,dyn_object.circularConstraintVector);
+			}
 		}
 	}
 
-	return console.error("Parameter 'mode' must either be equal to the one of the following strings: 'force','velocity' or 'position'.");
+
+	f.motionFunctionEnabled = true;
+
+	return f;
 
 }
 
@@ -7925,8 +8683,15 @@ PhSim.prototype.createMotionFunction = function(mode,dyn_object,motion) {
  */
 
 PhSim.Widgets.velocity = function(dynObject,widget) {
+
+	var w = new Widget(dynObject,widget);
+
     var f = this.createMotionFunction("velocity",dynObject,widget.vector);
+
+	w.wFunction = f;
+
     this.createWFunction(dynObject,f,widget);
+
 }
 
 /**
@@ -7941,7 +8706,13 @@ PhSim.Widgets.velocity = function(dynObject,widget) {
  */
 
 PhSim.Widgets.translate = function(dynObject,widget) {
+
+	var w = new Widget(dynObject,widget);
+
     var f = this.createMotionFunction("translate",dynObject,widget.vector);
+	
+	w.wFunction = f;
+
     this.createWFunction(dynObject,f,widget);
 }
 
@@ -7956,7 +8727,12 @@ PhSim.Widgets.translate = function(dynObject,widget) {
  */
 
 PhSim.Widgets.position = function(dynObject,widget) {
+
+	var w = new Widget(dynObject,widget);
+
     var f = this.createMotionFunction("position",dynObject,widget.vector);
+	w.wFunction = f;
+
     this.createWFunction(dynObject,f,widget);
 }
 
@@ -8026,11 +8802,13 @@ PhSim.Widgets.force = function(dyn_object,widget) {
 }
 
 /***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const DynObject = __webpack_require__(2)
-const PhSim = __webpack_require__(0);
+/***/ 1332:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const DynObject = __webpack_require__(390)
+const PhSim = __webpack_require__(8138);
+const Widget = __webpack_require__(5203);
 /**
  * 
  * Call ObjLink functions
@@ -8059,6 +8837,8 @@ PhSim.prototype.callObjLinkFunctions = function(dynObject) {
 
 PhSim.Widgets.objLink = function(dyn_object,widget) {
 
+    var w = new Widget(dyn_object,widget);
+
     var self = this;
     var targetObj;
     var widgetO = widget;
@@ -8077,20 +8857,302 @@ PhSim.Widgets.objLink = function(dyn_object,widget) {
             self.callObjLinkFunctions(targetObj);
         } 
     
-        self.createWFunction(dyn_object,eventFunc,widget);
+        w.wFunction = self.createWFunction(dyn_object,eventFunc,widget);
 
     },{
         slEvent: true
     });
+    
+    return w;
+    
+}
+
+/***/ }),
+
+/***/ 7326:
+/***/ ((module) => {
+
+/**
+ * Widget for changing image sources for sprites.
+ * 
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Object} widget - Widget Object
+ * @param {String} widget.src - New Source
+ * @this PhSim
+ */
+
+function setImgSrc(dynObject,widget) {
+
+    var f = function(){
+        dynObject.sprite.src = widget.src;
+    }
+
+    this.createWFunction(dynObject,f,widget);
+}
+
+module.exports = setImgSrc;
+
+/***/ }),
+
+/***/ 2905:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+const Widget = __webpack_require__(5203)
+
+/**
+ * 
+ * The `setColor` widget changes the color of an object.
+ * It utlizies the {@link PhSim.DynObject.setColor} function.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object - Dynamic Object that will have it's color changed.
+ * @param {WFunctionOptions} widget - Widget Options
+ * @param {String} widget.color - The new color of the object.
+ * @returns {PhSim.Widget}
+ */
+
+PhSim.Widgets.setColor = function(dyn_object,widget) {
+
+    var self = this;
+
+    var w = new Widget(dyn_object,widget);
+
+    var f = function() {
+        PhSim.DynObject.setColor(dyn_object,widget.color);
+    }
+
+    w.wFunction = self.createWFunction(dyn_object,f,widget);
+
+    dyn_object.test1 = w;
+
+    return w;
+
+}
+
+/**
+ * 
+ * The `setBorderColor` widget sets the border color of an object.
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object 
+ * @param {WFunctionOptions} widget - Widget properties.
+ * @param {String} widget.color - The new color of the object border
+ * @returns {PhSim.Widget}
+ * 
+ */
+    
+PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
+
+    var w = new Widget(dyn_object,widget);
+
+    var closure = function() {
+
+        var color = widget.color
+        var obj = dyn_object;
+
+        var f = function() {
+            PhSim.DynObject.setBorderColor(obj,color);
+        }
+
+        return f;
+
+    }
+
+    w.wFunction = this.createWFunction(dyn_object,closure(),widget);
+
+    return w;
+}
+
+/**
+ * 
+ * The `setLineWidth` widget sets the line width of an object.
+ * 
+ * 
+ * @function
+ * @param {PhSim.DynObject} dyn_object - The object to be affected.
+ * @param {WFunctionOptions} widget - Widget options
+ * @param {Number} widget.width - New line width
+ * @returns {PhSim.Widget}
+ * 
+ */
+        
+PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
+
+    var w = new Widget(dyn_object,widget);
+
+    var f = function(){
+        PhSim.DynObject.setLineWidth(dyn_object,widget.width);
+    }
+
+    w.wFunction = this.createWFunction(dyn_object,f,widget);
+
+    return w;
+}
+
+/***/ }),
+
+/***/ 4591:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+
+/**
+ * 
+ * @param {DynSimObject} o 
+ * 
+ * @param {Object} w -  Widget Options
+ * 
+ * @param {Number} w.rows -  Widget Rows
+ * @param {Number} w.rowDist - Distance between two adjacent objects in a row 
+ * 
+ * @param {Number} w.columns - Columns
+ * @param {Number} w.colDist - Distance between two adjecent objects in the column
+ * 
+ * @this {PhSim}
+ *  
+ */
+
+PhSim.Widgets.stack = function(o,w) {
+
+    var a = [];
+
+    for(let i = 1; i <= w.rows; i++) {
+
+        let new_o = this.cloneObject(o);
+
+        PhSim.Motion.transform(new_o,{
+            x: w.rowDist * i,
+            y: 0
+        });
+
+        a.push(new_o);
+
+    }
+
+
+    for(let i = 1; i <= w.columns; i++) {
+
+        let new_o = this.cloneObject(o);
+
+        PhSim.Motion.transform(new_o,{
+            x: 0,
+            y: w.colDist * i
+        });
+
+        a.push(new_o);
+
+    }
+}
+
+/***/ }),
+
+/***/ 6249:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const Widget = __webpack_require__(5203);
+
+/**
+ * Widget to transform object by camera.
+ * @param {Object} dynObject 
+ * @this PhSim
+ */
+
+
+function transformAgainstCamera(o) {
+
+    var self = this;
+
+    var w = new Widget(o);
+
+    this.camera.transformingObjects.push(o);
+
+    var destroy = function() {
+        var i = self.camera.transformingObjects.indexOf(o); 
+        self.camera.transformingObjects.splice(i,1);
+    }
+
+    w.on("destroy",destroy);
+    w.on("disable",destroy);
+
+    return w;
+
+}
+
+module.exports = transformAgainstCamera;
+
+/***/ }),
+
+/***/ 9009:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const PhSim = __webpack_require__(8138);
+const Widget = __webpack_require__(5203);
+
+/**
+ * 
+ * The `transformCameraByObj` widget transforms the camera by an object.
+ * 
+ * @function
+ * @this PhSim
+ * @param {PhSim.DynObject} dyn_object - Object that will transform object.
+ */
+
+
+PhSim.Widgets.transformCameraByObj = function(dyn_object) {
+
+    var w = new Widget(dyn_object);
+
+    var self = this;
+
+    var dx;
+    var dy;
+
+    // beforeUpdate
+
+    var beforeUpdate = function(){
+        if(w.status === "enabled") {
+            dx = dyn_object.matter.position.x;
+            dy = dyn_object.matter.position.y;
+        }
+    }
+
+    this.on("beforeupdate",beforeUpdate,{
+        "slEvent": true
+    });
+
+    // afterupdate
+
+    var afterUpdate = function(){
+        if(w.status === "enabled") {
+            dx = dyn_object.matter.position.x - dx;
+            dy = dyn_object.matter.position.y - dy;
+            self.camera.translate(-dx,-dy);
+        }
+    }
+
+    this.on("afterupdate",afterUpdate,{
+        "slEvent": true
+    });
+
+    // Widget Destruction
+
+    w.on("destoy",function(){
+        self.off("afterupdate",afterUpdate);
+        self.off("beforeupdate",beforeUpdate);
+    });
+
+    return w;
 
 }
 
 /***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const { statusCodes } = __webpack_require__(0);
-const PhSim = __webpack_require__(0);
+/***/ 4105:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const { statusCodes } = __webpack_require__(8138);
+const PhSim = __webpack_require__(8138);
 
 /**
  * @file File for dealing with wFunctions.
@@ -8608,966 +9670,46 @@ PhSim.Widgets.wFunction = function(o,widget) {
 PhSim.prototype.wFunctionNames = {}
 
 /***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
 
-const Motion = __webpack_require__(4);
-const Vector = __webpack_require__(3);
-const PhSim = __webpack_require__(0);
+/***/ 8054:
+/***/ ((module) => {
 
-// Try to import matter-js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = __webpack_require__(1);
-}
-/**
- * 
- * The `elevator` widget makes objects go back and forth within some range.
- * 
- * @function
- * @param {PhSim.DynObject} dyn_object 
- * @param {Object} widget - Options
- * @param {Vector} widget.pointA - First point of the elevator
- * @param {Vector} widget.pointB - Second point of the elevator
- * @param {"x"|"y"} widget.bounding - Rules for deteriming the range of the elevator. 
- * 
- * If `widget.bounding` is equal to `"x"`, then the elevator switches direction if the
- * `x` value of the position of `dyn_object` is equal to `widget.pointA.x` or `widget.pointB.x`.
- * 
- * If `widget.bounding` is equal to `"y"`, then the elevator switches direction if the
- * `y` value of the position of `dyn_object` is equal to `widget.pointA.y` or `widget.pointB.y`.
- * 
- */
-
-PhSim.Widgets.elevator = function(dyn_object,widget) {
-            
-    var func = function() {
-    
-        var bounding = widget.bounding;
-
-        var obj = dyn_object;
-        var relVec = Vector.subtract(widget.pointB,widget.pointA);
-        
-        var u = Vector.unitVector(relVec);
-        
-        var ax;
-        var ay;
-        var bx;
-        var by;
-        
-        // Corrections
-        
-        var reversable = true;
-        
-        // Condition function for checking if object is in bounds
-        
-        var cond_f = function() {}
-        
-        if(bounding === "x") {
-
-            if(widget.pointA.x < widget.pointB.x) {
-                ax = widget.pointA.x;
-                bx = widget.pointB.x;
-            }
-            
-            if(widget.pointB.x < widget.pointA.x) {
-               ax = widget.pointB.x;
-               bx = widget.pointA.x;
-            }
-        
-            cond_f = function() {
-                return (ax <= obj.matter.position.x) && (obj.matter.position.x <= bx);
-            }
-        
-        }
-        
-        if(bounding === "y") {
-
-            if(widget.pointA.y < widget.pointB.y) {
-                ay = widget.pointA.y;
-                by = widget.pointB.y;
-            }
-            
-            if(widget.pointB.y < widget.pointA.y) {
-               ay = widget.pointB.y;
-               by = widget.pointA.y;
-            }
-        
-            cond_f = function() {
-                return (ay <= obj.matter.position.y) && (obj.matter.position.y <= by);
-            }
-        
-        }
-        
-        // Set body static
-        
-        Matter.Body.setStatic(dyn_object.matter,true);
-        
-        // Event function
-
-        var inRange = function() {
-
-        if( cond_f() ) {
-        Motion.translate(obj,Vector.scale(u,1));
-                reversable = true;
-        }
-          
-            else {
-            
-                if(reversable) {
-
-                    u = {
-                        "x": -u.x,
-                        "y": -u.y
-                    }
-
-                    reversable = false;
-                }
-
-                else {
-                    Motion.translate(obj,Vector.scale(u,1));
-                }
-            
-            }
-            
-
-        }
-
-        return inRange
-
-
-    }
-
-    this.on("afterupdate",func());
-
-}
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-// Try to import matter-js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = __webpack_require__(1);
-}
-
-/**
- * 
- * The `keyboardControls` widget is a widget that makes an object go at a certain velocity
- * if the arrow keys are pressed.
- * 
- * @function
- * @param {PhSim.DynObject} dynObj 
- * @param {Object} keyboardControls - Keyboard Controls options
- * 
- * @param {Number} keyboardControls.right - Velocity in the right direction if the right key is pressed.
- * @param {NUmber} keyboardControls.up - Velocity in the up direction if the up key is pressed.
- * @param {Number} keyboardControls.left - Velocity in the left direction if the left key is pressed.
- * @param {Number} keyboardControls.down - Velocity in the down direction if the down key is pressed.
- */
-
-PhSim.prototype.addKeyboardControls = function(dynObj,keyboardControls) {
-
-	var f = function(event) {
-		if(event.code == "ArrowRight") {
-			Matter.Body.setVelocity(dynObj.matter, {x: keyboardControls.right, y: 0});
-		}
-		
-		if(event.code == "ArrowUp") {
-			Matter.Body.setVelocity(dynObj.matter, {x: 0, y: -keyboardControls.up});
-		}
-		
-		if(event.code == "ArrowLeft") {
-			Matter.Body.setVelocity(dynObj.matter, {x: -keyboardControls.left, y: 0});
-		}
-		
-		if(event.code == "ArrowDown") {
-			Matter.Body.setVelocity(dynObj.matter, {x: 0, y: keyboardControls.down});
-		}
-		
-	}
-
-	this.on("keydown",f,{
-		"slEvent": true
-	}); 
-4
-}
-
-PhSim.Widgets.keyboardControls = function(dyn_object,widget) {
-    this.addKeyboardControls(dyn_object,widget);
-}
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-const Widget = __webpack_require__(5);
-
-/**
- * 
- * The `transformCameraByObj` widget transforms the camera by an object.
- * 
- * @function
- * @this PhSim
- * @param {PhSim.DynObject} dyn_object - Object that will transform object.
- */
-
-
-PhSim.Widgets.transformCameraByObj = function(dyn_object) {
-
-    var w = new Widget(dyn_object);
-
-    var self = this;
-
-    var dx;
-    var dy;
-
-    // beforeUpdate
-
-    var beforeUpdate = function(){
-        if(w.status === "enabled") {
-            dx = dyn_object.matter.position.x;
-            dy = dyn_object.matter.position.y;
-        }
-    }
-
-    this.on("beforeupdate",beforeUpdate,{
-        "slEvent": true
-    });
-
-    // afterupdate
-
-    var afterUpdate = function(){
-        if(w.status === "enabled") {
-            dx = dyn_object.matter.position.x - dx;
-            dy = dyn_object.matter.position.y - dy;
-            self.camera.translate(-dx,-dy);
-        }
-    }
-
-    this.on("afterupdate",afterUpdate,{
-        "slEvent": true
-    });
-
-    // Widget Destruction
-
-    w.on("destoy",function(){
-        self.off("afterupdate",afterUpdate);
-        self.off("beforeupdate",beforeUpdate);
-    });
-
-    return w;
-
-}
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-const Widget = __webpack_require__(5)
-
-/**
- * 
- * The `setColor` widget changes the color of an object.
- * It utlizies the {@link PhSim.DynObject.setColor} function.
- * 
- * @function
- * @param {PhSim.DynObject} dyn_object - Dynamic Object that will have it's color changed.
- * @param {WFunctionOptions} widget - Widget Options
- * @param {String} widget.color - The new color of the object.
- * @returns {PhSim.Widget}
- */
-
-PhSim.Widgets.setColor = function(dyn_object,widget) {
-
-    var self = this;
-
-    var w = new Widget(dyn_object,widget);
-
-    var f = function() {
-        PhSim.DynObject.setColor(dyn_object,widget.color);
-    }
-
-    w.wFunction = self.createWFunction(dyn_object,f,widget);
-
-    dyn_object.test1 = w;
-
-    return w;
-
-}
-
-/**
- * 
- * The `setBorderColor` widget sets the border color of an object.
- * 
- * @function
- * @param {PhSim.DynObject} dyn_object 
- * @param {WFunctionOptions} widget - Widget properties.
- * @param {String} widget.color - The new color of the object border
- * @returns {PhSim.Widget}
- * 
- */
-    
-PhSim.Widgets.setBorderColor = function(dyn_object,widget) {
-
-    var w = new Widget(dyn_object,widget);
-
-    var closure = function() {
-
-        var color = widget.color
-        var obj = dyn_object;
-
-        var f = function() {
-            PhSim.DynObject.setBorderColor(obj,color);
-        }
-
-        return f;
-
-    }
-
-    w.wFunction = this.createWFunction(dyn_object,closure(),widget);
-
-    return w;
-}
-
-/**
- * 
- * The `setLineWidth` widget sets the line width of an object.
- * 
- * 
- * @function
- * @param {PhSim.DynObject} dyn_object - The object to be affected.
- * @param {WFunctionOptions} widget - Widget options
- * @param {Number} widget.width - New line width
- * @returns {PhSim.Widget}
- * 
- */
-        
-PhSim.Widgets.setLineWidth = function(dyn_object,widget) {
-
-    var w = new Widget(dyn_object,widget);
-
-    var f = function(){
-        PhSim.DynObject.setLineWidth(dyn_object,widget.width);
-    }
-
-    w.wFunction = this.createWFunction(dyn_object,f,widget);
-
-    return w;
-}
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/**
- * 
- * The deleteSelf widget makes an object delete itself from the simulation.
- * 
- * @function
- * @param {PhSim.DynObject} dyn_object - The Dynamic Object to be configured.
- * @param {WFunctionOptions} widget - Configuration options
- */
-
-PhSim.Widgets.deleteSelf = function(dyn_object,widget) {
-
-    var self = this;
-    
-    var ref;
-
-    var f = function(){
-        self.removeDynObj(dyn_object);
-        self.disableWFunction(ref);
-    }
-
-    ref = this.createWFunction(dyn_object,f,widget);
-
-}
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/**
- * 
- * @param {DynSimObject} o 
- * 
- * @param {Object} w -  Widget Options
- * 
- * @param {Number} w.rows -  Widget Rows
- * @param {Number} w.rowDist - Distance between two adjacent objects in a row 
- * 
- * @param {Number} w.columns - Columns
- * @param {Number} w.colDist - Distance between two adjecent objects in the column
- * 
- * @this {PhSim}
- *  
- */
-
-PhSim.Widgets.stack = function(o,w) {
-
-    var a = [];
-
-    for(let i = 1; i <= w.rows; i++) {
-
-        let new_o = this.cloneObject(o);
-
-        PhSim.Motion.transform(new_o,{
-            x: w.rowDist * i,
-            y: 0
-        });
-
-        a.push(new_o);
-
-    }
-
-
-    for(let i = 1; i <= w.columns; i++) {
-
-        let new_o = this.cloneObject(o);
-
-        PhSim.Motion.transform(new_o,{
-            x: 0,
-            y: w.colDist * i
-        });
-
-        a.push(new_o);
-
-    }
-}
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Vector = __webpack_require__(3);
-const DynObject = __webpack_require__(2);
-
-// Try to import matter-js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = __webpack_require__(1);
-}
-
-/**
- * 
- * 
- * Constraint Widget
- * 
- * @function
- * @memberof PhSim.Widgets
- * @param {PhSim} phsim 
- * @param {Object} widget - Widget Options
- * @param {LOAddress|PhSim.DynObject} [widget.objectA] - Object A - First point.
- * @param {LOAddress|PhSim.DynObject} [widget.objectB] - Object B - Second Point
- * @param {Vector} [widget.pointA] - First point (see `widget.position` for more information)
- * @param {Vector} [widget.pointB] - Second point (see `widget.position` for more information)
- * @param {"relative"|"absolute"} [widget.position = "absolute"] - Positions of points. 
- * 
- * If set to `"relative"`, then the rules for positioning a point is the following:
- * 
- * * If `widget.objectA` is set, then `widget.pointA` defines the offset from the 
- * centroid of `widget.objectA`. Otherwise, the point is set to a point in the phsim space.
- * 
- * * If `widget.objectB` is set, then `widget.pointB` defines the offset from the centroid
- * of `widget.objectB`. Otherwise, the point is set to a point in the phsim space.
- * 
- * Note: If one is familar with Matter.js, then the rules are simular to rules of making a 
- * constraint are simular to those in Matter.js.
- * 
- * If set to `"absolute"`, then the rules for positioning a point is that the points 
- * are set to points in space. This is the default value.
- */
-
-function constraint(phsim,widget) {
-
-    var position = "absolute";
-
-    if(widget.position === "relative") {
-        position = "relative"
-    } 
-    
-    else if(widget.position === "absolute") {
-        position = "absolute";
-    }
-    
-    var b = {}
-
-    if(position === "absolute") {
-
-        if(widget.objectA) {
-
-            if(widget.objectA instanceof DynObject) {
-                b.bodyA = widget.objectA.matter;
-            }
-    
-            else {
-    
-                if(typeof widget.objectA.L === "number" && typeof widget.objectA.O === "number") {
-                    b.bodyA = phsim.LO(widget.objectA.L,widget.objectA.O).matter;
-                }
-    
-                else {
-                    b.bodyA = phsim.optionMap.get(widget.objectA).matter;
-                }
-    
-            }
-    
-        }
-    
-        if(widget.objectB) {
-            b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
-    
-            if(widget.objectB instanceof DynObject) {
-                b.bodyB = widget.objectB.matter;
-            }
-    
-            else {
-    
-                if(typeof widget.objectB.L === "number" && typeof widget.objectB.O === "number") {
-                    b.bodyB = phsim.LO(widget.objectB.L,widget.objectB.O).matter;
-                }
-    
-                else {
-                    b.bodyB = phsim.optionMap.get(widget.objectB).matter;
-                }
-    
-            }
-    
-        }
-    
-        if(widget.pointA) {
-    
-            if(widget.objectA) {
-                b.pointA = Vector.subtract(widget.pointA,b.bodyA.position);
-            }
-    
-            else {
-                b.pointA = widget.pointA;
-            }
-    
-        }
-    
-        if(widget.pointB) {
-            
-            if(widget.objectB) {
-                b.pointB = Vector.subtract(widget.pointB,b.bodyB.position);
-            }
-    
-            else {
-                b.pointB = widget.pointB;
-            }
-        }
-
-    }
-
-    if(position === "relative") {
-        b.pointA = widget.pointA;
-        b.pointB = widget.pointB;
-        b.bodyA = widget.objectA.plugin.dynObject;
-        b.bodyB = widget.objectB.plugin.dynObject;
-    }
-
-    var c = Matter.Constraint.create(b);
-
-    Matter.World.add(phsim.matterJSWorld,c);
-
-}
-
-module.exports = constraint;
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports) {
-
-/**
- * Widget for changing image sources for sprites.
- * 
- * @param {PhSim.DynObject} dynObject 
- * @param {Object} widget - Widget Object
- * @param {String} widget.src - New Source
- * @this PhSim
- */
-
-function setImgSrc(dynObject,widget) {
-
-    var f = function(){
-        dynObject.sprite.src = widget.src;
-    }
-
-    this.createWFunction(dynObject,f,widget);
-}
-
-module.exports = setImgSrc;
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Widget = __webpack_require__(5);
-
-/**
- * Widget to transform object by camera.
- * @param {Object} dynObject 
- * @this PhSim
- */
-
-
-function transformAgainstCamera(o) {
-
-    var self = this;
-
-    var w = new Widget(o);
-
-    this.camera.transformingObjects.push(o);
-
-    var destroy = function() {
-        var i = self.camera.transformingObjects.indexOf(o); 
-        self.camera.transformingObjects.splice(i,1);
-    }
-
-    w.on("destroy",destroy);
-    w.on("disable",destroy);
-
-    return w;
-
-}
-
-module.exports = transformAgainstCamera;
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = __webpack_require__(1);
-}
-
-/**
- * 
- * Calculate DynObject skinmesh
- * 
- * @function
- * @memberof PhSim
- * @param {PhSim.DynObject} dynObject 
- */
-
-// Try to import matter.js as a commonJS module
-
-var calc_skinmesh = function(dynObject) {
-
-	/** Vector defining transformation */
-	
-	dynObject.transformVector = {
-		x: (dynObject.matter.position.x - dynObject.matter.positionPrev.x),
-		y: (dynObject.matter.position.y - dynObject.matter.positionPrev.y),
-	}
-
-	/** Number defining rotation */
-
-	var transformAngle = dynObject.matter.angle - dynObject.matter.anglePrev 
-
-	Matter.Vertices.translate(dynObject.skinmesh,Matter.Vertices.centre(dynObject.skinmesh),-1);
-	Matter.Vertices.rotate(dynObject.skinmesh,transformAngle,{x: 0, y: 0});
-	Matter.Vertices.translate(dynObject.skinmesh,dynObject.matter.position,1);
-
-	dynObject.verts = dynObject.skinmesh;
-	dynObject.verts = dynObject.skinmesh;
-
-}
-
-module.exports = calc_skinmesh;
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/**
- * Object containing variables that can be read by widgets such as
- * the {@link|RectText} widget. 
- */
-
-PhSim.prototype.vars = {}
-
-/**
- * Object containing magic words
- */
-
-PhSim.prototype.magicWords = {}
-
-PhSim.MagicWords = {
-
-	__test1: function() {
-		return "4";
-	},
-
-	/**
-	 * The `__game__score` magical word returns the game score if the game widget is enabled.
-	 * @function
-	 * @returns {Number} - Game score.
-	 */
-
-	__game__score: function() {
-		return this.lclGame && this.lclGame.score;
-	},
-
-	/**
-	 * The `__game__life` magical word returns the live count of the player if the 
-	 * game widget is enabled.
-	 * 
-	 * @function
-	 * @returns {Number} - Life count
-	 */
-
-	__game__life: function() {
-		return this.lclGame && this.lclGame.life; 
-	},
-
-	/**
-	 * The `__game__goal` magical word returns the goal of the game if the game widget
-	 * is enabled.
-	 * 
-	 * @function
-	 * @returns {Number}
-	 */
-
-	__game__goal: function() {
-		return this.lclGame && this.lclGame.goal;
-	},
-
-	/**
-	 * The `__game__int_life` magical word returns the intial life count of the game,
-	 * given the game widget is enabled.
-	 * 
-	 * @function
-	 * @returns {Number}
-	 */
-
-	__game__int_life: function() {
-		return this.lclGame && this.lclGame.intLife;
-	},
-
-	/**
-	 * The `__game__int_score` magical word returns the inital game score given the 
-	 * game widget is enabled.
-	 * 
-	 * @function
-	 * @returns {Number}
-	 */
-
-	__game__int_score: function() {
-		return this.lclGame && this.lclGame.intScore;
-	}
-
-}
-
-/**
- * 
- * Adds a global magical word function.
- * 
- * @function
- * @param {String} name - Name of magical word
- * @param {Function} call 
- */
-
-PhSim.addGlobalMagicalWord = function(name,call) {
-	
-	if(PhSim.MagicWords[name]) {
-		throw "Magical word " + name + " already exists."
-	}
-
-	else {
-		PhSim.MagicWords[name] = call;
-	}
-
-}
-
-/**
- * 
- * Adds a local magical word function.
- * 
- * @function
- * @param {String} name - Name of magical word
- * @param {Function} call 
- */
-
-PhSim.prototype.addLocalMagicalWord = function(name,call) {
-
-	if(this.magicWords[name]) {
-		throw "Magical word " + name + " already exists."
-	}
-
-	else {
-		this.magicWords[name] = call;
-	}
-
-}
-
-/**
- * 
- * Process string by replacing magical words and the values of elements in
- * {@link PhSim#vars|PhSim.prototype.vars}.
- * 
- * Some of the magic words are the following:
- * 
- * `{__game__score}` - The game score
- * `{__game__life}` -  The game life
- * `{__game__goal}` - The game goal
- * `{__game__int_life}` - The inital life value for the game
- * 
- * The expression `${key}` is replaced by the value of `{@link PhSim#vars |PhSim.prototype.vars[key]}`.
- * 
- * @function
- * @param {String} str 
- * @returns {String}
- * 
- */
-
-PhSim.prototype.processVar = function(str) {
-
-	var magicWordKeys = Object.keys(PhSim.MagicWords);
-
-	for(let i = 0; i < magicWordKeys.length; i++) {
-
-		let magicWord = magicWordKeys[i];
-		let mgkWordRegex = new RegExp("{" + magicWord + "}","g");
-
-		if(str.search(mgkWordRegex) !== -1) {
-
-			str = str.replace(mgkWordRegex,PhSim.MagicWords[magicWord].call(this));
-		}
-
-	}
-
-	let a = Object.keys(this.vars);
-
-	for(let i = 0; i < a.length; i++) {
-
-		let v = "\\$\\{" + a[i] + "\\}";
-		let regex = new RegExp(v,"g");
-		let s = str.search(regex);
-
-		if(s !== -1) {
-			str = str.replace(regex,this.vars[ a[i] ]);
-		}
-	}
-
-	return str;
-
-}
-
-/***/ }),
-/* 55 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const PhSim = __webpack_require__(0);
-
-/**
- * @namespace
- * @memberof PhSim
- */
-
-const ObjLoops = {}
-
-/**
- * Execute function on all members of a PhSim simulation or PhSim options.
- * @function
- * @param {PhSim|PhSimOptions} sim 
- * @param {Function} method 
- */
-
-ObjLoops.global = function(sim,method) {
-
-    if(sim instanceof PhSim) {
-        for(let i = 0; i < sim.objUniverse.length; i++) {
-            method(sim.objUniverse[i]);
-        }
-    }
-
-    else {
-
-        for(let i = 0; i < sim.simulations.length; i++) {
-            for(let j = 0; j < sim.simulations[i].layers.length; j++) {
-                for(let k = 0; k < sim.simulations[i].layers[j].objUniverse.length; k++) {
-                    method(sim.simulations[i].layers[j].objUniverse[k]);
-                }
-            }
-        }
-
-    }
-
-}
-
-/**
- * Execute function on all members of a simulation object.
- * @function
- * @param {Object} simulation 
- * @param {Function} method 
- */
-
-ObjLoops.simulation = function(simulation,method) {
-    for(let j = 0; j < simulation.layers.length; j++) {
-        for(let k = 0; k < simulation.layers[j].objUniverse.length; k++) {
-            method(simulation.layers[j].objUniverse[k]);
-        }
-    }
-}
-
-/**
- * Execute function on all members of an layer
- * @function
- * @param {Object} layer
- * @param {Function} method
- */
-
-ObjLoops.layer = function(layer,method) {
-    for(let k = 0; k < layer.objUniverse.length; k++) {
-        method(layer.objUniverse[k]);
-    }
-}
-
-module.exports = ObjLoops;
+"use strict";
+module.exports = require("matter-js");;
 
 /***/ })
-/******/ ]);
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__(8138);
+/******/ 	
+/******/ })()
+;
