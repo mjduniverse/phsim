@@ -128,6 +128,8 @@ PhSim.prototype.loopFunction = function() {
 			}
 		}
 
+		this.callEventClass("aftercanvasclear",this,afterUpdateEvent);
+
 		for(let i = 0; i < this.objUniverse.length; i++) {
 			this.updateDynObj(this.objUniverse[i]);
 		}

@@ -198,6 +198,12 @@ const EventStack = function() {
 
 	this.wfunctionerror = [];
 
+	/**
+	 * Array of functions to be executed after the canvas are cleared.
+	 */
+
+	this.aftercanvasclear = [];
+
 
 }
 
