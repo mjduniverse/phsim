@@ -84,7 +84,7 @@ PhSim.prototype.loopFunction = function() {
 		this.callEventClass("beforeupdate",this,beforeUpdateEvent);
 
 		if(!this.firstSlUpdate) {
-			this.callEventClass("beforefirstslupdate",this,afterUpdateEvent);
+			this.callEventClass("beforefirstslupdate",this,new PhSim.Events.PhSimDynEvent());
 		}
 
 		this.updateDate = new Date();
@@ -128,7 +128,7 @@ PhSim.prototype.loopFunction = function() {
 			}
 		}
 
-		this.callEventClass("aftercanvasclear",this,afterUpdateEvent);
+		this.callEventClass("aftercanvasclear",this,new PhSim.Events.PhSimDynEvent());
 
 		for(let i = 0; i < this.objUniverse.length; i++) {
 			this.updateDynObj(this.objUniverse[i]);

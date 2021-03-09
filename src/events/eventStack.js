@@ -164,6 +164,8 @@ const EventStack = function() {
 
 	this.firstslupdate = [];
 
+	this.beforefirstslupdate = [];
+
 	/** Array of functions to be executed before the simulation exit */
 
 	this.exit = []
