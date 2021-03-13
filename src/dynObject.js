@@ -59,24 +59,24 @@ var DynObject = function(staticObject,matterBody) {
 	 * 
 	 */
 
-	this.type = staticObject.type;
+	this.shape = staticObject.shape;
 
 	// Apply Shape Specific Constructor
 
-	if(this.type === "circle") {
-		Static.Circle.apply(this,staticObject.x,staticObject.y,staticObject.r);
+	if(this.shape === "circle") {
+		Static.Circle.call(this,staticObject.x,staticObject.y,staticObject.radius);
 	}
 
-	if(this.type === "regPolygon") {
-		Static.RegPolygon.apply(this,staticObject.x,staticObject.y,staticObject.radius,staticObject.sides)
+	if(this.shape === "regPolygon") {
+		Static.RegPolygon.call(this,staticObject.x,staticObject.y,staticObject.radius,staticObject.sides)
 	}
 
-	if(this.type === "rectangle") {
-		Static.Rectangle.apply(this,staticObject.x,staticObject.y,staticObject.w,staticObject.h);
+	if(this.shape === "rectangle") {
+		Static.Rectangle.call(this,staticObject.x,staticObject.y,staticObject.w,staticObject.h);
 	}
 
-	if(this.type === "polygon") {
-		Static.Polygon.apply(this,staticObject.verts);
+	if(this.shape === "polygon") {
+		Static.Polygon.call(this,staticObject.verts);
 	}
 
 	this.widgets = staticObject.widgets;
@@ -88,7 +88,7 @@ var DynObject = function(staticObject,matterBody) {
 
 	this.matter = matterBody || PhSim.DynObject.createMatterObject(staticObject);
 
-	if(staticObject.shape === "polygon") {
+	if(this.shape === "polygon") {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
 	}
 
@@ -99,7 +99,7 @@ var DynObject = function(staticObject,matterBody) {
 
 	this.firstCycle = staticObject.cycle || 0;
 
-	if(staticObject.shape === "composite") {
+	if(this.shape === "composite") {
 		this.flattenedParts = DynObject.flattenComposite();
 	}
 
@@ -120,10 +120,12 @@ var DynObject = function(staticObject,matterBody) {
 
 	/**
 	 * Custom properties that can be added by the user to extend the DynObject.
+	 * This property is not deep cloned, but assigned to `staticObject.data`.
+	 * 
 	 * @type {Object}
 	 */
 
-	this.data = this.data || {}
+	this.data = staticObject.data || {}
 	
 	/**
 	 * Reference to parent simulation
@@ -138,7 +140,7 @@ var DynObject = function(staticObject,matterBody) {
 	 * @default false
 	 */
 
-	this.noCollision = staticObject.noCollision || false;
+	this.noCollision = this.noCollision || false;
 
 	/**
  	 * Object containing array functions to be called.
@@ -153,6 +155,7 @@ var DynObject = function(staticObject,matterBody) {
 	 * */
 
 	this.matter.plugin.dynObject = this;
+
 
 	if(DynObject.keepInstances) {
 		DynObject.instances.push(this);
@@ -359,6 +362,8 @@ DynObject.createRegPolygon = function(x,y,r,n,options = {}) {
 
 DynObject.createMatterObject = function(staticObject) {
 
+	var shape = staticObject.shape;
+
 	var opts = staticObject.matter || {}
 
 	opts.label = staticObject.name || "Untitled Object";
@@ -390,22 +395,22 @@ DynObject.createMatterObject = function(staticObject) {
 	}
 
 
-	if(staticObject.shape === "polygon") {
+	if(shape === "polygon") {
 		return Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
 	}
 
 	
-	else if(staticObject.shape === "circle") {
+	else if(shape === "circle") {
 		return Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
 	}
 
 
-	else if(staticObject.shape === "rectangle") {
+	else if(shape === "rectangle") {
 		set = Vertices.rectangle(staticObject);
 		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 
-	else if(staticObject.shape === "regPolygon") {
+	else if(shape === "regPolygon") {
 		set = Vertices.regPolygon(staticObject);
 		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}

@@ -1,5 +1,11 @@
 ## 0.3.0-alpha (Unreleased)
 
+* Added ImageData, Canvas and HTMLImageElement support for PhRender.renderSpriteByCenter. 
+
+* Fixed `onfirstslupdate` event bug that makes it not run at all.
+
+* Added `aftercanvasclear` event.
+
 * `PhSim.Vector.neg` has been added. This creates a vector that is equal in length but opposite in direction of the original vector.
 
 * `PhSim.Vector.extract` has been added. This creates a new vector out of an object `o` that

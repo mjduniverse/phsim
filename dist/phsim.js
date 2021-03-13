@@ -315,24 +315,24 @@ var DynObject = function(staticObject,matterBody) {
 	 * 
 	 */
 
-	this.type = staticObject.type;
+	this.shape = staticObject.shape;
 
 	// Apply Shape Specific Constructor
 
-	if(this.type === "circle") {
-		Static.Circle.apply(this,staticObject.x,staticObject.y,staticObject.r);
+	if(this.shape === "circle") {
+		Static.Circle.call(this,staticObject.x,staticObject.y,staticObject.radius);
 	}
 
-	if(this.type === "regPolygon") {
-		Static.RegPolygon.apply(this,staticObject.x,staticObject.y,staticObject.radius,staticObject.sides)
+	if(this.shape === "regPolygon") {
+		Static.RegPolygon.call(this,staticObject.x,staticObject.y,staticObject.radius,staticObject.sides)
 	}
 
-	if(this.type === "rectangle") {
-		Static.Rectangle.apply(this,staticObject.x,staticObject.y,staticObject.w,staticObject.h);
+	if(this.shape === "rectangle") {
+		Static.Rectangle.call(this,staticObject.x,staticObject.y,staticObject.w,staticObject.h);
 	}
 
-	if(this.type === "polygon") {
-		Static.Polygon.apply(this,staticObject.verts);
+	if(this.shape === "polygon") {
+		Static.Polygon.call(this,staticObject.verts);
 	}
 
 	this.widgets = staticObject.widgets;
@@ -344,7 +344,7 @@ var DynObject = function(staticObject,matterBody) {
 
 	this.matter = matterBody || PhSim.DynObject.createMatterObject(staticObject);
 
-	if(staticObject.shape === "polygon") {
+	if(this.shape === "polygon") {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
 	}
 
@@ -355,7 +355,7 @@ var DynObject = function(staticObject,matterBody) {
 
 	this.firstCycle = staticObject.cycle || 0;
 
-	if(staticObject.shape === "composite") {
+	if(this.shape === "composite") {
 		this.flattenedParts = DynObject.flattenComposite();
 	}
 
@@ -376,10 +376,12 @@ var DynObject = function(staticObject,matterBody) {
 
 	/**
 	 * Custom properties that can be added by the user to extend the DynObject.
+	 * This property is not deep cloned, but assigned to `staticObject.data`.
+	 * 
 	 * @type {Object}
 	 */
 
-	this.data = this.data || {}
+	this.data = staticObject.data || {}
 	
 	/**
 	 * Reference to parent simulation
@@ -394,7 +396,7 @@ var DynObject = function(staticObject,matterBody) {
 	 * @default false
 	 */
 
-	this.noCollision = staticObject.noCollision || false;
+	this.noCollision = this.noCollision || false;
 
 	/**
  	 * Object containing array functions to be called.
@@ -409,6 +411,7 @@ var DynObject = function(staticObject,matterBody) {
 	 * */
 
 	this.matter.plugin.dynObject = this;
+
 
 	if(DynObject.keepInstances) {
 		DynObject.instances.push(this);
@@ -615,6 +618,8 @@ DynObject.createRegPolygon = function(x,y,r,n,options = {}) {
 
 DynObject.createMatterObject = function(staticObject) {
 
+	var shape = staticObject.shape;
+
 	var opts = staticObject.matter || {}
 
 	opts.label = staticObject.name || "Untitled Object";
@@ -646,22 +651,22 @@ DynObject.createMatterObject = function(staticObject) {
 	}
 
 
-	if(staticObject.shape === "polygon") {
+	if(shape === "polygon") {
 		return Matter.Bodies.fromVertices(Matter.Vertices.centre(staticObject.verts).x, Matter.Vertices.centre(staticObject.verts).y, staticObject.verts, opts);
 	}
 
 	
-	else if(staticObject.shape === "circle") {
+	else if(shape === "circle") {
 		return Matter.Bodies.circle(staticObject.x, staticObject.y, staticObject.radius,opts);
 	}
 
 
-	else if(staticObject.shape === "rectangle") {
+	else if(shape === "rectangle") {
 		set = Vertices.rectangle(staticObject);
 		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
 
-	else if(staticObject.shape === "regPolygon") {
+	else if(shape === "regPolygon") {
 		set = Vertices.regPolygon(staticObject);
 		return Matter.Bodies.fromVertices(Matter.Vertices.centre(set).x, Matter.Vertices.centre(set).y, set, opts); 
 	}
@@ -1173,6 +1178,8 @@ const EventStack = function() {
 
 	this.firstslupdate = [];
 
+	this.beforefirstslupdate = [];
+
 	/** Array of functions to be executed before the simulation exit */
 
 	this.exit = []
@@ -1206,6 +1213,12 @@ const EventStack = function() {
 	 */
 
 	this.wfunctionerror = [];
+
+	/**
+	 * Array of functions to be executed after the canvas are cleared.
+	 */
+
+	this.aftercanvasclear = [];
 
 
 }
@@ -2228,13 +2241,13 @@ else {
  * 
  */
 
-function PhSim(dynSimOptions = new PhSim.Static()) {
-
-	if(dynSimOptions) {
-		Object.assign(this,dynSimOptions);
-	}
+function PhSim(dynSimOptions) {
 
 	PhSim.Static.call(this);
+
+	if(typeof dynSimOptions === "object") {
+		Object.assign(this,dynSimOptions);
+	}
 
 	if(Array.isArray(dynSimOptions.simulations)) {
 		this.simulations = dynSimOptions.simulations;
@@ -3260,7 +3273,7 @@ PhSim.prototype.loopFunction = function() {
 		this.callEventClass("beforeupdate",this,beforeUpdateEvent);
 
 		if(!this.firstSlUpdate) {
-			this.callEventClass("beforefirstslupdate",this,afterUpdateEvent);
+			this.callEventClass("beforefirstslupdate",this,new PhSim.Events.PhSimDynEvent());
 		}
 
 		this.updateDate = new Date();
@@ -3303,6 +3316,8 @@ PhSim.prototype.loopFunction = function() {
 				this.ctx.fillRect(0 - this.camera.x,0 - this.camera.y,this.width / this.camera.scale,this.height / this.camera.scale);
 			}
 		}
+
+		this.callEventClass("aftercanvasclear",this,new PhSim.Events.PhSimDynEvent());
 
 		for(let i = 0; i < this.objUniverse.length; i++) {
 			this.updateDynObj(this.objUniverse[i]);
@@ -3654,7 +3669,7 @@ Motion.setPosition = function(o,position) {
 
 	if(!o.locked) {
 
-		if(o.type === "circle" || o.type === "regPolygon") {
+		if(o.shape === "circle" || o.shape === "regPolygon") {
 			o.x = position.x;
 			o.y = position.y;
 		}
@@ -4614,7 +4629,7 @@ PhRender.prototype.renderPolygon = function (path) {
 
 	if(path.sprite && path.sprite.src) {
 
-		var img = this.spriteImgObj[path.sprite.src];
+		var img = this.getImgObj(path.sprite.src);
 
 		var centroid = Centroid.polygon(path);
 
@@ -4700,7 +4715,7 @@ PhRender.prototype.renderPolygon = function (path) {
  * Render sprite by center
  * 
  * @function
- * @param {String} url - URL of object loaded in PhRender.prototype.spriteImgObj
+ * @param {String|HTMLCanvasElement|HTMLImageElement|ImageData} url - URL of object loaded in PhRender.prototype.spriteImgObj
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
  * @param {Number} w - width
@@ -4710,21 +4725,49 @@ PhRender.prototype.renderPolygon = function (path) {
 
 PhRender.prototype.renderSpriteByCenter = function(url,x,y,w,h,a) {
 
-	var spriteImg = this.spriteImgObj[url];
+	var spriteImg;
+
+	if(typeof url === "string") {
+		spriteImg = this.spriteImgObj[url];
+	}
+
+	if(url instanceof HTMLCanvasElement || url instanceof HTMLImageElement) {
+		spriteImg = url;
+	}
 
 	this.ctx.save();
 	this.ctx.translate(x,y)
 	this.ctx.rotate(a)
-	
-	if(h === null) {
-		this.ctx.drawImage(spriteImg,0,0,spriteImg.width,spriteImg.height,-w * 0.5 , -h * 0.5,w);
+
+	if(typeof url === "string" || url instanceof HTMLCanvasElement || url instanceof HTMLImageElement) {
+		
+		if(h === null) {
+			this.ctx.drawImage(spriteImg,0,0,spriteImg.width,spriteImg.height,-w * 0.5 , -h * 0.5,w);
+		}
+
+		else {
+			this.ctx.drawImage(spriteImg,0,0,spriteImg.width,spriteImg.height,-w * 0.5 , -h * 0.5,w,h);
+		}
+
 	}
 
-	else {
-		this.ctx.drawImage(spriteImg,0,0,spriteImg.width,spriteImg.height,-w * 0.5 , -h * 0.5,w,h);
+	if(url instanceof ImageData) {
+		this.ctx.putImageData(url, - url.width * 0.5, - url.height * 0.5);
 	}
 
 	this.ctx.restore();
+}
+
+PhRender.prototype.getImgObj = function(src) {
+
+	if(typeof src === "string") {
+		return this.spriteImgObj[src];
+	}
+
+	else {
+		return src;
+	}
+
 }
 
 
@@ -4768,7 +4811,7 @@ PhRender.prototype.renderCircle = function (circle) {
 		 * @type {HTMLImageElement}
 		 */
 
-		var img = this.spriteImgObj[circle.sprite.src];
+		var img = this.getImgObj(circle.sprite.src);
 
 		this.ctx.imageSmoothingEnabled = circle.sprite.smooth;
 
@@ -4872,9 +4915,9 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 	this.ctx.translate(-c.x,-c.y);
 
 
-	if(typeof rectangle.sprite === "object" && typeof rectangle.sprite.src === "string") {
+	if(typeof rectangle.sprite === "object" && rectangle.sprite.src) {
 
-		var img = this.spriteImgObj[rectangle.sprite.src];
+		var img = this.getImgObj(rectangle.sprite.src);
 
 		this.ctx.imageSmoothingEnabled = rectangle.sprite.smooth;
 
@@ -5029,7 +5072,7 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 	if(regPolygon.sprite && regPolygon.sprite.src) {
 
-		var img = this.spriteImgObj[regPolygon.sprite.src];
+		var img = this.getImgObj(regPolygon.sprite.src);
 
 		this.ctx.imageSmoothingEnabled = regPolygon.sprite.smooth;
 
@@ -5271,7 +5314,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 
 		if(dynObject.sprite && dynObject.sprite.src) {
 
-			var img = this.spriteImgObj[dynObject.sprite.src];
+			var img = this.getImgObj(dynObject.sprite.src);
 
 			this.ctx.imageSmoothingEnabled = dynObject.sprite.smooth;
 

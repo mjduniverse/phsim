@@ -63,13 +63,13 @@ else {
  * 
  */
 
-function PhSim(dynSimOptions = new PhSim.Static()) {
-
-	if(dynSimOptions) {
-		Object.assign(this,dynSimOptions);
-	}
+function PhSim(dynSimOptions) {
 
 	PhSim.Static.call(this);
+
+	if(typeof dynSimOptions === "object") {
+		Object.assign(this,dynSimOptions);
+	}
 
 	if(Array.isArray(dynSimOptions.simulations)) {
 		this.simulations = dynSimOptions.simulations;

@@ -107,7 +107,7 @@ Motion.setPosition = function(o,position) {
 
 	if(!o.locked) {
 
-		if(o.type === "circle" || o.type === "regPolygon") {
+		if(o.shape === "circle" || o.shape === "regPolygon") {
 			o.x = position.x;
 			o.y = position.y;
 		}
