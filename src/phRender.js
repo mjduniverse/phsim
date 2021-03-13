@@ -128,7 +128,7 @@ PhRender.prototype.renderPolygon = function (path) {
 
 	if(path.sprite && path.sprite.src) {
 
-		var img = this.spriteImgObj[path.sprite.src];
+		var img = this.getImgObj(path.sprite.src);
 
 		var centroid = Centroid.polygon(path);
 
@@ -214,7 +214,7 @@ PhRender.prototype.renderPolygon = function (path) {
  * Render sprite by center
  * 
  * @function
- * @param {String} url - URL of object loaded in PhRender.prototype.spriteImgObj
+ * @param {String|HTMLCanvasElement|HTMLImageElement|ImageData} url - URL of object loaded in PhRender.prototype.spriteImgObj
  * @param {Number} x - x-coordinate
  * @param {Number} y - y-coordinate
  * @param {Number} w - width
@@ -224,21 +224,49 @@ PhRender.prototype.renderPolygon = function (path) {
 
 PhRender.prototype.renderSpriteByCenter = function(url,x,y,w,h,a) {
 
-	var spriteImg = this.spriteImgObj[url];
+	var spriteImg;
+
+	if(typeof url === "string") {
+		spriteImg = this.spriteImgObj[url];
+	}
+
+	if(url instanceof HTMLCanvasElement || url instanceof HTMLImageElement) {
+		spriteImg = url;
+	}
 
 	this.ctx.save();
 	this.ctx.translate(x,y)
 	this.ctx.rotate(a)
-	
-	if(h === null) {
-		this.ctx.drawImage(spriteImg,0,0,spriteImg.width,spriteImg.height,-w * 0.5 , -h * 0.5,w);
+
+	if(typeof url === "string" || url instanceof HTMLCanvasElement || url instanceof HTMLImageElement) {
+		
+		if(h === null) {
+			this.ctx.drawImage(spriteImg,0,0,spriteImg.width,spriteImg.height,-w * 0.5 , -h * 0.5,w);
+		}
+
+		else {
+			this.ctx.drawImage(spriteImg,0,0,spriteImg.width,spriteImg.height,-w * 0.5 , -h * 0.5,w,h);
+		}
+
 	}
 
-	else {
-		this.ctx.drawImage(spriteImg,0,0,spriteImg.width,spriteImg.height,-w * 0.5 , -h * 0.5,w,h);
+	if(url instanceof ImageData) {
+		this.ctx.putImageData(url, - url.width * 0.5, - url.height * 0.5);
 	}
 
 	this.ctx.restore();
+}
+
+PhRender.prototype.getImgObj = function(src) {
+
+	if(typeof src === "string") {
+		return this.spriteImgObj[src];
+	}
+
+	else {
+		return src;
+	}
+
 }
 
 
@@ -282,7 +310,7 @@ PhRender.prototype.renderCircle = function (circle) {
 		 * @type {HTMLImageElement}
 		 */
 
-		var img = this.spriteImgObj[circle.sprite.src];
+		var img = this.getImgObj(circle.sprite.src);
 
 		this.ctx.imageSmoothingEnabled = circle.sprite.smooth;
 
@@ -386,9 +414,9 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 	this.ctx.translate(-c.x,-c.y);
 
 
-	if(typeof rectangle.sprite === "object" && typeof rectangle.sprite.src === "string") {
+	if(typeof rectangle.sprite === "object" && rectangle.sprite.src) {
 
-		var img = this.spriteImgObj[rectangle.sprite.src];
+		var img = this.getImgObj(rectangle.sprite.src);
 
 		this.ctx.imageSmoothingEnabled = rectangle.sprite.smooth;
 
@@ -543,7 +571,7 @@ PhRender.prototype.renderRegPolygon = function(regPolygon) {
 
 	if(regPolygon.sprite && regPolygon.sprite.src) {
 
-		var img = this.spriteImgObj[regPolygon.sprite.src];
+		var img = this.getImgObj(regPolygon.sprite.src);
 
 		this.ctx.imageSmoothingEnabled = regPolygon.sprite.smooth;
 
@@ -785,7 +813,7 @@ PhRender.prototype.dynamicRenderDraw = function (dynObject) {
 
 		if(dynObject.sprite && dynObject.sprite.src) {
 
-			var img = this.spriteImgObj[dynObject.sprite.src];
+			var img = this.getImgObj(dynObject.sprite.src);
 
 			this.ctx.imageSmoothingEnabled = dynObject.sprite.smooth;
 
