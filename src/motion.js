@@ -51,10 +51,31 @@ Motion.applyForce = function(dynObject,position,forceVector) {
  * @param {Vector} velocityVector 
  */
 
-Motion.setVelocity = function(dynObject,velocityVector) {
+Motion.setVelocity = function(dynObject,velocityVector,perSecond) { 
+
+	if(perSecond) {
+		velocityVector.x = (velocityVector.x / 1000) * dynObject.phSim.delta;
+		velocityVector.y = (velocityVector.y / 1000) * dynObject.phSim.delta;
+	}
+
 	if(!dynObject.locked) {
 		return Matter.Body.setVelocity(dynObject.matter,velocityVector);
 	}
+
+}
+
+/**
+ * Set acceleration of object
+ * @param {PhSim.DynObject} dynObject 
+ * @param {Vector} accelerationVector 
+ */
+
+Motion.setAcceleration = function(dynObject,accelerationVector) {
+
+	Matter.Body.set(dynObject,"acceleration",{
+		x: accelerationVector.x * dynObject.matter.mass,
+		y: accelerationVector.y * dynObject.matter.mass
+	});
 
 }
 

@@ -1,5 +1,9 @@
 ## 0.3.0-alpha (Unreleased)
 
+* Added `PhSim.Motion.setAcceleration` function for setting acceleration of objects
+
+* Added `perSecond` argument to `Motion.setVelocity` function so that velocity vectors could be in units per second rather than per update if set to `true`.
+
 * Added ImageData, Canvas and HTMLImageElement support for PhRender.renderSpriteByCenter. 
 
 * Fixed `onfirstslupdate` event bug that makes it not run at all.
