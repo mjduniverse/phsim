@@ -1,4 +1,4 @@
-## 0.3.0-alpha (Unreleased)
+## 0.3.0-alpha (2021-7-30)
 
 * Added `PhSim.Motion.setAcceleration` function for setting acceleration of objects
 

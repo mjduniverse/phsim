@@ -1,6 +1,6 @@
 {
   "name": "phsim",
-  "version": "0.2.0-alpha",
+  "version": "0.3.0-alpha",
   "description": "A matter-js library that allows one to easily create web simulations.",
   "main": "./src/index.js",
   "directories": {
