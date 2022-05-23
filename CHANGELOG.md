@@ -1,3 +1,7 @@
+## 0.4.0-alpha (Not Released)
+
+* Added `requestAnimatonFrame` function to loop.
+
 ## 0.3.0-alpha (2021-7-30)
 
 * Added `PhSim.Motion.setAcceleration` function for setting acceleration of objects
