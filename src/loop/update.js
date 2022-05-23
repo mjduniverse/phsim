@@ -156,6 +156,9 @@ PhSim.prototype.loopFunction = function() {
 
 		//this.renderAllCounters();
 
+		if(!this.paused && requestAnimationFrame) {
+			requestAnimationFrame(this.loopFunction.bind(this));
+		}
 
 	}
 

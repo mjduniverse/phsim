@@ -15,9 +15,19 @@ PhSim.prototype.play = function() {
 	var self = this;
 
 	return new Promise(function(resolve){
+
 		self.paused = false;
-		self.intervalLoop = setInterval(self.loopFunction.bind(self),self.delta);
+
+		if(requestAnimationFrame) {
+			self.inervalLoop = requestAnimationFrame(self.loopFunction.bind(self));
+		}
+
+		else {
+			self.intervalLoop = setInterval(self.loopFunction.bind(self),self.delta);
+		}
+
 		resolve(self);
+
 	});
 }
 
@@ -33,7 +43,11 @@ PhSim.prototype.pause = function() {
 	var self = this;
 
 	return new Promise(function(resolve){
-		clearInterval(self.intervalLoop);
+
+		if(!requestAnimationFrame) {
+			clearInterval(self.intervalLoop);
+		}
+
 		self.paused = true;
 		resolve(self);
 	});
@@ -89,7 +103,11 @@ PhSim.prototype.exitSl = function() {
 	return new Promise(function(resolve){
 		self.callEventClass("beforeslchange",self,new PhSim.Events.PhSimEvent("beforeslchange"));
 		self.paused = false;
-		clearInterval(self.intervalLoop);
+
+		if(!requestAnimationFrame) {
+			clearInterval(self.intervalLoop);
+		}
+		
 		resolve(self);
 	});
 
