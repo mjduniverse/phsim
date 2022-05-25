@@ -1,5 +1,9 @@
 ## 0.4.0-alpha (Not Released)
 
+* Moved `animatedSprite.js`, `gradient.js` and `phRender.js` to `src/render`.
+
+* Fixed a bug that gave a false positive for the existence of the sprite settings in an object.
+
 * Added `requestAnimatonFrame` function to loop.
 
 ## 0.3.0-alpha (2021-7-30)
