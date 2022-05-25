@@ -1,5 +1,7 @@
 ## 0.4.0-alpha (Not Released)
 
+* Renamed `src/render/phRender.js` to `src/render/index.js`
+
 * Moved `animatedSprite.js`, `gradient.js` and `phRender.js` to `src/render`.
 
 * Fixed a bug that gave a false positive for the existence of the sprite settings in an object.
