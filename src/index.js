@@ -496,7 +496,7 @@ PhSim.prototype.simulationEventStack = new PhSim.EventStack();
 
 PhSim.prototype.getWidgetByName = require("./getWidgetByName.js");
 
-PhSim.PhRender = require("./phRender");
+PhSim.PhRender = require("./render/phRender");
 PhSim.Sprites = require("./sprites");
 PhSim.Audio = require("./audio");
 PhSim.Vector = require("./tools/vector");
@@ -536,7 +536,7 @@ require("./widgets/extractWidgets");
 
 PhSim.Camera = require("./dynSimCamera");
 PhSim.Game = require("./game");
-PhSim.Gradients = require("./gradient");
+PhSim.Gradients = require("./render/gradient");
 
 PhSim.Widget = require("./widget.js");
 

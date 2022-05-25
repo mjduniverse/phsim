@@ -1,7 +1,7 @@
 const Gradients = require("./gradient");
-const BoundingBox = require("./tools/boundingBox");
-const Centroid = require("./tools/centroid");
-const Vertices = require("./tools/vertex");
+const BoundingBox = require("../tools/boundingBox");
+const Centroid = require("../tools/centroid");
+const Vertices = require("../tools/vertex");
 
 /** 
  * 

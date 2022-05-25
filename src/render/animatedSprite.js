@@ -1,4 +1,4 @@
-const PhSim = require("../../index");
+const PhSim = require("../index");
 
 PhSim.AnimatedSprite = function(dynObject) {
 
