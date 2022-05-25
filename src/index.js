@@ -496,7 +496,7 @@ PhSim.prototype.simulationEventStack = new PhSim.EventStack();
 
 PhSim.prototype.getWidgetByName = require("./getWidgetByName.js");
 
-PhSim.PhRender = require("./render/phRender");
+PhSim.PhRender = require("./render");
 PhSim.Sprites = require("./sprites");
 PhSim.Audio = require("./audio");
 PhSim.Vector = require("./tools/vector");
