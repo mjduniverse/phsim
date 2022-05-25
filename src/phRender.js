@@ -414,7 +414,7 @@ PhRender.prototype.renderRectangle = function(rectangle) {
 	this.ctx.translate(-c.x,-c.y);
 
 
-	if(typeof rectangle.sprite === "object" && rectangle.sprite.src) {
+	if(rectangle.sprite && rectangle.sprite.src) {
 
 		var img = this.getImgObj(rectangle.sprite.src);
 

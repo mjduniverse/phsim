@@ -67,28 +67,53 @@ function PhSim(dynSimOptions) {
 
 	PhSim.Static.call(this);
 
-	if(typeof dynSimOptions === "object") {
+	if(dynSimOptions && typeof dynSimOptions === "object") {
+
 		Object.assign(this,dynSimOptions);
-	}
 
-	if(Array.isArray(dynSimOptions.simulations)) {
-		this.simulations = dynSimOptions.simulations;
-	}
+		if(Array.isArray(dynSimOptions.simulations)) {
+			this.simulations = dynSimOptions.simulations;
+		}
+	
+		else if(Array.isArray(dynSimOptions.layers)) {
+			this.simulations[0] = dynSimOptions;
+		}
+	
+		else if(Array.isArray(dynSimOptions.objUniverse)) {
+			this.simulations[0].layers[0] = dynSimOptions;
+		}
+	
+		else if(Array.isArray(dynSimOptions)) {
+			this.simulations[0].layers[0].objUniverse = [];
+		}
 
-	else if(Array.isArray(dynSimOptions.layers)) {
-		this.simulations[0] = dynSimOptions;
-	}
+		if(typeof dynSimOptions.wFunctions === "object") {
+			this.wFunctions = dynSimOptions.wFunctions
+		}
 
-	else if(Array.isArray(dynSimOptions.objUniverse)) {
-		this.simulations[0].layers[0] = dynSimOptions;
-	}
+		// Configure canvas
 
-	else if(Array.isArray(dynSimOptions)) {
-		this.simulations[0].layers[0].objUniverse = [];
-	}
+		if(dynSimOptions.canvas) {
+			this.connectCanvas(dynSimOptions.canvas)
+		}
 
-	if(typeof dynSimOptions.wFunctions === "object") {
-		this.wFunctions = dynSimOptions.wFunctions
+		else {
+			var newCanvas = document.createElement("canvas");
+			this.connectCanvas(newCanvas);
+		}
+
+		// Configure container
+
+		if(dynSimOptions.container) {
+			this.connectContainer(dynSimOptions.container);
+		}
+
+		else {
+			var newContainer = document.createElement("div");
+			this.connectContainer(newContainer);
+		}
+
+
 	}
 
 	// Register Plugin
@@ -120,28 +145,7 @@ function PhSim(dynSimOptions) {
 	
 	this.debuggingData = {}
 
-	// Configure canvas
-
-	if(dynSimOptions.canvas) {
-		this.connectCanvas(dynSimOptions.canvas)
-	}
-
-	else {
-		var newCanvas = document.createElement("canvas");
-		this.connectCanvas(newCanvas);
-	}
-
-	// Configure container
-
-	if(dynSimOptions.container) {
-		this.connectContainer(dynSimOptions.container);
-	}
-
-	else {
-		var newContainer = document.createElement("div");
-		this.connectContainer(newContainer);
-	}
-
+	
 	// Register event keys
 
 	this.registerKeyEvents();
