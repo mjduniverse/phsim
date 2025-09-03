@@ -1,4 +1,4 @@
-const PhSim = require(".");
+const Vector = require("./tools/vector");
 
 /**
  * A static object is an object that is not simulated by the PhSim simulation.
@@ -21,7 +21,7 @@ var Static = function() {
 	 * @type {Number}
 	 */
 
-	this.version = PhSim.version;
+	this.version = require("./version-name");
 
 	/** 
 	 * PhSim Static simulation Array 
@@ -30,13 +30,13 @@ var Static = function() {
 
 	this.simulations = [];
 	
-	this.simulations.push(new PhSim.Static.Simulation());
+	this.simulations.push(new Static.Simulation());
 	this.simulations[0].layers[0].name = "Untitled Layer"
 	this.simulations[0].name = "Untitled simulation";
 
 	/** PhSim Box Settings */
 
-	this.box = new PhSim.Static.Rectangle(0,0,800,600);
+	this.box = new Static.Rectangle(0,0,800,600);
 
 }
 
@@ -69,14 +69,14 @@ Static.GradientLimits = function(x0,y0,x1,y1) {
 	 * @type {Vector}
 	 */
 
-	this.start = new PhSim.Vector(x0,y0);
+	this.start = new Vector(x0,y0);
 	
 	/**
 	 * End vector
 	 * @type {Vector}
 	 */
 
-	this.end = new PhSim.Vector(x1,y1);
+	this.end = new Vector(x1,y1);
 }
 
 /**
@@ -147,7 +147,7 @@ Static.Gradient = function() {
 
 Static.lclGradient = function() {
 	this.src = null;
-	this.limits = new PhSim.Static.GradientLimits(arguments[0],arguments[1],arguments[2],arguments[3]);
+	this.limits = new Static.GradientLimits(arguments[0],arguments[1],arguments[2],arguments[3]);
 	this.type = "linear";
 }
 
@@ -498,7 +498,7 @@ Static.Simulation = function() {
 
 	this.layers = [];
 
-	this.layers.push(new PhSim.Static.Layer())
+	this.layers.push(new Static.Layer())
 	this.world = {
 		grav: 1,
 		bg: "white",

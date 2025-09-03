@@ -30,7 +30,8 @@
     "build": "npx webpack && npm run minify",
     "generate-docs": "jsdoc src -c jsdoc.json --verbose -r",
     "minify": "terser ./dist/phsim.js -o ./dist/phsim.min.js",
-    "lint": "./node_modules/.bin/eslint src"
+    "lint": "./node_modules/.bin/eslint src",
+    "chk-depos": "madge src -i depos"
   },
   "keywords": [
     "phsim",

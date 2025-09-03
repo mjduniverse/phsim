@@ -7,24 +7,6 @@ const Widget = require("../widget");
  */
 
 
-function transformAgainstCamera(o) {
-
-    var self = this;
-
-    var w = new Widget(o);
-
-    this.camera.transformingObjects.push(o);
-
-    var destroy = function() {
-        var i = self.camera.transformingObjects.indexOf(o); 
-        self.camera.transformingObjects.splice(i,1);
-    }
-
-    w.on("destroy",destroy);
-    w.on("disable",destroy);
-
-    return w;
-
-}
+function 
 
 module.exports = transformAgainstCamera;
