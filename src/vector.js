@@ -1,3 +1,4 @@
+
 /** 
  * Constructor for the minimal requirements for being a {@link Vector}.
  *  
@@ -9,38 +10,38 @@
  */
 
 var Vector = function(x,y) {
-	
-	/**
-	 * x-coordinate of the vector
-	 * @type {Number}
-	 */
-	
-	this.x;
+    
+    /**
+     * x-coordinate of the vector
+     * @type {Number}
+     */
+    
+    this.x;
 
-	/**
-	 * y-coordinate of the vector
-	 * @type {Number}
-	 */
-	
-	this.y;
+    /**
+     * y-coordinate of the vector
+     * @type {Number}
+     */
+    
+    this.y;
 
-	if(typeof x === "number") {
-		this.x = x;
-	}
+    if(typeof x === "number") {
+        this.x = x;
+    }
 
-	else {
-		console.trace();
-		throw "Expecting a number in argument 1";
-	}
+    else {
+        console.trace();
+        throw "Expecting a number in argument 1";
+    }
 
-	if(typeof y === "number") {
-		this.y = y;
-	}
+    if(typeof y === "number") {
+        this.y = y;
+    }
 
-	else {
-		console.trace()
-		throw "Expecting a number in argument 2"
-	}
+    else {
+        console.trace()
+        throw "Expecting a number in argument 2"
+    }
 
 }
 
@@ -64,16 +65,16 @@ var Vector = function(x,y) {
  */
 
 Vector.add = function(vector1,vector2,newObj = true) {
-	
-	if(newObj) {
-		return new Vector(vector1.x + vector2.x, vector1.y + vector2.y);
-	}
+    
+    if(newObj) {
+        return new Vector(vector1.x + vector2.x, vector1.y + vector2.y);
+    }
 
-	else {
-		vector1.x = vector1.x + vector2.x;
-		vector1.y = vector1.y + vector2.y;
-		return vector1;
-	}
+    else {
+        vector1.x = vector1.x + vector2.x;
+        vector1.y = vector1.y + vector2.y;
+        return vector1;
+    }
 
 }
 
@@ -98,14 +99,14 @@ Vector.add = function(vector1,vector2,newObj = true) {
 
 Vector.subtract = function(vector1,vector2,newObj = true) {
 
-	if(newObj) {
-		return new Vector(vector1.x - vector2.x, vector1.y - vector2.y);	}
+    if(newObj) {
+        return new Vector(vector1.x - vector2.x, vector1.y - vector2.y);	}
 
-	else {
-		vector1.x = vector1.x - vector2.x;
-		vector1.y = vector1.y - vector2.y;
-		return vector1;
-	}
+    else {
+        vector1.x = vector1.x - vector2.x;
+        vector1.y = vector1.y - vector2.y;
+        return vector1;
+    }
 
 }
 
@@ -121,7 +122,7 @@ Vector.subtract = function(vector1,vector2,newObj = true) {
  */
 
 Vector.scale = function(vector,scalar) {
-	return new Vector(vector.x * scalar,vector.y * scalar)
+    return new Vector(vector.x * scalar,vector.y * scalar)
 }
 
 /**
@@ -136,7 +137,7 @@ Vector.scale = function(vector,scalar) {
  */
 
 Vector.extract = function(o) {
-	return new Vector(o.x,o.y);
+    return new Vector(o.x,o.y);
 }
 
 /**
@@ -146,7 +147,7 @@ Vector.extract = function(o) {
  */
 
 Vector.neg = function(vector) {
-	return new Vector(-vector.x,-vector.y);
+    return new Vector(-vector.x,-vector.y);
 }
 
 /**
@@ -161,7 +162,7 @@ Vector.neg = function(vector) {
  */
 
 Vector.divide = function(vector,scalar) {
-	return new Vector(vector.x * (1/scalar),vector.y * (1/scalar));
+    return new Vector(vector.x * (1/scalar),vector.y * (1/scalar));
 }
 
 /**
@@ -176,11 +177,11 @@ Vector.divide = function(vector,scalar) {
  */
 
 Vector.distance = function(vector1,vector2) {
-	
-	var l1 = Math.pow(vector1.x - vector2.x,2);
-	var l2 = Math.pow(vector1.y - vector2.y,2);
+    
+    var l1 = Math.pow(vector1.x - vector2.x,2);
+    var l2 = Math.pow(vector1.y - vector2.y,2);
 
-	return Math.sqrt(l1+l2);
+    return Math.sqrt(l1+l2);
 
 }
 
@@ -194,7 +195,7 @@ Vector.distance = function(vector1,vector2) {
  */
 
 Vector.getLength = function(vector) {
-	return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
+    return Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2))
 }
 
 /**
@@ -207,7 +208,7 @@ Vector.getLength = function(vector) {
  */
 
 Vector.unitVector = function(vector) {
-	return Vector.scale(vector,1/Vector.getLength(vector));
+    return Vector.scale(vector,1/Vector.getLength(vector));
 }
 
 /**
@@ -224,7 +225,7 @@ Vector.unitVector = function(vector) {
  */
 
 Vector.applyTransformation = function(a11,a12,a21,a22,x,y) {
-	return new Vector(a11 * x + a12 * y,a21 * x + a22 * y);
+    return new Vector(a11 * x + a12 * y,a21 * x + a22 * y);
 }
 
 /**
@@ -239,7 +240,7 @@ Vector.applyTransformation = function(a11,a12,a21,a22,x,y) {
  */
 
 Vector.rotate = function(x,y,a) {
-	return Vector.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
+    return Vector.applyTransformation(Math.cos(a),Math.sin(a),-Math.cos(a),Math.sin(a),x,y);
 }
 
 /**
@@ -250,7 +251,7 @@ Vector.rotate = function(x,y,a) {
  */
 
 Vector.svgVector = function(x,y) {
-	return x + "," + y;
+    return x + "," + y;
 }
 
 /**
@@ -264,7 +265,7 @@ Vector.svgVector = function(x,y) {
  */
 
 Vector.dotProduct = function(vector1,vector2) {
-	return vector1.x * vector2.x + vector1.y * vector2.y;
+    return vector1.x * vector2.x + vector1.y * vector2.y;
 }
 
 /**
@@ -285,14 +286,14 @@ Vector.dotProduct = function(vector1,vector2) {
 
 Vector.vectorToArray = function(vertex,ray1,ray2) {
 
-	ray1.x = ray1.x - vertex.x;
-	ray1.y = ray1.y - vertex.y;
+    ray1.x = ray1.x - vertex.x;
+    ray1.y = ray1.y - vertex.y;
 
-	ray2.x = ray2.x - vertex.x;
-	ray2.y = ray2.y - vertex.y;
+    ray2.x = ray2.x - vertex.x;
+    ray2.y = ray2.y - vertex.y;
 
-	return Math.acos(Vector.dotProduct(ray1,ray2));
+    return Math.acos(Vector.dotProduct(ray1,ray2));
 
 }
 
-module.exports = Vector;
+export default Vector;

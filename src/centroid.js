@@ -1,4 +1,4 @@
-const Vector = require("./vector");
+import Vector from "./vector.js";
 
 /**
  * Namespace for functions that get the centroid (the center) of a {@link PhSimObject}.
@@ -18,18 +18,18 @@ const Centroid = {}
  */
 
 Centroid.shape = function(o) {
-	
-	if(o.shape === "rectangle") {
-		return Centroid.rectangle(o);
-	}
+    
+    if(o.shape === "rectangle") {
+        return Centroid.rectangle(o);
+    }
 
-	if(o.shape === "polygon") {
-		return Centroid.polygon(o)
-	}
+    if(o.shape === "polygon") {
+        return Centroid.polygon(o)
+    }
 
-	if(o.shape === "circle" || o.shape === "regPolygon") {
-		return o;
-	}
+    if(o.shape === "circle" || o.shape === "regPolygon") {
+        return o;
+    }
 
 }
 
@@ -44,10 +44,10 @@ Centroid.shape = function(o) {
  */
 
 Centroid.rectangle = function(rectangle) {
-	return {
-		"x": rectangle.x + 0.5 * rectangle.w,
-		"y": rectangle.y + 0.5 * rectangle.h
-	}
+    return {
+        "x": rectangle.x + 0.5 * rectangle.w,
+        "y": rectangle.y + 0.5 * rectangle.h
+    }
 }
 
 
@@ -59,19 +59,19 @@ Centroid.rectangle = function(rectangle) {
  */
 
 Centroid.polygon = function(a) {
-		
-	var v = new Vector(0,0);
-	
-	for(var j = 0; j < a.verts.length; j++) { 
-		v.x += a.verts[j].x;
-		v.y += a.verts[j].y;
-	}
-	
-	v.x = (1/a.verts.length) * v.x;
-	v.y = (1/a.verts.length) * v.y;
-	
-	return v;
+        
+    var v = new Vector(0,0);
+    
+    for(var j = 0; j < a.verts.length; j++) { 
+        v.x += a.verts[j].x;
+        v.y += a.verts[j].y;
+    }
+    
+    v.x = (1/a.verts.length) * v.x;
+    v.y = (1/a.verts.length) * v.y;
+    
+    return v;
 
-}
+};
 
-module.exports = Centroid;
+export default Centroid;

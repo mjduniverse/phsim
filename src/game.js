@@ -10,58 +10,58 @@
 
 var Game = function(phSim,options) {
 
-	/**
+    /**
      * Inital Life
-	 * @type {Number}
-	 */
+     * @type {Number}
+     */
 
-	this.intLife = options.life;
+    this.intLife = options.life;
 
-	/**
+    /**
      * Game goal
-	 * @type {Number}
-	 */
+     * @type {Number}
+     */
 
-	this.goal = options.goal;
+    this.goal = options.goal;
 
-	/**
+    /**
      * Inital Score
-	 * @type {Number}
-	 */
-	
-	this.intScore = options.score;
+     * @type {Number}
+     */
+    
+    this.intScore = options.score;
 
-	/**
+    /**
      * 
      * Options passed into the constructor
-	 * @type {Number}
-	 */
+     * @type {Number}
+     */
 
-	this.options = options;
+    this.options = options;
 
-	/**
+    /**
      * Life
-	 * @type {Number}
+     * @type {Number}
      * 
-	 */
+     */
 
-	this.life = options.life;
+    this.life = options.life;
 
-	/**
+    /**
      * Score
-	 * @type {Number}
-	 */
+     * @type {Number}
+     */
 
-	this.score = options.score;
+    this.score = options.score;
 
-	/**
+    /**
      * Reference to the parent PhSim simulation
-	 * @type {PhSim}
-	 */
+     * @type {PhSim}
+     */
 
-	this.phSim = phSim;
+    this.phSim = phSim;
 
-	// Adding arrays to phSim eventstack
+    // Adding arrays to phSim eventstack
 
 }
 
@@ -75,27 +75,27 @@ var Game = function(phSim,options) {
 
 Game.Options = function(goal,life,score) {
 
-	/**
+    /**
      * Game Goal
-	 * @type {Number}
-	 */
+     * @type {Number}
+     */
 
-	this.goal = goal;
+    this.goal = goal;
 
-	/**
+    /**
      * Game goal
-	 * @type {Number}
-	 */
+     * @type {Number}
+     */
 
-	this.life = life;
+    this.life = life;
 
-	/**
+    /**
      * Game score
-	 * @type {Number}
+     * @type {Number}
      * 
-	 */
+     */
 
-	this.score = score;
+    this.score = score;
 }
 
 /**
@@ -124,56 +124,56 @@ Game.prototype.setScore = function(c) {
 
     var self = this;
 
-	this.score = c;
+    this.score = c;
 
-	if(this.score >= this.goal && Number.isInteger(this.score) && Number.isInteger(this.goal)) {
-	
-		this.phSim.pause();
-		this.phSim.enableFilter();
+    if(this.score >= this.goal && Number.isInteger(this.score) && Number.isInteger(this.goal)) {
+    
+        this.phSim.pause();
+        this.phSim.enableFilter();
 
-		// Code to execute 
+        // Code to execute 
 
-		if(this.phSim.simulationIndex + 1 === this.phSim.simulations.length) {
+        if(this.phSim.simulationIndex + 1 === this.phSim.simulations.length) {
 
-			if(this.defaultGameWinModal) {
+            if(this.defaultGameWinModal) {
 
                 this.phSim.callEventClass("gamewin",this,{});                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 
-				var a = self.phSim.alert({
-					msg:"You Win!",
-					closeButtonTxt:"Play again",
-					bgColor:"#333",
-					txtColor:"#fff",
-					w:300,
-					h:100,
-					onok: function() {
-						self.phSim.disableFilter();
-						a.parentNode.removeChild(a);
-						self.phSim.gotoSimulationIndex(0);
-						self.phSim.play();
-					}
-				});
+                var a = self.phSim.alert({
+                    msg:"You Win!",
+                    closeButtonTxt:"Play again",
+                    bgColor:"#333",
+                    txtColor:"#fff",
+                    w:300,
+                    h:100,
+                    onok: function() {
+                        self.phSim.disableFilter();
+                        a.parentNode.removeChild(a);
+                        self.phSim.gotoSimulationIndex(0);
+                        self.phSim.play();
+                    }
+                });
 
-			}
+            }
 
-		}
+        }
 
-		// If not the final simulation
+        // If not the final simulation
 
-		else {
+        else {
 
-			this.phSim.callEventClass("levelwin",this,{}); 
+            this.phSim.callEventClass("levelwin",this,{}); 
 
-			clearInterval(this.phSim.intervalLoop);
-			this.phSim.disableFilter();
-			this.phSim.gotoSimulationIndex(this.phSim.simulationIndex + 1);
-			self.phSim.play();
-		}
+            clearInterval(this.phSim.intervalLoop);
+            this.phSim.disableFilter();
+            this.phSim.gotoSimulationIndex(this.phSim.simulationIndex + 1);
+            self.phSim.play();
+        }
 
 
-	}
+    }
 
-	this.phSim.callEventClass("score",this,{}); 
+    this.phSim.callEventClass("score",this,{}); 
 },
 
 /**
@@ -183,11 +183,11 @@ Game.prototype.setScore = function(c) {
  */
 
 Game.prototype.setLife = function(c) {
-	this.life = c;
+    this.life = c;
 
-	if(this.life === 0) {
-		this.end();
-	}
+    if(this.life === 0) {
+        this.end();
+    }
 }
 
 /**
@@ -196,7 +196,7 @@ Game.prototype.setLife = function(c) {
  */
 
 Game.prototype.incrementLife = function() {
-	this.setLife(this.life + 1);
+    this.setLife(this.life + 1);
 }
 
 /**
@@ -205,7 +205,7 @@ Game.prototype.incrementLife = function() {
  */
 
 Game.prototype.decrementLife = function() {
-	this.setLife(this.life - 1);
+    this.setLife(this.life - 1);
 }
 
 /**
@@ -215,28 +215,28 @@ Game.prototype.decrementLife = function() {
 
 Game.prototype.end = function() {
 
-	this.phSim.pause();
-	this.phSim.enableFilter();
+    this.phSim.pause();
+    this.phSim.enableFilter();
 
-	var self = this;
+    var self = this;
 
 
-	var a = this.phSim.alert({
-		msg:"Game Over",
-		closeButtonTxt:"Try again",
-		bgColor:"#333",
-		txtColor:"#fff",
-		w:300,
-		h:100,
-		onok: function() {
-			self.phSim.gotoSimulationIndex(self.phSim.simulationIndex);
-			self.phSim.play();
-			self.phSim.disableFilter();
-			a.parentNode.removeChild(a);	
-		}
-	});
+    var a = this.phSim.alert({
+        msg:"Game Over",
+        closeButtonTxt:"Try again",
+        bgColor:"#333",
+        txtColor:"#fff",
+        w:300,
+        h:100,
+        onok: function() {
+            self.phSim.gotoSimulationIndex(self.phSim.simulationIndex);
+            self.phSim.play();
+            self.phSim.disableFilter();
+            a.parentNode.removeChild(a);	
+        }
+    });
 
-	this.phSim.callEventClass("levelloss",this,{}); 
+    this.phSim.callEventClass("levelloss",this,{}); 
 
 }
 
@@ -261,30 +261,30 @@ Game.Widgets = {
 
 Game.Widgets.coin = function(dyn_object,widget) {
 
-	widget = widget || {};
+    widget = widget || {};
 
-	var value = widget.value || 1;
+    var value = widget.value || 1;
 
-	var self = this;
+    var self = this;
 
-	var func = function() {
+    var func = function() {
 
-		var obj1 = dyn_object;
+        var obj1 = dyn_object;
 
-		var a = function() {
+        var a = function() {
 
-			if(self.inSensorCollision(obj1) && self.lclGame) {
-				self.lclGame.setScore(self.lclGame.score + value);
-				self.off("collisionstart",a);	
-			}
+            if(self.inSensorCollision(obj1) && self.lclGame) {
+                self.lclGame.setScore(self.lclGame.score + value);
+                self.off("collisionstart",a);	
+            }
 
-		}
+        }
 
-		return a;
+        return a;
 
-	}
+    }
 
-	self.on("collisionstart",func());
+    self.on("collisionstart",func());
 
 
 }
@@ -298,30 +298,30 @@ Game.Widgets.coin = function(dyn_object,widget) {
 
 Game.Widgets.hazard = function(dyn_object,widget) {
 
-	widget = widget || {};
+    widget = widget || {};
 
-	widget.damage = widget.damage || 1;
+    widget.damage = widget.damage || 1;
 
-	var self = this;
+    var self = this;
 
-	var func = function() {
+    var func = function() {
 
-		var obj1 = dyn_object;
+        var obj1 = dyn_object;
 
-		var a = function() {
+        var a = function() {
 
-			if(self.inSensorCollision(obj1) && self.lclGame) {
-				self.lclGame.setLife(self.lclGame.life - widget.damage);
-				self.off("collisionstart",a);
-			}
+            if(self.inSensorCollision(obj1) && self.lclGame) {
+                self.lclGame.setLife(self.lclGame.life - widget.damage);
+                self.off("collisionstart",a);
+            }
 
-		}
+        }
 
-		return a;
+        return a;
 
-	}
+    }
 
-	self.on("collisionstart",func());
+    self.on("collisionstart",func());
 
 }
 
@@ -334,35 +334,35 @@ Game.Widgets.hazard = function(dyn_object,widget) {
 
 Game.Widgets.health = function(dyn_object,widget) {
 
-	widget = widget || {};
-	widget.lives = widget.lives || 1;
+    widget = widget || {};
+    widget.lives = widget.lives || 1;
 
-	var self = this;
+    var self = this;
 
-	var func = function() {
+    var func = function() {
 
-		var obj1 = dyn_object;
+        var obj1 = dyn_object;
 
-		var a = function() {
+        var a = function() {
 
-			if(self.inSensorCollision(obj1) && self.lclGame) {
-				self.lclGame.setLife(self.lclGame.life + widget.lives);
-				self.off("collisionstart",a);	
-			}
+            if(self.inSensorCollision(obj1) && self.lclGame) {
+                self.lclGame.setLife(self.lclGame.life + widget.lives);
+                self.off("collisionstart",a);	
+            }
 
-		}
+        }
 
-		return a;
+        return a;
 
-	}
+    }
 
-	self.on("collisionstart",func());
+    self.on("collisionstart",func());
 
 }
 
 Game.Widgets.endGame = function(dyn_object,widget) {
-	var f = this.createMotionFunction("position",dyn_object,widget.vector);
-	this.createWFunction(dyn_object,f,widget);
+    var f = this.createMotionFunction("position",dyn_object,widget.vector);
+    this.createWFunction(dyn_object,f,widget);
 }
 
-module.exports = Game;
+export default Game;

@@ -9537,7 +9537,7 @@ window.createIFrameWindow = iframeWindow;
 
 	/*** Error Handling ***/
 
-	window.addEventListener("error",function(err) {
+	/***window.addEventListener("error",function(err) {
 
 		var mainScriptCond = (document.querySelector(".main-script") === err.filename);
 		var clagetSelectedSimulationibCond = (document.querySelector(".class-lib-js-script") === err.filename)
@@ -9547,7 +9547,7 @@ window.createIFrameWindow = iframeWindow;
 			errMsg.appendToDocumentBody();
 		}
 
-	})
+	})***/
 
 	// Generate Irregular Polygon From shapes
 

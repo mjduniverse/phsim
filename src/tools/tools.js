@@ -1,7 +1,0 @@
-// Tools declaration
-
-/**
- * @namespace
- */
-
-

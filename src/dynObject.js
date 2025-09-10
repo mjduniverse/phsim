@@ -1,20 +1,6 @@
-const Static = require("./objects");
-const PhSim = require(".");
-const Vertices = require("./tools/vertex");
-const PhSimEventTarget = require("./events/eventListener");
-const EventStack = require("./events/eventStack");
-
-// Try to import matter.js as a commonJS module
-
-var Matter;
-
-if(typeof window === "object") {
-	Matter = window.Matter;
-}
-
-else {
-	Matter = require("matter-js");
-}
+import PhSim from "./core.js";
+import PhSimEventTarget from "./events/target.js";
+import Static from "./static.js";
 
 /**
  * 
@@ -86,7 +72,7 @@ var DynObject = function(staticObject,matterBody) {
 	 * @type {Object}
 	 */
 
-	this.matter = matterBody || PhSim.DynObject.createMatterObject(staticObject);
+	this.matter = matterBody || DynObject.createMatterObject(staticObject);
 
 	if(this.shape === "polygon") {
 		this.skinmesh = JSON.parse(JSON.stringify(staticObject.verts));
@@ -143,9 +129,9 @@ var DynObject = function(staticObject,matterBody) {
 	this.noCollision = this.noCollision || false;
 
 	/**
- 	 * Object containing array functions to be called.
- 	 * @type {PhSim.EventStack}
- 	 */
+	 * Object containing array functions to be called.
+	 * @type {PhSim.EventStack}
+	 */
 
 	this.eventStack = new EventStack();
 
@@ -427,9 +413,9 @@ DynObject.nextId = 0;
  * 
  */
 
- /**
-  * A PhSimObject array is an array of PhSimObject objects
-  * @typedef {PhSimObject[]} PhSimObjectArr
-  */
+/**
+ * A PhSimObject array is an array of PhSimObject objects
+ * @typedef {PhSimObject[]} PhSimObjectArr
+ */
 
-module.exports = DynObject;
+export default DynObject;

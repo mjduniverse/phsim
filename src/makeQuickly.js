@@ -1,2 +1,0 @@
-const PhSim = require(".");
-

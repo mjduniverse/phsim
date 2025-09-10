@@ -7,7 +7,7 @@
  * 
  */
 
-const EventStack = function() {
+export default function EventStack() {
 
 	/** 
 	 * 
@@ -208,5 +208,3 @@ const EventStack = function() {
 
 
 }
-
-module.exports = EventStack;
